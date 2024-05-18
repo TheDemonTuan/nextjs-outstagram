@@ -1,27 +1,21 @@
 import React, { ChangeEvent, useRef, useState } from "react";
 import ImageGallery from "react-image-gallery";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { PostResponse, postCreate } from "@/api/post";
-import { useMutation } from "@tanstack/react-query";
+import { PostResponse, postCreate, postKey } from "@/api/post";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Textarea,
-  useDisclosure,
-} from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from "@nextui-org/react";
 import { useModalStore } from "@/stores/modal-store";
 import Image from "next/image";
 
+export const CreatePostModalKey = "CreatePost";
+
 const CreatePost = () => {
-  const { modalClose, modalIsOpen } = useModalStore();
+  const { modalClose, modalKey } = useModalStore();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const captionRef = useRef<HTMLTextAreaElement>(null);
+  const queryClient = useQueryClient();
 
   const { mutate: createMutate, isPending: createIsPending } = useMutation<
     ApiSuccessResponse<PostResponse>,
@@ -31,8 +25,12 @@ const CreatePost = () => {
     mutationFn: async (params) => await postCreate(params),
     onSuccess: (res) => {
       toast.success("Add new post successfully!");
+      queryClient.setQueryData([postKey, "me"], (oldData: ApiSuccessResponse<PostResponse[]>) =>
+        oldData ? { ...oldData, data: [res.data, ...oldData.data] } : oldData
+      );
+      setSelectedFiles([]);
+      setPreviews([]);
       modalClose();
-      // addForm.reset();
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Add new post failed!");
@@ -73,7 +71,7 @@ const CreatePost = () => {
       scrollBehavior="inside"
       isDismissable={false}
       hideCloseButton={createIsPending}
-      isOpen={modalIsOpen}
+      isOpen={modalKey === CreatePostModalKey}
       onOpenChange={modalClose}>
       <ModalContent>
         {(onClose) => (

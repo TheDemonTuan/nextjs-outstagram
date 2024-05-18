@@ -1,9 +1,9 @@
 "use client";
 
-import { PostResponse, postGetAllFromMe } from "@/api/post";
+import { PostResponse, postGetAllFromMe, postKey } from "@/api/post";
 import Post from "@/components/Post";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 
@@ -13,16 +13,18 @@ const HomePage = () => {
     ApiErrorResponse,
     PostResponse[]
   >({
-    queryKey: ["posts", "me"],
+    queryKey: [postKey, "me"],
     queryFn: async () => postGetAllFromMe(),
     select: (data) => data.data,
   });
 
-  if (postsIsFetching || !postsData) return <div>Loading...</div>;
-
   return (
     <div className="flex-auto grid grid-flow-col justify-evenly p-8">
-      <Post postData={postsData} />
+      {postsIsFetching || !postsData ? (
+        <Spinner label="Loading" color="primary" labelColor="primary" />
+      ) : (
+        <Post postData={postsData} />
+      )}
       <div className="flex flex-col p-5 space-y-6 w-80">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -77,6 +79,6 @@ const HomePage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default HomePage;

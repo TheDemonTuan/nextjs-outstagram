@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Fragment, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import {
@@ -12,11 +12,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BookmarkIcon, FileWarningIcon, HeartIcon, MessageCircleIcon, SendIcon, StarIcon } from "@/icons";
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
+import { Button, select } from "@nextui-org/react";
 import { PostResponse, postKey } from "@/api/post";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { UserResponse, userGetByUserID } from "@/api/user";
+import { UserResponse, userGetByUserID, userKey } from "@/api/user";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Image from "next/image";
@@ -24,24 +24,22 @@ import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
+  const listUserID = postData.map((post) => post.user_id);
+
+  const userResults = useQueries({
+    queries: listUserID.map((id) => ({
+      queryKey: [userKey, id],
+      queryFn: () => userGetByUserID(id),
+    })),
+  });
+
   return (
     <div className="flex flex-col col-span-2 items-center gap-2">
       {postData.map((post, index) => {
-        const { data: userData, isFetching: userIsFetching } = useQuery<
-          ApiSuccessResponse<UserResponse>,
-          ApiErrorResponse,
-          UserResponse
-        >({
-          queryKey: [postKey, post.user_id],
-          queryFn: async () => userGetByUserID(post.user_id),
-          select: (data) => data.data,
-        });
-
+        const userData = userResults.find((result) => result.data?.data?.id === post.user_id)?.data?.data;
         return (
-          <>
-            <Card
-              key={post.id}
-              className="w-full max-w-lg overflow-hidden border-transparent bg-transparent shadow-none">
+          <Fragment key={post.id}>
+            <Card className="w-full max-w-lg overflow-hidden border-transparent bg-transparent shadow-none">
               <CardContent className="p-0">
                 <div className="grid gap-4">
                   <Card className="rounded-none shadow-none border-0">
@@ -116,7 +114,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                     <CardFooter className="p-2 pb-4 grid gap-1">
                       <div className="flex items-center w-full">
                         <Button isIconOnly variant="light">
-                          <HeartIcon className="w-6 h-6" />
+                          <HeartIcon className="w-6 h-6 text-red-500" />
                           <span className="sr-only">Like</span>
                         </Button>
                         <Button isIconOnly variant="light">
@@ -132,7 +130,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                           <span className="sr-only">Comment</span>
                         </Button>
                       </div>
-                      <span className="font-semibold px-2 text-sm">{post.post_likes.length} likes</span>
+                      <span className="font-semibold px-2 text-sm">{post.post_likes?.length} likes</span>
                       <div className="px-2 py-1 text-sm">
                         <span className="font-bold">{userData?.username}</span>
                         <span className="ml-1">{post.caption}</span>
@@ -157,7 +155,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
               </CardContent>
             </Card>
             {index === postData.length - 1 ? null : <hr className="w-[512] border-gray-300" />}
-          </>
+          </Fragment>
         );
       })}
     </div>

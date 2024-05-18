@@ -5,10 +5,14 @@ import { useModalStore } from "@/stores/modal-store";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React from "react";
 import { FaRegHeart } from "react-icons/fa6";
 import "react-image-gallery/styles/css/image-gallery.css";
-import CreatePost from "./Post/create-post";
+import CreatePost, { CreatePostModalKey } from "./Post/create-post";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Skeleton } from "@nextui-org/react";
 
 const HeaderMenu = [
   {
@@ -19,7 +23,7 @@ const HeaderMenu = [
   {
     name: "Search",
     icon: SearchIcon,
-    action: () => console.log("Search"),
+    action: (callback: Function) => callback,
   },
   {
     name: "Explore",
@@ -39,29 +43,38 @@ const HeaderMenu = [
   {
     name: "Notifications",
     icon: FaRegHeart,
-    action: () => console.log("Notifications"),
+    action: (callback: Function) => callback,
   },
   {
     name: "New",
     icon: AddIcon,
-    action: () => {
-      const { modalOpen, modalIsOpen } = useModalStore();
-      console.log(modalIsOpen);
-    },
+    action: (callback: Function) => callback,
   },
 ];
 
-const isActive = "font-bold";
+const MenuItemClass =
+  "flex items-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
 
 const Header = () => {
+  const { modalOpen } = useModalStore();
   const pathName = usePathname();
-  const { modalOpen, modalIsOpen } = useModalStore();
+  const { authData, authIsLoading } = useAuth();
+
+  console.log(authData);
+  
 
   return (
     <div className="flex flex-col w-64 h-dvh p-2 border-r border-gray-200 sticky top-0">
       <Link href={"/"} className="p-4">
-        <Image alt="Outstagram logo" className="w-auto h-auto" height={128} src="/logo.png" width={128} priority={true} />
-      </Link>
+        <Image
+          alt="Outstagram logo"
+          className="w-auto h-auto"
+          height={128}
+          src="/logo.png"
+          width={128}
+          priority={true}
+        />
+    </Link>
       <nav className="space-y-4 p-2">
         {HeaderMenu.map((item, index) => {
           const Icon = item.icon;
@@ -70,18 +83,53 @@ const Header = () => {
               ? pathName === item.href
               : pathName.startsWith(item.href ?? "")
             : false;
+
           return (
             <Link
               key={index}
               href={item.href || "#"}
-              className={`flex items-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out ${isActiveClass && isActive
-                }`}
-              onClick={modalOpen}>
+              className={cn(MenuItemClass, isActiveClass && "font-bold")}
+              onClick={(e) => {
+                e.preventDefault();
+                switch (item.name) {
+                  case "New":
+                    modalOpen(CreatePostModalKey);
+                    break;
+                  case "Search":
+                    break;
+                  case "Notifications":
+                    break;
+                  default:
+                    break;
+                }
+              }}>
               <Icon className="w-7 h-7 group-hover:scale-105" />
               <span>{item.name}</span>
             </Link>
           );
         })}
+        {/* Profile */}
+        {!authIsLoading ? (
+          authData && (
+            <Link href={`/${authData?.username}`} className={MenuItemClass}>
+              <Avatar className="w-7 h-7 border group-hover:scale-105">
+                <AvatarImage
+                  alt={authData?.username}
+                  src={!!authData?.avatar ? authData?.avatar : "/guest-avatar.png"}
+                />
+                <AvatarFallback>{authData?.username}</AvatarFallback>
+              </Avatar>
+              <span>Profile</span>
+            </Link>
+          )
+        ) : (
+          <div className={MenuItemClass}>
+            <div>
+              <Skeleton className="flex rounded-full w-7 h-7" />
+            </div>
+            <Skeleton className="h-3 w-4/5 rounded-lg" />
+          </div>
+        )}
       </nav>
       <CreatePost />
     </div>

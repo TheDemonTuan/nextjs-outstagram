@@ -34,7 +34,7 @@ export interface AuthRegisterParams {
   birthday: Date;
 }
 
-export interface AuthRegisterResponse extends AuthLoginResponse {}
+export interface AuthRegisterResponse extends AuthLoginResponse { }
 
 export const authRegister = async (params: AuthRegisterParams) =>
   http.post<ApiSuccessResponse<AuthRegisterResponse>>("auth/register", params).then(async (res) => {
@@ -48,7 +48,9 @@ export const authRegister = async (params: AuthRegisterParams) =>
 
 // ----------------------------------------------Verify----------------------------------------------
 
-export const authVerify = async () => http.get<ApiSuccessResponse<UserResponse>>("auth/verify").then((res) => res.data);
+export interface AuthVerifyResponse extends Omit<AuthLoginResponse, "token"> { }
+
+export const authVerify = async () => http.get<ApiSuccessResponse<AuthVerifyResponse>>("auth/verify").then((res) => res.data);
 
 // ----------------------------------------------LOGOUT----------------------------------------------
 

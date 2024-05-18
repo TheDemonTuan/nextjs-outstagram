@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { authVerify } from "@/api/auth";
+import { AuthLoginResponse, AuthVerifyResponse, authVerify } from "@/api/auth";
+import { UserResponse } from "@/api/user";
 
 export const useAuth = () => {
   const {
@@ -13,10 +14,10 @@ export const useAuth = () => {
     isLoading: authIsLoading,
     refetch: authRefetch,
     isStale: authIsStale,
-  } = useQuery<ApiSuccessResponse<UserResponse>, ApiErrorResponse, UserResponse>({
+  } = useQuery<ApiSuccessResponse<AuthVerifyResponse>, ApiErrorResponse, UserResponse>({
     queryKey: ["auth"],
     queryFn: async () => await authVerify(),
-    select: (res) => res?.data,
+    select: (res) => res?.data.user,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });

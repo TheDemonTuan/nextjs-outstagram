@@ -22,6 +22,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import Image from "next/image";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
   const listUserID = postData.map((post) => post.user_id);
@@ -32,6 +33,8 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
       queryFn: () => userGetByUserID(id),
     })),
   });
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <div className="flex flex-col col-span-2 items-center gap-2">
@@ -59,9 +62,76 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                           • {formatDistanceToNow(post.updated_at, { addSuffix: true })}
                         </span>
                       </div>
+
+                      <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton={true} >
+                        <ModalContent>
+                          {(onClose) => (
+                            <>
+                              <ModalBody className="mt-3 mb-3 cursor-pointer items-center">
+                                <Link href="/">
+                                  <p className="text-danger font-bold">
+                                    Report
+                                  </p>
+
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Link href="/">
+                                  <p className="text-danger font-bold">
+                                    Unfollow
+                                  </p>
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Link href="/">
+                                  <p className="text-black">
+                                    Add to favorites
+                                  </p>
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Link href="/">
+                                  <p className="text-black">
+                                    Go to post
+                                  </p>
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Link href="/">
+                                  <p className="text-black">
+                                    Share to ...
+                                  </p>
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Link href="/">
+                                  <p className="text-black">
+                                    Copy link
+                                  </p>
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Link href="/" >
+                                  <p className="text-black">
+                                    Embed
+                                  </p>
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Link href="/" >
+                                  <p className="text-black">
+                                    About this account
+                                  </p>
+                                </Link>
+                                <hr className="w-full border-gray-300" />
+                                <Button variant="light" onPress={onClose}>
+                                  <p className="text-black text-base">
+                                    Cancel
+                                  </p>
+                                </Button>
+
+                              </ModalBody>
+                            </>
+                          )}
+                        </ModalContent>
+                      </Modal>
+
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button className="ml-auto w-8 h-8 rounded-full" isIconOnly variant="light">
+                          <Button className="ml-auto w-8 h-8 rounded-full" isIconOnly onClick={onOpen} variant="light">
                             <PiDotsThreeBold className="w-6 h-6" />
                           </Button>
                         </DropdownMenuTrigger>

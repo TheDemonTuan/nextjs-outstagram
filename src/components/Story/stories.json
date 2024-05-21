@@ -1,0 +1,72 @@
+[
+    {
+        "id": 1,
+        "email": "johndoe@example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "avatar": "https://images.pexels.com/photos/33045/lion-wild-africa-african.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+        "id": 2,
+        "email": "janedoe@example.com",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "avatar": "https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 3,
+        "email": "alice@example.com",
+        "first_name": "Alice",
+        "last_name": "Smith",
+        "avatar": "https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 4,
+        "email": "bob@example.com",
+        "first_name": "Bob",
+        "last_name": "Johnson",
+        "avatar": "https://images.pexels.com/photos/2101187/pexels-photo-2101187.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 5,
+        "email": "charlie@example.com",
+        "first_name": "Charlie",
+        "last_name": "Brown",
+        "avatar": "https://images.pexels.com/photos/1408221/pexels-photo-1408221.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 6,
+        "email": "6johndoe@example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "avatar": "https://images.pexels.com/photos/40896/larch-conifer-cone-branch-tree-40896.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 7,
+        "email": "7janedoe@example.com",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "avatar": "https://images.pexels.com/photos/733745/pexels-photo-733745.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 8,
+        "email": "8alice@example.com",
+        "first_name": "Alice",
+        "last_name": "Smith",
+        "avatar": "https://images.pexels.com/photos/593655/pexels-photo-593655.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 9,
+        "email": "9bob@example.com",
+        "first_name": "Bob",
+        "last_name": "Johnson",
+        "avatar": "https://images.pexels.com/photos/2559941/pexels-photo-2559941.jpeg?auto=compress&cs=tinysrgb&w=400"
+    },
+    {
+        "id": 10,
+        "email": "10@example.com",
+        "first_name": "Charlie",
+        "last_name": "Brown",
+        "avatar": "https://images.pexels.com/photos/1366913/pexels-photo-1366913.jpeg?auto=compress&cs=tinysrgb&w=400"
+    }
+]

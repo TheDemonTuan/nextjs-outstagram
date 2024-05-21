@@ -1,6 +1,6 @@
 "use client";
 
-import { AddIcon, DiscoverIcon, HomeIcon, MessagesIcon, ReelsIcon, SearchIcon } from "@/icons";
+import { AddIcon, DiscoverIcon, HomeIcon, MessagesIcon, Notifications, ReelsIcon, SearchIcon } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,7 +42,7 @@ const HeaderMenu = [
   },
   {
     name: "Notifications",
-    icon: FaRegHeart,
+    icon: Notifications,
     action: (callback: Function) => callback,
   },
   {
@@ -61,7 +61,7 @@ const Header = () => {
   const { authData, authIsLoading } = useAuth();
 
   console.log(authData);
-  
+
 
   return (
     <div className="flex flex-col w-64 h-dvh p-2 border-r border-gray-200 sticky top-0">
@@ -74,7 +74,7 @@ const Header = () => {
           width={128}
           priority={true}
         />
-    </Link>
+      </Link>
       <nav className="space-y-4 p-2">
         {HeaderMenu.map((item, index) => {
           const Icon = item.icon;

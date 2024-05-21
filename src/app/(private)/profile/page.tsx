@@ -10,7 +10,7 @@ import Gallery from "@/components/Profile/gallery";
 
 const ProfilePage = () => {
   return (
-    <div className="max-w-5xl mx-5 p-10 xl:mx-auto mt-5">
+    <div className="max-w-5xl mx-5 p-10 xl:mx-auto mt-2">
       <Information />
       <ProfileStories />
       <hr className="border-gray-300 mt-14" />

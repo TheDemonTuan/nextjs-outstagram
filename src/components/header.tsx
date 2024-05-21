@@ -1,6 +1,6 @@
 "use client";
 
-import { AddIcon, DiscoverIcon, HomeIcon, MessagesIcon, ReelsIcon, SearchIcon } from "@/icons";
+import { AddIcon, DiscoverIcon, HomeIcon, MessagesIcon, Notifications, ReelsIcon, SearchIcon } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,7 +42,7 @@ const HeaderMenu = [
   },
   {
     name: "Notifications",
-    icon: FaRegHeart,
+    icon: Notifications,
     action: (callback: Function) => callback,
   },
   {

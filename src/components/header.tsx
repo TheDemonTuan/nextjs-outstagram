@@ -61,7 +61,6 @@ const Header = () => {
   const { authData, authIsLoading } = useAuth();
 
   console.log(authData);
-  
 
   return (
     <div className="flex flex-col w-64 h-dvh p-2 border-r border-gray-200 sticky top-0">
@@ -74,7 +73,7 @@ const Header = () => {
           width={128}
           priority={true}
         />
-    </Link>
+      </Link>
       <nav className="space-y-4 p-2">
         {HeaderMenu.map((item, index) => {
           const Icon = item.icon;
@@ -90,17 +89,19 @@ const Header = () => {
               href={item.href || "#"}
               className={cn(MenuItemClass, isActiveClass && "font-bold")}
               onClick={(e) => {
-                e.preventDefault();
-                switch (item.name) {
-                  case "New":
-                    modalOpen(CreatePostModalKey);
-                    break;
-                  case "Search":
-                    break;
-                  case "Notifications":
-                    break;
-                  default:
-                    break;
+                if (!item.href && item.action) {
+                  e.preventDefault();
+                  switch (item.name) {
+                    case "New":
+                      modalOpen(CreatePostModalKey);
+                      break;
+                    case "Search":
+                      break;
+                    case "Notifications":
+                      break;
+                    default:
+                      break;
+                  }
                 }
               }}>
               <Icon className="w-7 h-7 group-hover:scale-105" />

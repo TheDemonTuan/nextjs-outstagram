@@ -20,6 +20,13 @@ const config = {
       },
     },
     extend: {
+      colors:{
+        'gray115': '#737373',
+      },
+      height: {
+        '160': '40rem',
+      },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -36,7 +43,10 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), nextui()],
+  plugins: [
+    require("tailwindcss-animate"),
+    nextui()
+  ],
 } satisfies Config;
 
 export default config;

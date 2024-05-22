@@ -40,9 +40,9 @@ const HeaderMenu = [
     action: (callback: Function) => callback,
   },
   {
-    name: "Explore",
+    name: "Explores",
     icon: DiscoverIcon,
-    href: "/explore",
+    href: "/explores",
   },
   {
     name: "Reels",
@@ -66,16 +66,22 @@ const HeaderMenu = [
   },
 ];
 
+const DisabledMenuItems = ["Explores", "Reels", "Messages", "Notifications", "New"];
+
 const MenuItemClass =
   "flex items-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
+
+const MenuItemClassDisabled = "flex items-center space-x-4 text-gray-900 group p-2 rounded-lg";
 
 const ShortMenuItemClass =
   "flex items-center justify-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
 
+const ShortMenuItemClassDisabled = "flex items-center justify-center space-x-4 text-gray-900 group p-2 rounded-lg";
+
 const Header = () => {
   const { modalOpen } = useModalStore();
   const pathName = usePathname();
-  const { authData, authIsLoading } = useAuth();
+  const { authData, authIsLoading, authIsError } = useAuth();
   const [isShortHeader, setIsShortHeader] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
@@ -110,6 +116,16 @@ const Header = () => {
                 ? pathName === item.href
                 : pathName.startsWith(item.href ?? "")
               : false;
+            if (authIsError && DisabledMenuItems.includes(item.name)) {
+              return (
+                <Fragment key={index}>
+                  <div className={cn(isShortHeader ? ShortMenuItemClassDisabled : MenuItemClassDisabled, "opacity-50")}>
+                    <Icon className="w-7 h-7" />
+                    {!isShortHeader && <span>{item.name}</span>}
+                  </div>
+                </Fragment>
+              );
+            }
             return (
               <Link
                 key={index}

@@ -5,9 +5,11 @@ import { useModalStore } from "@/stores/modal-store";
 import ProfileSettings, { ProfileSettingModalKey } from "./profile-settings";
 import { UserResponse } from "@/api/user";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { useAuth } from "@/hooks/useAuth";
 
 const Information = ({ userData }: { userData: UserResponse }) => {
   const { modalOpen } = useModalStore();
+  const { authData } = useAuth();
 
   return (
     <div className="flex justify-center">
@@ -23,16 +25,22 @@ const Information = ({ userData }: { userData: UserResponse }) => {
               {userData.username} <VerifiedIcon className="inline-flex" />
             </span>
           </div>
+          {authData?.id === userData.id && (
+            <>
+              <div className="cursor-pointer inline-flex items-center justify-center text-xs text-gray-700 font-semibold py-2 px-3 border-none rounded mr-4 bg-[#DBDBDB] w-24">
+                <span>Edit profile</span>
+              </div>
+              <div className="cursor-pointer inline-flex items-center justify-center text-xs text-gray-700 font-semibold py-2 px-3 border-none rounded mr-4 bg-[#DBDBDB] w-24">
+                <span>View archive</span>
+              </div>
+              <SettingIcon
+                className="cursor-pointer h-6 inline-block "
+                onClick={() => modalOpen(ProfileSettingModalKey)}
+              />
+              <ProfileSettings />
+            </>
+          )}
 
-          <div className="cursor-pointer inline-flex items-center justify-center text-xs text-gray-700 font-semibold py-2 px-3 border-none rounded mr-4 bg-[#DBDBDB] w-24">
-            <span>Edit profile</span>
-          </div>
-          <div className="cursor-pointer inline-flex items-center justify-center text-xs text-gray-700 font-semibold py-2 px-3 border-none rounded mr-4 bg-[#DBDBDB] w-24">
-            <span>View archive</span>
-          </div>
-          <ProfileSettings />
-
-          <SettingIcon className="cursor-pointer h-6 inline-block " onClick={() => modalOpen(ProfileSettingModalKey)} />
           <div className="mt-5 flex">
             <div>
               <span className="font-semibold text-sm leading-5">200</span>{" "}

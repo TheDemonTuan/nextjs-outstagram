@@ -3,7 +3,7 @@
 import Information from "@/components/Profile/information";
 import ProfileStories from "@/components/Profile/profile-stories";
 import { IoMdGrid } from "react-icons/io";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { BiMoviePlay } from "react-icons/bi";
 import Gallery from "@/components/Profile/gallery";
 import { useLazyQuery } from "@apollo/client";
@@ -14,11 +14,7 @@ import { notFound } from "next/navigation";
 
 const ProfilePage = ({ params }: { params: { username: string } }) => {
   const [getSearchResults, { data: userData, loading: userLoading, error: userError }] =
-    useLazyQuery<UserGetByUserNameResponse>(GET_USER_BY_USERNAME, {
-      onCompleted: (data) => {
-        console.log(data);
-      },
-    });
+    useLazyQuery<UserGetByUserNameResponse>(GET_USER_BY_USERNAME);
 
   useEffect(() => {
     getSearchResults({ variables: { username: params.username } });

@@ -28,7 +28,7 @@ export const InstagramIcon = (props: SVGProps<SVGSVGElement>) => {
         gradientTransform="matrix(1 0 0 .6663 0 1.849)"
         gradientUnits="userSpaceOnUse">
         <stop offset="0" stopColor="#4168c9"></stop>
-        <stop offset=".999" stopColor="#4168c9" stop-opacity="0"></stop>
+        <stop offset=".999" stopColor="#4168c9" stopOpacity="0"></stop>
       </radialGradient>
       <path
         fill="url(#yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2)"
@@ -313,7 +313,7 @@ export const StarIcon = (props: SVGProps<SVGSVGElement>) => {
 export const SettingIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_1_43)">
+      <g clipPath="url(#clip0_1_43)">
         <path
           d="M12 20.635C16.769 20.635 20.635 16.769 20.635 12C20.635 7.23102 16.769 3.365 12 3.365C7.23103 3.365 3.36501 7.23102 3.36501 12C3.36501 16.769 7.23103 20.635 12 20.635Z"
           stroke="#262626"

@@ -10,7 +10,7 @@ export interface UserResponse {
   phone: string;
   avatar: string;
   bio: string;
-  birthday: string;
+  birthday: Date;
   gender: boolean;
   role: boolean;
   active: boolean;
@@ -24,3 +24,5 @@ export interface UserResponse {
 
 export const userGetByUserID = async (userID: string) =>
   http.get<ApiSuccessResponse<UserResponse>>(`users/${userID}`).then((res) => res.data);
+export const userGetMe = async () => 
+  http.get<ApiSuccessResponse<UserResponse>>(`users/me`).then((res) => res.data);

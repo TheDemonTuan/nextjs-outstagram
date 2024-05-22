@@ -9,6 +9,7 @@ import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { Avatar, Button, Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 const HomePage = () => {
   const { data: postsData, isFetching: postsIsFetching } = useQuery<

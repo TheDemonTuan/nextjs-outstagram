@@ -10,7 +10,7 @@ export interface UserResponse {
   phone: string;
   avatar: string;
   bio: string;
-  birthday: string;
+  birthday: Date;
   gender: boolean;
   role: boolean;
   active: boolean;
@@ -32,3 +32,5 @@ export interface UserSearchResponse {
 export interface UserGetByUserNameResponse {
   get_user_by_username: UserResponse;
 }
+export const userGetMe = async () => 
+  http.get<ApiSuccessResponse<UserResponse>>(`users/me`).then((res) => res.data);

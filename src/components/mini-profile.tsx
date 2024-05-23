@@ -9,6 +9,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextu
 import { useModalStore } from "@/stores/modal-store";
 import { toast } from "sonner";
 import { clearJWT } from "@/actions";
+import Link from "next/link";
 
 const MiniProfile = () => {
   const { authData } = useAuth();
@@ -17,11 +18,11 @@ const MiniProfile = () => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-2">
-        <div className="rounded-full">
+        <Link href={`/${authData?.username}`} className="rounded-full">
           <Avatar src={getUserAvatarURL(authData?.avatar)} />
-        </div>
+        </Link>
         <div className="flex-1 mx-4">
-          <h2 className="font-bold">{authData?.username}</h2>
+          <Link href={`/${authData?.username}`} className="font-bold">{authData?.username}</Link>
           <h3 className="text-sm text-gray-400">{authData?.full_name}</h3>
         </div>
       </div>

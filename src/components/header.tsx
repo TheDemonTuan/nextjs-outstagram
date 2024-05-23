@@ -87,24 +87,24 @@ const Header = () => {
   const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
 
   return (
-    <div className="flex">
+    <>
       <div
         className={cn(
-          "flex flex-col h-dvh sticky top-0 p-2 border-r border-gray-300",
-          isShortHeader ? "w-[75px] space-y-8" : "w-[246px] space-y-6"
+          "flex flex-col h-dvh sticky top-0 border-r border-gray-300",
+          isShortHeader ? "w-[75px] space-y-8 p-2" : "w-[245px] space-y-6 p-4 pt-6"
         )}>
         <Link href={"/"} className={cn(isShortHeader ? "flex items-center justify-center p-3" : "p-2")}>
           {!isShortHeader ? (
             <Image
               alt="Outstagram logo"
-              className="w-auto h-auto"
+              className="object-cover w-auto h-auto"
               width={128}
               height={128}
               src="/logo.png"
               priority={true}
             />
           ) : (
-            <InstagramIcon className="w-10 h-10" />
+            <InstagramIcon className="w-12 h-12" />
           )}
         </Link>
         {/* Menu */}
@@ -194,7 +194,7 @@ const Header = () => {
           {isNotificationsOpen && <Notification />}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -36,9 +36,9 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   }
 
   return (
-    <div className="max-w-5xl mx-5 p-10 xl:mx-auto mt-2">
+    <div className="flex flex-col items-center mx-5 p-10">
       <Information userData={userData.get_user_by_username} />
-      <ProfileStories />
+      {/* <ProfileStories /> */}
       <hr className="border-gray-300 mt-14" />
       <div className="flex justify-center gap-10">
         <button className="focus:border-t border-gray-800 py-4 text-sm font-semibold flex gap-2 text-gray-400 focus:text-gray-600">

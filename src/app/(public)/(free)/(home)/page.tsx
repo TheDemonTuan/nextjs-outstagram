@@ -31,8 +31,10 @@ const HomePage = () => {
         {!authData && (
           <div className="flex flex-col items-center gap-2">
             <p className="text-lg font-semibold">Welcome to Outstagram</p>
-            <p className="text-sm text-gray-400">Sign in to see photos and videos from your friends.</p>
-            <Link href="/register">
+            <p className="text-sm text-gray-400">
+              Sign in to see photos and videos from your friends.
+            </p>
+            <Link href="/login">
               <Button color="primary">Sign in</Button>
             </Link>
           </div>
@@ -46,7 +48,10 @@ const HomePage = () => {
           </>
         )}
         <div className="text-xs text-gray-300">
-          <p>About · Help · Press · API · Jobs · Privacy · Terms · Locations · Top Accounts · Hashtags · Language</p>
+          <p>
+            About · Help · Press · API · Jobs · Privacy · Terms · Locations ·
+            Top Accounts · Hashtags · Language
+          </p>
           <p className="pt-5">© 2024 OUTSTAGRAM FROM METAN</p>
         </div>
       </div>

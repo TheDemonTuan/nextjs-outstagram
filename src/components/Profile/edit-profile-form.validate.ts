@@ -5,17 +5,10 @@ export const EditProfileFormValidateSchema = z.object({
 
   }),  
   bio : z.string({
-
+  }).max(150, {
+    message: "Full name must be less than 100 characters.",
   }),
-  avatar: z.string({
-
-  }),
-  email : z.string({
-
-  }),
-  phone : z.string({
-
-  }),
+  avatar: z.string(),
   full_name: z
     .string({
       required_error: "Full name is required.",

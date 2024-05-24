@@ -1,6 +1,6 @@
 "use client";
 import { UserResponse, userGetMe, userKey } from "@/api/user";
-import ProfileForm from "@/components/Profile/profile-form";
+import ProfileForm from "@/components/Profile/edit-profile-form";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { Spinner } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
@@ -18,8 +18,6 @@ const EditProfile = () => {
     queryFn: async () => userGetMe(),
     select: (data) => data.data,
   });
-
-  console.log(getProfile);
 
   return (
     <div className="px-12">

@@ -4,6 +4,8 @@ import { UserResponse } from "./user";
 
 // ----------------------------------------------LOGIN----------------------------------------------
 
+export const authKey = "auth";
+
 export interface AuthLoginParams {
   username: string;
   password: string;

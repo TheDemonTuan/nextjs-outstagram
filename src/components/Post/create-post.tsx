@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import ImageGallery from "react-image-gallery";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { PostResponse, postCreate, postKey } from "@/api/post";
@@ -36,6 +36,12 @@ const CreatePost = () => {
       toast.error(error?.response?.data?.message || "Add new post failed!");
     },
   });
+
+  useEffect(() => {
+    return () => {
+      previews.forEach((preview) => URL.revokeObjectURL(preview));
+    };
+  }, [selectedFiles, previews]);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;

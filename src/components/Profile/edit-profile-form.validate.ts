@@ -1,14 +1,13 @@
 import { z } from "zod";
 
 export const EditProfileFormValidateSchema = z.object({
-  gender : z.boolean({
+  gender: z.boolean({
 
-  }),  
-  bio : z.string({
+  }),
+  bio: z.string({
   }).max(150, {
     message: "Full name must be less than 100 characters.",
   }),
-  avatar: z.string(),
   full_name: z
     .string({
       required_error: "Full name is required.",

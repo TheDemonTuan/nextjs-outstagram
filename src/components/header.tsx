@@ -19,10 +19,9 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Input, Skeleton, Spinner } from "@nextui-org/react";
+import { Avatar, Input, Skeleton, Spinner } from "@nextui-org/react";
 import _ from "lodash";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { SEARCH_USER } from "@/graphql/query";
 import { UserSearchResponse } from "@/api/user";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
@@ -167,13 +166,12 @@ const Header = () => {
           {!authIsLoading ? (
             authData && (
               <Link href={`/${authData?.username}`} className={cn(isShortHeader ? ShortMenuItemClass : MenuItemClass)}>
-                <Avatar className="w-7 h-7 border group-hover:scale-105">
-                  <AvatarImage
-                    alt={authData?.username}
-                    src={!!authData?.avatar ? authData?.avatar : "/guest-avatar.png"}
-                  />
-                  <AvatarFallback>{authData?.username}</AvatarFallback>
-                </Avatar>
+                <Avatar
+                  src={getUserAvatarURL(authData?.avatar)}
+                  alt={authData?.username}
+                  className="w-7 h-7 border group-hover:scale-105"
+                  fallback={<Spinner size="sm" />}
+                />
                 {!isShortHeader && <span>Profile</span>}
               </Link>
             )
@@ -260,10 +258,11 @@ const Search = () => {
                   <Link
                     href={`/${user.username}`}
                     className="hover:bg-gray-200 w-full p-2 px-6 flex items-center gap-2 rounded-sm">
-                    <Avatar className="w-11 h-11 border">
-                      <AvatarImage alt={user.username} src={getUserAvatarURL(user.avatar)} />
-                      <AvatarFallback>{user.username}</AvatarFallback>
-                    </Avatar>
+                    <Avatar
+                      className="w-11 h-11 border"
+                      src={getUserAvatarURL(user.avatar)}
+                      fallback={<Spinner size="sm" />}
+                    />
                     <div className="flex flex-col">
                       <span className="font-semibold text-sm">{user.username}</span>
                       <span className="text-gray-400 text-sm">{user.full_name}</span>

@@ -9,7 +9,9 @@ export default function PrivateLayout({
   return (
     <div className="flex">
       <Header />
-      <AuthGuard>{children}</AuthGuard>
+      <AuthGuard>
+        <div className="flex-1">{children}</div>
+      </AuthGuard>
     </div>
   );
 }

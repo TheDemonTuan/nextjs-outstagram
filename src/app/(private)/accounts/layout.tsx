@@ -41,10 +41,7 @@ export default function SettingsLayout({
           ))}
         </TabsList>
       </Tabs>
-
-      <div className=" w-full bg-white dark:bg-neutral-950 mt-12">
-        {children}
-      </div>
+      <div className=" w-full bg-white dark:bg-neutral-950 mt-12">{children}</div>
     </div>
   );
 }

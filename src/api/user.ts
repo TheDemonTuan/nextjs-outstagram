@@ -34,3 +34,16 @@ export interface UserGetByUserNameResponse {
 }
 export const userGetMe = async () => 
   http.get<ApiSuccessResponse<UserResponse>>(`users/me`).then((res) => res.data);
+
+export interface UserUpdateMeResponse {
+    update_user: Pick<UserResponse, "username" | "full_name" | "avatar" | "birthday" | "bio" | "gender"> 
+  
+}  
+export const userUpdateMe = async (data: FormData) =>
+    http
+      .put<ApiSuccessResponse<UserResponse>>("users/me/update", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => res.data);

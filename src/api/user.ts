@@ -23,23 +23,58 @@ export interface UserResponse {
 }
 
 export const userGetByUserID = async (userID: string) =>
-  http.get<ApiSuccessResponse<UserResponse>>(`users/${userID}`).then((res) => res.data);
+  http
+    .get<ApiSuccessResponse<UserResponse>>(`users/${userID}`)
+    .then((res) => res.data);
 
 export interface UserSearchResponse {
-  search_user: Pick<UserResponse, "id" | "username" | "full_name" | "avatar" | "active">[];
+  search_user: Pick<
+    UserResponse,
+    "id" | "username" | "full_name" | "avatar" | "active"
+  >[];
 }
 
 export interface UserGetByUserNameResponse {
   get_user_by_username: UserResponse;
 }
 export const userGetMe = async () =>
-  http.get<ApiSuccessResponse<UserResponse>>(`users/me`).then((res) => res.data);
+  http
+    .get<ApiSuccessResponse<UserResponse>>(`users/me`)
+    .then((res) => res.data);
 
 export const userChangeAvatar = async (avatar: File) =>
   http
-    .patch<ApiSuccessResponse<string>>("users/me/avatar", { avatar }, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    .patch<ApiSuccessResponse<string>>(
+      "users/me/avatar",
+      { avatar },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    )
+    .then((res) => res.data);
+
+
+export interface UserEditProfileParams {
+  username : string,
+  full_name : string,
+  bio : string,
+  birthday: Date,
+  gender : boolean,
+
+}
+
+export interface UserEditProfileResponse  {
+  edit_profile: Pick<
+    UserResponse,
+    "username" | "full_name"| "bio" | "gender" | "birthday" 
+  >;
+}
+export const userEditProfile = async (params: UserEditProfileParams) =>
+  http
+    .put<ApiSuccessResponse<UserEditProfileResponse>>(
+      "users/me/profile",
+      params
+    )
     .then((res) => res.data);

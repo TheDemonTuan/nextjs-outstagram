@@ -56,24 +56,13 @@ export const userChangeAvatar = async (avatar: File) =>
     .then((res) => res.data);
 
 
-export interface UserEditProfileParams {
-  username : string,
-  full_name : string,
-  bio : string,
-  birthday: Date,
-  gender : boolean,
+export interface UserEditProfileParams extends Pick<UserResponse, "username" | "full_name" | "bio"| "birthday"> {
+  gender: string;
+ }
 
-}
-
-export interface UserEditProfileResponse  {
-  edit_profile: Pick<
-    UserResponse,
-    "username" | "full_name"| "bio" | "gender" | "birthday" 
-  >;
-}
 export const userEditProfile = async (params: UserEditProfileParams) =>
   http
-    .put<ApiSuccessResponse<UserEditProfileResponse>>(
+    .patch<ApiSuccessResponse<UserResponse>>(
       "users/me/profile",
       params
     )

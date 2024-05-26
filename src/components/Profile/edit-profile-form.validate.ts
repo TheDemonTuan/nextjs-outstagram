@@ -1,13 +1,10 @@
 import { z } from "zod";
 
 export const EditProfileFormValidateSchema = z.object({
-  gender: z.boolean({
-
-  }),
   bio: z.string({
   }).max(150, {
     message: "Full name must be less than 150 characters.",
-  }),
+  }).trim(),
   full_name: z
     .string({
       required_error: "Full name is required.",
@@ -21,7 +18,7 @@ export const EditProfileFormValidateSchema = z.object({
     })
     .regex(/^[a-zA-ZÀ-ỹ\s]+$/, {
       message: "Full name must be alphabetic.",
-    }),
+    }).trim(),
   username: z
     .string({
       required_error: "Username is required.",
@@ -35,7 +32,12 @@ export const EditProfileFormValidateSchema = z.object({
     })
     .regex(/^[a-zA-Z0-9]+$/, {
       message: "Username must be alphanumeric.",
-    }),
+    }).trim(),
+  gender: z
+    .string({
+      required_error: "Giới tính không được để trống.",
+    })
+    .trim(),
   birthday: z.date({
     required_error: "A date of birth is required.",
     invalid_type_error: "A date of birth is invalid.",

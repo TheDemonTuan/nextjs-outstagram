@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const EditProfileFormValidateSchema = z.object({
   gender: z.boolean({
+    message : "Gender is required",
 
   }),
   bio: z.string({

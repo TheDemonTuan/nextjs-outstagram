@@ -47,6 +47,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
+import { boolean } from "zod";
 
 const ProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
@@ -349,9 +350,7 @@ const ProfileForm = () => {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        // disabled={(date) =>
-                        //   date > new Date() || date < new Date("1900-01-01")
-                        // }
+                        disabled={(date) => date > new Date()}
                         initialFocus
                       />
                     </PopoverContent>

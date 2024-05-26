@@ -137,7 +137,7 @@ const ProfileForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <div className=" md:items-center gap-y-2 gap-x-8">
+                <div className="md:items-center gap-y-2 gap-x-8">
                   <FormLabel className="font-bold w-20 md:text-right">Username</FormLabel>
                   <FormControl className="mt-2">
                     <Input {...field} />
@@ -169,7 +169,7 @@ const ProfileForm = () => {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <div className=" md:items-center gap-y-2 gap-x-8">
+                <div className="md:items-center gap-y-2 gap-x-8">
                   <FormLabel className="font-bold w-20 md:text-right">Bio</FormLabel>
                   <FormControl className="mt-2">
                     <div className="relative w-full">
@@ -190,7 +190,7 @@ const ProfileForm = () => {
             name="gender"
             render={() => (
               <FormItem>
-                <div className=" md:items-center gap-y-2 gap-x-8">
+                <div className="md:items-center gap-y-2 gap-x-8">
                   <FormLabel className="font-bold w-20 md:text-right">Gender</FormLabel>
                   <Select
                     onValueChange={(value) => {
@@ -226,8 +226,8 @@ const ProfileForm = () => {
                     <PopoverTrigger>
                       <FormControl>
                         <Button
-                          size="lg"
-                          about="Chọn ngày sinh"
+                          about="Choose date of birth day"
+                          variant="bordered"
                           className={cn(
                             "pl-3 text-left text-sm",
                             !field.value && "text-muted-foreground",
@@ -236,7 +236,7 @@ const ProfileForm = () => {
                           {field.value ? (
                             <span>{new Date(field.value).toDateString()}</span>
                           ) : (
-                            <span>Chọn ngày sinh</span>
+                            <span>Choose date of birth day</span>
                           )}
                           <CalendarIcon className="ml-auto h-5 w-5 opacity-50" />
                         </Button>

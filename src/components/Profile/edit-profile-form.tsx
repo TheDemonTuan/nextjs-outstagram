@@ -2,52 +2,21 @@
 
 import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormField,
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  FormDescription,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  UserEditProfileResponse,
-  userChangeAvatar,
-  userEditProfile,
-} from "@/api/user";
-import {
-  EditProfileFormValidate,
-  EditProfileFormValidateSchema,
-} from "./edit-profile-form.validate";
+import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
+import { UserEditProfileParams, UserResponse, userChangeAvatar, userEditProfile } from "@/api/user";
+import { EditProfileFormValidate, EditProfileFormValidateSchema } from "./edit-profile-form.validate";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Avatar,
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Spinner,
-} from "@nextui-org/react";
-import { cn } from "@/lib/utils";
-import { CalendarIcon } from "@radix-ui/react-icons";
+import { Avatar, Button, Input, Popover, PopoverContent, PopoverTrigger, Spinner, Textarea } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
-import { boolean } from "zod";
+import { Calendar } from "@/components/ui/calendar";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
@@ -64,15 +33,12 @@ const ProfileForm = () => {
       username: authData?.username || "",
       full_name: authData?.full_name || "",
       bio: authData?.bio || "",
-      gender: authData?.gender || false,
+      gender: authData?.gender ? "female" : "male",
       birthday: authData?.birthday || new Date(),
     },
   });
 
-  const {
-    mutate: userChangeAvatarMutate,
-    isPending: userChangeAvatarIsPending,
-  } = useMutation<
+  const { mutate: userChangeAvatarMutate, isPending: userChangeAvatarIsPending } = useMutation<
     ApiSuccessResponse<string>,
     ApiErrorResponse,
     { avatar: File }
@@ -80,20 +46,18 @@ const ProfileForm = () => {
     mutationFn: async (params) => await userChangeAvatar(params.avatar),
     onSuccess: (res) => {
       toast.success("Change avatar successfully!");
-      queryClient.setQueryData(
-        [authKey],
-        (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-          oldData
-            ? {
-                ...oldData,
-                data: {
-                  user: {
-                    ...oldData.data.user,
-                    avatar: res.data,
-                  },
+      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
+        oldData
+          ? {
+              ...oldData,
+              data: {
+                user: {
+                  ...oldData.data.user,
+                  avatar: res.data,
                 },
-              }
-            : oldData
+              },
+            }
+          : oldData
       );
     },
     onError: (error) => {
@@ -101,35 +65,32 @@ const ProfileForm = () => {
     },
   });
 
-  const { mutate: userEditProfileMutate, isPending: userEditProfileIsLoading } =
-    useMutation<
-      ApiSuccessResponse<UserEditProfileResponse>,
-      ApiErrorResponse,
-      EditProfileFormValidate
-    >({
-      mutationFn: async (data) => await userEditProfile(data),
-      onSuccess: (res) => {
-        toast.success("Profile updated successfully!");
-        queryClient.setQueryData(
-          [authKey],
-          (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-            oldData
-              ? {
-                  ...oldData,
-                  data: {
-                    user: {
-                      ...oldData.data.user,
-                      ...res.data.edit_profile,
-                    },
-                  },
-                }
-              : oldData
-        );
-      },
-      onError: (error) => {
-        toast.error(error?.response?.data?.message || "Profile update failed!");
-      },
-    });
+  const { mutate: userEditProfileMutate, isPending: userEditProfileIsLoading } = useMutation<
+    ApiSuccessResponse<UserResponse>,
+    ApiErrorResponse,
+    UserEditProfileParams
+  >({
+    mutationFn: async (data) => await userEditProfile(data),
+    onSuccess: (res) => {
+      toast.success("Profile updated successfully!");
+      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
+        oldData
+          ? {
+              ...oldData,
+              data: {
+                user: {
+                  ...oldData.data.user,
+                  ...res.data,
+                },
+              },
+            }
+          : oldData
+      );
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Profile update failed!");
+    },
+  });
 
   useEffect(() => {
     if (authData?.birthday) {
@@ -145,14 +106,6 @@ const ProfileForm = () => {
   };
 
   const onSubmit = async (data: EditProfileFormValidate) => {
-    console.log({
-      username: data.username,
-      full_name: data.full_name,
-      bio: data.bio,
-      gender: data.gender,
-      birthday: data.birthday,
-    });
-
     userEditProfileMutate({
       username: data.username,
       full_name: data.full_name,
@@ -170,9 +123,7 @@ const ProfileForm = () => {
             src={getUserAvatarURL(authData?.avatar)}
             alt="User Avatar"
             fallback={<Spinner />}
-            onClick={() =>
-              !userChangeAvatarIsPending && avatarInputRef.current?.click()
-            }
+            onClick={() => !userChangeAvatarIsPending && avatarInputRef.current?.click()}
             showFallback={userChangeAvatarIsPending}
             isDisabled={userChangeAvatarIsPending}
             icon={userChangeAvatarIsPending ? <Spinner /> : undefined}
@@ -186,10 +137,7 @@ const ProfileForm = () => {
           color="primary"
           className="text-white text-sm font-bold cursor-pointer"
           isLoading={userChangeAvatarIsPending}
-          onClick={() =>
-            !userChangeAvatarIsPending && avatarInputRef.current?.click()
-          }
-        >
+          onClick={() => !userChangeAvatarIsPending && avatarInputRef.current?.click()}>
           Change photo
         </Button>
         <Input
@@ -204,39 +152,36 @@ const ProfileForm = () => {
         <form onSubmit={editForm.handleSubmit(onSubmit)} className="space-y-8">
           <FormItem>
             <div className=" md:items-center gap-y-2 gap-x-8">
-              <FormLabel className="font-bold w-20 md:text-right">
-                Website
-              </FormLabel>
+              <FormLabel className="font-bold w-20 md:text-right">Website</FormLabel>
               <FormControl aria-disabled className="mt-2">
-                <Input
-                  placeholder="Website"
-                  disabled
-                  className="bg-[#EFEFEF] border-1 "
-                />
+                <Input placeholder="Website" disabled className="bg-[#EFEFEF] border-1" />
               </FormControl>
             </div>
             <FormDescription className="text-xs">
-              Editing your links is only available on mobile. Visit the
-              Instagram app and edit your profile to change the websites in your
-              bio.
+              Editing your links is only available on mobile. Visit the Instagram app and edit your profile to change
+              the websites in your bio.
             </FormDescription>
-            <FormMessage className="md:ml-24" />
+            <FormMessage />
           </FormItem>
           <FormField
             control={editForm.control}
             name="username"
             render={({ field }) => (
               <FormItem>
-                <div className=" md:items-center gap-y-2 gap-x-8">
-                  <FormLabel className="font-bold w-20 md:text-right">
-                    Username
-                  </FormLabel>
+                <div className="md:items-center gap-y-2 gap-x-8">
+                  <FormLabel className="font-bold w-20 md:text-right">Username</FormLabel>
                   <FormControl className="mt-2">
-                    <Input {...field} />
+                    <Input
+                      isRequired
+                      autoFocus
+                      isInvalid={!!editForm.formState.errors.username}
+                      errorMessage={editForm.formState.errors.username?.message}
+                      placeholder={authData?.username || ""}
+                      variant="bordered"
+                      {...field}
+                    />
                   </FormControl>
                 </div>
-
-                <FormMessage className="md:ml-24" />
               </FormItem>
             )}
           />
@@ -246,15 +191,18 @@ const ProfileForm = () => {
             render={({ field }) => (
               <FormItem>
                 <div className="md:items-center gap-y-2 gap-x-8">
-                  <FormLabel className="font-bold w-20 md:text-right">
-                    Name
-                  </FormLabel>
+                  <FormLabel className="font-bold w-20 md:text-right">Full Name</FormLabel>
                   <FormControl className="mt-2">
-                    <Input {...field} />
+                    <Input
+                      isRequired
+                      isInvalid={!!editForm.formState.errors.full_name}
+                      errorMessage={editForm.formState.errors.full_name?.message}
+                      placeholder={authData?.full_name || ""}
+                      variant="bordered"
+                      {...field}
+                    />
                   </FormControl>
                 </div>
-
-                <FormMessage className="md:ml-24" />
               </FormItem>
             )}
           />
@@ -263,59 +211,54 @@ const ProfileForm = () => {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <div className=" md:items-center gap-y-2 gap-x-8">
-                  <FormLabel className="font-bold w-20 md:text-right">
-                    Bio
-                  </FormLabel>
+                <div className="md:items-center gap-y-2 gap-x-8">
+                  <FormLabel className="font-bold w-20 md:text-right">Bio</FormLabel>
                   <FormControl className="mt-2">
                     <div className="relative w-full">
-                      <Textarea className="resize-none" {...field} />
-                      <FormDescription className="absolute bottom-2 right-2 text-xs">
-                        {field.value?.length} / 150
-                      </FormDescription>
+                      <Textarea
+                        className="resize-none"
+                        isInvalid={!!editForm.formState.errors.bio || field.value.length > 150}
+                        errorMessage={editForm.formState.errors.bio?.message || "Bio must be less than 150 characters."}
+                        placeholder={authData?.bio || ""}
+                        variant="bordered"
+                        {...field}
+                      />
+                      <span className="absolute bottom-3 right-2 text-xs">{field.value?.length} / 150</span>
                     </div>
                   </FormControl>
                 </div>
-                <FormMessage className="md:ml-24" />
               </FormItem>
             )}
           />
-
           <FormField
             control={editForm.control}
             name="gender"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <div className=" md:items-center gap-y-2 gap-x-8">
-                  <FormLabel className="font-bold w-20 md:text-right">
-                    Gender
-                  </FormLabel>
+                  <FormLabel className="font-bold w-20 md:text-right">Gender</FormLabel>
                   <Select
                     onValueChange={(value) => {
-                      const genderValue = value === "true";
-                      editForm.setValue("gender", genderValue);
+                      editForm.setValue("gender", value);
                     }}
-                    defaultValue={authData?.gender ? "true" : "false"}
-                  >
+                    defaultValue={authData?.gender ? "female" : "male"}
+                    {...field}>
                     <FormControl className="mt-2">
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="true">Female</SelectItem>
-                      <SelectItem value="false">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-                <FormDescription className="text-xs">
-                  This wont be part of your public profile.
-                </FormDescription>
+                <FormDescription className="text-xs">This wont be part of your public profile.</FormDescription>
                 <FormMessage className="md:ml-24" />
               </FormItem>
             )}
           />
-
           <FormField
             control={editForm.control}
             name="birthday"
@@ -327,19 +270,17 @@ const ProfileForm = () => {
                     <PopoverTrigger>
                       <FormControl>
                         <Button
-                          size="lg"
-                          about="Chọn ngày sinh"
+                          about="Choose date of birth day"
+                          variant="bordered"
                           className={cn(
                             "pl-3 text-left text-sm",
                             !field.value && "text-muted-foreground",
-                            !!editForm.formState.errors.birthday &&
-                              "border-danger text-danger"
-                          )}
-                        >
+                            !!editForm.formState.errors.birthday && "border-danger text-danger"
+                          )}>
                           {field.value ? (
                             <span>{new Date(field.value).toDateString()}</span>
                           ) : (
-                            <span>Chọn ngày sinh</span>
+                            <span>Choose date of birth day</span>
                           )}
                           <CalendarIcon className="ml-auto h-5 w-5 opacity-50" />
                         </Button>
@@ -360,15 +301,13 @@ const ProfileForm = () => {
               </FormItem>
             )}
           />
-
           <div className="flex justify-end">
             <Button
               type="submit"
               isLoading={userEditProfileIsLoading}
               // disabled={!isDirty || !isValid || isSubmitting}
               color="primary"
-              className="pl-20 pr-20 pt-5 pb-5"
-            >
+              className="pl-20 pr-20 pt-5 pb-5">
               Update
             </Button>
           </div>

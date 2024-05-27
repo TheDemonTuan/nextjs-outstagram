@@ -3,10 +3,10 @@ import React from "react";
 
 const Gallery = () => {
   return (
-    <div className="grid grid-cols-3 gap-1">
+    <div className="grid grid-cols-3 gap-1 mx-28">
       <div className="relative group cursor-pointer">
         <img
-          className="object-cover overflow-hidden h-80 fill"
+          className="object-cover overflow-hidden h-[310] fill"
           src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
           alt=""
         />
@@ -15,22 +15,22 @@ const Gallery = () => {
         </div>
       </div>
       <img
-        className="object-cover overflow-hidden h-80 fill"
+        className="object-cover overflow-hidden h-[310] fill"
         src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
         alt=""
       />
       <img
-        className="object-cover overflow-hidden h-80 fill"
+        className="object-cover overflow-hidden h-[310] fill"
         src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
         alt=""
       />
       <img
-        className="object-cover overflow-hidden h-80 fill"
+        className="object-cover overflow-hidden h-[310] fill"
         src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
         alt=""
       />
       <img
-        className="object-cover overflow-hidden h-80 fill"
+        className="object-cover overflow-hidden h-[310] fill"
         src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
         alt=""
       />

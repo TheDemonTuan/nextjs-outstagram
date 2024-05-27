@@ -38,6 +38,8 @@ const ProfileForm = () => {
     },
   });
 
+  // const { isDirty, isSubmitting, isValid } = editForm.formState;
+
   const { mutate: userChangeAvatarMutate, isPending: userChangeAvatarIsPending } = useMutation<
     ApiSuccessResponse<string>,
     ApiErrorResponse,
@@ -304,8 +306,8 @@ const ProfileForm = () => {
           <div className="flex justify-end">
             <Button
               type="submit"
+              // isDisabled={!isDirty || !isValid || isSubmitting}
               isLoading={userEditProfileIsLoading}
-              // disabled={!isDirty || !isValid || isSubmitting}
               color="primary"
               className="pl-20 pr-20 pt-5 pb-5">
               Update

@@ -36,16 +36,19 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   }
 
   return (
-    <div className="flex flex-col items-center mx-5 p-10">
+    <div className="flex flex-col mt-9 mx-28 mb-40">
       <Information userData={userData.get_user_by_username} />
       {/* <ProfileStories /> */}
-      <hr className="border-gray-300 mt-14" />
+      <div className="w-full">
+        <hr className="border-gray-300 mt-14 border-t mx-28" />
+      </div>
+
       <div className="flex justify-center gap-10">
-        <button className="focus:border-t border-gray-800 py-4 text-sm font-semibold flex gap-2 text-gray-400 focus:text-gray-600">
+        <button className="focus:border-t border-gray-800 py-4 text-sm font-normal flex gap-2 text-gray-400 focus:text-black">
           <IoMdGrid size="19" />
           POSTS
         </button>
-        <button className="focus:border-t border-gray-800 py-4 text-sm font-semibold flex gap-2 text-gray-400 focus:text-gray-600">
+        <button className="focus:border-t border-gray-800 py-4 text-sm font-normal flex gap-2 text-gray-400 focus:text-black">
           <BiMoviePlay className="w-5 h-5" />
           REELS
         </button>

@@ -153,10 +153,10 @@ const ProfileForm = () => {
       <Form {...editForm}>
         <form onSubmit={editForm.handleSubmit(onSubmit)} className="space-y-8">
           <FormItem>
-            <div className=" md:items-center gap-y-2 gap-x-8">
+            <div className=" md:items-center gap-y-2 gap-x-8 ">
               <FormLabel className="font-bold w-20 md:text-right">Website</FormLabel>
-              <FormControl aria-disabled className="mt-2">
-                <Input placeholder="Website" disabled />
+              <FormControl aria-disabled className="mt-2 cursor-pointer">
+                <Input placeholder="Website" disabled className="bg-[#EFEFEF] border-1 rounded-xl " />
               </FormControl>
             </div>
             <FormDescription className="text-xs">

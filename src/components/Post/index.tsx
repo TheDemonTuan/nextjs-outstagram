@@ -2,12 +2,7 @@
 
 import React, { Fragment, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,14 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  BookmarkIcon,
-  FileWarningIcon,
-  HeartIcon,
-  MessageCircleIcon,
-  SendIcon,
-  StarIcon,
-} from "@/icons";
+import { BookmarkIcon, FileWarningIcon, StarIcon } from "@/icons";
 import Link from "next/link";
 import { Button, select } from "@nextui-org/react";
 import { PostResponse, postKey } from "@/api/post";
@@ -38,6 +26,7 @@ import { useModalStore } from "@/stores/modal-store";
 import MoreOptions, { MoreOptionsModalKey } from "./more-options";
 import { useQuery, gql } from "@apollo/client";
 import { useAuth } from "@/hooks/useAuth";
+import PostReact from "./post-react";
 
 const postsQuery = gql`
   query Posts_by_user_id($id: String!) {
@@ -74,9 +63,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
   return (
     <div className="flex flex-col col-span-2 items-center gap-2">
       {postData.map((post, index) => {
-        const userData = userResults.find(
-          (result) => result.data?.data?.id === post.user_id
-        )?.data?.data;
+        const userData = userResults.find((result) => result.data?.data?.id === post.user_id)?.data?.data;
         return (
           <Fragment key={post.id}>
             <Card className="w-full max-w-lg overflow-hidden border-transparent bg-transparent shadow-none">
@@ -85,22 +72,13 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                   <Card className="rounded-none shadow-none border-0">
                     <CardHeader className="p-4 flex flex-row items-center">
                       <div className="flex gap-1 items-center justify-center">
-                        <Link
-                          className="flex items-center gap-2 text-sm font-medium"
-                          href="#"
-                        >
+                        <Link className="flex items-center gap-2 text-sm font-medium" href="#">
                           <Avatar className="w-9 h-9 border">
                             <AvatarImage
                               alt={userData?.username}
-                              src={
-                                !!userData?.avatar
-                                  ? userData?.avatar
-                                  : "/guest-avatar.png"
-                              }
+                              src={!!userData?.avatar ? userData?.avatar : "/guest-avatar.png"}
                             />
-                            <AvatarFallback>
-                              {userData?.username}
-                            </AvatarFallback>
+                            <AvatarFallback>{userData?.username}</AvatarFallback>
                           </Avatar>
                           {userData?.full_name}
                         </Link>
@@ -119,8 +97,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                             className="ml-auto w-8 h-8 rounded-full"
                             isIconOnly
                             onClick={() => modalOpen(MoreOptionsModalKey)}
-                            variant="light"
-                          >
+                            variant="light">
                             <PiDotsThreeBold className="w-6 h-6" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -170,42 +147,14 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                         </div>
                       ) : null}
                     </CardContent>
-                    <CardFooter className="p-2 pb-4 grid gap-1">
-                      <div className="flex items-center w-full">
-                        <Button isIconOnly variant="light">
-                          <HeartIcon className="w-6 h-6 text-red-500" />
-                          <span className="sr-only">Like</span>
-                        </Button>
-                        <Button isIconOnly variant="light">
-                          <MessageCircleIcon
-                            className="w-6 h-6 hover:stroke-gray115"
-                            stroke="#262626"
-                          />
-                          <span className="sr-only">Comment</span>
-                        </Button>
-                        <Button isIconOnly variant="light">
-                          <SendIcon
-                            className="w-6 h-6 hover:stroke-gray115"
-                            stroke="#262626"
-                          />
-                          <span className="sr-only">Share</span>
-                        </Button>
-                        <Button className="ml-auto" isIconOnly variant="light">
-                          <BookmarkIcon
-                            className="w-6 h-6  hover:stroke-gray115"
-                            stroke="#262626"
-                          />
-                          <span className="sr-only">BookmarkIcon</span>
-                        </Button>
-                      </div>
-                      <span className="font-semibold px-2 text-sm">
-                        {post.post_likes?.length} likes
-                      </span>
-                      <div className="px-2 py-1 text-sm">
+                    <CardFooter className="p-2 pb-4 grid gap-2">
+                      <PostReact postID={post.id} isLiked={true} />
+                      <span className="font-semibold text-sm">{post.post_likes?.length} likes</span>
+                      <div className="py-1 text-sm">
                         <span className="font-bold">{userData?.username}</span>
                         <span className="ml-1">{post.caption}</span>
                       </div>
-                      <div className="px-2 text-sm w-full grid gap-1.5">
+                      <div className="text-sm w-full grid gap-1.5">
                         <div>
                           <Link className="font-medium" href="#">
                             john
@@ -224,9 +173,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                 </div>
               </CardContent>
             </Card>
-            {index === postData.length - 1 ? null : (
-              <hr className="w-[512] border-gray-300" />
-            )}
+            {index === postData.length - 1 ? null : <hr className="w-[512] border-gray-300" />}
           </Fragment>
         );
       })}

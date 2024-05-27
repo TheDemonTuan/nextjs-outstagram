@@ -2,22 +2,13 @@ import { SVGProps } from "react";
 
 export const InstagramIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      x="0px"
-      y="0px"
-      width="100"
-      height="100"
-      viewBox="0 0 48 48"
-    >
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
       <radialGradient
         id="yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1"
         cx="19.38"
         cy="42.035"
         r="44.899"
-        gradientUnits="userSpaceOnUse"
-      >
+        gradientUnits="userSpaceOnUse">
         <stop offset="0" stopColor="#fd5"></stop>
         <stop offset=".328" stopColor="#ff543f"></stop>
         <stop offset=".348" stopColor="#fc5245"></stop>
@@ -28,46 +19,34 @@ export const InstagramIcon = (props: SVGProps<SVGSVGElement>) => {
       </radialGradient>
       <path
         fill="url(#yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1)"
-        d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
-      ></path>
+        d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"></path>
       <radialGradient
         id="yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2"
         cx="11.786"
         cy="5.54"
         r="29.813"
         gradientTransform="matrix(1 0 0 .6663 0 1.849)"
-        gradientUnits="userSpaceOnUse"
-      >
+        gradientUnits="userSpaceOnUse">
         <stop offset="0" stopColor="#4168c9"></stop>
         <stop offset=".999" stopColor="#4168c9" stopOpacity="0"></stop>
       </radialGradient>
       <path
         fill="url(#yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2)"
-        d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
-      ></path>
+        d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"></path>
       <path
         fill="#fff"
-        d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5	s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"
-      ></path>
+        d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5	s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"></path>
       <circle cx="31.5" cy="16.5" r="1.5" fill="#fff"></circle>
       <path
         fill="#fff"
-        d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12	C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"
-      ></path>
+        d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12	C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"></path>
     </svg>
   );
 };
 
 export const HomeIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="100"
-      height="100"
-      viewBox="0 0 100 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M13.1075 44.7422L15.883 47.8378L15.883 47.8378L13.1075 44.7422ZM86.6761 44.7422L83.9006 47.8378L83.9006 47.8378L86.6761 44.7422ZM51.2795 13.0058L54.055 9.9102L54.055 9.9102L51.2795 13.0058ZM48.504 13.0058L51.2795 16.1014L51.2795 16.1014L48.504 13.0058ZM41.5639 87.3621H37.4062V91.5197H41.5639V87.3621ZM58.2196 87.3621V91.5197H62.3772V87.3621H58.2196ZM16.574 46.29C16.574 46.8807 16.3228 47.4435 15.883 47.8378L10.332 41.6466C9.01258 42.8296 8.25872 44.5179 8.25872 46.29H16.574ZM16.574 85.2833V46.29H8.25872V85.2833H16.574ZM14.4952 83.2045C15.6433 83.2045 16.574 84.1352 16.574 85.2833H8.25872C8.25872 88.7277 11.0509 91.5198 14.4952 91.5198V83.2045ZM85.2883 83.2045H14.4952V91.5198H85.2883V83.2045ZM83.2095 85.2833C83.2095 84.1352 84.1402 83.2045 85.2883 83.2045V91.5198C88.7326 91.5198 91.5248 88.7277 91.5248 85.2833H83.2095ZM83.2095 46.29V85.2833H91.5248V46.29H83.2095ZM83.9006 47.8378C83.4608 47.4435 83.2095 46.8807 83.2095 46.29H91.5248C91.5248 44.5179 90.7709 42.8295 89.4516 41.6466L83.9006 47.8378ZM48.504 16.1014L83.9006 47.8378L89.4516 41.6466L54.055 9.9102L48.504 16.1014ZM51.2795 16.1014C50.4898 16.8094 49.2937 16.8094 48.504 16.1014L54.055 9.9102C51.6859 7.78609 48.0976 7.78607 45.7285 9.91021L51.2795 16.1014ZM15.883 47.8378L51.2795 16.1014L45.7285 9.9102L10.332 41.6466L15.883 47.8378ZM45.7215 66.5424C45.7215 64.2393 47.5886 62.3722 49.8917 62.3722V54.0569C42.9962 54.0569 37.4062 59.6469 37.4062 66.5424H45.7215ZM45.7215 87.3621V66.5424H37.4062V87.3621H45.7215ZM58.2196 83.2044H41.5639V91.5197H58.2196V83.2044ZM54.0619 66.5424V87.3621H62.3772V66.5424H54.0619ZM49.8917 62.3722C52.1949 62.3722 54.0619 64.2393 54.0619 66.5424H62.3772C62.3772 59.6469 56.7873 54.0569 49.8917 54.0569V62.3722Z"
         fill="#2F2F2F"
@@ -78,14 +57,7 @@ export const HomeIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const SearchIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="101"
-      height="101"
-      viewBox="0 0 101 101"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="101" height="101" viewBox="0 0 101 101" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -98,14 +70,7 @@ export const SearchIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const DiscoverIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="15"
-      height="15"
-      viewBox="0 0 15 15"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1_8798)">
         <path
           d="M8.55162 8.58794L4.90869 10.0033L6.32863 6.35579L9.97156 4.94043L8.55162 8.58794Z"
@@ -130,12 +95,7 @@ export const DiscoverIcon = (props: SVGProps<SVGSVGElement>) => {
       </g>
       <defs>
         <clipPath id="clip0_1_8798">
-          <rect
-            width="13.7469"
-            height="13.7469"
-            fill="white"
-            transform="translate(0.566528 0.595703)"
-          />
+          <rect width="13.7469" height="13.7469" fill="white" transform="translate(0.566528 0.595703)" />
         </clipPath>
       </defs>
     </svg>
@@ -144,14 +104,7 @@ export const DiscoverIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const ReelsIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="101"
-      height="100"
-      viewBox="0 0 101 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="101" height="100" viewBox="0 0 101 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -164,14 +117,7 @@ export const ReelsIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const MessagesIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1_18)">
         <path
           d="M12.003 2.001C13.303 1.95925 14.5982 2.17926 15.8115 2.64794C17.0248 3.11662 18.1316 3.82442 19.0659 4.72927C20.0003 5.63412 20.7433 6.71757 21.2506 7.91522C21.758 9.11288 22.0195 10.4003 22.0195 11.701C22.0195 13.0017 21.758 14.2891 21.2506 15.4868C20.7433 16.6844 20.0003 17.7679 19.0659 18.6727C18.1316 19.5776 17.0248 20.2854 15.8115 20.7541C14.5982 21.2227 13.303 21.4427 12.003 21.401C11.0251 21.4037 10.0514 21.2746 9.108 21.017C8.93102 20.9687 8.74279 20.9828 8.575 21.057L6.591 21.933C6.47104 21.9857 6.33996 22.0083 6.20927 21.9985C6.07859 21.9888 5.95228 21.9472 5.84142 21.8773C5.73056 21.8074 5.63855 21.7114 5.57344 21.5977C5.50834 21.484 5.47213 21.356 5.468 21.225L5.414 19.445C5.40949 19.3369 5.38327 19.2308 5.33688 19.133C5.29049 19.0353 5.2249 18.9479 5.144 18.876C4.14018 17.9724 3.3408 16.8649 2.7993 15.6275C2.25781 14.3902 1.98667 13.0515 2.004 11.701C1.9964 10.3995 2.25214 9.11 2.75583 7.90994C3.25952 6.70989 4.00076 5.62412 4.93495 4.71795C5.86914 3.81179 6.97697 3.10396 8.19181 2.63704C9.40665 2.17013 10.7024 1.95377 12.003 2.001Z"
@@ -197,14 +143,7 @@ export const MessagesIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const AddIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="101"
-      height="101"
-      viewBox="0 0 101 101"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="101" height="101" viewBox="0 0 101 101" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -217,14 +156,7 @@ export const AddIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const BookmarkIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1_80)">
         <path
           d="M20 21L12 13.44L4 21V3H20V21Z"
@@ -255,8 +187,7 @@ export const FileWarningIcon = (props: SVGProps<SVGSVGElement>) => {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round"
-    >
+      strokeLinejoin="round">
       <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
       <path d="M12 9v4" />
       <path d="M12 17h.01" />
@@ -266,14 +197,7 @@ export const FileWarningIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const Notifications = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1_70)">
         <path
           d="M16.792 3.904C18.1064 3.97667 19.3389 4.56591 20.2207 5.54331C21.1026 6.52071 21.5624 7.80705 21.5 9.122C21.5 12.194 18.848 14.081 16.303 16.344C13.791 18.587 12.438 19.813 12 20.096C11.523 19.787 9.85698 18.273 7.69698 16.344C5.14098 14.072 2.49998 12.167 2.49998 9.122C2.43755 7.80705 2.89737 6.52071 3.77924 5.54331C4.66111 4.56591 5.89355 3.97667 7.20798 3.904C7.93613 3.88193 8.65754 4.04919 9.30169 4.3894C9.94585 4.72962 10.4907 5.23117 10.883 5.845C11.723 7.02 11.863 7.608 12.003 7.608C12.143 7.608 12.281 7.02 13.113 5.842C13.503 5.22533 14.0481 4.7218 14.6937 4.38172C15.3393 4.04164 16.0628 3.87691 16.792 3.904ZM16.792 1.904C15.8839 1.87493 14.981 2.05109 14.1504 2.41935C13.3199 2.78762 12.5831 3.33851 11.995 4.031C11.4074 3.34053 10.6721 2.79091 9.84353 2.42276C9.01496 2.0546 8.11427 1.87732 7.20798 1.904C5.36285 1.97615 3.62136 2.77599 2.36432 4.1286C1.10728 5.48121 0.436977 7.27654 0.499982 9.122C0.499982 12.732 3.04998 14.949 5.51498 17.092C5.79798 17.338 6.08398 17.586 6.36798 17.839L7.39498 18.757C8.51502 19.8228 9.68925 20.8301 10.913 21.775C11.2368 21.9846 11.6143 22.0962 12 22.0962C12.3857 22.0962 12.7632 21.9846 13.087 21.775C14.3497 20.8013 15.56 19.7615 16.713 18.66L17.635 17.836C17.928 17.576 18.225 17.317 18.52 17.062C20.854 15.037 23.5 12.742 23.5 9.122C23.563 7.27654 22.8927 5.48121 21.6356 4.1286C20.3786 2.77599 18.6371 1.97615 16.792 1.904Z"
@@ -301,8 +225,7 @@ export const HeartIcon = (props: SVGProps<SVGSVGElement>) => {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round"
-    >
+      strokeLinejoin="round">
       <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
     </svg>
   );
@@ -310,14 +233,7 @@ export const HeartIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const MessageCircleIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1_73)">
         <path
           d="M20.656 17.008C21.8711 14.9061 22.2795 12.4337 21.8048 10.0527C21.3301 7.67172 20.0048 5.54497 18.0765 4.06978C16.1482 2.59458 13.7488 1.87186 11.3266 2.0366C8.9043 2.20135 6.62486 3.24231 4.91408 4.96501C3.20329 6.68772 2.17817 8.97432 2.03024 11.3977C1.8823 13.821 2.62166 16.2153 4.1102 18.1334C5.59874 20.0514 7.73463 21.3619 10.1189 21.82C12.5031 22.2782 14.9726 21.8527 17.066 20.623L22 22L20.656 17.008Z"
@@ -347,8 +263,7 @@ export const MoveHorizontalIcon = (props: SVGProps<SVGSVGElement>) => {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round"
-    >
+      strokeLinejoin="round">
       <polyline points="18 8 22 12 18 16" />
       <polyline points="6 8 2 12 6 16" />
       <line x1="2" x2="22" y1="12" y2="12" />
@@ -358,21 +273,9 @@ export const MoveHorizontalIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const SendIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1_76)">
-        <path
-          d="M22 3L9.21802 10.083"
-          stroke=""
-          strokeWidth="2"
-          strokeLinejoin="round"
-        />
+        <path d="M22 3L9.21802 10.083" stroke="" strokeWidth="2" strokeLinejoin="round" />
         <path
           d="M11.698 20.334L22 3.001H2L9.218 10.084L11.698 20.334Z"
           stroke=""
@@ -401,8 +304,7 @@ export const StarIcon = (props: SVGProps<SVGSVGElement>) => {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round"
-    >
+      strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
@@ -410,14 +312,7 @@ export const StarIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const SettingIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1_43)">
         <path
           d="M12 20.635C16.769 20.635 20.635 16.769 20.635 12C20.635 7.23102 16.769 3.365 12 3.365C7.23103 3.365 3.36501 7.23102 3.36501 12C3.36501 16.769 7.23103 20.635 12 20.635Z"
@@ -444,14 +339,7 @@ export const SettingIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const VerifiedIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M6.45 16.875L5.025 14.475L2.325 13.875L2.5875 11.1L0.75 9L2.5875 6.9L2.325 4.125L5.025 3.525L6.45 1.125L9 2.2125L11.55 1.125L12.975 3.525L15.675 4.125L15.4125 6.9L17.25 9L15.4125 11.1L15.675 13.875L12.975 14.475L11.55 16.875L9 15.7875L6.45 16.875ZM8.2125 11.6625L12.45 7.425L11.4 6.3375L8.2125 9.525L6.6 7.95L5.55 9L8.2125 11.6625Z"
         fill="#3897F0"
@@ -462,14 +350,7 @@ export const VerifiedIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const UserIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="101"
-      height="100"
-      viewBox="0 0 101 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="101" height="100" viewBox="0 0 101 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -482,14 +363,7 @@ export const UserIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const ArchiveIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_1_58)">
         <path
           d="M12 1.505C13.7268 1.50479 15.427 1.93049 16.95 2.74436C18.473 3.55824 19.7718 4.73518 20.7313 6.17092C21.6907 7.60666 22.2813 9.25687 22.4506 10.9754C22.62 12.6939 22.3628 14.4276 21.702 16.023C21.0412 17.6184 19.9972 19.0262 18.6623 20.1217C17.3274 21.2171 15.743 21.9665 14.0493 22.3033C12.3557 22.6401 10.6051 22.5541 8.95265 22.0527C7.30022 21.5513 5.79694 20.6502 4.57599 19.429"
@@ -533,14 +407,7 @@ export const ArchiveIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const EditIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="28px"
-      height="28px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="28px" height="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -553,14 +420,7 @@ export const EditIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const PhoneIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="26px"
-      height="26px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="26px" height="26px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="Communication / Phone">
         <path
           id="Vector"
@@ -577,14 +437,7 @@ export const PhoneIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const VideoIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="27px"
-      height="27x"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="27px" height="27x" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M16 10L18.5768 8.45392C19.3699 7.97803 19.7665 7.74009 20.0928 7.77051C20.3773 7.79703 20.6369 7.944 20.806 8.17433C21 8.43848 21 8.90095 21 9.8259V14.1741C21 15.099 21 15.5615 20.806 15.8257C20.6369 16.056 20.3773 16.203 20.0928 16.2295C19.7665 16.2599 19.3699 16.022 18.5768 15.5461L16 14M6.2 18H12.8C13.9201 18 14.4802 18 14.908 17.782C15.2843 17.5903 15.5903 17.2843 15.782 16.908C16 16.4802 16 15.9201 16 14.8V9.2C16 8.0799 16 7.51984 15.782 7.09202C15.5903 6.71569 15.2843 6.40973 14.908 6.21799C14.4802 6 13.9201 6 12.8 6H6.2C5.0799 6 4.51984 6 4.09202 6.21799C3.71569 6.40973 3.40973 6.71569 3.21799 7.09202C3 7.51984 3 8.07989 3 9.2V14.8C3 15.9201 3 16.4802 3.21799 16.908C3.40973 17.2843 3.71569 17.5903 4.09202 17.782C4.51984 18 5.07989 18 6.2 18Z"
         stroke="#000000"
@@ -598,15 +451,8 @@ export const VideoIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const InformationIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="27px"
-      height="27x"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g clip-path="url(#clip0_429_11160)">
+    <svg {...props} width="27px" height="27x" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_429_11160)">
         <circle
           cx="12"
           cy="11.9999"
@@ -616,22 +462,8 @@ export const InformationIcon = (props: SVGProps<SVGSVGElement>) => {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <rect
-          x="12"
-          y="8"
-          width="0.01"
-          height="0.01"
-          stroke="#292929"
-          strokeWidth="3.75"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M12 12V16"
-          stroke="#292929"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        <rect x="12" y="8" width="0.01" height="0.01" stroke="#292929" strokeWidth="3.75" strokeLinejoin="round" />
+        <path d="M12 12V16" stroke="#292929" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
       </g>
       <defs>
         <clipPath id="clip0_429_11160">
@@ -644,14 +476,7 @@ export const InformationIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const EmojiLookBottomIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M8.5 14C8.22386 14 8 13.7761 8 13.5C8 13.2239 8.22386 13 8.5 13C8.77614 13 9 13.2239 9 13.5C9 13.7761 8.77614 14 8.5 14Z"
         fill="#000000"
@@ -681,14 +506,7 @@ export const EmojiLookBottomIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const MicIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      fill="#000000"
-      width="23px"
-      height="23px"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} fill="#000000" width="23px" height="23px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <g data-name="Layer 2">
         <g data-name="mic">
           <rect width="24" height="24" opacity="0" />
@@ -704,14 +522,7 @@ export const MicIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const ImgBoxIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24px"
-      height="24px"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg {...props} width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M3 11C3 7.22876 3 5.34315 4.17157 4.17157C5.34315 3 7.22876 3 11 3H13C16.7712 3 18.6569 3 19.8284 4.17157C21 5.34315 21 7.22876 21 11V13C21 16.7712 21 18.6569 19.8284 19.8284C18.6569 21 16.7712 21 13 21H11C7.22876 21 5.34315 21 4.17157 19.8284C3 18.6569 3 16.7712 3 13V11Z"
         stroke="#000000"

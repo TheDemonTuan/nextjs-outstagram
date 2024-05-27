@@ -36,7 +36,7 @@ const HeaderMenu = [
   {
     name: "Search",
     icon: SearchIcon,
-    action: (callback: Function) => callback,
+    action: true,
   },
   {
     name: "Explores",
@@ -56,12 +56,12 @@ const HeaderMenu = [
   {
     name: "Notifications",
     icon: Notifications,
-    action: (callback: Function) => callback,
+    action: true,
   },
   {
     name: "New",
     icon: AddIcon,
-    action: (callback: Function) => callback,
+    action: true,
   },
 ];
 

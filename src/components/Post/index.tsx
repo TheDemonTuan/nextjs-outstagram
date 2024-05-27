@@ -22,13 +22,14 @@ import Image from "next/image";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
 import { useModalStore } from "@/stores/modal-store";
-import MoreOptions, { MoreOptionsModalKey } from "./more-options";
+import PostMoreOptions, { PostMoreOptionsModalKey } from "./post-more-options";
 import PostReact from "./post-react";
 import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
-  const { modalOpen } = useModalStore();
+  const { modalOpen, setModalData } = useModalStore();
   const { authData } = useAuth();
 
   const listUserID = postData.map((post) => post.user_id);
@@ -41,125 +42,106 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
   });
 
   return (
-    <div className="flex flex-col col-span-2 items-center gap-2">
-      {postData.map((post, index) => {
-        const userData = userResults.find((result) => result.data?.data?.id === post.user_id)?.data?.data;
-        const postLikes = post.post_likes.filter((like) => like.is_liked);
-        const isUserLiked = postLikes.some((like) => like.user_id === authData?.id);
-        return (
-          <Fragment key={post.id}>
-            <Card className="w-full max-w-lg overflow-hidden border-transparent bg-transparent shadow-none">
-              <CardContent className="p-0">
-                <div className="grid gap-4">
-                  <Card className="rounded-none shadow-none border-0">
-                    <CardHeader className="p-4 flex flex-row items-center">
-                      <div className="flex gap-1 items-center justify-center">
-                        <Link className="flex items-center gap-2 text-sm font-medium" href="#">
-                          <Avatar className="w-9 h-9 border">
-                            <AvatarImage
-                              alt={userData?.username}
-                              src={!!userData?.avatar ? userData?.avatar : "/guest-avatar.png"}
-                            />
-                            <AvatarFallback>{userData?.username}</AvatarFallback>
-                          </Avatar>
-                          {userData?.full_name}
-                        </Link>
-                        <span className="text-sm text-gray-500">
-                          •{" "}
-                          {formatDistanceToNow(post.updated_at, {
-                            addSuffix: true,
-                          })}
-                        </span>
-                      </div>
-                      <MoreOptions />
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            className="ml-auto w-8 h-8 rounded-full"
-                            isIconOnly
-                            onClick={() => modalOpen(MoreOptionsModalKey)}
-                            variant="light">
-                            <PiDotsThreeBold className="w-6 h-6" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <BookmarkIcon className="w-4 h-4 mr-2" />
-                            Save
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <StarIcon className="w-4 h-4 mr-2" />
-                            Add to favorites
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <FileWarningIcon className="w-4 h-4 mr-2" />
-                            Report
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </CardHeader>
-                    <Share />
-                    <CardContent className="p-2">
-                      {post.post_images.length ? (
-                        <div className="slide-container">
-                          <ImageGallery
-                            items={post.post_images.map((image, index) => {
-                              return {
-                                original: image.url,
-                                index,
-                              };
+    <>
+      <div className="flex flex-col col-span-2 items-center gap-2">
+        {postData.map((post, index) => {
+          const userData = userResults.find((result) => result.data?.data?.id === post.user_id)?.data?.data;
+          const postLikes = post.post_likes.filter((like) => like.is_liked);
+          const isUserLiked = postLikes.some((like) => like.user_id === authData?.id);
+          return (
+            <Fragment key={post.id}>
+              <Card className="w-full max-w-lg overflow-hidden border-transparent bg-transparent shadow-none">
+                <CardContent className="p-0">
+                  <div className="grid gap-4">
+                    <Card className="rounded-none shadow-none border-0">
+                      <CardHeader className="p-2 flex flex-row items-center">
+                        <div className="flex gap-1 items-center justify-center">
+                          <Link className="flex items-center gap-2 text-sm font-medium" href={`/${userData?.username}`}>
+                            <Avatar className="w-9 h-9 border">
+                              <AvatarImage alt={userData?.username} src={getUserAvatarURL(userData?.avatar)} />
+                              <AvatarFallback>{userData?.username}</AvatarFallback>
+                            </Avatar>
+                            {userData?.full_name}
+                          </Link>
+                          <span className="text-xs text-gray-500">
+                            •{" "}
+                            {formatDistanceToNow(post.updated_at, {
+                              addSuffix: true,
                             })}
-                            renderItem={(item) => {
-                              return (
-                                <div className="image-gallery-image relative">
-                                  <Image
-                                    src={item.original}
-                                    alt={userData?.username + " post image"}
-                                    className="object-cover min-w-[468px] max-h-[564] w-full h-full rounded-lg shadow-lg"
-                                    width={500}
-                                    height={500}
-                                  />
-                                </div>
-                              );
-                            }}
-                            showPlayButton={false}
-                            showThumbnails={false}
-                          />
+                          </span>
                         </div>
-                      ) : null}
-                    </CardContent>
-                    <CardFooter className="p-2 pb-4 grid gap-2">
-                      <PostReact postID={post.id} isLiked={isUserLiked} />
-                      <span className="font-semibold text-sm">{postLikes?.length} likes</span>
-                      <div className="py-1 text-sm">
-                        <span className="font-bold">{userData?.username}</span>
-                        <span className="ml-1">{post.caption}</span>
-                      </div>
-                      <div className="text-sm w-full grid gap-1.5">
-                        <div>
-                          <Link className="font-medium" href="#">
-                            john
-                          </Link>
-                          Wow, this photo is absolutely stunning! 😍✨
+                        <span
+                          className="ml-auto w-8 h-8 rounded-full"
+                          onClick={() => {
+                            setModalData(post);
+                            modalOpen(PostMoreOptionsModalKey);
+                          }}>
+                          <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+                        </span>
+                      </CardHeader>
+                      <Share />
+                      <CardContent className="p-2">
+                        {post.post_images.length ? (
+                          <div className="slide-container">
+                            <ImageGallery
+                              items={post.post_images.map((image, index) => {
+                                return {
+                                  original: image.url,
+                                  index,
+                                };
+                              })}
+                              renderItem={(item) => {
+                                return (
+                                  <div className="image-gallery-image relative">
+                                    <Image
+                                      src={item.original}
+                                      alt={userData?.username + " post image"}
+                                      className="object-cover min-w-[468px] max-h-[564] w-full h-full rounded-lg shadow-lg"
+                                      width={500}
+                                      height={500}
+                                    />
+                                  </div>
+                                );
+                              }}
+                              showPlayButton={false}
+                              showThumbnails={false}
+                            />
+                          </div>
+                        ) : null}
+                      </CardContent>
+                      <CardFooter className="p-2 pb-4 grid gap-2">
+                        <PostReact postID={post.id} isLiked={isUserLiked} />
+                        <span className="font-semibold text-sm">{postLikes?.length} likes</span>
+                        <div className="py-1 text-sm">
+                          <span className="font-bold">{userData?.username}</span>
+                          <span className="ml-1">{post.caption}</span>
                         </div>
-                        <div>
-                          <Link className="font-medium" href="#">
-                            amelia
-                          </Link>
-                          This post just made my day! 😃👍
+                        <div className="text-sm w-full grid gap-1.5">
+                          <div>
+                            <Link className="font-medium" href="#">
+                              john
+                            </Link>
+                            Wow, this photo is absolutely stunning! 😍✨
+                          </div>
+                          <div>
+                            <Link className="font-medium" href="#">
+                              amelia
+                            </Link>
+                            This post just made my day! 😃👍
+                          </div>
                         </div>
-                      </div>
-                    </CardFooter>
-                  </Card>
-                </div>
-              </CardContent>
-            </Card>
-            {index === postData.length - 1 ? null : <hr className="w-[512] border-gray-300" />}
-          </Fragment>
-        );
-      })}
-    </div>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                </CardContent>
+              </Card>
+              {index === postData.length - 1 ? null : <hr className="w-[512] border-gray-300" />}
+            </Fragment>
+          );
+        })}
+      </div>
+      <PostMoreOptions />
+    </>
   );
 };
 

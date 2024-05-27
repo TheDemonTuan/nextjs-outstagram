@@ -27,6 +27,7 @@ import MoreOptions, { MoreOptionsModalKey } from "./more-options";
 import { useQuery, gql } from "@apollo/client";
 import { useAuth } from "@/hooks/useAuth";
 import PostReact from "./post-react";
+import Share, { SharedModalKey } from "./share";
 
 const postsQuery = gql`
   query Posts_by_user_id($id: String!) {
@@ -118,6 +119,9 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </CardHeader>
+
+                    <Share />
+
                     <CardContent className="p-2">
                       {post.post_images.length ? (
                         <div className="slide-container">

@@ -6,7 +6,18 @@ import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDes
 import { UserEditProfileParams, UserResponse, userChangeAvatar, userEditProfile } from "@/api/user";
 import { EditProfileFormValidate, EditProfileFormValidateSchema } from "./edit-profile-form.validate";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Avatar, Button, Input, Popover, PopoverContent, PopoverTrigger, Spinner, Textarea } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  DatePicker,
+  DateValue,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Spinner,
+  Textarea,
+} from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,6 +28,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CalendarDate, parseDate } from "@internationalized/date";
 
 const ProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
@@ -268,36 +280,19 @@ const ProfileForm = () => {
               <FormItem className="flex flex-col">
                 <FormLabel className="font-bold w-20">Birthday</FormLabel>
                 <FormControl>
-                  <Popover>
-                    <PopoverTrigger>
-                      <FormControl>
-                        <Button
-                          about="Choose date of birth day"
-                          variant="bordered"
-                          className={cn(
-                            "pl-3 text-left text-sm",
-                            !field.value && "text-muted-foreground",
-                            !!editForm.formState.errors.birthday && "border-danger text-danger"
-                          )}>
-                          {field.value ? (
-                            <span>{new Date(field.value).toDateString()}</span>
-                          ) : (
-                            <span>Choose date of birth day</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-5 w-5 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) => date > new Date()}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <DatePicker
+                    isInvalid={!!editForm.formState.errors.birthday}
+                    errorMessage={editForm.formState.errors.birthday?.message}
+                    isRequired
+                    variant="bordered"
+                    // showMonthAndYearPickers
+                    onChange={(value: DateValue) => {
+                      value && field.onChange(new Date(value.toString()));
+                    }}
+                    aria-label="Birthday"
+                    aria-labelledby="birthday"
+                    defaultValue={parseDate(new Date(authData?.birthday || "").toISOString().split("T")[0])}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -306,7 +301,6 @@ const ProfileForm = () => {
           <div className="flex justify-end">
             <Button
               type="submit"
-              // isDisabled={!isDirty || !isValid || isSubmitting}
               isLoading={userEditProfileIsLoading}
               color="primary"
               className="pl-20 pr-20 pt-5 pb-5">

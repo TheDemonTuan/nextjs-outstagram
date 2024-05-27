@@ -1,5 +1,7 @@
+import { PostResponse, postKey } from "@/api/post";
 import { PostLikeResponse, postLike } from "@/api/post_like";
-import { BookmarkIcon, LikeHeartIcon, MessageCircleIcon, SendIcon } from "@/icons";
+import { useAuth } from "@/hooks/useAuth";
+import { BookmarkIcon, LikeHeartIcon, MessageCircleIcon, SendIcon, UnLikeHeartIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -7,20 +9,40 @@ import { toast } from "sonner";
 
 const PostReact = ({ postID, isLiked }: { postID: string; isLiked: boolean }) => {
   const queryClient = useQueryClient();
+  const { authData } = useAuth();
+
   const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postLike(params),
     onSuccess: (likePostData) => {
-      //   queryClient.invalidateQueries({
-      //     queryKey: ["posts"],
-      //   });
+      queryClient.setQueryData([postKey, "me"], (oldData: ApiSuccessResponse<PostResponse[]>) => {
+        return {
+          ...oldData,
+          data: oldData.data.map((post) => {
+            if (post.id === postID) {
+              return {
+                ...post,
+                post_likes: post.post_likes.map((postLike) => {
+                  if (postLike.user_id === authData?.id) {
+                    return {
+                      ...postLike,
+                      is_liked: likePostData.data.is_liked,
+                    };
+                  }
+                  return postLike;
+                }),
+              };
+            }
+            return post;
+          }),
+        };
+      });
     },
     onError: (error) => {
-      //   toast.error();
+      toast.error(error?.response?.data?.message || "Like post failed!");
     },
   });
 
   const handleLikePost = async () => {
-    // setIsLiked((prev) => !prev);
     postLikeMutate(postID);
   };
 
@@ -28,7 +50,11 @@ const PostReact = ({ postID, isLiked }: { postID: string; isLiked: boolean }) =>
     <div className="flex items-center w-full">
       <div className="flex gap-4 items-center justify-center">
         <div onClick={handleLikePost}>
-          <LikeHeartIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer text-red-500" stroke="#262626" />
+          {isLiked ? (
+            <LikeHeartIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer text-red-500" />
+          ) : (
+            <UnLikeHeartIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" />
+          )}
           <span className="sr-only">Like</span>
         </div>
         <div>

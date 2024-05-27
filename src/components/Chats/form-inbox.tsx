@@ -1,4 +1,4 @@
-import { EmojiLookBottomIcon, HeartIcon, ImgBoxIcon, MicIcon } from "@/icons";
+import { EmojiLookBottomIcon, LikeHeartIcon, ImgBoxIcon, MicIcon } from "@/icons";
 import React, { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import MessageInput from "./message-input";
@@ -18,11 +18,11 @@ const FormInbox = () => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {};
 
   return (
-    <div className="sticky bottom-0 py-4 px-4 bg-white items-center gap-2 lg:gap-4 w-full">
+    <div className="sticky bottom-0 py-4 px-4 bg-white items-center gap-2 lg:gap-4 w-full z-10">
       <div className="flex text-xs font-light text-gray-500 px-3 justify-end py-3">
         Seen just now
       </div>
-      <div className=" border-1 py-0 px-4  flex items-center rounded-full gap-2 lg:gap-4 w-full ">
+      <div className="border-1 py-0 px-4 flex items-center rounded-full gap-2 lg:gap-4 w-full">
         <EmojiLookBottomIcon />
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -48,7 +48,7 @@ const FormInbox = () => {
               <ImgBoxIcon />
             </div>
             <div className="p-2">
-              <HeartIcon />
+              <LikeHeartIcon />
             </div>
           </div>
         </form>

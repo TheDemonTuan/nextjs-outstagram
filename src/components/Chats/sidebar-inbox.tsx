@@ -6,7 +6,7 @@ import UserBox from "./user-box";
 function SildeBarInbox({ children }: { children: React.ReactNode }) {
   return (
     <div className="h-full">
-      <div className="fixed inset-y-0 pb-20 lg:pb-0 lg:block overflow-y-auto border-r border-gray-200 block w-[400]">
+      <div className="fixed inset-y-0 pb-20 lg:pb-0 lg:block overflow-y-auto overflow-x-hidden border-r border-gray-200 block w-[400]">
         <div className="px-0 py-5">
           <div className="flex-col">
             <div className="flex flex-row items-center px-5">

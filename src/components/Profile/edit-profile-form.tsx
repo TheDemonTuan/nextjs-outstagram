@@ -156,7 +156,7 @@ const ProfileForm = () => {
             <div className=" md:items-center gap-y-2 gap-x-8">
               <FormLabel className="font-bold w-20 md:text-right">Website</FormLabel>
               <FormControl aria-disabled className="mt-2">
-                <Input placeholder="Website" disabled className="bg-[#EFEFEF] border-1" />
+                <Input placeholder="Website" disabled />
               </FormControl>
             </div>
             <FormDescription className="text-xs">

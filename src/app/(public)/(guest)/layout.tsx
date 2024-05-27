@@ -1,5 +1,4 @@
 import Header from "@/components/header";
-import AuthGuard from "@/guards/AuthGuard";
 
 export default function PrivateLayout({
   children,
@@ -9,7 +8,7 @@ export default function PrivateLayout({
   return (
     <div className="flex">
       <Header />
-      {children}
+      <div className="flex-1">{children}</div>
     </div>
   );
 }

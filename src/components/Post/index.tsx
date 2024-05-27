@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import {
@@ -12,11 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BookmarkIcon, FileWarningIcon, StarIcon } from "@/icons";
 import Link from "next/link";
-import { Button, select } from "@nextui-org/react";
-import { PostResponse, postKey } from "@/api/post";
+import { Button } from "@nextui-org/react";
+import { PostResponse } from "@/api/post";
 import { useQueries } from "@tanstack/react-query";
-import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { UserResponse, userGetByUserID, userKey } from "@/api/user";
+import { userGetByUserID, userKey } from "@/api/user";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Image from "next/image";
@@ -24,33 +23,13 @@ import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
 import { useModalStore } from "@/stores/modal-store";
 import MoreOptions, { MoreOptionsModalKey } from "./more-options";
-import { useQuery, gql } from "@apollo/client";
-import { useAuth } from "@/hooks/useAuth";
 import PostReact from "./post-react";
-import Share, { SharedModalKey } from "./share";
-
-const postsQuery = gql`
-  query Posts_by_user_id($id: String!) {
-    posts_by_user_id(id: $id) {
-      active
-      caption
-      created_at
-      id
-      is_hide_comment
-      is_hide_like
-      user {
-        avatar
-        username
-      }
-      files {
-        url
-      }
-    }
-  }
-`;
+import Share from "./share";
+import { useAuth } from "@/hooks/useAuth";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
   const { modalOpen } = useModalStore();
+  const { authData } = useAuth();
 
   const listUserID = postData.map((post) => post.user_id);
 
@@ -65,6 +44,8 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
     <div className="flex flex-col col-span-2 items-center gap-2">
       {postData.map((post, index) => {
         const userData = userResults.find((result) => result.data?.data?.id === post.user_id)?.data?.data;
+        const postLikes = post.post_likes.filter((like) => like.is_liked);
+        const isUserLiked = postLikes.some((like) => like.user_id === authData?.id);
         return (
           <Fragment key={post.id}>
             <Card className="w-full max-w-lg overflow-hidden border-transparent bg-transparent shadow-none">
@@ -91,7 +72,6 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                         </span>
                       </div>
                       <MoreOptions />
-
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -119,9 +99,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </CardHeader>
-
                     <Share />
-
                     <CardContent className="p-2">
                       {post.post_images.length ? (
                         <div className="slide-container">
@@ -152,8 +130,8 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                       ) : null}
                     </CardContent>
                     <CardFooter className="p-2 pb-4 grid gap-2">
-                      <PostReact postID={post.id} isLiked={true} />
-                      <span className="font-semibold text-sm">{post.post_likes?.length} likes</span>
+                      <PostReact postID={post.id} isLiked={isUserLiked} />
+                      <span className="font-semibold text-sm">{postLikes?.length} likes</span>
                       <div className="py-1 text-sm">
                         <span className="font-bold">{userData?.username}</span>
                         <span className="ml-1">{post.caption}</span>

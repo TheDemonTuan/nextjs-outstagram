@@ -13,7 +13,7 @@ import Link from "next/link";
 
 const HomePage = () => {
   const { authData } = useAuth();
-  const { data: postsData, isFetching: postsIsFetching } = useQuery<
+  const { data: postsData, isLoading: postsIsLoading } = useQuery<
     ApiSuccessResponse<PostResponse[]>,
     ApiErrorResponse,
     PostResponse[]
@@ -27,7 +27,7 @@ const HomePage = () => {
     <div className="flex-auto grid grid-flow-col justify-evenly p-8">
       <div className="flex flex-col col-span-2 items-center gap-2">
         <Stories />
-        {!postsIsFetching && postsData && <Post postData={postsData} />}
+        {!postsIsLoading && postsData && <Post postData={postsData} />}
         {!authData && (
           <div className="flex flex-col items-center gap-2">
             <p className="text-lg font-semibold">Welcome to Outstagram</p>

@@ -65,25 +65,17 @@ const HeaderMenu = [
   },
 ];
 
-const DisabledMenuItems = [
-  "Explores",
-  "Reels",
-  "Messages",
-  "Notifications",
-  "New",
-];
+const DisabledMenuItems = ["Explores", "Reels", "Messages", "Notifications", "New"];
 
 const MenuItemClass =
   "flex items-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
 
-const MenuItemClassDisabled =
-  "flex items-center space-x-4 text-gray-900 group p-2 rounded-lg";
+const MenuItemClassDisabled = "flex items-center space-x-4 text-gray-900 group p-2 rounded-lg";
 
 const ShortMenuItemClass =
   "flex items-center justify-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
 
-const ShortMenuItemClassDisabled =
-  "flex items-center justify-center space-x-4 text-gray-900 group p-2 rounded-lg";
+const ShortMenuItemClassDisabled = "flex items-center justify-center space-x-4 text-gray-900 group p-2 rounded-lg";
 
 const Header = () => {
   const { modalOpen } = useModalStore();
@@ -98,17 +90,9 @@ const Header = () => {
       <div
         className={cn(
           "flex flex-col h-dvh sticky top-0 border-r border-gray-300",
-          isShortHeader
-            ? "w-[75px] space-y-8 p-2"
-            : "w-[245px] space-y-6 p-4 pt-6"
-        )}
-      >
-        <Link
-          href={"/"}
-          className={cn(
-            isShortHeader ? "flex items-center justify-center p-3" : "p-2"
-          )}
-        >
+          isShortHeader ? "w-[75px] space-y-8 p-2" : "w-[245px] space-y-6 p-4 pt-6"
+        )}>
+        <Link href={"/"} className={cn(isShortHeader ? "flex items-center justify-center p-3" : "p-2")}>
           {!isShortHeader ? (
             <Image
               alt="Outstagram logo"
@@ -134,14 +118,7 @@ const Header = () => {
             if (authIsError && DisabledMenuItems.includes(item.name)) {
               return (
                 <Fragment key={index}>
-                  <div
-                    className={cn(
-                      isShortHeader
-                        ? ShortMenuItemClassDisabled
-                        : MenuItemClassDisabled,
-                      "opacity-50"
-                    )}
-                  >
+                  <div className={cn(isShortHeader ? ShortMenuItemClassDisabled : MenuItemClassDisabled, "opacity-50")}>
                     <Icon className="w-7 h-7" />
                     {!isShortHeader && <span>{item.name}</span>}
                   </div>
@@ -152,10 +129,7 @@ const Header = () => {
               <Link
                 key={index}
                 href={item.href || "#"}
-                className={cn(
-                  isShortHeader ? ShortMenuItemClass : MenuItemClass,
-                  isActiveClass && "font-bold"
-                )}
+                className={cn(isShortHeader ? ShortMenuItemClass : MenuItemClass, isActiveClass && "font-bold")}
                 onClick={(e) => {
                   if (!item.href && item.action) {
                     e.preventDefault();
@@ -181,9 +155,16 @@ const Header = () => {
                       default:
                         break;
                     }
+                  } else {
+                    switch (item.name) {
+                      case "Messages":
+                        setIsShortHeader(true);
+                        break;
+                      default:
+                        break;
+                    }
                   }
-                }}
-              >
+                }}>
                 <Icon className="w-7 h-7 group-hover:scale-105" />
                 {!isShortHeader && <span>{item.name}</span>}
               </Link>
@@ -192,12 +173,7 @@ const Header = () => {
           {/* Profile */}
           {!authIsLoading ? (
             authData && (
-              <Link
-                href={`/${authData?.username}`}
-                className={cn(
-                  isShortHeader ? ShortMenuItemClass : MenuItemClass
-                )}
-              >
+              <Link href={`/${authData?.username}`} className={cn(isShortHeader ? ShortMenuItemClass : MenuItemClass)}>
                 <Avatar
                   src={getUserAvatarURL(authData?.avatar)}
                   alt={authData?.username}
@@ -233,12 +209,14 @@ export default Header;
 const Search = () => {
   const keyWordRef = useRef<HTMLInputElement>(null);
 
-  const [getSearchResults, { data: searchData, loading: searchLoading }] =
-    useLazyQuery<UserSearchResponse>(SEARCH_USER, {
+  const [getSearchResults, { data: searchData, loading: searchLoading }] = useLazyQuery<UserSearchResponse>(
+    SEARCH_USER,
+    {
       onError() {
         toast.error("Error while searching user");
       },
-    });
+    }
+  );
 
   const debouncedHandleSearch = useCallback(
     _.debounce(() => {
@@ -258,8 +236,7 @@ const Search = () => {
         className={cn(
           "flex flex-col justify-between w-full h-40 p-4",
           !keyWordRef.current?.value && "border-b border-gray-300"
-        )}
-      >
+        )}>
         <span className="text-2xl p-2 font-semibold">Search</span>
         <Input
           autoFocus
@@ -281,49 +258,38 @@ const Search = () => {
         />
       </div>
       <div className={cn("flex flex-col", !keyWordRef.current?.value && "p-6")}>
-        {keyWordRef.current?.value &&
-          !searchLoading &&
-          searchData?.search_user?.length && (
-            <>
-              {searchData?.search_user?.map((user) => {
-                return (
-                  <div className="flex items-center" key={user.id}>
-                    <Link
-                      href={`/${user.username}`}
-                      className="hover:bg-gray-200 w-full p-2 px-6 flex items-center gap-2 rounded-sm"
-                    >
-                      <Avatar
-                        className="w-11 h-11 border"
-                        src={getUserAvatarURL(user.avatar)}
-                        fallback={<Spinner size="sm" />}
-                      />
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-sm">
-                          {user.username}
-                        </span>
-                        <span className="text-gray-400 text-sm">
-                          {user.full_name}
-                        </span>
-                      </div>
-                    </Link>
-                  </div>
-                );
-              })}
-            </>
-          )}
-        {keyWordRef.current?.value &&
-          !searchLoading &&
-          !searchData?.search_user?.length && (
-            <div className="flex justify-center items-center flex-1">
-              <span className="text-gray-500">No results</span>
-            </div>
-          )}
+        {keyWordRef.current?.value && !searchLoading && searchData?.search_user?.length && (
+          <>
+            {searchData?.search_user?.map((user) => {
+              return (
+                <div className="flex items-center" key={user.id}>
+                  <Link
+                    href={`/${user.username}`}
+                    className="hover:bg-gray-200 w-full p-2 px-6 flex items-center gap-2 rounded-sm">
+                    <Avatar
+                      className="w-11 h-11 border"
+                      src={getUserAvatarURL(user.avatar)}
+                      fallback={<Spinner size="sm" />}
+                    />
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-sm">{user.username}</span>
+                      <span className="text-gray-400 text-sm">{user.full_name}</span>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
+          </>
+        )}
+        {keyWordRef.current?.value && !searchLoading && !searchData?.search_user?.length && (
+          <div className="flex justify-center items-center flex-1">
+            <span className="text-gray-500">No results</span>
+          </div>
+        )}
         {!keyWordRef.current?.value && (
           <div className="flex justify-between">
             <span className="font-semibold">Recent</span>
-            <span className="text-primary hover:text-red-500 cursor-pointer">
-              Clear all
-            </span>
+            <span className="text-primary hover:text-red-500 cursor-pointer">Clear all</span>
           </div>
         )}
       </div>

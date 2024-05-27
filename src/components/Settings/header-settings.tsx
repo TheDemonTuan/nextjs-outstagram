@@ -30,7 +30,7 @@ const HeaderSettings = () => {
   const pathName = usePathname();
 
   return (
-    <div className="flex flex-col w-80 h-dvh border-r border-gray-200 sticky top-0 ">
+    <div className="flex flex-col w-80 h-dvh border-r border-gray-200 sticky top-0">
       <div className="mx-6 my-8">
         <div className="font-bold text-xl mb-5">Settings</div>
         <nav className="space-y-1 ">

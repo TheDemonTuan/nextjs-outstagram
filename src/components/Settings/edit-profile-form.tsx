@@ -269,7 +269,7 @@ const EditProfileForm = () => {
                   </Select>
                 </div>
                 <FormDescription className="text-xs">This wont be part of your public profile.</FormDescription>
-                <FormMessage className="md:ml-24" />
+                <FormMessage />
               </FormItem>
             )}
           />

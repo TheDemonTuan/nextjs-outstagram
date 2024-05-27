@@ -9,6 +9,11 @@ import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change-avatar";
+import { SlArrowDown } from "react-icons/sl";
+import { TfiMoreAlt } from "react-icons/tfi";
+import { FiUserPlus } from "react-icons/fi";
+import MoreOptionsProfileNotMe, { MoreOptionsProfileNotMeModalKey } from "./more-option-profile-notme";
+import MoreOptionsProfileAdmin, { MoreOptionsProfileAdminModalKey } from "./more-option-profile-admin";
 
 const UserStat = ({ count, label }: { count: number; label: string }) => (
   <div className="mr-10">
@@ -18,11 +23,15 @@ const UserStat = ({ count, label }: { count: number; label: string }) => (
 );
 
 const btnClass =
-  "cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-5 rounded-md mr-4 bg-gray-200/70 hover:bg-gray-300";
+  "cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-5 rounded-md mr-3 bg-gray-200/70 hover:bg-gray-300";
 
 const Information = ({ userData }: { userData: UserResponse }) => {
   const { modalOpen } = useModalStore();
   const { authData } = useAuth();
+
+  const isOwnProfile = authData?.id === userData.id;
+  const isAdmin = userData.role === true;
+  const isOwnAdmin = authData?.role === true;
 
   return (
     <div className="flex flex-row mx-28">
@@ -36,11 +45,19 @@ const Information = ({ userData }: { userData: UserResponse }) => {
           <div>
             <span className="text-black-700 text-xl leading-6">{userData.username} </span>
           </div>
-          <div className="mx-2 mr-5">
-            <VerifiedIcon className="w-5 h-5" />
-          </div>
+          {isAdmin ? (
+            <>
+              <div className="mx-2 mr-5">
+                <VerifiedIcon className="w-5 h-5" />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="mx-2"></div>
+            </>
+          )}
 
-          {authData?.id === userData.id && (
+          {isOwnProfile ? (
             <>
               <Link href="/accounts/edit">
                 <div className={cn(btnClass, "")}>
@@ -58,11 +75,39 @@ const Information = ({ userData }: { userData: UserResponse }) => {
               />
               <ProfileSettings />
             </>
+          ) : (
+            <>
+              <div className="flex flex-row">
+                <button className={btnClass}>
+                  Following <SlArrowDown className="ml-2" size={12} />
+                </button>
+              </div>
+              <div>
+                <button className={btnClass}>Message</button>
+              </div>
+              <div>
+                <button className="cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-3 rounded-md mr-2 bg-gray-200/70 hover:bg-gray-300">
+                  <FiUserPlus size={18} />
+                </button>
+              </div>
+              <div className="ml-2 cursor-pointer">
+                <TfiMoreAlt
+                  size={20}
+                  onClick={() =>
+                    modalOpen(isOwnAdmin ? MoreOptionsProfileAdminModalKey : MoreOptionsProfileNotMeModalKey)
+                  }
+                />
+              </div>
+              {isOwnAdmin ? <MoreOptionsProfileAdmin /> : <MoreOptionsProfileNotMe />}
+            </>
           )}
+
+          {/* <MoreOptionsProfileNotMe /> */}
           <OptionChangeAvatar />
+          {/* <MoreOptionsProfileAdmin /> */}
         </div>
 
-        <div className="mt-5 flex flex-row">
+        <div className="mt-6 flex flex-row">
           <div>
             <UserStat count={200} label="posts" />
           </div>
@@ -75,7 +120,7 @@ const Information = ({ userData }: { userData: UserResponse }) => {
         </div>
 
         <div className="flex flex-col">
-          <div className=" pt-5">
+          <div className=" pt-4">
             <span className="text-base font-semibold text-black-700 mr-2 leading-5">{userData.full_name}</span>
           </div>
           <div className="">

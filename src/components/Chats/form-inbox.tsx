@@ -19,21 +19,11 @@ const FormInbox = () => {
 
   return (
     <div className="sticky bottom-0 py-4 px-4 bg-white items-center gap-2 lg:gap-4 w-full z-10">
-      <div className="flex text-xs font-light text-gray-500 px-3 justify-end py-3">
-        Seen just now
-      </div>
+      <div className="flex text-xs font-light text-gray-500 px-3 justify-end py-3">Seen just now</div>
       <div className="border-1 py-0 px-4 flex items-center rounded-full gap-2 lg:gap-4 w-full">
         <EmojiLookBottomIcon />
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center gap-2 lg:gap-4 w-full"
-        >
-          <MessageInput
-            id="message"
-            errors={errors}
-            required
-            placeholder="Message..."
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex items-center gap-2 lg:gap-4 w-full">
+          <MessageInput id="message" errors={errors} required placeholder="Message..." />
           {/* <button type="submit" className="p-2 cursor-pointer transition">
             <span className="hover:text-sky-900 font-bold text-sky-500">
               Send

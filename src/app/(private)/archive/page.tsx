@@ -7,9 +7,9 @@ const ArchivePage = () => {
   return (
     <div className="max-w-6xl mx-5 xl:mx-auto mt-10">
       <div className="flex items-center space-x-2">
-        <Link href="/">
+        <button onClick={() => history.back()}>
           <FaArrowLeftLong className="text-xl text-gray-800 " />
-        </Link>
+        </button>
 
         <h1 className="text-xl">Archive</h1>
       </div>
@@ -22,10 +22,7 @@ const ArchivePage = () => {
       <hr className="border-gray-300 mb-7" />
 
       <div className="flex items-center space-x-2 mb-7">
-        <p className="text-xs">
-          Only you can see your archived stories unless you choose to share
-          them.
-        </p>
+        <p className="text-xs">Only you can see your archived stories unless you choose to share them.</p>
       </div>
 
       <div className="grid grid-cols-4 grid-rows-2 gap-3 mb-1">

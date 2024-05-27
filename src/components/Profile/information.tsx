@@ -40,7 +40,7 @@ const Information = ({ userData }: { userData: UserResponse }) => {
           <Avatar src={getUserAvatarURL(userData.avatar)} className="w-36 h-36 text-large" />
         </div>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col mx-6">
         <div className="flex flex-row items-center">
           <div>
             <span className="text-black-700 text-xl leading-6">{userData.username} </span>

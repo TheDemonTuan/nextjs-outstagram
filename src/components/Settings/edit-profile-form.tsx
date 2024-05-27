@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CalendarDate, parseDate } from "@internationalized/date";
 
-const ProfileForm = () => {
+const EditProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
@@ -313,4 +313,4 @@ const ProfileForm = () => {
   );
 };
 
-export default ProfileForm;
+export default EditProfileForm;

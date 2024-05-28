@@ -1,3 +1,4 @@
+import HeaderSettings from "@/components/Settings/header-settings";
 import { buttonVariants } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserIcon } from "@/icons";
@@ -21,27 +22,8 @@ export default function SettingsLayout({
 }>) {
   return (
     <div className="flex">
-      <Tabs
-        defaultValue="edit-profile"
-        className="sticky h-dvh top-0 flex flex-col lg:border-r px-6 py-12"
-        orientation="vertical">
-        <h4 className="font-bold text-xl text-black ml-1">Settings</h4>
-        <TabsList className="flex flex-col items-start justify-start h-full bg-transparent">
-          {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.value}
-              value={tab.value}
-              className={cn(
-                button({ variant: "ghost", size: "lg" }),
-                "hover:bg-[#F2F2F2] data-[state=active]:bg-[#E3E3E3] dark:data-[state=active]:bg-[#E3E3E3] dark:hover:bg-[#F2F2F2] w-full justify-start !px-3"
-              )}>
-              <tab.icon className="mr-2 w-7 h-6" />
-              <span className="font-normal">{tab.title}</span>
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
-      <div className=" w-full bg-white dark:bg-neutral-950 mt-12">{children}</div>
+      <HeaderSettings />
+      <div className=" bg-white dark:bg-neutral-950 mt-12">{children}</div>
     </div>
   );
 }

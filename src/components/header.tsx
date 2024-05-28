@@ -22,8 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Avatar, Input, Skeleton, Spinner } from "@nextui-org/react";
 import _ from "lodash";
 import { useLazyQuery } from "@apollo/client";
-import { SEARCH_USER } from "@/graphql/query";
-import { UserSearchResponse } from "@/api/user";
+import { SEARCH_USER, UserSearchResponse } from "@/graphql/query";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { toast } from "sonner";
 
@@ -151,14 +150,6 @@ const Header = () => {
                           setIsSearchOpen(false);
                           return !prev;
                         });
-                        break;
-                      default:
-                        break;
-                    }
-                  } else {
-                    switch (item.name) {
-                      case "Messages":
-                        setIsShortHeader(true);
                         break;
                       default:
                         break;

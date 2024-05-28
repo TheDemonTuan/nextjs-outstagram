@@ -1,5 +1,5 @@
 import http, { ApiSuccessResponse } from "@/lib/http";
-import { PostImageResponse } from "./post_image";
+import { PostFileResponse } from "./post_file";
 import { PostLikeResponse } from "./post_like";
 
 export const postKey = "posts";
@@ -11,7 +11,7 @@ export interface PostResponse {
   is_hide_like: boolean;
   is_hide_comment: boolean;
   active: boolean;
-  post_images: PostImageResponse[];
+  files: PostFileResponse[];
   post_likes: PostLikeResponse[];
   created_at: Date;
   updated_at: Date;

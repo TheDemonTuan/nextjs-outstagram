@@ -7,8 +7,7 @@ import React, { useEffect } from "react";
 import { BiMoviePlay } from "react-icons/bi";
 import Gallery from "@/components/Profile/gallery";
 import { useLazyQuery } from "@apollo/client";
-import { GET_USER_BY_USERNAME } from "@/graphql/query";
-import { UserGetByUserNameResponse } from "@/api/user";
+import { GET_USER_BY_USERNAME, UserGetByUserNameResponse } from "@/graphql/query";
 import { toast } from "sonner";
 import { notFound } from "next/navigation";
 import { FiBookmark } from "react-icons/fi";
@@ -43,7 +42,6 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
       <div className="w-full">
         <hr className="border-gray-300 mt-14 border-t mx-28" />
       </div>
-
       <div className="flex justify-center gap-10 mb-1">
         <button className="focus:border-t border-gray-800 py-4 mx-2 text-sm font-normal flex gap-2 text-gray-400 focus:text-black">
           <IoMdGrid size="19" />
@@ -58,7 +56,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
           SAVED
         </button>
       </div>
-      <Gallery />
+      <Gallery user={userData.get_user_by_username} />
     </div>
   );
 };

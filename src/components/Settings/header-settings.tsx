@@ -15,12 +15,12 @@ const HeaderSettingsMenu = [
   {
     name: "Change password",
     icon: ShieldIcon,
-    href: "/accounts/change_password",
+    href: "/accounts/change-password",
   },
   {
     name: "Contact info",
     icon: ContactInfoIcon,
-    href: "/accounts/contact_info",
+    href: "/accounts/contact-info",
   },
 ];
 
@@ -36,11 +36,7 @@ const HeaderSettings = () => {
         <nav className="space-y-1 ">
           {HeaderSettingsMenu.map((item, index) => {
             const Icon = item.icon;
-            const isActiveClass = item.href
-              ? !index
-                ? pathName === item.href
-                : pathName.startsWith(item.href ?? "")
-              : false;
+            const isActiveClass = item.href ? pathName.startsWith(item.href ?? "") : false;
             return (
               <Link
                 key={index}

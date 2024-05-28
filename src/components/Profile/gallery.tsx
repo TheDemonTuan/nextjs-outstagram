@@ -1,7 +1,25 @@
 "use client";
-import React from "react";
 
-const Gallery = () => {
+import { UserResponse } from "@/api/user";
+import { GET_ALL_POST_BY_USER_ID, PostGetByUserNameResponse } from "@/graphql/query";
+import { useLazyQuery } from "@apollo/client";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
+
+const Gallery = ({ user }: { user: UserResponse }) => {
+  const [getSearchResults, { data: postsData, loading: postsLoading, error: postsError }] =
+    useLazyQuery<PostGetByUserNameResponse>(GET_ALL_POST_BY_USER_ID);
+
+  useEffect(() => {
+    getSearchResults({ variables: { username: user.username } });
+  }, [user]);
+
+  useEffect(() => {
+    if (postsError) {
+      toast.error("Error fetching posts");
+    }
+  }, [postsError]);
+
   return (
     <div className="grid grid-cols-3 gap-1 mx-28">
       <div className="relative group cursor-pointer">

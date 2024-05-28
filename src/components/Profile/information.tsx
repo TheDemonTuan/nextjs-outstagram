@@ -23,7 +23,7 @@ const UserStat = ({ count, label }: { count: number; label: string }) => (
 );
 
 const btnClass =
-  "cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-5 rounded-md mr-3 bg-gray-200/70 hover:bg-gray-300";
+  "cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-2 px-5 rounded-md mr-3 bg-gray-200/70 hover:bg-gray-300";
 
 const Information = ({ userData }: { userData: UserResponse }) => {
   const { modalOpen } = useModalStore();
@@ -37,7 +37,7 @@ const Information = ({ userData }: { userData: UserResponse }) => {
     <div className="flex flex-row mx-28">
       <div className="mt-2 mx-16">
         <div className="rounded-full w-40 h-40 cursor-pointer" onClick={() => modalOpen(OptionChangeAvatarModalKey)}>
-          <Avatar src={getUserAvatarURL(userData.avatar)} className="w-36 h-36 text-large" />
+          <Avatar src={getUserAvatarURL(userData.avatar)} className="w-40 h-40 text-large" />
         </div>
       </div>
       <div className="flex flex-col mx-6">

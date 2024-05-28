@@ -27,16 +27,6 @@ export const userGetByUserID = async (userID: string) =>
     .get<ApiSuccessResponse<UserResponse>>(`users/${userID}`)
     .then((res) => res.data);
 
-export interface UserSearchResponse {
-  search_user: Pick<
-    UserResponse,
-    "id" | "username" | "full_name" | "avatar" | "active"
-  >[];
-}
-
-export interface UserGetByUserNameResponse {
-  get_user_by_username: UserResponse;
-}
 export const userGetMe = async () =>
   http
     .get<ApiSuccessResponse<UserResponse>>(`users/me`)

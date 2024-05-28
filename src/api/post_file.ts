@@ -1,4 +1,4 @@
-export interface PostImageResponse {
+export interface PostFileResponse {
     id: string;
     post_id: string;
     url: string;

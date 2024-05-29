@@ -64,3 +64,17 @@ export const GET_ALL_POST_BY_USER_ID = gql`
     }
   }
 `;
+
+export interface UserSuggestionsResponse {
+  get_user_suggestions: Pick<UserResponse, "username" | "avatar" | "full_name">[];
+}
+
+export const GET_USER_SUGGESTIONS = gql`
+  query Get_user_suggestions($userID: String!, $count: Int!) {
+    get_user_suggestions(userID: $userID, count: $count) {
+      username
+      avatar
+      full_name
+    }
+  }
+`;

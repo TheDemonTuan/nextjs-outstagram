@@ -1,58 +1,62 @@
-import { Avatar } from '@nextui-org/react'
-import React from 'react'
+import { GET_USER_SUGGESTIONS, UserSuggestionsResponse } from "@/graphql/query";
+import { useAuth } from "@/hooks/useAuth";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { useLazyQuery } from "@apollo/client";
+import { Avatar } from "@nextui-org/react";
+import Link from "next/link";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 const Suggestions = () => {
-    return (
-        <div className="space-y-2">
-            <div className=''>
-                <div className="flex justify-between text-sm mb-5">
-                    <h3 className="text-sm font-semibold text-gray-400">Suggestions</h3>
-                    <button className='text-gray-600 font-semibold'>See All</button>
-                </div>
+  const { authData } = useAuth();
+  const [
+    getUserSuggestionsResults,
+    { data: userSuggestionsData, loading: userSuggestionsLoading, error: userSuggestionsError },
+  ] = useLazyQuery<UserSuggestionsResponse>(GET_USER_SUGGESTIONS);
 
-                <div className="flex items-center justify-between mt-4">
-                    <div className=''>
-                        <div className="rounded-full w-8 h-8">
-                            <Avatar src="https://images.pexels.com/photos/573299/pexels-photo-573299.jpeg?auto=compress&cs=tinysrgb&w=600" />
-                        </div>
-                    </div>
-                    <div className="flex-1 ml-4">
-                        <h2 className="font-semibold text-sm">jack200</h2>
-                        <h3 className="text-xs text-gray-400">New to Instagram</h3>
+  useEffect(() => {
+    if (authData?.id) {
+      getUserSuggestionsResults({
+        variables: {
+          userID: authData.id,
+          count: 5,
+        },
+      });
+    }
+  }, [authData?.id]);
 
-                    </div>
-                    <button className="text-blue-400 text-xs font-bold">Follow</button>
-                </div>
-                <div className="flex items-center justify-between mt-5">
-                    <div className=''>
-                        <div className="rounded-full w-8 h-8">
-                            <Avatar src="https://images.pexels.com/photos/573299/pexels-photo-573299.jpeg?auto=compress&cs=tinysrgb&w=600" />
-                        </div>
-                    </div>
-                    <div className="flex-1 ml-4">
-                        <h2 className="font-semibold text-sm">jack200</h2>
-                        <h3 className="text-xs text-gray-400">New to Instagram</h3>
+  useEffect(() => {
+    if (userSuggestionsError) {
+      toast.error("Failed to get user suggestions");
+    }
+  }, [userSuggestionsError]);
 
-                    </div>
-                    <button className="text-blue-400 text-xs font-bold">Follow</button>
-                </div>
-                <div className="flex items-center justify-between mt-5">
-                    <div className=''>
-                        <div className="rounded-full w-8 h-8">
-                            <Avatar src="https://images.pexels.com/photos/573299/pexels-photo-573299.jpeg?auto=compress&cs=tinysrgb&w=600" />
-                        </div>
-                    </div>
-                    <div className="flex-1 ml-4">
-                        <h2 className="font-semibold text-sm">jack200</h2>
-                        <h3 className="text-xs text-gray-400">New to Instagram</h3>
+  if (userSuggestionsLoading) {
+    return <div>Loading...</div>;
+  }
 
-                    </div>
-                    <button className="text-blue-400 text-xs font-bold">Follow</button>
-                </div>
-            </div>
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between text-sm mb-5">
+        <h3 className="text-sm font-semibold text-gray-400">Suggestions</h3>
+        <button className="text-gray-600 font-semibold">See All</button>
+      </div>
+      {userSuggestionsData?.get_user_suggestions.map((user) => (
+        <div key={user.username} className="flex items-center justify-between gap-3">
+          <Link href={`/${user.username}`}>
+            <Avatar className="w-11 h-11" src={getUserAvatarURL(user.avatar)} />
+          </Link>
+          <div className="flex-1">
+            <Link href={`/${user.username}`} className="font-semibold text-sm">
+              {user.username}
+            </Link>
+            <h3 className="text-xs text-gray-400">{user.full_name}</h3>
+          </div>
+          <button className="text-blue-400 text-xs font-bold">Follow</button>
         </div>
+      ))}
+    </div>
+  );
+};
 
-    )
-}
-
-export default Suggestions
+export default Suggestions;

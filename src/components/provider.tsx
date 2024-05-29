@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import Pusher from "pusher-js";
+import { toast } from "sonner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,8 +27,24 @@ const client = new ApolloClient({
 });
 
 export const Provider = ({ children }: { children: React.ReactNode }) => {
+  const [message, setMessage] = useState("");
   const router = useRouter();
+  var pusher = new Pusher("34407909c139e336f7d0", {
+    cluster: "ap1",
+  });
 
+  pusher.subscribe("my-channel");
+  pusher.bind("my-event", (data: any) => {
+    setMessage(data.message);
+  });
+
+  useEffect(() => {
+    toast.info(message);
+    return () => {
+      pusher.unsubscribe("my-channel");
+      pusher.disconnect();
+    };
+  }, [message]);
   return (
     <QueryClientProvider client={queryClient}>
       <ApolloProvider client={client}>

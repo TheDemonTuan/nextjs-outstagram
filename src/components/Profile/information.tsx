@@ -1,5 +1,5 @@
 import { SettingIcon, VerifiedIcon } from "@/icons";
-import { Avatar } from "@nextui-org/react";
+import { Avatar, Button, Tooltip } from "@nextui-org/react";
 import React from "react";
 import { useModalStore } from "@/stores/modal-store";
 import ProfileSettings, { ProfileSettingModalKey } from "./profile-settings";
@@ -46,15 +46,13 @@ const Information = ({ userData }: { userData: UserResponse }) => {
             <span className="text-black-700 text-xl leading-6">{userData.username} </span>
           </div>
           {isAdmin ? (
-            <>
-              <div className="mx-2 mr-5">
+            <Tooltip color="primary" showArrow content="I'm Admin" className="mx-2 mr-5">
+              <span className="mx-2 mr-5">
                 <VerifiedIcon className="w-5 h-5" />
-              </div>
-            </>
+              </span>
+            </Tooltip>
           ) : (
-            <>
-              <div className="mx-2"></div>
-            </>
+            <div className="mx-2"></div>
           )}
 
           {isOwnProfile ? (
@@ -104,7 +102,6 @@ const Information = ({ userData }: { userData: UserResponse }) => {
 
           <OptionChangeAvatar />
         </div>
-
         <div className="mt-6 flex flex-row">
           <div>
             <UserStat count={200} label="posts" />
@@ -116,7 +113,6 @@ const Information = ({ userData }: { userData: UserResponse }) => {
             <UserStat count={200} label="following" />
           </div>
         </div>
-
         <div className="flex flex-col">
           <div className=" pt-4">
             <span className="text-base font-semibold text-black-700 mr-2 leading-5">{userData.full_name}</span>

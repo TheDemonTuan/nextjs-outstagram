@@ -18,12 +18,12 @@ const MiniProfile = () => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-2">
-        <Link href={`/${authData?.username}`} className="rounded-full">
-          <Avatar src={getUserAvatarURL(authData?.avatar)} />
+        <Link href={`/${authData?.username}`}>
+          <Avatar className="w-12 h-12" src={getUserAvatarURL(authData?.avatar)} />
         </Link>
-        <div className="flex-1 mx-4">
-          <Link href={`/${authData?.username}`} className="font-bold">{authData?.username}</Link>
-          <h3 className="text-sm text-gray-400">{authData?.full_name}</h3>
+        <div className="flex-1 mx-4 flex flex-col">
+          <Link href={`/${authData?.username}`} className="font-bold text-sm">{authData?.username}</Link>
+          <span className="text-sm text-gray-400">{authData?.full_name}</span>
         </div>
       </div>
       <button

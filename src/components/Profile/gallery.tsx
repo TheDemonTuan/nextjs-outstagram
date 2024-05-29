@@ -2,7 +2,9 @@
 
 import { UserResponse } from "@/api/user";
 import { GET_ALL_POST_BY_USER_ID, PostGetByUserNameResponse } from "@/graphql/query";
+import { LikeHeartIcon, MessageCircleIcon } from "@/icons";
 import { useLazyQuery } from "@apollo/client";
+import { Skeleton } from "@nextui-org/react";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
@@ -20,38 +22,38 @@ const Gallery = ({ user }: { user: UserResponse }) => {
     }
   }, [postsError]);
 
+  if (!postsData || !postsData.get_posts_by_username) {
+    return <div>No posts found.</div>;
+  }
+
   return (
     <div className="grid grid-cols-3 gap-1 mx-28">
-      <div className="relative group cursor-pointer">
-        <img
-          className="object-cover overflow-hidden h-[310] fill"
-          src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
-          alt=""
-        />
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
-          <div className="text-white">Hover Content</div>
+      {postsData?.get_posts_by_username?.map((post, index) => (
+        <div key={`${index}`} className="relative group cursor-pointer">
+          {postsLoading ? (
+            <Skeleton className="object-cover overflow-hidden h-[310] fill" />
+          ) : (
+            <div className="w-full h-[310px]">
+              <img
+                className="absolute top-0 left-0 object-cover w-full h-full"
+                src={post.files[0]?.url}
+                alt={"image " + index}
+              />
+            </div>
+          )}
+          <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6">
+            <div className="flex items-center font-bold space-x-1 mx-2">
+              <LikeHeartIcon className="text-white fill-white" />
+              <p className="text-white">1</p>
+            </div>
+
+            <div className="flex items-center font-bold space-x-1 mx-2">
+              <MessageCircleIcon className="text-white fill-white" />
+              <p className="text-white">1</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <img
-        className="object-cover overflow-hidden h-[310] fill"
-        src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
-        alt=""
-      />
-      <img
-        className="object-cover overflow-hidden h-[310] fill"
-        src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
-        alt=""
-      />
-      <img
-        className="object-cover overflow-hidden h-[310] fill"
-        src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
-        alt=""
-      />
-      <img
-        className="object-cover overflow-hidden h-[310] fill"
-        src="https://images.pexels.com/photos/443446/pexels-photo-443446.jpeg?auto=compress&cs=tinysrgb&w=600"
-        alt=""
-      />
+      ))}
     </div>
   );
 };

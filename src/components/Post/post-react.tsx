@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { BookmarkIcon, LikeHeartIcon, MessageCircleIcon, SendIcon, UnLikeHeartIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
 
@@ -57,10 +58,10 @@ const PostReact = ({ postID, isLiked }: { postID: string; isLiked: boolean }) =>
           )}
           <span className="sr-only">Like</span>
         </div>
-        <div>
+        <Link href={`/p/${postID}`}>
           <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           <span className="sr-only">Comment</span>
-        </div>
+        </Link>
         <div>
           <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           <span className="sr-only">Share</span>

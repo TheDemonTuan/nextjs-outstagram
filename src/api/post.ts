@@ -29,3 +29,6 @@ export const postCreate = async (data: FormData) =>
       },
     })
     .then((res) => res.data);
+
+export const postGetByPostId =  async (postID: string) => 
+  http.get<ApiSuccessResponse<PostResponse>>(`posts/${postID}`).then((res) => res.data);

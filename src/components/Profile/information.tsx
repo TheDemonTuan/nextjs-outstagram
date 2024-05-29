@@ -102,9 +102,7 @@ const Information = ({ userData }: { userData: UserResponse }) => {
             </>
           )}
 
-          {/* <MoreOptionsProfileNotMe /> */}
           <OptionChangeAvatar />
-          {/* <MoreOptionsProfileAdmin /> */}
         </div>
 
         <div className="mt-6 flex flex-row">

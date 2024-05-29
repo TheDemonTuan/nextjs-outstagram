@@ -48,7 +48,7 @@ const ChangePhoneModal = () => {
                                   endContent={
                                     <FaPhoneFlip className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
                                   }
-                                  label="Enter new email"
+                                  label="Enter new phone"
                                   variant="bordered"
                                 />
                               </FormControl>

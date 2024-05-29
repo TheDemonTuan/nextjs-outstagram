@@ -36,9 +36,6 @@ const MiniPost = ({ post }: { post: ApiSuccessResponse<PostResponse> }) => {
               addSuffix: true,
             })}
           </span>
-          <span>
-            <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-          </span>
         </div>
       </div>
     </div>

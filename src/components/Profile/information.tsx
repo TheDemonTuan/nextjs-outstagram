@@ -90,7 +90,6 @@ const Information = ({ userData }: { userData: UserResponse }) => {
               <div className="ml-2 cursor-pointer">
                 <TfiMoreAlt size={20} onClick={() => modalOpen(ProfileMoreOptionsModalKey)} />
               </div>
-              {/* {isOwnAdmin ? <MoreOptionsProfileAdmin /> : <MoreOptionsProfileNotMe />} */}
             </>
           )}
           <ProfileMoreOptions />

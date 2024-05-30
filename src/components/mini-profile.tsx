@@ -22,7 +22,9 @@ const MiniProfile = () => {
           <Avatar className="w-12 h-12" src={getUserAvatarURL(authData?.avatar)} />
         </Link>
         <div className="flex-1 mx-4 flex flex-col">
-          <Link href={`/${authData?.username}`} className="font-bold text-sm">{authData?.username}</Link>
+          <Link href={`/${authData?.username}`} className="font-bold text-sm">
+            {authData?.username}
+          </Link>
           <span className="text-sm text-gray-400">{authData?.full_name}</span>
         </div>
       </div>

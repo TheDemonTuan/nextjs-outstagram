@@ -7,7 +7,6 @@ import { Avatar } from "@nextui-org/react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import React from "react";
-import { PiDotsThreeBold } from "react-icons/pi";
 
 const MiniPost = ({ post }: { post: ApiSuccessResponse<PostResponse> }) => {
   const username = post.data.user_id;

@@ -27,9 +27,9 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
 
   return (
     <Dialog open={isPostModal} onOpenChange={(open: any) => !open && router.back()}>
-      <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-3xl lg:max-w-5xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
-        <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-md">
-          <DialogHeader className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3 pl-3.5 pr-6 justify-between">
+      <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
+        <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg">
+          <DialogHeader className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-6 justify-between">
             <div>
               <div className="flex flex-row items-center">
                 <div className="">
@@ -54,9 +54,9 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
             </div>
           </DialogHeader>
 
-          <ScrollArea className="hidden md:inline border-b flex-1 py-1.5">
+          <ScrollArea className="hidden md:inline border-b py-1.5">
             <MiniPost post={post} />
-            <>
+            <div className="flex flex-col">
               <Comment />
               <Comment />
               <Comment />
@@ -67,7 +67,7 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
               <Comment />
               <Comment />
               <Comment />
-            </>
+            </div>
           </ScrollArea>
           <ViewPost className="hidden md:flex border-b" />
 
@@ -82,7 +82,7 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
           </div>
           <CommentForm postId={id} className="hidden md:inline-flex" inputRef={inputRef} />
         </div>
-        <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-3xl w-full ">
+        <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full ">
           <Image
             src="https://res.cloudinary.com/dsjzxokur/image/upload/v1716491944/posts/ofbzb6a70ilxwzclymzk.webp"
             fill

@@ -10,7 +10,7 @@ function PostActions({ className }: Props) {
   return (
     <div className={cn("relative flex items-start w-full gap-x-2", className)}>
       <div className="flex items-center w-full">
-        <div className="flex gap-4 items-center justify-center">
+        <div className="flex gap-4 items-center justify-center mb-4 mt-1 ">
           <div>
             <LikeHeartIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer text-red-500" />
             <span className="sr-only">Like</span>
@@ -26,7 +26,7 @@ function PostActions({ className }: Props) {
             <span className="sr-only">Share</span>
           </div>
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto mb-4 mt-1">
           <BookmarkIcon className="w-6 h-6  hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           <span className="sr-only">BookmarkIcon</span>
         </div>

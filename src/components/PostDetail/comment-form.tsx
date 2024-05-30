@@ -7,6 +7,7 @@ import { FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommentFormValidate, CommentFormValidateSchema } from "./comment-form.validate";
 import { Spinner } from "@nextui-org/react";
+import { EmojiLookBottomIcon } from "@/icons";
 
 function CommentForm({
   postId,
@@ -37,7 +38,7 @@ function CommentForm({
       <form
         onSubmit={commentForm.handleSubmit(onSubmit)}
         className={cn(
-          "border-b relative border-gray-200 dark:border-neutral-800 py-3 flex items-center space-x-2 w-full px-3",
+          "border-b relative border-gray-200 dark:border-neutral-800 py-2.5 flex items-center space-x-2 w-full px-3",
           className
         )}>
         {isSubmitting && (
@@ -45,6 +46,8 @@ function CommentForm({
             <Spinner className="h-4 w-4 animate-spin" />
           </div>
         )}
+        <EmojiLookBottomIcon className="w-7 h-7" />
+
         <FormField
           control={commentForm.control}
           name="body"
@@ -56,7 +59,7 @@ function CommentForm({
                     disabled={isSubmitting}
                     type="text"
                     placeholder="Add a comment..."
-                    className="bg-transparent text-sm border-none focus:outline-none flex-1 dark:text-neutral-400 placeholder-neutral-400 font-medium disabled:opacity-30"
+                    className="bg-transparent text-sm border-none focus:outline-none flex-1 dark:text-neutral-400 placeholder-neutral-400 font-normal disabled:opacity-30"
                     {...field}
                   />
                 </FormControl>

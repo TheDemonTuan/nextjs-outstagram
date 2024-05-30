@@ -12,7 +12,7 @@ const SinglePost = ({ id }: { id: string }) => {
   return (
     <>
       <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9">
-        <div className="relative overflow-hidden h-[450px] max-w-sm lg:max-w-lg w-full">
+        <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full">
           <Image
             src="https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp"
             alt="Post preview"
@@ -25,8 +25,18 @@ const SinglePost = ({ id }: { id: string }) => {
           <div className="flex items-center justify-between border-b px-5 py-3">
             <HoverCard>
               <HoverCardTrigger asChild>
-                <Link className="font-semibold text-sm" href="/">
-                  PostUsername
+                <Link className="font-semibold text-[13px] leading-[18px]" href="/">
+                  <div className="flex flex-row items-center  ">
+                    <div>
+                      <Avatar
+                        src="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        className="w-8 h-8"
+                      />
+                    </div>
+                    <div className="mx-2">
+                      <span>PostUsername</span>
+                    </div>
+                  </div>
                 </Link>
               </HoverCardTrigger>
               <HoverCardContent>
@@ -36,6 +46,8 @@ const SinglePost = ({ id }: { id: string }) => {
                     className="h-14 w-14"
                     alt={""}
                     priority
+                    width={14}
+                    height={14}
                   />
                   <div>
                     <p className="font-bold">postusername</p>

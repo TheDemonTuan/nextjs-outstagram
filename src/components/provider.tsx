@@ -29,22 +29,22 @@ const client = new ApolloClient({
 export const Provider = ({ children }: { children: React.ReactNode }) => {
   const [message, setMessage] = useState("");
   const router = useRouter();
-  var pusher = new Pusher("34407909c139e336f7d0", {
-    cluster: "ap1",
-  });
+  // var pusher = new Pusher("34407909c139e336f7d0", {
+  //   cluster: "ap1",
+  // });
 
-  pusher.subscribe("my-channel");
-  pusher.bind("my-event", (data: any) => {
-    setMessage(data.message);
-  });
+  // pusher.subscribe("my-channel");
+  // pusher.bind("my-event", (data: any) => {
+  //   setMessage(data.message);
+  // });
 
-  useEffect(() => {
-    toast.info(message);
-    return () => {
-      pusher.unsubscribe("my-channel");
-      pusher.disconnect();
-    };
-  }, [message]);
+  // useEffect(() => {
+  //   toast.info(message);
+  //   return () => {
+  //     pusher.unsubscribe("my-channel");
+  //     pusher.disconnect();
+  //   };
+  // }, [message]);
   return (
     <QueryClientProvider client={queryClient}>
       <ApolloProvider client={client}>

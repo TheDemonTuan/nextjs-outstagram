@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
-import { Avatar, Button } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
@@ -10,6 +10,7 @@ import { useModalStore } from "@/stores/modal-store";
 import { toast } from "sonner";
 import { clearJWT } from "@/actions";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const MiniProfile = () => {
   const { authData } = useAuth();
@@ -19,10 +20,17 @@ const MiniProfile = () => {
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-2">
         <Link href={`/${authData?.username}`}>
-          <Avatar className="w-12 h-12" src={getUserAvatarURL(authData?.avatar)} />
+          <Avatar className="w-12 h-12">
+            <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar)} />
+            <AvatarFallback>
+              <Spinner size="sm" />
+            </AvatarFallback>
+          </Avatar>
         </Link>
         <div className="flex-1 mx-4 flex flex-col">
-          <Link href={`/${authData?.username}`} className="font-bold text-sm">{authData?.username}</Link>
+          <Link href={`/${authData?.username}`} className="font-bold text-sm">
+            {authData?.username}
+          </Link>
           <span className="text-sm text-gray-400">{authData?.full_name}</span>
         </div>
       </div>

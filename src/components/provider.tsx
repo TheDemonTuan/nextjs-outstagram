@@ -7,7 +7,9 @@ import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import Pusher from "pusher-js";
-import { toast } from "sonner";
+import { useNotification } from "@/hooks/useNotification";
+import { sendNotification } from "@/lib/send-notification";
+import { usePusherStore } from "@/stores/pusher-store";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,24 +29,36 @@ const client = new ApolloClient({
 });
 
 export const Provider = ({ children }: { children: React.ReactNode }) => {
-  const [message, setMessage] = useState("");
   const router = useRouter();
-  // var pusher = new Pusher("34407909c139e336f7d0", {
-  //   cluster: "ap1",
-  // });
-
-  // pusher.subscribe("my-channel");
-  // pusher.bind("my-event", (data: any) => {
-  //   setMessage(data.message);
-  // });
+  const { setPusherClient } = usePusherStore();
 
   // useEffect(() => {
-  //   toast.info(message);
-  //   return () => {
-  //     pusher.unsubscribe("my-channel");
-  //     pusher.disconnect();
-  //   };
-  // }, [message]);
+  //   if (!("Notification" in window)) {
+  //     console.log("This browser does not support notifications.");
+  //     return;
+  //   }
+
+  //   if (Notification.permission !== "granted") {
+  //     Notification.requestPermission()
+  //       .then((permission) => {
+  //         if (permission === "granted") {
+  //           console.log("Permission granted");
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY ?? "", {
+      cluster: "ap1",
+    });
+    setPusherClient(pusher);
+    // sendNotification("Hello", "This is a test notification");
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <ApolloProvider client={client}>

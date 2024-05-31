@@ -11,7 +11,6 @@ import {
   SearchIcon,
 } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { Fragment, useCallback, useRef } from "react";
@@ -19,12 +18,15 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { Avatar, Input, Skeleton, Spinner } from "@nextui-org/react";
+import { Input, Skeleton, Spinner } from "@nextui-org/react";
 import _ from "lodash";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_USER, UserSearchResponse } from "@/graphql/query";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Image } from "@nextui-org/react";
+import NextImage from "next/image";
 
 const HeaderMenu = [
   {
@@ -93,14 +95,7 @@ const Header = () => {
         )}>
         <Link href={"/"} className={cn(isShortHeader ? "flex items-center justify-center p-3" : "p-2")}>
           {!isShortHeader ? (
-            <Image
-              alt="Outstagram logo"
-              className="object-cover w-auto h-auto"
-              width={128}
-              height={128}
-              src="/logo.png"
-              priority={true}
-            />
+            <Image as={NextImage} className="w-auto h-auto" width={128} height={128} src="/logo.webp" alt="Outstagram Logo" />
           ) : (
             <InstagramIcon className="w-12 h-12" />
           )}
@@ -165,12 +160,12 @@ const Header = () => {
           {!authIsLoading ? (
             authData && (
               <Link href={`/${authData?.username}`} className={cn(isShortHeader ? ShortMenuItemClass : MenuItemClass)}>
-                <Avatar
-                  src={getUserAvatarURL(authData?.avatar)}
-                  alt={authData?.username}
-                  className="w-7 h-7 border group-hover:scale-105"
-                  fallback={<Spinner size="sm" />}
-                />
+                <Avatar className="group-hover:scale-105 w-8 h-8">
+                  <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar)} />
+                  <AvatarFallback>
+                    <Spinner size="sm" />
+                  </AvatarFallback>
+                </Avatar>
                 {!isShortHeader && <span>Profile</span>}
               </Link>
             )
@@ -257,11 +252,12 @@ const Search = () => {
                   <Link
                     href={`/${user.username}`}
                     className="hover:bg-gray-200 w-full p-2 px-6 flex items-center gap-2 rounded-sm">
-                    <Avatar
-                      className="w-11 h-11 border"
-                      src={getUserAvatarURL(user.avatar)}
-                      fallback={<Spinner size="sm" />}
-                    />
+                    <Avatar className="w-11 h-11">
+                      <AvatarImage className="object-cover" src={getUserAvatarURL(user.avatar)} />
+                      <AvatarFallback>
+                        <Spinner size="sm" />
+                      </AvatarFallback>
+                    </Avatar>
                     <div className="flex flex-col">
                       <span className="font-semibold text-sm">{user.username}</span>
                       <span className="text-gray-400 text-sm">{user.full_name}</span>

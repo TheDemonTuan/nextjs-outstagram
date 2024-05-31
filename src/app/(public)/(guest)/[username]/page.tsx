@@ -11,10 +11,24 @@ import { GET_USER_BY_USERNAME, UserGetByUserNameResponse } from "@/graphql/query
 import { toast } from "sonner";
 import { notFound } from "next/navigation";
 import { FiBookmark } from "react-icons/fi";
+import { usePusherStore } from "@/stores/pusher-store";
 
 const ProfilePage = ({ params }: { params: { username: string } }) => {
   const [getSearchResults, { data: userData, loading: userLoading, error: userError }] =
     useLazyQuery<UserGetByUserNameResponse>(GET_USER_BY_USERNAME);
+  const { pusherClient } = usePusherStore();
+
+  useEffect(() => {
+    pusherClient.subscribe("my-channel");
+    pusherClient.bind("my-event", (data: any) => {
+      // setMessage(data.message);
+      toast.info(data.message);
+    });
+    return () => {
+      pusherClient.unsubscribe("my-channel");
+      // pusher.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     getSearchResults({ variables: { username: params.username } });

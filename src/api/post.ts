@@ -11,7 +11,7 @@ export interface PostResponse {
   is_hide_like: boolean;
   is_hide_comment: boolean;
   active: boolean;
-  files: PostFileResponse[];
+  post_files: PostFileResponse[];
   post_likes: PostLikeResponse[];
   created_at: Date;
   updated_at: Date;

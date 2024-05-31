@@ -2,10 +2,11 @@ import { GET_USER_SUGGESTIONS, UserSuggestionsResponse } from "@/graphql/query";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useLazyQuery } from "@apollo/client";
-import { Avatar } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Suggestions = () => {
   const { authData } = useAuth();
@@ -44,7 +45,12 @@ const Suggestions = () => {
       {userSuggestionsData?.get_user_suggestions.map((user) => (
         <div key={user.username} className="flex items-center justify-between gap-3">
           <Link href={`/${user.username}`}>
-            <Avatar className="w-11 h-11" src={getUserAvatarURL(user.avatar)} />
+            <Avatar className="w-11 h-11">
+              <AvatarImage className="object-cover" src={getUserAvatarURL(user.avatar)} />
+              <AvatarFallback>
+                <Spinner size="sm" />
+              </AvatarFallback>
+            </Avatar>
           </Link>
           <div className="flex-1">
             <Link href={`/${user.username}`} className="font-semibold text-sm">

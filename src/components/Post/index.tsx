@@ -57,8 +57,8 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                       <CardHeader className="p-2 flex flex-row items-center">
                         <div className="flex gap-1 items-center justify-center">
                           <Link className="flex items-center gap-2 text-sm font-medium" href={`/${userData?.username}`}>
-                            <Avatar className="w-9 h-9 border">
-                              <AvatarImage alt={userData?.username} src={getUserAvatarURL(userData?.avatar)} />
+                            <Avatar className="w-9 h-9">
+                              <AvatarImage className="object-cover" alt={userData?.username} src={getUserAvatarURL(userData?.avatar)} />
                               <AvatarFallback>{userData?.username}</AvatarFallback>
                             </Avatar>
                             {userData?.full_name}
@@ -81,12 +81,12 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                       </CardHeader>
                       <Share />
                       <CardContent className="p-2">
-                        {post.post_images.length ? (
+                        {post.post_files.length ? (
                           <div className="slide-container">
                             <ImageGallery
-                              items={post.post_images.map((image, index) => {
+                              items={post.post_files.map((file, index) => {
                                 return {
-                                  original: image.url,
+                                  original: file.url,
                                   index,
                                 };
                               })}
@@ -99,6 +99,7 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                                       className="object-cover min-w-[468px] max-h-[564] w-full h-full rounded-lg shadow-lg"
                                       width={500}
                                       height={500}
+                                      priority
                                     />
                                   </div>
                                 );

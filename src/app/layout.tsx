@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={roboto.className}>
         <Provider>{children}</Provider>
-        <Toaster richColors toastOptions={{
+        <Toaster richColors closeButton position="top-right" toastOptions={{
           duration: 3000,
         }}/>
       </body>

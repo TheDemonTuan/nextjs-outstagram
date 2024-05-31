@@ -29,26 +29,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { HoverCard, HoverCardTrigger } from "../ui/hover-card";
 import SummaryProfile from "../summary-profile";
-import { GET_ALL_POST_BY_USER_ID, PostGetByUserNameResponse } from "@/graphql/query";
-import { useLazyQuery } from "@apollo/client";
-import { toast } from "sonner";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
   const { modalOpen, setModalData } = useModalStore();
   const { authData } = useAuth();
-
-  const [getUserByUserNameResults, { data: postsData, loading: postsLoading, error: postsError }] =
-    useLazyQuery<PostGetByUserNameResponse>(GET_ALL_POST_BY_USER_ID);
-
-  useEffect(() => {
-    getUserByUserNameResults({ variables: { username: authData?.username } });
-  }, [authData?.username]);
-
-  useEffect(() => {
-    if (postsError) {
-      toast.error("Error fetching posts");
-    }
-  }, [postsError]);
 
   const listUserID = postData.map((post) => post.user_id);
 
@@ -58,8 +42,6 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
       queryFn: () => userGetByUserID(id),
     })),
   });
-
-  const listImageFirstOfPost = postsData?.get_posts_by_username.map((post) => post.files[0].url).slice(0, 3);
 
   return (
     <>
@@ -92,7 +74,6 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                               full_name={userData?.full_name}
                               username={userData?.username}
                               avatar={getUserAvatarURL(userData?.avatar)}
-                              listImageFirstOfPost={listImageFirstOfPost}
                             />
                           </HoverCard>
                           <span className="text-xs text-gray-500">

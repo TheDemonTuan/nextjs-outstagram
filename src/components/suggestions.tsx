@@ -7,6 +7,8 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { HoverCard, HoverCardTrigger } from "./ui/hover-card";
+import SummaryProfile from "./summary-profile";
 
 const Suggestions = () => {
   const { authData } = useAuth();
@@ -58,6 +60,31 @@ const Suggestions = () => {
             </Link>
             <h3 className="text-xs text-gray-400">{user.full_name}</h3>
           </div>
+          <HoverCard>
+            <HoverCardTrigger>
+              <div className="flex flex-row gap-3">
+                <Link href={`/${user.username}`}>
+                  <Avatar className="w-11 h-11">
+                    <AvatarImage className="object-cover" src={getUserAvatarURL(user.avatar)} />
+                    <AvatarFallback>
+                      <Spinner size="sm" />
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
+                <div className="flex-1">
+                  <Link href={`/${user.username}`} className="font-semibold text-sm">
+                    {user.username}
+                  </Link>
+                  <h3 className="text-xs text-gray-400">{user.full_name}</h3>
+                </div>
+              </div>
+            </HoverCardTrigger>
+            <SummaryProfile
+              avatar={getUserAvatarURL(user.avatar)}
+              full_name={user.full_name}
+              username={user.username}
+            />
+          </HoverCard>
           <button className="text-blue-400 text-xs font-bold">Follow</button>
         </div>
       ))}

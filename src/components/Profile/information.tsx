@@ -12,8 +12,7 @@ import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change
 import { SlArrowDown } from "react-icons/sl";
 import { TfiMoreAlt } from "react-icons/tfi";
 import { FiUserPlus } from "react-icons/fi";
-import MoreOptionsProfileNotMe, { MoreOptionsProfileNotMeModalKey } from "./more-option-profile-notme";
-import MoreOptionsProfileAdmin, { MoreOptionsProfileAdminModalKey } from "./more-option-profile-admin";
+import ProfileMoreOptions, { ProfileMoreOptionsModalKey } from "./profile-more-options";
 
 const UserStat = ({ count, label }: { count: number; label: string }) => (
   <div className="mr-10">
@@ -89,17 +88,11 @@ const Information = ({ userData }: { userData: UserResponse }) => {
                 </button>
               </div>
               <div className="ml-2 cursor-pointer">
-                <TfiMoreAlt
-                  size={20}
-                  onClick={() =>
-                    modalOpen(isOwnAdmin ? MoreOptionsProfileAdminModalKey : MoreOptionsProfileNotMeModalKey)
-                  }
-                />
+                <TfiMoreAlt size={20} onClick={() => modalOpen(ProfileMoreOptionsModalKey)} />
               </div>
-              {isOwnAdmin ? <MoreOptionsProfileAdmin /> : <MoreOptionsProfileNotMe />}
             </>
           )}
-
+          <ProfileMoreOptions />
           <OptionChangeAvatar />
         </div>
         <div className="mt-6 flex flex-row">

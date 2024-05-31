@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Roboto, Source_Sans_3 } from "next/font/google";
 import "@/styles/globals.css";
 import { Provider } from "@/components/provider";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
+import { SocketProvider } from "@/websocket";
 
-const roboto = Roboto({ weight: ["100", "300", "400", "500", "700", "900"], subsets: ["latin"] });
+const roboto = Source_Sans_3({});
 
 export const metadata: Metadata = {
   title: "Outstagram",
@@ -19,10 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <Provider>{children}</Provider>
-        <Toaster richColors closeButton position="top-right" toastOptions={{
-          duration: 3000,
-        }}/>
+        <Provider>
+          <SocketProvider>{children}</SocketProvider>
+        </Provider>
+        <Toaster
+          richColors
+          closeButton
+          position="top-right"
+          toastOptions={{
+            duration: 3000,
+          }}
+        />
       </body>
     </html>
   );

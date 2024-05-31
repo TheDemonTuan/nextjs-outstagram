@@ -1,4 +1,6 @@
 import http, { ApiSuccessResponse } from "@/lib/http";
+import { PostResponse } from "./post";
+import { PostLikeResponse } from "./post_like";
 
 export const userKey = "users";
 
@@ -14,9 +16,12 @@ export interface UserResponse {
   gender: boolean;
   role: boolean;
   active: boolean;
-  posts: null;
-  post_likes: null;
+  isPrivate: boolean;
+  
+  posts: PostResponse[];
+  post_likes: PostLikeResponse[];
   post_comments: null;
+  
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;

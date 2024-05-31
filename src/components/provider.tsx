@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import Pusher from "pusher-js";
 import { useNotification } from "@/hooks/useNotification";
 import { sendNotification } from "@/lib/send-notification";
 import { usePusherStore } from "@/stores/pusher-store";
@@ -30,7 +29,6 @@ const client = new ApolloClient({
 
 export const Provider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const { setPusherClient } = usePusherStore();
 
   // useEffect(() => {
   //   if (!("Notification" in window)) {
@@ -50,14 +48,6 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
   //       });
   //   }
   // }, []);
-
-  useEffect(() => {
-    var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY ?? "", {
-      cluster: "ap1",
-    });
-    setPusherClient(pusher);
-    // sendNotification("Hello", "This is a test notification");
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

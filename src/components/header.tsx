@@ -18,7 +18,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { Input, Skeleton, Spinner } from "@nextui-org/react";
+import { Button, Input, Skeleton, Spinner } from "@nextui-org/react";
 import _ from "lodash";
 import { useLazyQuery } from "@apollo/client";
 import { SEARCH_USER, UserSearchResponse } from "@/graphql/query";
@@ -95,7 +95,14 @@ const Header = () => {
         )}>
         <Link href={"/"} className={cn(isShortHeader ? "flex items-center justify-center p-3" : "p-2")}>
           {!isShortHeader ? (
-            <Image as={NextImage} className="w-auto h-auto" width={128} height={128} src="/logo.webp" alt="Outstagram Logo" />
+            <Image
+              as={NextImage}
+              className="w-auto h-auto"
+              width={128}
+              height={128}
+              src="/logo.webp"
+              alt="Outstagram Logo"
+            />
           ) : (
             <InstagramIcon className="w-12 h-12" />
           )}
@@ -110,14 +117,7 @@ const Header = () => {
                 : pathName.startsWith(item.href ?? "")
               : false;
             if (authIsError && DisabledMenuItems.includes(item.name)) {
-              return (
-                <Fragment key={index}>
-                  <div className={cn(isShortHeader ? ShortMenuItemClassDisabled : MenuItemClassDisabled, "opacity-50")}>
-                    <Icon className="w-7 h-7" />
-                    {!isShortHeader && <span>{item.name}</span>}
-                  </div>
-                </Fragment>
-              );
+              return null;
             }
             return (
               <Link
@@ -175,6 +175,18 @@ const Header = () => {
                 <Skeleton className="flex rounded-full w-7 h-7" />
               </div>
               <Skeleton className="h-3 w-4/5 rounded-lg" />
+            </div>
+          )}
+          {!authData && (
+            <div className="flex flex-col w-full gap-2">
+              <Link href="/login">
+                <Button className={cn("text-lg w-full", isShortHeader && "hidden")} color="primary">
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button className={cn("text-lg w-full", isShortHeader && "hidden")}>Sign Up</Button>
+              </Link>
             </div>
           )}
         </nav>

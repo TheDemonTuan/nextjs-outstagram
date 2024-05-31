@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { BookmarkIcon, FileWarningIcon, StarIcon } from "@/icons";
 import Link from "next/link";
-import { Button } from "@nextui-org/react";
+import { Button, Tooltip } from "@nextui-org/react";
 import { PostResponse } from "@/api/post";
 import { useQueries } from "@tanstack/react-query";
 import { userGetByUserID, userKey } from "@/api/user";
@@ -27,7 +27,6 @@ import PostReact from "./post-react";
 import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
-import { HoverCard, HoverCardTrigger } from "../ui/hover-card";
 import SummaryProfile from "../summary-profile";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
@@ -58,31 +57,21 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                     <Card className="rounded-none shadow-none border-0">
                       <CardHeader className="p-2 flex flex-row items-center">
                         <div className="flex gap-1 items-center justify-center">
-                          <Link className="flex items-center gap-2 text-sm font-medium" href={`/${userData?.username}`}>
-                            <Avatar className="w-9 h-9">
-                              <AvatarImage className="object-cover" alt={userData?.username} src={getUserAvatarURL(userData?.avatar)} />
-                              <AvatarFallback>{userData?.username}</AvatarFallback>
-                            </Avatar>
-                            {userData?.full_name}
-                          </Link>
-                          <HoverCard>
-                            <HoverCardTrigger>
-                              <Link
-                                className="flex items-center gap-2 text-sm font-medium"
-                                href={`/${userData?.username}`}>
-                                <Avatar className="w-9 h-9 border">
-                                  <AvatarImage alt={userData?.username} src={getUserAvatarURL(userData?.avatar)} />
-                                  <AvatarFallback>{userData?.username}</AvatarFallback>
-                                </Avatar>
-                                {userData?.full_name}
-                              </Link>
-                            </HoverCardTrigger>
-                            <SummaryProfile
-                              full_name={userData?.full_name}
-                              username={userData?.username}
-                              avatar={getUserAvatarURL(userData?.avatar)}
-                            />
-                          </HoverCard>
+                          <Tooltip content={userData && <SummaryProfile user={userData} />}>
+                            <Link
+                              className="flex items-center gap-2 text-sm font-medium"
+                              href={`/${userData?.username}`}>
+                              <Avatar className="w-9 h-9">
+                                <AvatarImage
+                                  className="object-cover"
+                                  alt={userData?.username}
+                                  src={getUserAvatarURL(userData?.avatar)}
+                                />
+                                <AvatarFallback>{userData?.username}</AvatarFallback>
+                              </Avatar>
+                              {userData?.username}
+                            </Link>
+                          </Tooltip>
                           <span className="text-xs text-gray-500">
                             •{" "}
                             {formatDistanceToNow(post.updated_at, {

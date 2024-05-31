@@ -2,7 +2,7 @@
 
 import { UserResponse } from "@/api/user";
 import { GET_ALL_POST_BY_USER_ID, PostGetByUserNameResponse } from "@/graphql/query";
-import { LikeHeartIcon, MessageCircleIcon } from "@/icons";
+import { LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import { useLazyQuery } from "@apollo/client";
 import { Skeleton } from "@nextui-org/react";
 import React, { useEffect } from "react";
@@ -44,9 +44,14 @@ const Gallery = ({ user }: { user: UserResponse }) => {
             <div className="w-full h-[310px]">
               <img
                 className="absolute top-0 left-0 object-cover w-full h-full"
-                src={post.files[0]?.url}
+                src={post.post_files[0]?.url}
                 alt={"image " + index}
               />
+              {post.post_files.length > 1 && (
+                <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                  <MultiFileIcon className="text-white" />
+                </div>
+              )}
             </div>
           )}
           <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6">

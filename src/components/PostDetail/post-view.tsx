@@ -18,8 +18,11 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { HoverCard, HoverCardTrigger } from "../ui/hover-card";
 import SummaryProfile from "../summary-profile";
+import { useModalStore } from "@/stores/modal-store";
+import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 
 function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostResponse> }) {
+  const { modalOpen, setModalData } = useModalStore();
   const router = useRouter();
   const pathname = usePathname();
   const isPostModal = pathname === `/p/${id}`;
@@ -54,15 +57,21 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
                     </div>
                   </div>
                 </HoverCardTrigger>
-                <SummaryProfile full_name={name} username={usernamepost} avatar={postImageSrc} />
+                {/* <SummaryProfile full_name={name} username={usernamepost} avatar={postImageSrc} /> */}
               </HoverCard>
             </div>
             <div>
-              <span>
+              <span
+                onClick={() => {
+                  setModalData(post);
+                  modalOpen(PostMoreOptionsModalKey);
+                }}>
                 <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
               </span>
             </div>
           </DialogHeader>
+
+          <PostMoreOptions />
 
           <ScrollArea className="hidden md:inline border-b py-1.5">
             <MiniPost post={post} />

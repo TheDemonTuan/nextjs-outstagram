@@ -16,6 +16,8 @@ import CommentForm from "./comment-form";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { HoverCard, HoverCardTrigger } from "../ui/hover-card";
+import SummaryProfile from "../summary-profile";
 
 function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostResponse> }) {
   const router = useRouter();
@@ -24,6 +26,9 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
   const inputRef = useRef<HTMLInputElement>(null);
   const username = post.data.user_id;
   const href = `/${username}`;
+  const usernamepost = "PostUsername";
+  const name = "name";
+  const postImageSrc = "https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp";
 
   return (
     <Dialog open={isPostModal} onOpenChange={(open: any) => !open && router.back()}>
@@ -31,21 +36,26 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
         <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg">
           <DialogHeader className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-6 justify-between">
             <div>
-              <div className="flex flex-row items-center">
-                <div className="">
-                  <Link href={href}>
-                    <Avatar
-                      src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
-                      className="w-8 h-8"
-                    />
-                  </Link>
-                </div>
-                <div className="pl-3.5">
-                  <Link href={href} className="font-semibold text-[13px] leading-[18px]">
-                    {username}
-                  </Link>
-                </div>
-              </div>
+              <HoverCard>
+                <HoverCardTrigger>
+                  <div className="flex flex-row items-center">
+                    <div className="">
+                      <Link href={href}>
+                        <Avatar
+                          src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
+                          className="w-8 h-8"
+                        />
+                      </Link>
+                    </div>
+                    <div className="pl-3.5">
+                      <Link href={href} className="font-semibold text-[13px] leading-[18px]">
+                        {username}
+                      </Link>
+                    </div>
+                  </div>
+                </HoverCardTrigger>
+                <SummaryProfile full_name={name} username={usernamepost} avatar={postImageSrc} />
+              </HoverCard>
             </div>
             <div>
               <span>

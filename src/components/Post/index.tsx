@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import {
@@ -27,6 +27,8 @@ import PostReact from "./post-react";
 import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { HoverCard, HoverCardTrigger } from "../ui/hover-card";
+import SummaryProfile from "../summary-profile";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -56,13 +58,24 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                     <Card className="rounded-none shadow-none border-0">
                       <CardHeader className="p-2 flex flex-row items-center">
                         <div className="flex gap-1 items-center justify-center">
-                          <Link className="flex items-center gap-2 text-sm font-medium" href={`/${userData?.username}`}>
-                            <Avatar className="w-9 h-9 border">
-                              <AvatarImage alt={userData?.username} src={getUserAvatarURL(userData?.avatar)} />
-                              <AvatarFallback>{userData?.username}</AvatarFallback>
-                            </Avatar>
-                            {userData?.full_name}
-                          </Link>
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              <Link
+                                className="flex items-center gap-2 text-sm font-medium"
+                                href={`/${userData?.username}`}>
+                                <Avatar className="w-9 h-9 border">
+                                  <AvatarImage alt={userData?.username} src={getUserAvatarURL(userData?.avatar)} />
+                                  <AvatarFallback>{userData?.username}</AvatarFallback>
+                                </Avatar>
+                                {userData?.full_name}
+                              </Link>
+                            </HoverCardTrigger>
+                            <SummaryProfile
+                              full_name={userData?.full_name}
+                              username={userData?.username}
+                              avatar={getUserAvatarURL(userData?.avatar)}
+                            />
+                          </HoverCard>
                           <span className="text-xs text-gray-500">
                             •{" "}
                             {formatDistanceToNow(post.updated_at, {

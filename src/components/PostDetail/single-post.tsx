@@ -7,8 +7,13 @@ import PostActions from "./post-actions";
 import { Card } from "../ui/card";
 import CommentForm from "./comment-form";
 import Image from "next/image";
+import SummaryProfile from "../summary-profile";
 
 const SinglePost = ({ id }: { id: string }) => {
+  const username = "PostUsername";
+  const name = "name";
+  const postImageSrc = "https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp";
+
   return (
     <>
       <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9">
@@ -27,34 +32,17 @@ const SinglePost = ({ id }: { id: string }) => {
               <HoverCardTrigger asChild>
                 <Link className="font-semibold text-[13px] leading-[18px]" href="/">
                   <div className="flex flex-row items-center  ">
-                    <div>
-                      <Avatar
-                        src="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
-                        className="w-8 h-8"
-                      />
-                    </div>
+                    <Avatar
+                      src="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
+                      className="w-9 h-9"
+                    />
                     <div className="mx-2">
                       <span>PostUsername</span>
                     </div>
                   </div>
                 </Link>
               </HoverCardTrigger>
-              <HoverCardContent>
-                <div className="flex items-center space-x-2">
-                  <Image
-                    src="https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp"
-                    className="h-14 w-14"
-                    alt={""}
-                    priority
-                    width={14}
-                    height={14}
-                  />
-                  <div>
-                    <p className="font-bold">postusername</p>
-                    <p className="text-sm font-medium dark:text-neutral-400">name</p>
-                  </div>
-                </div>
-              </HoverCardContent>
+              <SummaryProfile full_name={name} username={username} avatar={postImageSrc} />
             </HoverCard>
             <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           </div>

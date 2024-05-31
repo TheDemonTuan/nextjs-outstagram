@@ -22,8 +22,16 @@ const Gallery = ({ user }: { user: UserResponse }) => {
     }
   }, [postsError]);
 
-  if (!postsData || !postsData.get_posts_by_username) {
-    return <div>No posts found.</div>;
+  if (!postsData || !postsData.get_posts_by_username || postsData.get_posts_by_username.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center my-14">
+        <div>
+          {" "}
+          <img src="/camera-b.png" alt="" className="w-16 h-16" />
+        </div>
+        <span className="font-black text-3xl mt-10">No Posts Yet</span>
+      </div>
+    );
   }
 
   return (

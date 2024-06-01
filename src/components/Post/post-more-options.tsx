@@ -15,6 +15,7 @@ const UserMeMoreOptions = [
   },
   {
     title: "Edit",
+    action: true,
   },
   {
     title: "Hide number of reacts",
@@ -68,7 +69,7 @@ const UserMoreOptions = [
 ];
 
 const PostMoreOptions = () => {
-  const { modalClose, modalKey, modalData } = useModalStore();
+  const { modalOpen, modalClose, modalKey, modalData } = useModalStore();
   const { authData } = useAuth();
 
   return (
@@ -88,6 +89,9 @@ const PostMoreOptions = () => {
                         onClick={() => {
                           if (optionItem?.action) {
                             switch (optionItem.title) {
+                              // case "Edit":
+                              //   modalOpen(EditPostModalKey);
+                              //   break;
                               case "Cancel":
                                 modalClose();
                                 break;

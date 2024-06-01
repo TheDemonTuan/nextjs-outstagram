@@ -8,6 +8,8 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import ChangeEmailModal, { ChangeEmailModalKey } from "./change-email-modal";
 import { useModalStore } from "@/stores/modal-store";
 import ChangePhoneModal, { ChangePhoneModalKey } from "./change-phone-modal";
+import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "../Post/confirm-delete-post";
+import EditPost, { EditPostModalKey } from "../Post/edit-post";
 
 const ContactInfoForm = () => {
   const { authData, authIsLoading } = useAuth();
@@ -56,7 +58,41 @@ const ContactInfoForm = () => {
             </div>
           </button>
         </div>
+        <hr />
+        <button onClick={() => modalOpen(EditPostModalKey)}>
+          <div className="mx-5 justify-center items-center cursor-pointer">
+            <div className="flex justify-between">
+              <div className="flex flex-row">
+                <div>
+                  <PhoneContactIcon />
+                </div>
+                <div className="mx-2 font-medium">{authData?.phone}</div>
+              </div>
+              <div>
+                <MdKeyboardArrowRight size={25} color="#425564" />
+              </div>
+            </div>
+          </div>
+        </button>
+        <hr />
+        <button onClick={() => modalOpen(ConfirmDeletePostModalKey)}>
+          <div className="mx-5 justify-center items-center cursor-pointer">
+            <div className="flex justify-between">
+              <div className="flex flex-row">
+                <div>
+                  <PhoneContactIcon />
+                </div>
+                <div className="mx-2 font-medium">{authData?.phone}</div>
+              </div>
+              <div>
+                <MdKeyboardArrowRight size={25} color="#425564" />
+              </div>
+            </div>
+          </div>
+        </button>
       </div>
+      <EditPost />
+      <ConfirmDeletePost />
       <ChangeEmailModal />
       <ChangePhoneModal />
     </div>

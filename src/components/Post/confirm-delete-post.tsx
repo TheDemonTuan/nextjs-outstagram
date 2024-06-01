@@ -4,16 +4,11 @@ import { Input, Link } from "@nextui-org/react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 import React from "react";
 
-export const OptionChangeAvatarModalKey = "OptionChangeAvatar";
+export const ConfirmDeletePostModalKey = "ConfirmDeletePost";
 
-const ListOptionChangeAvatar = [
+const ListConfirmDeletePost = [
   {
-    title: "Upload Photo",
-    className: "text-sky-500 text-sm font-bold",
-    action: true,
-  },
-  {
-    title: "Remove Current Photo",
+    title: "Delete",
     className: "text-sm font-bold text-red-500",
     action: true,
   },
@@ -24,18 +19,21 @@ const ListOptionChangeAvatar = [
   },
 ];
 
-const OptionChangeAvatar = () => {
+const ConfirmDeletePost = () => {
   const { modalClose, modalKey } = useModalStore();
   return (
-    <Modal isOpen={modalKey === OptionChangeAvatarModalKey} onOpenChange={modalClose} hideCloseButton={true}>
+    <Modal isOpen={modalKey === ConfirmDeletePostModalKey} onOpenChange={modalClose} hideCloseButton={true}>
       <ModalContent>
         {(onClose) => {
           return (
             <>
               <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
-                <p className="text-black text-lg my-5">Change Profile Photo</p>
+                <div className="my-4 text-center">
+                  <p className="text-black text-lg">Delete post?</p>
+                  <p>Are you sure you want to delete this post?</p>
+                </div>
                 <hr className="w-full border-gray-300" />
-                {ListOptionChangeAvatar.map((optionItem, index) => {
+                {ListConfirmDeletePost.map((optionItem, index) => {
                   return (
                     <>
                       <div
@@ -47,8 +45,6 @@ const OptionChangeAvatar = () => {
                               case "Cancel":
                                 modalClose();
                                 break;
-                              case "Upload Photo":
-                                break;
                               default:
                                 break;
                             }
@@ -56,7 +52,7 @@ const OptionChangeAvatar = () => {
                         }}>
                         <p className={cn("text-black", optionItem?.className)}>{optionItem.title}</p>
                       </div>
-                      {index !== ListOptionChangeAvatar.length - 1 && <hr className="w-full my-1 border-gray-300" />}
+                      {index !== ListConfirmDeletePost.length - 1 && <hr className="w-full my-1 border-gray-300" />}
                     </>
                   );
                 })}
@@ -69,4 +65,4 @@ const OptionChangeAvatar = () => {
   );
 };
 
-export default OptionChangeAvatar;
+export default ConfirmDeletePost;

@@ -42,7 +42,18 @@ const ChangePhoneModal = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="md:items-center gap-y-2 gap-x-8">
-                              <FormControl className="mt-2">
+                              <FormControl className="my-2">
+                                <Input
+                                  disabled
+                                  endContent={
+                                    <FaPhoneFlip className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
+                                  }
+                                  label="Current Phone"
+                                  variant="bordered"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormControl className="my-2">
                                 <Input
                                   autoFocus
                                   endContent={

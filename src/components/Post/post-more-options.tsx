@@ -4,6 +4,7 @@ import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useModalStore } from "@/stores/modal-store";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import EditPost, { EditPostModalKey } from "./edit-post";
 
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
@@ -89,9 +90,9 @@ const PostMoreOptions = () => {
                         onClick={() => {
                           if (optionItem?.action) {
                             switch (optionItem.title) {
-                              // case "Edit":
-                              //   modalOpen(EditPostModalKey);
-                              //   break;
+                              case "Edit":
+                                modalOpen(EditPostModalKey);
+                                break;
                               case "Cancel":
                                 modalClose();
                                 break;
@@ -111,6 +112,7 @@ const PostMoreOptions = () => {
           );
         }}
       </ModalContent>
+      <EditPost />
     </Modal>
   );
 };

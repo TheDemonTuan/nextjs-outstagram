@@ -11,7 +11,7 @@ import ChangePhoneModal, { ChangePhoneModalKey } from "./change-phone-modal";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "../Post/confirm-delete-post";
 import EditPost, { EditPostModalKey } from "../Post/edit-post";
 
-const ContactInfoForm = () => {
+const ContactInfo = () => {
   const { authData, authIsLoading } = useAuth();
   const { modalOpen } = useModalStore();
   if (authIsLoading) {
@@ -99,4 +99,4 @@ const ContactInfoForm = () => {
   );
 };
 
-export default ContactInfoForm;
+export default ContactInfo;

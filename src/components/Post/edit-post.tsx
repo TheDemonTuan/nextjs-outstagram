@@ -21,7 +21,12 @@ const EditPost = () => {
   };
 
   return (
-    <Modal isOpen={modalKey === EditPostModalKey} onOpenChange={modalClose} hideCloseButton={true} size="3xl">
+    <Modal
+      isOpen={modalKey === EditPostModalKey}
+      onOpenChange={modalClose}
+      onClose={modalClose}
+      hideCloseButton={true}
+      size="3xl">
       <ModalContent className="h-[550px]">
         {(onClose) => (
           <>

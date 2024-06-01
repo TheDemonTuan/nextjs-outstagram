@@ -1,8 +1,12 @@
 import { Switch } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
+import ConfirmPublicAccount, { ConfirmPublicAccountModalKey } from "./confirm-public-account";
+import { useModalStore } from "@/stores/modal-store";
 
 const AccountPrivacy = () => {
+  const { modalOpen, setModalData } = useModalStore();
+
   return (
     <div className="space-y-8 py-8">
       <div className="flex flex-col">
@@ -10,7 +14,7 @@ const AccountPrivacy = () => {
           <div className="text-lg">Private account</div>
           <div>
             {" "}
-            <Switch defaultChecked size="md" />
+            <Switch defaultChecked size="md" onChange={() => modalOpen(ConfirmPublicAccountModalKey)} />
           </div>
         </div>
 
@@ -26,6 +30,7 @@ const AccountPrivacy = () => {
           </Link>
         </div>
       </div>
+      <ConfirmPublicAccount />
     </div>
   );
 };

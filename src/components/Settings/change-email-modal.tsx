@@ -55,17 +55,6 @@ const ChangeEmailModal = () => {
                               </FormControl>
                               <FormControl className="my-3">
                                 <Input
-                                  disabled
-                                  endContent={
-                                    <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
-                                  }
-                                  label="Current email"
-                                  variant="bordered"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormControl className="mt-2">
-                                <Input
                                   autoFocus
                                   endContent={
                                     <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />

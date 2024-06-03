@@ -28,6 +28,7 @@ import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import SummaryProfile from "../summary-profile";
+import Carousel from "./carousel";
 
 const Post = ({ postData }: { postData: PostResponse[] }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -91,8 +92,10 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                       <Share />
                       <CardContent className="p-2">
                         {post.post_files.length ? (
-                          <div className="slide-container">
-                            <ImageGallery
+                          <div className="relative">
+                            <div className="slide-container">
+                              <Carousel slides={post.post_files.map((file) => file.url)} />
+                              {/* <ImageGallery
                               items={post.post_files.map((file, index) => {
                                 return {
                                   original: file.url,
@@ -111,11 +114,13 @@ const Post = ({ postData }: { postData: PostResponse[] }) => {
                                       priority
                                     />
                                   </div>
+                               
                                 );
                               }}
                               showPlayButton={false}
                               showThumbnails={false}
-                            />
+                            /> */}
+                            </div>
                           </div>
                         ) : null}
                       </CardContent>

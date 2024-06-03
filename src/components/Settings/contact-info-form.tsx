@@ -58,41 +58,7 @@ const ContactInfo = () => {
             </div>
           </button>
         </div>
-        <hr />
-        <button onClick={() => modalOpen(EditPostModalKey)}>
-          <div className="mx-5 justify-center items-center cursor-pointer">
-            <div className="flex justify-between">
-              <div className="flex flex-row">
-                <div>
-                  <PhoneContactIcon />
-                </div>
-                <div className="mx-2 font-medium">{authData?.phone}</div>
-              </div>
-              <div>
-                <MdKeyboardArrowRight size={25} color="#425564" />
-              </div>
-            </div>
-          </div>
-        </button>
-        <hr />
-        <button onClick={() => modalOpen(ConfirmDeletePostModalKey)}>
-          <div className="mx-5 justify-center items-center cursor-pointer">
-            <div className="flex justify-between">
-              <div className="flex flex-row">
-                <div>
-                  <PhoneContactIcon />
-                </div>
-                <div className="mx-2 font-medium">{authData?.phone}</div>
-              </div>
-              <div>
-                <MdKeyboardArrowRight size={25} color="#425564" />
-              </div>
-            </div>
-          </div>
-        </button>
       </div>
-      <EditPost />
-      <ConfirmDeletePost />
       <ChangeEmailModal />
       <ChangePhoneModal />
     </div>

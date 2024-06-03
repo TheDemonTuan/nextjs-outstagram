@@ -5,6 +5,7 @@ import { useModalStore } from "@/stores/modal-store";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import EditPost, { EditPostModalKey } from "./edit-post";
+import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "./confirm-delete-post";
 
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
@@ -74,46 +75,52 @@ const PostMoreOptions = () => {
   const { authData } = useAuth();
 
   return (
-    <Modal isOpen={modalKey === PostMoreOptionsModalKey} onOpenChange={modalClose} hideCloseButton={true}>
-      <ModalContent>
-        {(onClose) => {
-          const listOptionItem = authData?.id === modalData?.user_id ? UserMeMoreOptions : UserMoreOptions;
-          return (
-            <>
-              <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
-                {listOptionItem.map((optionItem, index) => {
-                  return (
-                    <>
-                      <div
-                        key={index}
-                        className="flex items-center gap-2"
-                        onClick={() => {
-                          if (optionItem?.action) {
-                            switch (optionItem.title) {
-                              case "Edit":
-                                modalOpen(EditPostModalKey);
-                                break;
-                              case "Cancel":
-                                modalClose();
-                                break;
-                              default:
-                                break;
+    <>
+      <Modal isOpen={modalKey === PostMoreOptionsModalKey} onOpenChange={modalClose} hideCloseButton={true}>
+        <ModalContent>
+          {(onClose) => {
+            const listOptionItem = authData?.id === modalData?.user_id ? UserMeMoreOptions : UserMoreOptions;
+            return (
+              <>
+                <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
+                  {listOptionItem.map((optionItem, index) => {
+                    return (
+                      <>
+                        <div
+                          key={index}
+                          className="flex items-center gap-2"
+                          onClick={() => {
+                            if (optionItem?.action) {
+                              switch (optionItem.title) {
+                                case "Edit":
+                                  modalOpen(EditPostModalKey);
+                                  break;
+                                case "Delete":
+                                  modalOpen(ConfirmDeletePostModalKey);
+                                  break;
+                                case "Cancel":
+                                  modalClose();
+                                  break;
+                                default:
+                                  break;
+                              }
                             }
-                          }
-                        }}>
-                        <p className={cn("text-black", optionItem?.className)}>{optionItem.title}</p>
-                      </div>
-                      {index !== listOptionItem.length - 1 && <hr className="w-full border-gray-300" />}
-                    </>
-                  );
-                })}
-              </ModalBody>
-            </>
-          );
-        }}
-      </ModalContent>
+                          }}>
+                          <p className={cn("text-black", optionItem?.className)}>{optionItem.title}</p>
+                        </div>
+                        {index !== listOptionItem.length - 1 && <hr className="w-full border-gray-300" />}
+                      </>
+                    );
+                  })}
+                </ModalBody>
+              </>
+            );
+          }}
+        </ModalContent>
+      </Modal>
       <EditPost />
-    </Modal>
+      <ConfirmDeletePost />
+    </>
   );
 };
 

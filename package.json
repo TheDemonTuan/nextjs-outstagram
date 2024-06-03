@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "graphql": "graphql-codegen"
+    "graphql": "graphql-codegen --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.10.4",
@@ -34,7 +34,6 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^11.1.9",
     "graphql": "^16.8.1",
-    "graphql-request": "^7.0.1",
     "lodash": "^4.17.21",
     "next": "^14.2.3",
     "pusher-js": "^8.4.0-rc2",

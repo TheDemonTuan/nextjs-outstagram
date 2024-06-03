@@ -30,3 +30,6 @@ export const friendSendRequest = async (toUserID: string) =>
 
 export const friendRejectRequest = async (toUserID: string) =>
     http.delete<ApiSuccessResponse<FriendResponse>>(`friends/${toUserID}/reject`).then((res) => res.data);
+
+export const friendGetByUserID = async (toUserID: string) =>
+    http.get<ApiSuccessResponse<FriendResponse>>(`friends/${toUserID}`).then((res) => res.data);

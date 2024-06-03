@@ -5,10 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, ApolloLink, HttpLink, concat } from "@apollo/client";
 import { useNotification } from "@/hooks/useNotification";
 import { sendNotification } from "@/lib/send-notification";
-import { usePusherStore } from "@/stores/pusher-store";
+import { getJWT } from "@/actions";
+import { onError } from "@apollo/client/link/error";
+import { useJWTStore } from "@/stores/jwt-store";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,8 +24,21 @@ const queryClient = new QueryClient({
   },
 });
 
+const httpLink = new HttpLink({ uri: `${process.env.NEXT_PUBLIC_API_HOST}/graphql`, headers: {} });
+
+const authMiddleware = new ApolloLink((operation, forward) => {
+  // add the authorization to the headers
+  operation.setContext(({}) => ({
+    headers: {
+      authorization: useJWTStore.getState().jwt ? `Bearer ${useJWTStore.getState().jwt}` : "",
+    },
+  }));
+
+  return forward(operation);
+});
+
 const client = new ApolloClient({
-  uri: `${process.env.NEXT_PUBLIC_API_HOST}/graphql`,
+  link: concat(authMiddleware, httpLink),
   cache: new InMemoryCache(),
 });
 

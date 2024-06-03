@@ -21,12 +21,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button, Input, Skeleton, Spinner } from "@nextui-org/react";
 import _ from "lodash";
 import { useLazyQuery } from "@apollo/client";
-import { SEARCH_USER, UserSearchResponse } from "@/graphql/query";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
+import { UserSearchQuery } from "@/gql/graphql";
+import { UserSearch } from "@/graphql/user";
 
 const HeaderMenu = [
   {
@@ -207,14 +208,11 @@ export default Header;
 const Search = () => {
   const keyWordRef = useRef<HTMLInputElement>(null);
 
-  const [getSearchResults, { data: searchData, loading: searchLoading }] = useLazyQuery<UserSearchResponse>(
-    SEARCH_USER,
-    {
-      onError() {
-        toast.error("Error while searching user");
-      },
-    }
-  );
+  const [getSearchResults, { data: searchData, loading: searchLoading }] = useLazyQuery<UserSearchQuery>(UserSearch, {
+    onError() {
+      toast.error("Error while searching user");
+    },
+  });
 
   const debouncedHandleSearch = useCallback(
     _.debounce(() => {
@@ -256,9 +254,9 @@ const Search = () => {
         />
       </div>
       <div className={cn("flex flex-col", !keyWordRef.current?.value && "p-6")}>
-        {keyWordRef.current?.value && !searchLoading && searchData?.search_user?.length && (
+        {keyWordRef.current?.value && !searchLoading && searchData?.userSearch?.length && (
           <>
-            {searchData?.search_user?.map((user) => {
+            {searchData?.userSearch?.map((user) => {
               return (
                 <div className="flex items-center" key={user.id}>
                   <Link
@@ -280,7 +278,7 @@ const Search = () => {
             })}
           </>
         )}
-        {keyWordRef.current?.value && !searchLoading && !searchData?.search_user?.length && (
+        {keyWordRef.current?.value && !searchLoading && !searchData?.userSearch?.length && (
           <div className="flex justify-center items-center flex-1">
             <span className="text-gray-500">No results</span>
           </div>

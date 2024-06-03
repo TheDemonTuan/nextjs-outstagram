@@ -1,4 +1,3 @@
-import { GET_USER_SUGGESTIONS, UserSuggestionsResponse } from "@/graphql/query";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useLazyQuery } from "@apollo/client";
@@ -9,19 +8,20 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import SummaryProfile from "./summary-profile";
 import { UserResponse } from "@/api/user";
+import { UserSuggestionQuery } from "@/gql/graphql";
+import { UserSuggestion } from "@/graphql/user";
 
 const Suggestions = () => {
   const { authData } = useAuth();
   const [
     getUserSuggestionsResults,
-    { data: userSuggestionsData, loading: userSuggestionsLoading, error: userSuggestionsError },
-  ] = useLazyQuery<UserSuggestionsResponse>(GET_USER_SUGGESTIONS);
+    { data: userSuggestionData, loading: userSuggestionLoading, error: userSuggestionError },
+  ] = useLazyQuery<UserSuggestionQuery>(UserSuggestion);
 
   useEffect(() => {
     if (authData?.id) {
       getUserSuggestionsResults({
         variables: {
-          userID: authData.id,
           count: 5,
         },
       });
@@ -29,12 +29,12 @@ const Suggestions = () => {
   }, [authData?.id]);
 
   useEffect(() => {
-    if (userSuggestionsError) {
+    if (userSuggestionError) {
       toast.error("Failed to get user suggestions");
     }
-  }, [userSuggestionsError]);
+  }, [userSuggestionError]);
 
-  if (userSuggestionsLoading) {
+  if (userSuggestionLoading) {
     return <div>Loading...</div>;
   }
 
@@ -44,7 +44,7 @@ const Suggestions = () => {
         <h3 className="text-sm font-semibold text-gray-400">Suggestions</h3>
         <button className="text-gray-600 font-semibold">See All</button>
       </div>
-      {userSuggestionsData?.get_user_suggestions.map((user) => (
+      {userSuggestionData?.userSuggestion.map((user) => (
         <div key={user.username} className="flex items-center justify-between gap-3">
           <Tooltip content={user && <SummaryProfile user={user as UserResponse} />}>
             <Link className="flex items-center gap-2 text-sm font-medium" href={`/${user?.username}`}>

@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import { clearJWT } from "@/actions";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useJWTStore } from "@/stores/jwt-store";
+import { useApolloClient } from "@apollo/client";
 
 const MiniProfile = () => {
   const { authData } = useAuth();
@@ -51,6 +53,7 @@ const SignOutModalKey = "SignOut";
 const SignOutAlert = () => {
   const { modalKey, modalClose } = useModalStore();
   const queryClient = useQueryClient();
+  const apolloClient = useApolloClient();
 
   const handleSignOut = async () => {
     toast.promise(clearJWT(), {
@@ -59,6 +62,8 @@ const SignOutAlert = () => {
       error: "Failed to log out! 😵",
     });
     queryClient.clear();
+    apolloClient.clearStore();
+    useJWTStore.getState().clearJWT();
     modalClose();
   };
 

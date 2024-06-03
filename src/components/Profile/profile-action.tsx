@@ -21,10 +21,11 @@ import {
 } from "@/api/friend";
 import { toast } from "sonner";
 import { IoPersonRemoveOutline } from "react-icons/io5";
+import { UserByUsernameQuery } from "@/gql/graphql";
 
 interface ProfileActionProps {
   isMe: boolean;
-  user: UserResponse;
+  user: UserByUsernameQuery;
 }
 
 const btnClass =
@@ -32,6 +33,8 @@ const btnClass =
 
 const ProfileAction = (props: ProfileActionProps) => {
   const { modalOpen } = useModalStore();
+  const { userByUsername } = props.user;
+
   return (
     <>
       {props.isMe && (
@@ -50,7 +53,7 @@ const ProfileAction = (props: ProfileActionProps) => {
           <ProfileSettings />
         </div>
       )}
-      {!props.isMe && <ProfileActionGuest toUserID={props.user.id} />}
+      {!props.isMe && userByUsername?.id && <ProfileActionGuest toUserID={userByUsername?.id} />}
     </>
   );
 };

@@ -1,14 +1,14 @@
 "use client";
 
 import { UserResponse } from "@/api/user";
-import { GET_ALL_POST_BY_USER_ID, PostGetByUserNameResponse } from "@/graphql/query";
+import { UserByUsernameQuery } from "@/gql/graphql";
 import { LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import { useLazyQuery } from "@apollo/client";
 import { Skeleton } from "@nextui-org/react";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
-const Gallery = ({ user }: { user: UserResponse }) => {
+const Gallery = ({ user }: { user: UserByUsernameQuery }) => {
   const [getUserByUserNameResults, { data: postsData, loading: postsLoading, error: postsError }] =
     useLazyQuery<PostGetByUserNameResponse>(GET_ALL_POST_BY_USER_ID);
 
@@ -44,10 +44,10 @@ const Gallery = ({ user }: { user: UserResponse }) => {
             <div className="w-full h-[310px]">
               <img
                 className="absolute top-0 left-0 object-cover w-full h-full"
-                src={post.post_files[0]?.url}
+                src={post.files[0]?.url}
                 alt={"image " + index}
               />
-              {post.post_files.length > 1 && (
+              {post.files.length > 1 && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                   <MultiFileIcon className="text-white" />
                 </div>

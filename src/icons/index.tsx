@@ -709,3 +709,49 @@ export const MultiFileIcon = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+export const LockIcon = (props: SVGProps<SVGSVGElement>) => {
+  return (
+    <svg {...props} aria-label="" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+      <title></title>
+      <path
+        d="M6.71 9.555h10.581a2.044 2.044 0 0 1 2.044 2.044v8.357a2.044 2.044 0 0 1-2.043 2.043H6.71a2.044 2.044 0 0 1-2.044-2.044V11.6A2.044 2.044 0 0 1 6.71 9.555Zm1.07 0V6.222a4.222 4.222 0 0 1 8.444 0v3.333"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"></path>
+    </svg>
+  );
+};
+
+export const MentionIcon = (props: SVGProps<SVGSVGElement>) => {
+  return (
+    <svg {...props} aria-label="" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+      <title></title>
+      <path
+        d="M15.108 13.652a3.342 3.342 0 0 1-3.341 3.342h-.661a2.246 2.246 0 0 1-2.246-2.246v-.634a2.246 2.246 0 0 1 2.246-2.246h3.654"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="2"></path>
+      <path
+        d="M17.521 22h-7.368a6.95 6.95 0 0 1-3.695-.642 4.356 4.356 0 0 1-1.813-1.812 6.96 6.96 0 0 1-.64-3.696v-7.7a6.964 6.964 0 0 1 .64-3.697 4.36 4.36 0 0 1 1.813-1.812A6.952 6.952 0 0 1 10.153 2h3.74a6.95 6.95 0 0 1 3.694.64 4.356 4.356 0 0 1 1.814 1.813 6.956 6.956 0 0 1 .64 3.696v6.464a2.38 2.38 0 0 1-2.38 2.38h-.13a2.423 2.423 0 0 1-2.422-2.422V9.019a2.471 2.471 0 0 0-2.47-2.471h-.994a2.471 2.471 0 0 0-2.47 2.47v.268"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="2"></path>
+    </svg>
+  );
+};
+
+export const PlusIcon = (props: SVGProps<SVGSVGElement>) => {
+  return (
+    <svg {...props} aria-label="" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+      <title></title>
+      <path d="M11.999 6.999a1 1 0 0 0-1 1V11H8a1 1 0 0 0 0 2h2.999v2.998a1 1 0 0 0 2 0V13H16a1 1 0 0 0 0-2h-3.001V7.999a1 1 0 0 0-1-1ZM21.001 11a1 1 0 0 0-1 1v3.104c0 2.355-.552 3.12-1.14 3.732-.637.614-1.404 1.165-3.758 1.165H8.896c-2.352 0-3.12-.552-3.731-1.139a3.729 3.729 0 0 1-.644-.864H7a1 1 0 0 0 0-2H2a1 1 0 0 0-1 1v5a1 1 0 0 0 2 0v-2.65a6.257 6.257 0 0 0 .751.928c1.076 1.036 2.362 1.725 5.146 1.725h6.206c2.786 0 4.072-.69 5.171-1.751 1.037-1.073 1.727-2.36 1.727-5.146V12a1 1 0 0 0-1-1ZM22 .999a1 1 0 0 0-1 1v2.653a6.2 6.2 0 0 0-.751-.926c-1.073-1.037-2.36-1.727-5.146-1.727H8.897c-2.788 0-4.074.69-5.17 1.751C2.69 4.82 2 6.104 2 8.896V12a1 1 0 0 0 2 0V8.896c0-2.358.55-3.122 1.14-3.731.635-.614 1.402-1.166 3.757-1.166h6.206c2.355 0 3.12.552 3.733 1.142a3.705 3.705 0 0 1 .638.858H17a1 1 0 0 0 0 2h5a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1Z"></path>
+    </svg>
+  );
+};

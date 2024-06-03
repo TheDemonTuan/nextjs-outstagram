@@ -1,6 +1,6 @@
 "use client";
 
-import { ContactInfoIcon, ShieldIcon, UserIcon } from "@/icons";
+import { ContactInfoIcon, LockIcon, ShieldIcon, UserIcon } from "@/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { ChangeEvent, useRef, useState } from "react";
@@ -21,6 +21,11 @@ const HeaderSettingsMenu = [
     name: "Contact info",
     icon: ContactInfoIcon,
     href: "/accounts/contact-info",
+  },
+  {
+    name: "Private account",
+    icon: LockIcon,
+    href: "/accounts/privacy_setting",
   },
 ];
 

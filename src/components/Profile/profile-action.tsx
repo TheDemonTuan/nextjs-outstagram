@@ -9,11 +9,12 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { FiUserPlus } from "react-icons/fi";
 import { TfiMoreAlt } from "react-icons/tfi";
 import ProfileMoreOptions, { ProfileMoreOptionsModalKey } from "./profile-more-options";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { UseMutateFunction, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import {
   FriendResponse,
   FriendStatus,
+  friendGetByUserID,
   friendGetList,
   friendKey,
   friendRejectRequest,
@@ -60,19 +61,89 @@ const ProfileAction = (props: ProfileActionProps) => {
 
 export default ProfileAction;
 
+const ProfileActionGuestBtn = (name: string, icon: React.ReactNode, onClick: () => void, isLoading: boolean) => {
+  return (
+    <Button
+      color="primary"
+      isLoading={isLoading}
+      startContent={icon}
+      className={"p-2 rounded-lg text-sm"}
+      onClick={onClick}>
+      {name}
+    </Button>
+  );
+};
+
+const ProfileActionGuestLogic = (
+  toUserID: string,
+  friend: FriendResponse,
+  friendSendRequestMutate: UseMutateFunction<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, string, unknown>,
+  friendRejectMutate: UseMutateFunction<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, string, unknown>,
+  friendSendRequestIsPending: boolean,
+  friendRejectIsPending: boolean
+) => {
+  const btnAddFriend = ProfileActionGuestBtn(
+    "Add friend",
+    <IoMdPersonAdd size={20} />,
+    () => {
+      friendSendRequestMutate(toUserID);
+    },
+    friendSendRequestIsPending
+  );
+
+  const btnRemoveFriend = ProfileActionGuestBtn(
+    "Remove friend",
+    <IoPersonRemoveOutline size={20} />,
+    () => {
+      friendRejectMutate(toUserID);
+    },
+    friendRejectIsPending
+  );
+
+  const btnCancelRequest = ProfileActionGuestBtn(
+    "Cancel request",
+    <IoPersonRemoveOutline size={20} />,
+    () => {
+      friendRejectMutate(toUserID);
+    },
+    friendRejectIsPending
+  );
+
+  const btnAcceptRequest = ProfileActionGuestBtn(
+    "Accept request",
+    <FiUserPlus size={20} />,
+    () => {
+      friendSendRequestMutate(toUserID);
+    },
+    friendSendRequestIsPending
+  );
+
+  switch (friend?.status) {
+    case FriendStatus.REQUESTED:
+      if (friend?.from_user_id === toUserID) return btnAcceptRequest;
+      return btnCancelRequest;
+    case FriendStatus.ACCEPTED:
+      return btnRemoveFriend;
+    case FriendStatus.REJECTED:
+      return btnAddFriend;
+    default:
+      return btnAddFriend;
+  }
+};
+
 const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   const { modalOpen } = useModalStore();
-  const [friend, setFriend] = useState<FriendResponse | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: friendsData, isLoading: friendsIsLoading } = useQuery<
-    ApiSuccessResponse<FriendResponse[]>,
-    ApiErrorResponse,
-    FriendResponse[]
-  >({
-    queryKey: [friendKey, "me"],
-    queryFn: async () => friendGetList(),
+  const {
+    data: friendData,
+    isLoading: friendIsLoading,
+    isError: friendIsError,
+  } = useQuery<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, FriendResponse>({
+    queryKey: [friendKey, toUserID],
+    queryFn: async () => friendGetByUserID(toUserID),
     select: (data) => data.data,
+    enabled: !!toUserID,
   });
 
   const { mutate: friendSendRequestMutate, isPending: friendSendRequestIsPending } = useMutation<
@@ -83,7 +154,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     mutationFn: async (params) => await friendSendRequest(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [friendKey, "me"],
+        queryKey: [friendKey, toUserID],
       });
     },
     onError: (error) => {
@@ -98,9 +169,9 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   >({
     mutationFn: async (params) => await friendRejectRequest(params),
     onSuccess: () => {
-        queryClient.invalidateQueries({
-            queryKey: [friendKey, "me"],
-        });
+      queryClient.invalidateQueries({
+        queryKey: [friendKey, toUserID],
+      });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Reject friend request failed");
@@ -108,10 +179,12 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   });
 
   useEffect(() => {
-    setFriend(friendsData?.find((friend) => friend.ToUser.id === toUserID) ?? null);
-  }, [toUserID, friendsData]);
-  
-  if (friendsIsLoading) {
+    if (friendIsError) {
+      toast.error("Error fetching friend data");
+    }
+  }, [toUserID]);
+
+  if (friendIsLoading) {
     return <div>Loading...</div>;
   }
 
@@ -119,36 +192,15 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     <>
       <div className="flex items-center gap-2">
         <div className="flex flex-row">
-          {!friend || friend.status === FriendStatus.REJECTED ? (
-            <Button
-              color="primary"
-              isLoading={friendSendRequestIsPending}
-              startContent={<IoMdPersonAdd size={20} />}
-              className={"p-2 rounded-lg text-sm"}
-              onClick={() => friendSendRequestMutate(toUserID)}>
-              Add friend
-            </Button>
-          ) : friend?.status === FriendStatus.ACCEPTED ? (
-            <Button
-              color="primary"
-              isLoading={friendRejectIsPending}
-              startContent={<IoPersonRemoveOutline size={20} />}
-              className={"p-2 rounded-lg text-sm"}
-              onClick={() => friendRejectMutate(toUserID)}>
-              Remove friend
-            </Button>
-          ) : (
-            friend?.status === FriendStatus.REQUESTED && (
-              <Button
-                color="primary"
-                isLoading={friendRejectIsPending}
-                startContent={<IoMdPersonAdd size={20} />}
-                className={"p-2 rounded-lg text-sm"}
-                onClick={() => friendRejectMutate(toUserID)}>
-                Cancel request
-              </Button>
-            )
-          )}
+          {friendData &&
+            ProfileActionGuestLogic(
+              toUserID,
+              friendData,
+              friendSendRequestMutate,
+              friendRejectMutate,
+              friendSendRequestIsPending,
+              friendRejectIsPending
+            )}
         </div>
         <div>
           <button className={btnClass}>Message</button>

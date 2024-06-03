@@ -1,6 +1,7 @@
 import { setJWT } from "@/actions";
 import http, { ApiSuccessResponse } from "@/lib/http";
 import { UserResponse } from "./user";
+import { useJWTStore } from "@/stores/jwt-store";
 
 // ----------------------------------------------LOGIN----------------------------------------------
 
@@ -22,6 +23,7 @@ export const authLogin = async (params: AuthLoginParams) =>
 
     if (authToken) {
       await setJWT(authToken);
+      !useJWTStore.getState().jwt && useJWTStore.getState().jwt !== authToken && useJWTStore.getState().setJWT(authToken);
     }
     return res.data;
   });
@@ -44,6 +46,7 @@ export const authRegister = async (params: AuthRegisterParams) =>
 
     if (authToken) {
       await setJWT(authToken);
+      !useJWTStore.getState().jwt && useJWTStore.getState().jwt !== authToken && useJWTStore.getState().setJWT(authToken);
     }
     return res.data;
   });

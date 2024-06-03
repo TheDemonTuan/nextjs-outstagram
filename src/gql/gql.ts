@@ -13,6 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n  query PostByUsername($username: String!) {\n    postByUsername(username: $username) {\n      id\n      user_id\n      caption\n      is_hide_like\n      is_hide_comment\n      active\n      post_files {\n        url\n      }\n      created_at\n    }\n  }\n": types.PostByUsernameDocument,
     "\n  query UserSearch($keyword: String!) {\n    userSearch(keyword: $keyword) {\n      id\n      username\n      full_name\n      avatar\n      active\n    }\n  }\n": types.UserSearchDocument,
     "\n  query UserSuggestion($count: Int!) {\n    userSuggestion(count: $count) {\n      id\n      username\n      full_name\n      avatar\n      active\n    }\n  }\n": types.UserSuggestionDocument,
     "\n  query UserByUsername($username: String!) {\n    userByUsername(username: $username) {\n      id\n      username\n      password\n      full_name\n      email\n      phone\n      avatar\n      bio\n      birthday\n      gender\n      role\n    }\n  }\n": types.UserByUsernameDocument,
@@ -32,6 +33,10 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query PostByUsername($username: String!) {\n    postByUsername(username: $username) {\n      id\n      user_id\n      caption\n      is_hide_like\n      is_hide_comment\n      active\n      post_files {\n        url\n      }\n      created_at\n    }\n  }\n"): (typeof documents)["\n  query PostByUsername($username: String!) {\n    postByUsername(username: $username) {\n      id\n      user_id\n      caption\n      is_hide_like\n      is_hide_comment\n      active\n      post_files {\n        url\n      }\n      created_at\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -16,8 +16,7 @@ import { UserByUsername } from "@/graphql/user";
 const renderActiveTabContent = (activeTab: string, user: UserByUsernameQuery) => {
   switch (activeTab) {
     case "POSTS":
-      // return <Gallery user={userData} />;
-      break;
+      return <Gallery user={user} />;
     case "REELS":
       return <div>Reels content goes here</div>;
     case "SAVED":

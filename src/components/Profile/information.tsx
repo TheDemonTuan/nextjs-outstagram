@@ -2,7 +2,6 @@ import { VerifiedIcon } from "@/icons";
 import { Avatar, Tooltip } from "@nextui-org/react";
 import React from "react";
 import { useModalStore } from "@/stores/modal-store";
-import { UserResponse } from "@/api/user";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change-avatar";

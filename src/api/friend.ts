@@ -33,3 +33,6 @@ export const friendRejectRequest = async (toUserID: string) =>
 
 export const friendGetByUserID = async (toUserID: string) =>
     http.get<ApiSuccessResponse<FriendResponse>>(`friends/${toUserID}`).then((res) => res.data);
+
+export const friendAcceptRequest = async (toUserID: string) =>
+    http.patch<ApiSuccessResponse<FriendResponse>>(`friends/${toUserID}/accept`).then((res) => res.data);

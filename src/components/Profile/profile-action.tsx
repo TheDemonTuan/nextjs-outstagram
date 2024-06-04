@@ -1,7 +1,7 @@
 import { UserResponse } from "@/api/user";
 import { SettingIcon } from "@/icons";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ProfileSettings, { ProfileSettingModalKey } from "./profile-settings";
 import { useModalStore } from "@/stores/modal-store";
 import { Button } from "@nextui-org/react";
@@ -14,6 +14,7 @@ import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import {
   FriendResponse,
   FriendStatus,
+  friendAcceptRequest,
   friendGetByUserID,
   friendGetList,
   friendKey,
@@ -61,76 +62,6 @@ const ProfileAction = (props: ProfileActionProps) => {
 
 export default ProfileAction;
 
-const ProfileActionGuestBtn = (name: string, icon: React.ReactNode, onClick: () => void, isLoading: boolean) => {
-  return (
-    <Button
-      color="primary"
-      isLoading={isLoading}
-      startContent={icon}
-      className={"p-2 rounded-lg text-sm"}
-      onClick={onClick}>
-      {name}
-    </Button>
-  );
-};
-
-const ProfileActionGuestLogic = (
-  toUserID: string,
-  friend: FriendResponse,
-  friendSendRequestMutate: UseMutateFunction<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, string, unknown>,
-  friendRejectMutate: UseMutateFunction<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, string, unknown>,
-  friendSendRequestIsPending: boolean,
-  friendRejectIsPending: boolean
-) => {
-  const btnAddFriend = ProfileActionGuestBtn(
-    "Add friend",
-    <IoMdPersonAdd size={20} />,
-    () => {
-      friendSendRequestMutate(toUserID);
-    },
-    friendSendRequestIsPending
-  );
-
-  const btnRemoveFriend = ProfileActionGuestBtn(
-    "Remove friend",
-    <IoPersonRemoveOutline size={20} />,
-    () => {
-      friendRejectMutate(toUserID);
-    },
-    friendRejectIsPending
-  );
-
-  const btnCancelRequest = ProfileActionGuestBtn(
-    "Cancel request",
-    <IoPersonRemoveOutline size={20} />,
-    () => {
-      friendRejectMutate(toUserID);
-    },
-    friendRejectIsPending
-  );
-
-  const btnAcceptRequest = ProfileActionGuestBtn(
-    "Accept request",
-    <FiUserPlus size={20} />,
-    () => {
-      friendSendRequestMutate(toUserID);
-    },
-    friendSendRequestIsPending
-  );
-
-  switch (friend?.status) {
-    case FriendStatus.REQUESTED:
-      if (friend?.from_user_id === toUserID) return btnAcceptRequest;
-      return btnCancelRequest;
-    case FriendStatus.ACCEPTED:
-      return btnRemoveFriend;
-    case FriendStatus.REJECTED:
-      return btnAddFriend;
-    default:
-      return btnAddFriend;
-  }
-};
-
 const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   const { modalOpen } = useModalStore();
   const queryClient = useQueryClient();
@@ -174,7 +105,25 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
       });
     },
     onError: (error) => {
+      console.log(error);
+
       toast.error(error?.response?.data?.message || "Reject friend request failed");
+    },
+  });
+
+  const { mutate: friendAcceptRequestMutate, isPending: friendAcceptRequestIsPending } = useMutation<
+    ApiSuccessResponse<FriendResponse>,
+    ApiErrorResponse,
+    string
+  >({
+    mutationFn: async (params) => await friendAcceptRequest(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [friendKey, toUserID],
+      });
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Accept friend request failed");
     },
   });
 
@@ -184,6 +133,75 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     }
   }, [toUserID]);
 
+  const handleSendRequest = useCallback(() => {
+    friendSendRequestMutate(toUserID);
+  }, [toUserID]);
+
+  const handleRejectRequest = useCallback(() => {
+    friendRejectMutate(toUserID);
+  }, [toUserID]);
+
+  const handleAcceptRequest = useCallback(() => {
+    friendAcceptRequestMutate(toUserID);
+  }, [toUserID]);
+
+  const btnAddFriend = (
+    <Button
+      color="primary"
+      isLoading={friendSendRequestIsPending}
+      startContent={<IoMdPersonAdd size={20} />}
+      className={"p-2 rounded-lg text-sm"}
+      onClick={handleSendRequest}>
+      Add friend
+    </Button>
+  );
+
+  const btnRemoveFriend = (
+    <Button
+      color="primary"
+      isLoading={friendRejectIsPending}
+      startContent={<IoPersonRemoveOutline size={20} />}
+      className={"p-2 rounded-lg text-sm"}
+      onClick={handleRejectRequest}>
+      Remove friend
+    </Button>
+  );
+
+  const btnCancelRequest = (
+    <Button
+      color="primary"
+      isLoading={friendRejectIsPending}
+      startContent={<IoPersonRemoveOutline size={20} />}
+      className={"p-2 rounded-lg text-sm"}
+      onClick={handleRejectRequest}>
+      Cancel request
+    </Button>
+  );
+
+  const btnAcceptRequest = (
+    <Button
+      color="primary"
+      isLoading={friendAcceptRequestIsPending}
+      startContent={<IoPersonRemoveOutline size={20} />}
+      className={"p-2 rounded-lg text-sm"}
+      onClick={handleAcceptRequest}>
+      Accept request
+    </Button>
+  );
+
+  const renderButton = () => {
+    switch (friendData?.status) {
+      case FriendStatus.REQUESTED:
+        return friendData?.from_user_id === toUserID ? btnAcceptRequest : btnCancelRequest;
+      case FriendStatus.ACCEPTED:
+        return btnRemoveFriend;
+      case FriendStatus.REJECTED:
+        return btnAddFriend;
+      default:
+        return btnAddFriend;
+    }
+  };
+
   if (friendIsLoading) {
     return <div>Loading...</div>;
   }
@@ -191,17 +209,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   return (
     <>
       <div className="flex items-center gap-2">
-        <div className="flex flex-row">
-          {friendData &&
-            ProfileActionGuestLogic(
-              toUserID,
-              friendData,
-              friendSendRequestMutate,
-              friendRejectMutate,
-              friendSendRequestIsPending,
-              friendRejectIsPending
-            )}
-        </div>
+        <div className="flex flex-row">{renderButton && renderButton()}</div>
         <div>
           <button className={btnClass}>Message</button>
         </div>

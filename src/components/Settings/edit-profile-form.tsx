@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { UserEditProfileParams, UserResponse, userChangeAvatar, userEditProfile } from "@/api/user";
@@ -29,11 +29,15 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CalendarDate, parseDate } from "@internationalized/date";
+import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "../Profile/options-change-avatar";
+import { useModalStore } from "@/stores/modal-store";
 
 const EditProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
-  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const { modalOpen } = useModalStore();
   const queryClient = useQueryClient();
+
+  const [avatar, setAvatar] = useState(getUserAvatarURL(authData?.avatar));
 
   if (authIsLoading) {
     return <Spinner />;
@@ -50,34 +54,9 @@ const EditProfileForm = () => {
     },
   });
 
-  // const { isDirty, isSubmitting, isValid } = editForm.formState;
-
-  const { mutate: userChangeAvatarMutate, isPending: userChangeAvatarIsPending } = useMutation<
-    ApiSuccessResponse<string>,
-    ApiErrorResponse,
-    { avatar: File }
-  >({
-    mutationFn: async (params) => await userChangeAvatar(params.avatar),
-    onSuccess: (res) => {
-      toast.success("Change avatar successfully!");
-      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-        oldData
-          ? {
-              ...oldData,
-              data: {
-                user: {
-                  ...oldData.data.user,
-                  avatar: res.data,
-                },
-              },
-            }
-          : oldData
-      );
-    },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message || "Change avatar failed!");
-    },
-  });
+  const handleAvatarChange = (newAvatar: string) => {
+    setAvatar(getUserAvatarURL(newAvatar));
+  };
 
   const { mutate: userEditProfileMutate, isPending: userEditProfileIsLoading } = useMutation<
     ApiSuccessResponse<UserResponse>,
@@ -112,13 +91,6 @@ const EditProfileForm = () => {
     }
   }, [authData?.birthday, editForm]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    userChangeAvatarMutate({ avatar: file });
-  };
-
   const onSubmit = async (data: EditProfileFormValidate) => {
     userEditProfileMutate({
       username: data.username,
@@ -134,13 +106,9 @@ const EditProfileForm = () => {
         <div className="flex items-center gap-x-4">
           <Avatar
             className="w-16 h-16 cursor-pointer"
-            src={getUserAvatarURL(authData?.avatar)}
+            src={avatar}
             alt="User Avatar"
-            fallback={<Spinner />}
-            onClick={() => !userChangeAvatarIsPending && avatarInputRef.current?.click()}
-            showFallback={userChangeAvatarIsPending}
-            isDisabled={userChangeAvatarIsPending}
-            icon={userChangeAvatarIsPending ? <Spinner /> : undefined}
+            onClick={() => modalOpen(OptionChangeAvatarModalKey)}
           />
           <div>
             <p className="font-medium">{authData?.username}</p>
@@ -150,17 +118,9 @@ const EditProfileForm = () => {
         <Button
           color="primary"
           className="text-white text-sm font-bold cursor-pointer"
-          isLoading={userChangeAvatarIsPending}
-          onClick={() => !userChangeAvatarIsPending && avatarInputRef.current?.click()}>
+          onClick={() => modalOpen(OptionChangeAvatarModalKey)}>
           Change photo
         </Button>
-        <Input
-          type="file"
-          className="hidden"
-          accept=".webp,.png,.jpg"
-          ref={avatarInputRef}
-          onChange={handleImageChange}
-        />
       </div>
       <Form {...editForm}>
         <form onSubmit={editForm.handleSubmit(onSubmit)} className="space-y-8">
@@ -309,6 +269,8 @@ const EditProfileForm = () => {
           </div>
         </form>
       </Form>
+
+      <OptionChangeAvatar onAvatarChange={handleAvatarChange} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { VerifiedIcon } from "@/icons";
 import { Avatar, Tooltip } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import { useModalStore } from "@/stores/modal-store";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,12 +20,24 @@ const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
   const { authData } = useAuth();
   const { userByUsername } = user;
 
+  const [avatar, setAvatar] = useState(getUserAvatarURL(userByUsername?.avatar));
+
+  const handleAvatarChange = (newAvatar: string) => {
+    setAvatar(getUserAvatarURL(newAvatar));
+  };
+
+  const handleAvatarClick = () => {
+    if (authData?.id === userByUsername?.id) {
+      modalOpen(OptionChangeAvatarModalKey);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
-          <div className="rounded-full w-40 h-40 cursor-pointer" onClick={() => modalOpen(OptionChangeAvatarModalKey)}>
-            <Avatar src={getUserAvatarURL(userByUsername?.avatar)} className="w-40 h-40 text-large" />
+          <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
+            <Avatar src={avatar} className="w-40 h-40 text-large" />
           </div>
         </div>
         <div className="flex flex-col mx-6">
@@ -66,7 +78,7 @@ const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
           </div>
         </div>
       </div>
-      <OptionChangeAvatar />
+      <OptionChangeAvatar onAvatarChange={handleAvatarChange} />
     </>
   );
 };

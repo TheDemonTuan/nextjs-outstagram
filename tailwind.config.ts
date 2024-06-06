@@ -22,7 +22,9 @@ const config = {
     extend: {
       colors:{
         'gray115': '#737373',
-        '#EFEFEF' : '#EFEFEF', 
+        '#EFEFEF' : '#EFEFEF',
+        '#0096F6' : '#0096F6',
+        '#1877F2' : '#1877F2',
       },
       
       height: {

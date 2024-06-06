@@ -22,7 +22,6 @@ import {
   friendSendRequest,
 } from "@/api/friend";
 import { toast } from "sonner";
-import { IoPersonRemoveOutline } from "react-icons/io5";
 import { UserByUsernameQuery } from "@/gql/graphql";
 
 interface ProfileActionProps {
@@ -42,14 +41,14 @@ const ProfileAction = (props: ProfileActionProps) => {
       {props.isMe && (
         <div className="flex items-center gap-2">
           <Link href="/accounts/edit">
-            <div className={btnClass}>
+            <Button size="sm" className={btnClass}>
               <span>Edit profile</span>
-            </div>
+            </Button>
           </Link>
           <Link href="/archive">
-            <div className={btnClass}>
+            <Button size="sm" className={btnClass}>
               <span>View archive</span>
-            </div>
+            </Button>
           </Link>
           <SettingIcon className="cursor-pointer h-6 inline-block" onClick={() => modalOpen(ProfileSettingModalKey)} />
           <ProfileSettings />
@@ -147,43 +146,31 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
 
   const btnAddFriend = (
     <Button
-      color="primary"
+      size="sm"
       isLoading={friendSendRequestIsPending}
-      startContent={<IoMdPersonAdd size={20} />}
-      className={"p-2 rounded-lg text-sm"}
+      className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]"
       onClick={handleSendRequest}>
       Add friend
     </Button>
   );
 
   const btnRemoveFriend = (
-    <Button
-      color="primary"
-      isLoading={friendRejectIsPending}
-      startContent={<IoPersonRemoveOutline size={20} />}
-      className={"p-2 rounded-lg text-sm"}
-      onClick={handleRejectRequest}>
+    <Button size="sm" isLoading={friendRejectIsPending} className={btnClass} onClick={handleRejectRequest}>
       Remove friend
     </Button>
   );
 
   const btnCancelRequest = (
-    <Button
-      color="primary"
-      isLoading={friendRejectIsPending}
-      startContent={<IoPersonRemoveOutline size={20} />}
-      className={"p-2 rounded-lg text-sm"}
-      onClick={handleRejectRequest}>
+    <Button size="sm" isLoading={friendRejectIsPending} className={btnClass} onClick={handleRejectRequest}>
       Cancel request
     </Button>
   );
 
   const btnAcceptRequest = (
     <Button
-      color="primary"
+      size="sm"
       isLoading={friendAcceptRequestIsPending}
-      startContent={<IoPersonRemoveOutline size={20} />}
-      className={"p-2 rounded-lg text-sm"}
+      className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]"
       onClick={handleAcceptRequest}>
       Accept request
     </Button>
@@ -211,12 +198,16 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
       <div className="flex items-center gap-2">
         <div className="flex flex-row">{renderButton && renderButton()}</div>
         <div>
-          <button className={btnClass}>Message</button>
+          <Button size="sm" className={btnClass}>
+            Message
+          </Button>
         </div>
         <div>
-          <button className="cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-3 rounded-md mr-2 bg-gray-200/70 hover:bg-gray-300">
+          <Button
+            size="sm"
+            className="cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-3 rounded-md mr-2 bg-gray-200/70 hover:bg-gray-300">
             <FiUserPlus size={18} />
-          </button>
+          </Button>
         </div>
         <div className="ml-2 cursor-pointer">
           <TfiMoreAlt size={20} onClick={() => modalOpen(ProfileMoreOptionsModalKey)} />

@@ -20,6 +20,7 @@ export interface FriendResponse {
     updated_at: Date;
     deleted_at: Date | null;
 }
+
 export const friendGetList = async () =>
     http.get<ApiSuccessResponse<FriendResponse[]>>("friends").then((res) => res.data);
 

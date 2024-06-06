@@ -13,7 +13,7 @@ import {
 import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { Fragment, useCallback, useRef } from "react";
+import React, { Fragment, useCallback, useEffect, useRef } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
@@ -28,6 +28,7 @@ import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
 import { UserSearchQuery } from "@/gql/graphql";
 import { UserSearch } from "@/graphql/user";
+import { useJWTStore } from "@/stores/jwt-store";
 
 const HeaderMenu = [
   {
@@ -86,6 +87,15 @@ const Header = () => {
   const [isShortHeader, setIsShortHeader] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
+
+  useEffect(() => {
+    return () => {
+      setIsShortHeader(false);
+      setIsSearchOpen(false);
+      setIsNotificationsOpen(false);
+      useJWTStore.getState().clearJWT();
+    };
+  }, []);
 
   return (
     <>

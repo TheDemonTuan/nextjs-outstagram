@@ -16,3 +16,29 @@ export const PostByUserName = graphql(`
     }
   }
 `);
+
+export const PostHomePage = graphql(`
+  query PostHomePage($count: Int!) {
+    postHomePage(count: $count) {
+      id
+      user_id
+      caption
+      is_hide_like
+      is_hide_comment
+      active
+      user {
+        avatar
+        username
+        full_name
+      }
+      post_files {
+        url
+      }
+      post_likes {
+        user_id
+        is_liked
+      }
+      created_at
+    }
+  }
+`);

@@ -9,5 +9,5 @@ interface JWTState {
 export const useJWTStore = create<JWTState>((set) => ({
   jwt: null,
   setJWT: (jwt) => set({ jwt }),
-  clearJWT: () => set({ jwt: null }),
+  clearJWT: () => set({ jwt: "" }),
 }));

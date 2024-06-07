@@ -1,5 +1,3 @@
-"use client";
-
 import { UserResponse } from "@/api/user";
 import { PostByUsernameQuery, UserByUsernameQuery } from "@/gql/graphql";
 import { PostByUserName } from "@/graphql/post";

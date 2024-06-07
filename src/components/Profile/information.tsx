@@ -1,6 +1,6 @@
 import { VerifiedIcon } from "@/icons";
 import { Avatar, Tooltip } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useModalStore } from "@/stores/modal-store";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,9 +22,9 @@ const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
 
   const [avatar, setAvatar] = useState(getUserAvatarURL(userByUsername?.avatar));
 
-  const handleAvatarChange = (newAvatar: string) => {
-    setAvatar(getUserAvatarURL(newAvatar));
-  };
+  useEffect(() => {
+    setAvatar(authData?.avatar ?? "");
+  }, [authData]);
 
   const handleAvatarClick = () => {
     if (authData?.id === userByUsername?.id) {
@@ -78,7 +78,7 @@ const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
           </div>
         </div>
       </div>
-      <OptionChangeAvatar onAvatarChange={handleAvatarChange} />
+      <OptionChangeAvatar />
     </>
   );
 };

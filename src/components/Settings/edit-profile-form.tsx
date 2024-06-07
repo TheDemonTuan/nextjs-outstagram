@@ -25,6 +25,10 @@ const EditProfileForm = () => {
 
   const [avatar, setAvatar] = useState(getUserAvatarURL(authData?.avatar));
 
+  useEffect(() => {
+    setAvatar(authData?.avatar ?? "");
+  }, [authData]);
+
   const editForm = useForm<EditProfileFormValidate>({
     resolver: zodResolver(EditProfileFormValidateSchema),
     defaultValues: {
@@ -35,10 +39,6 @@ const EditProfileForm = () => {
       birthday: authData?.birthday || new Date(),
     },
   });
-
-  const handleAvatarChange = (newAvatar: string) => {
-    setAvatar(getUserAvatarURL(newAvatar));
-  };
 
   const { mutate: userEditProfileMutate, isPending: userEditProfileIsLoading } = useMutation<
     ApiSuccessResponse<UserResponse>,
@@ -257,7 +257,7 @@ const EditProfileForm = () => {
         </form>
       </Form>
 
-      <OptionChangeAvatar onAvatarChange={handleAvatarChange} />
+      <OptionChangeAvatar />
     </div>
   );
 };

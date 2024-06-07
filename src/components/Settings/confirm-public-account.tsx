@@ -13,7 +13,7 @@ import { toast } from "sonner";
 
 export const ConfirmPublicAccountModalKey = "ConfirmPublicAccount";
 
-const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (isPrivate: boolean) => void }) => {
+const ConfirmPublicAccount = () => {
   const { modalClose, modalKey } = useModalStore();
   const queryClient = useQueryClient();
   const { authData } = useAuth();
@@ -38,7 +38,6 @@ const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (isPrivate: bo
             }
           : oldData
       );
-      onPrivateEdit(res.data);
       modalClose();
     },
     onError: (error) => {

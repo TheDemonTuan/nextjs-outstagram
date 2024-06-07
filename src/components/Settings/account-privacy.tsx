@@ -14,10 +14,6 @@ const AccountPrivacy = () => {
     setIsSelected(authData?.is_private ?? false);
   }, [authData]);
 
-  const handlePrivateEdit = (isPrivate: boolean) => {
-    setIsSelected(isPrivate);
-  };
-
   return (
     <div className="space-y-8 py-8">
       <div className="flex flex-col">
@@ -41,7 +37,7 @@ const AccountPrivacy = () => {
           </Link>
         </div>
       </div>
-      <ConfirmPublicAccount onPrivateEdit={handlePrivateEdit} />
+      <ConfirmPublicAccount />
     </div>
   );
 };

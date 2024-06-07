@@ -62,3 +62,10 @@ export const userEditProfile = async (params: UserEditProfileParams) =>
       params
     )
     .then((res) => res.data);
+
+export const userEditPrivate = async () => 
+  http
+    .patch<ApiSuccessResponse<string>>(
+      "users/me/private"
+    ).then((res) => res.data) 
+  

@@ -34,10 +34,9 @@ const OptionChangeAvatar = ({ onAvatarChange }: { onAvatarChange: (newAvatar: st
   const { modalClose, modalKey } = useModalStore();
 
   const avatarInputRef = useRef<HTMLInputElement>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const queryClient = useQueryClient();
 
-  const { mutate: userChangeAvatarMutate } = useMutation<
+  const { mutate: userChangeAvatarMutate, isPending: userChangeAvatarIsLoading } = useMutation<
     ApiSuccessResponse<string>,
     ApiErrorResponse,
     { avatar: File }
@@ -58,20 +57,17 @@ const OptionChangeAvatar = ({ onAvatarChange }: { onAvatarChange: (newAvatar: st
             }
           : oldData
       );
-      setIsUploading(false);
       onAvatarChange(res.data);
       modalClose();
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Change avatar failed!");
-      setIsUploading(false);
     },
   });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setIsUploading(true);
       userChangeAvatarMutate({ avatar: file });
     }
   };
@@ -81,14 +77,14 @@ const OptionChangeAvatar = ({ onAvatarChange }: { onAvatarChange: (newAvatar: st
       isOpen={modalKey === OptionChangeAvatarModalKey}
       onOpenChange={modalClose}
       hideCloseButton={true}
-      isDismissable={!isUploading}>
+      isDismissable={!userChangeAvatarIsLoading}>
       <ModalContent>
         {(onClose) => {
           return (
             <>
               <ModalBody
                 className={`relative mt-3 mb-3 cursor-pointer items-center p-0 ${
-                  isUploading ? "pointer-events-none opacity-50" : ""
+                  userChangeAvatarIsLoading ? "pointer-events-none opacity-50" : ""
                 }`}>
                 <p className="text-black text-lg my-5">Change Profile Photo</p>
                 <hr className="w-full border-gray-300" />
@@ -126,9 +122,9 @@ const OptionChangeAvatar = ({ onAvatarChange }: { onAvatarChange: (newAvatar: st
                   accept=".webp,.png,.jpg"
                   ref={avatarInputRef}
                   onChange={handleImageChange}
-                  disabled={isUploading}
+                  disabled={userChangeAvatarIsLoading}
                 />
-                {isUploading && (
+                {userChangeAvatarIsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
                     <Spinner size="md" />
                   </div>

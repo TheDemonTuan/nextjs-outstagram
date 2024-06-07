@@ -1,11 +1,18 @@
 import { Switch } from "@nextui-org/react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import ConfirmPublicAccount, { ConfirmPublicAccountModalKey } from "./confirm-public-account";
 import { useModalStore } from "@/stores/modal-store";
+import { useAuth } from "@/hooks/useAuth";
 
 const AccountPrivacy = () => {
-  const { modalOpen, setModalData } = useModalStore();
+  const { modalOpen } = useModalStore();
+  const { authData } = useAuth();
+  const [isSelected, setIsSelected] = useState(authData?.is_private);
+
+  const handlePrivateEdit = (newPrivate: string) => {
+    setIsSelected(newPrivate);
+  };
 
   return (
     <div className="space-y-8 py-8">
@@ -14,7 +21,7 @@ const AccountPrivacy = () => {
           <div className="text-lg">Private account</div>
           <div>
             {" "}
-            <Switch defaultChecked size="md" onChange={() => modalOpen(ConfirmPublicAccountModalKey)} />
+            <Switch isSelected={isSelected} size="md" onChange={() => modalOpen(ConfirmPublicAccountModalKey)} />
           </div>
         </div>
 
@@ -30,7 +37,7 @@ const AccountPrivacy = () => {
           </Link>
         </div>
       </div>
-      <ConfirmPublicAccount />
+      <ConfirmPublicAccount onPrivateEdit={handlePrivateEdit} />
     </div>
   );
 };

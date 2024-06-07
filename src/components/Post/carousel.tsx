@@ -26,8 +26,9 @@ export default function Carousel({
       <div
         className="flex transition-transform ease-out duration-500"
         style={{ transform: `translateX(-${curr * 100}%)` }}>
-        {slides.map((img) => (
-          <img src={img} alt="" className="rounded-sm" />
+        {slides.map((img, index) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={img} alt="" className="rounded-sm" key={index} />
         ))}
       </div>
       {slides.length > 1 && (

@@ -1,20 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { UserEditProfileParams, UserResponse, userEditProfile } from "@/api/user";
 import { EditProfileFormValidate, EditProfileFormValidateSchema } from "./edit-profile-form.validate";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Avatar,
-  Button,
-  DatePicker,
-  DateValue,
-  Input,
-  Spinner,
-  Textarea,
-} from "@nextui-org/react";
+import { Avatar, Button, DatePicker, DateValue, Input, Spinner, Textarea } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

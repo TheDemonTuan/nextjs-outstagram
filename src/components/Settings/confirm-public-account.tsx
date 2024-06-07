@@ -5,7 +5,7 @@ import { MentionIcon, PlusIcon, ReelsIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import {Skeleton, Spinner } from "@nextui-org/react";
+import { Skeleton, Spinner } from "@nextui-org/react";
 import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -93,7 +93,7 @@ const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (isPrivate: bo
                   <div className="flex flex-row items-center my-2">
                     <MentionIcon className="w-7 h-7 mr-2" />
                     <div className="">
-                      This won't change who can message, tag or <br /> @mention you.
+                      This won&apos;t change who can message, tag or <br /> @mention you.
                     </div>
                   </div>
                   <div className="flex flex-row items-center my-2">

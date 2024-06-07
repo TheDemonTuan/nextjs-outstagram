@@ -111,8 +111,8 @@ const OptionChangeAvatar = () => {
       <Modal
         isOpen={modalKey === OptionChangeAvatarModalKey}
         onOpenChange={modalClose}
-        hideCloseButton={true}
-        isDismissable={!userChangeAvatarIsLoading}>
+        hideCloseButton={userChangeAvatarIsLoading || userDeleteAvatarIsLoading}
+        isDismissable={!userChangeAvatarIsLoading || !userDeleteAvatarIsLoading}>
         <ModalContent>
           {(onClose) => {
             return (
@@ -152,7 +152,7 @@ const OptionChangeAvatar = () => {
                       </>
                     );
                   })}
-                  {userChangeAvatarIsLoading && (
+                  {(userChangeAvatarIsLoading || userDeleteAvatarIsLoading) && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
                       <Spinner size="md" />
                     </div>
@@ -169,7 +169,7 @@ const OptionChangeAvatar = () => {
         accept=".webp,.png,.jpg"
         ref={avatarInputRef}
         onChange={handleImageChange}
-        disabled={userChangeAvatarIsLoading}
+        disabled={userChangeAvatarIsLoading || userDeleteAvatarIsLoading}
       />
     </>
   );

@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
-import { UserEditProfileParams, UserResponse, userChangeAvatar, userEditProfile } from "@/api/user";
+import { UserEditProfileParams, UserResponse, userEditProfile } from "@/api/user";
 import { EditProfileFormValidate, EditProfileFormValidateSchema } from "./edit-profile-form.validate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,9 +12,6 @@ import {
   DatePicker,
   DateValue,
   Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   Spinner,
   Textarea,
 } from "@nextui-org/react";
@@ -24,11 +21,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
-import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CalendarDate, parseDate } from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "../Profile/options-change-avatar";
 import { useModalStore } from "@/stores/modal-store";
 

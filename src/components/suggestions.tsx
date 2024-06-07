@@ -26,7 +26,7 @@ const Suggestions = () => {
         },
       });
     }
-  }, [authData?.id]);
+  }, [authData?.id, getUserSuggestionsResults]);
 
   useEffect(() => {
     if (userSuggestionError) {

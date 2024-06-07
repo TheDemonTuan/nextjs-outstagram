@@ -53,7 +53,7 @@ export const authRegister = async (params: AuthRegisterParams) =>
 
 // ----------------------------------------------Verify----------------------------------------------
 
-export interface AuthVerifyResponse extends Omit<AuthLoginResponse, "token"> { }
+export interface AuthVerifyResponse extends AuthLoginResponse { }
 
 export const authVerify = async () => http.get<ApiSuccessResponse<AuthVerifyResponse>>("auth/verify").then((res) => res.data);
 

@@ -16,26 +16,21 @@ export interface UserResponse {
   gender: boolean;
   role: boolean;
   active: boolean;
-  isPrivate: boolean;
-  
+  is_private: boolean;
+
   posts: PostResponse[];
   post_likes: PostLikeResponse[];
   post_comments: null;
-  
+
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
 }
 
 export const userGetByUserID = async (userID: string) =>
-  http
-    .get<ApiSuccessResponse<UserResponse>>(`users/${userID}`)
-    .then((res) => res.data);
+  http.get<ApiSuccessResponse<UserResponse>>(`users/${userID}`).then((res) => res.data);
 
-export const userGetMe = async () =>
-  http
-    .get<ApiSuccessResponse<UserResponse>>(`users/me`)
-    .then((res) => res.data);
+export const userGetMe = async () => http.get<ApiSuccessResponse<UserResponse>>(`users/me`).then((res) => res.data);
 
 export const userChangeAvatar = async (avatar: File) =>
   http
@@ -50,22 +45,12 @@ export const userChangeAvatar = async (avatar: File) =>
     )
     .then((res) => res.data);
 
-
-export interface UserEditProfileParams extends Pick<UserResponse, "username" | "full_name" | "bio"| "birthday"> {
+export interface UserEditProfileParams extends Pick<UserResponse, "username" | "full_name" | "bio" | "birthday"> {
   gender: string;
- }
+}
 
 export const userEditProfile = async (params: UserEditProfileParams) =>
-  http
-    .patch<ApiSuccessResponse<UserResponse>>(
-      "users/me/profile",
-      params
-    )
-    .then((res) => res.data);
+  http.patch<ApiSuccessResponse<UserResponse>>("users/me/profile", params).then((res) => res.data);
 
-export const userEditPrivate = async () => 
-  http
-    .patch<ApiSuccessResponse<string>>(
-      "users/me/private"
-    ).then((res) => res.data) 
-  
+export const userEditPrivate = async () =>
+  http.patch<ApiSuccessResponse<boolean>>("users/me/private").then((res) => res.data);

@@ -14,7 +14,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     });
     setPusherClient(pusher);
     // sendNotification("Hello", "This is a test notification");
-  }, []);
+  }, [setPusherClient]);
 
   useFriendNotificationSocket();
   return <>{children}</>;

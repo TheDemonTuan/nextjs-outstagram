@@ -1,32 +1,31 @@
-import { authKey } from "@/api/auth";
+import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { userEditPrivate } from "@/api/user";
 import { useAuth } from "@/hooks/useAuth";
 import { MentionIcon, PlusIcon, ReelsIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import { Input, Link, Skeleton, Spinner } from "@nextui-org/react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import {Skeleton, Spinner } from "@nextui-org/react";
+import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { error } from "console";
 import React from "react";
 import { toast } from "sonner";
 
 export const ConfirmPublicAccountModalKey = "ConfirmPublicAccount";
 
-const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (newAvatar: string) => void }) => {
+const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (isPrivate: boolean) => void }) => {
   const { modalClose, modalKey } = useModalStore();
   const queryClient = useQueryClient();
   const { authData } = useAuth();
 
   const { mutate: userEditPrivateMutate, isPending: userEditPrivateIsLoading } = useMutation<
-    ApiSuccessResponse<string>,
+    ApiSuccessResponse<boolean>,
     ApiErrorResponse
   >({
     mutationFn: async () => await userEditPrivate(),
     onSuccess: (res) => {
       toast.success("Update private successfully!");
-      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<any>) =>
+      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
         oldData
           ? {
               ...oldData,

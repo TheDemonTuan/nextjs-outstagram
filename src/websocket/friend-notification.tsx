@@ -23,5 +23,5 @@ export const useFriendNotificationSocket = () => {
     return () => {
       pusherClient.unsubscribe(authData?.id ?? "my-channel");
     };
-  }, [authData]);
+  }, [authData, pusherClient, queryClient]);
 };

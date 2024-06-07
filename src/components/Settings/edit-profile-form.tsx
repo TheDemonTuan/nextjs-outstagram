@@ -39,10 +39,6 @@ const EditProfileForm = () => {
 
   const [avatar, setAvatar] = useState(getUserAvatarURL(authData?.avatar));
 
-  if (authIsLoading) {
-    return <Spinner />;
-  }
-
   const editForm = useForm<EditProfileFormValidate>({
     resolver: zodResolver(EditProfileFormValidateSchema),
     defaultValues: {
@@ -100,6 +96,11 @@ const EditProfileForm = () => {
       birthday: data.birthday,
     });
   };
+
+  if (authIsLoading) {
+    return <Spinner />;
+  }
+
   return (
     <div className="space-y-8 py-10">
       <div className="flex items-center gap-x-2 md:gap-x-5 justify-between rounded-2xl p-3 bg-[#EFEFEF]">

@@ -8,7 +8,6 @@ const nextConfig = {
             protocol: 'https',
         }],
     },
-    
 };
 
 export default nextConfig;

@@ -5,7 +5,7 @@ import { Provider } from "@/components/provider";
 import { Toaster } from "sonner";
 import { SocketProvider } from "@/websocket";
 
-const roboto = Source_Sans_3({});
+const roboto = Source_Sans_3({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Outstagram",

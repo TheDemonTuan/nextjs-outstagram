@@ -93,7 +93,7 @@ const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (isPrivate: bo
                   <div className="flex flex-row items-center my-2">
                     <MentionIcon className="w-7 h-7 mr-2" />
                     <div className="">
-                      This won't change who can message, tag or <br /> @mention you.
+                      This won&apos;t change who can message, tag or <br /> @mention you.
                     </div>
                   </div>
                   <div className="flex flex-row items-center my-2">

@@ -1,20 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { UserEditProfileParams, UserResponse, userEditProfile } from "@/api/user";
 import { EditProfileFormValidate, EditProfileFormValidateSchema } from "./edit-profile-form.validate";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Avatar,
-  Button,
-  DatePicker,
-  DateValue,
-  Input,
-  Spinner,
-  Textarea,
-} from "@nextui-org/react";
+import { Avatar, Button, DatePicker, DateValue, Input, Spinner, Textarea } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,8 +23,6 @@ const EditProfileForm = () => {
   const { modalOpen } = useModalStore();
   const queryClient = useQueryClient();
 
-  const [avatar, setAvatar] = useState(getUserAvatarURL(authData?.avatar));
-
   const editForm = useForm<EditProfileFormValidate>({
     resolver: zodResolver(EditProfileFormValidateSchema),
     defaultValues: {
@@ -43,10 +33,6 @@ const EditProfileForm = () => {
       birthday: authData?.birthday || new Date(),
     },
   });
-
-  const handleAvatarChange = (newAvatar: string) => {
-    setAvatar(getUserAvatarURL(newAvatar));
-  };
 
   const { mutate: userEditProfileMutate, isPending: userEditProfileIsLoading } = useMutation<
     ApiSuccessResponse<UserResponse>,
@@ -101,7 +87,7 @@ const EditProfileForm = () => {
         <div className="flex items-center gap-x-4">
           <Avatar
             className="w-16 h-16 cursor-pointer"
-            src={avatar}
+            src={getUserAvatarURL(authData?.avatar)}
             alt="User Avatar"
             onClick={() => modalOpen(OptionChangeAvatarModalKey)}
           />
@@ -264,8 +250,7 @@ const EditProfileForm = () => {
           </div>
         </form>
       </Form>
-
-      <OptionChangeAvatar onAvatarChange={handleAvatarChange} />
+      <OptionChangeAvatar />
     </div>
   );
 };

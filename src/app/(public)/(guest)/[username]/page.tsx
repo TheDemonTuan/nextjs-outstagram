@@ -33,7 +33,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
 
   useEffect(() => {
     getSearchResults({ variables: { username: params.username } });
-  }, [params.username]);
+  }, [getSearchResults, params.username]);
 
   useEffect(() => {
     if (userError) {

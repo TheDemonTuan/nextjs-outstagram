@@ -1,6 +1,6 @@
 import { VerifiedIcon } from "@/icons";
 import { Avatar, Tooltip } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { useModalStore } from "@/stores/modal-store";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
@@ -15,16 +15,10 @@ const UserStat = ({ count, label }: { count: number; label: string }) => (
   </div>
 );
 
-const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
+const Information = ({ userData }: { userData: UserByUsernameQuery }) => {
   const { modalOpen } = useModalStore();
   const { authData } = useAuth();
-  const { userByUsername } = user;
-
-  const [avatar, setAvatar] = useState(getUserAvatarURL(userByUsername?.avatar));
-
-  const handleAvatarChange = (newAvatar: string) => {
-    setAvatar(getUserAvatarURL(newAvatar));
-  };
+  const { userByUsername } = userData;
 
   const handleAvatarClick = () => {
     if (authData?.id === userByUsername?.id) {
@@ -37,7 +31,7 @@ const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
           <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
-            <Avatar src={avatar} className="w-40 h-40 text-large" />
+            <Avatar src={getUserAvatarURL(userByUsername?.avatar)} className="w-40 h-40 text-large" />
           </div>
         </div>
         <div className="flex flex-col mx-6">
@@ -52,10 +46,10 @@ const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
                 </span>
               </Tooltip>
             ) : (
-              <div className="mx-2"></div>
+              <div className="mx-2" />
             )}
 
-            {authData && <ProfileAction isMe={authData.id === userByUsername?.id} user={user} />}
+            {authData && <ProfileAction isMe={authData.id === userByUsername?.id} user={userData} />}
           </div>
           <div className="mt-6 flex flex-row">
             <div>
@@ -78,7 +72,7 @@ const Information = ({ userData: user }: { userData: UserByUsernameQuery }) => {
           </div>
         </div>
       </div>
-      <OptionChangeAvatar onAvatarChange={handleAvatarChange} />
+      <OptionChangeAvatar />
     </>
   );
 };

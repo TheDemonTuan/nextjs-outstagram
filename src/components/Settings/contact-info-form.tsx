@@ -10,6 +10,7 @@ import { useModalStore } from "@/stores/modal-store";
 import ChangePhoneModal, { ChangePhoneModalKey } from "./change-phone-modal";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "../Post/confirm-delete-post";
 import EditPost, { EditPostModalKey } from "../Post/edit-post";
+import VerifyOTPModal, { VerifyOTPModalKey } from "./verify-otp-form";
 
 const ContactInfo = () => {
   const { authData, authIsLoading } = useAuth();

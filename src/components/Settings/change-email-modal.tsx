@@ -1,47 +1,96 @@
 "use client";
 
 import { useModalStore } from "@/stores/modal-store";
-import { Input, Link, Modal, ModalContent, ModalBody, Button, ModalHeader } from "@nextui-org/react";
-import React from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { FormField, FormControl, FormItem } from "@/components/ui/form";
+import { Input, Link, Modal, ModalContent, ModalBody, Button, ModalHeader, Spinner } from "@nextui-org/react";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { FormField, FormControl, FormItem, Form, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MailIcon } from "@/icons";
 import { ChangeEmailFormValidate, ChangeEmailFormValidateSchema } from "./change-email-form.validate";
+import { useAuth } from "@/hooks/useAuth";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { userEditEmail } from "@/api/user";
+import { AuthVerifyResponse, authKey } from "@/api/auth";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const ChangeEmailModalKey = "ChangeEmailModal";
 
 const ChangeEmailModal = () => {
   const { modalClose, modalKey } = useModalStore();
+  const { authData } = useAuth();
+  const queryClient = useQueryClient();
 
-  const editForm = useForm<ChangeEmailFormValidate>({
+  const changeEmailForm = useForm<ChangeEmailFormValidate>({
     resolver: zodResolver(ChangeEmailFormValidateSchema),
     defaultValues: {
       newEmail: "",
+      currentEmail: authData?.email || "",
     },
   });
 
+  const { mutate: userEditEmailMutate, isPending: userEditEmailIsLoading } = useMutation<
+    ApiSuccessResponse<string>,
+    ApiErrorResponse,
+    { email: string }
+  >({
+    mutationFn: async (param) => await userEditEmail(param.email),
+    onSuccess: (res) => {
+      toast.success("Email updated successfully!");
+      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
+        oldData
+          ? {
+              ...oldData,
+              data: {
+                user: {
+                  ...oldData.data.user,
+                  email: res.data,
+                },
+              },
+            }
+          : oldData
+      );
+      changeEmailForm.reset();
+      modalClose();
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Email update failed!");
+    },
+  });
+
+  useEffect(() => {
+    changeEmailForm.setValue("currentEmail", authData?.email || "");
+  }, [authData?.email, changeEmailForm]);
+
   const onSubmit = async (data: ChangeEmailFormValidate) => {
-    // handle form submission
+    userEditEmailMutate({
+      email: data.newEmail,
+    });
   };
 
   return (
-    <Modal isOpen={modalKey === ChangeEmailModalKey} onOpenChange={modalClose} hideCloseButton={false} size="lg">
+    <Modal
+      isOpen={modalKey === ChangeEmailModalKey}
+      onOpenChange={modalClose}
+      hideCloseButton={userEditEmailIsLoading}
+      size="lg"
+      isDismissable={!userEditEmailIsLoading}>
       <ModalContent>
         {(onClose) => (
           <>
             <div className="my-4">
               <ModalHeader className="font-semibold text-2xl">Change email</ModalHeader>
               <ModalBody className="cursor-pointer">
-                <div className="">
-                  <FormProvider {...editForm}>
-                    <form onSubmit={editForm.handleSubmit(onSubmit)} className="space-y-8">
-                      <FormField
-                        control={editForm.control}
-                        name="newEmail"
-                        render={({ field }) => (
-                          <FormItem>
-                            <div className="md:items-center gap-y-2 gap-x-8">
+                <div>
+                  <Form {...changeEmailForm}>
+                    <form onSubmit={changeEmailForm.handleSubmit(onSubmit)} className="space-y-8">
+                      <div className="md:items-center gap-y-2 gap-x-8">
+                        <FormField
+                          control={changeEmailForm.control}
+                          name="currentEmail"
+                          render={({ field }) => (
+                            <FormItem>
                               <FormControl className="my-2">
                                 <Input
                                   disabled
@@ -53,27 +102,45 @@ const ChangeEmailModal = () => {
                                   {...field}
                                 />
                               </FormControl>
-                              <FormControl className="my-3">
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={changeEmailForm.control}
+                          name="newEmail"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl className="my-5">
                                 <Input
-                                  autoFocus
+                                  disabled={userEditEmailIsLoading}
+                                  isRequired
+                                  isInvalid={!!changeEmailForm.formState.errors.newEmail}
+                                  errorMessage={changeEmailForm.formState.errors.newEmail?.message}
                                   endContent={
                                     <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
                                   }
                                   label="Enter new email"
                                   variant="bordered"
+                                  aria-label="Email"
+                                  aria-labelledby="email"
+                                  {...field}
                                 />
                               </FormControl>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                       <div className="flex ">
-                        <Button type="submit" color="primary" className="pl-16 pr-16 pt-5 pb-5 w-full font-bold">
-                          Change email
+                        <Button
+                          type="submit"
+                          color="primary"
+                          className="pl-16 pr-16 pt-5 pb-5 w-full font-bold"
+                          disabled={userEditEmailIsLoading}>
+                          {userEditEmailIsLoading ? <Spinner color="white" /> : "Change email"}
                         </Button>
                       </div>
                     </form>
-                  </FormProvider>
+                  </Form>
                 </div>
               </ModalBody>
             </div>

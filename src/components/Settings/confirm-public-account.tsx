@@ -5,7 +5,7 @@ import { MentionIcon, PlusIcon, ReelsIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import {Skeleton, Spinner } from "@nextui-org/react";
+import { Skeleton, Spinner } from "@nextui-org/react";
 import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -13,7 +13,7 @@ import { toast } from "sonner";
 
 export const ConfirmPublicAccountModalKey = "ConfirmPublicAccount";
 
-const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (isPrivate: boolean) => void }) => {
+const ConfirmPublicAccount = () => {
   const { modalClose, modalKey } = useModalStore();
   const queryClient = useQueryClient();
   const { authData } = useAuth();
@@ -38,7 +38,6 @@ const ConfirmPublicAccount = ({ onPrivateEdit }: { onPrivateEdit: (isPrivate: bo
             }
           : oldData
       );
-      onPrivateEdit(res.data);
       modalClose();
     },
     onError: (error) => {

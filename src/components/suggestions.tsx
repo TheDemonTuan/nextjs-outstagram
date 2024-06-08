@@ -47,7 +47,7 @@ const Suggestions = () => {
       {userSuggestionData?.userSuggestion.map((user) => (
         <div key={user.username} className="flex items-center justify-between gap-3">
           <Tooltip content={user && <SummaryProfile user={user as UserResponse} />}>
-            <Link className="flex items-center gap-2 text-sm font-medium" href={`/${user?.username}`}>
+            <div className="flex items-center gap-2 text-sm font-medium">
               <div className="flex flex-row gap-3">
                 <Link href={`/${user.username}`}>
                   <Avatar className="w-11 h-11">
@@ -64,7 +64,7 @@ const Suggestions = () => {
                   <h3 className="text-xs text-gray-400">{user.full_name}</h3>
                 </div>
               </div>
-            </Link>
+            </div>
           </Tooltip>
           <button className="text-blue-400 text-xs font-bold">Follow</button>
         </div>

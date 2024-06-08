@@ -1,5 +1,5 @@
 import { AuthVerifyResponse, authKey } from "@/api/auth";
-import { userChangeAvatar } from "@/api/user";
+import { userChangeAvatar, userDeleteAvatar } from "@/api/user";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
@@ -31,8 +31,36 @@ const ListOptionChangeAvatar = [
 
 const OptionChangeAvatar = () => {
   const { modalClose, modalKey } = useModalStore();
-  const queryClient = useQueryClient();
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+  const { authData } = useAuth();
+
+  const { mutate: userDeleteAvatarMutate, isPending: userDeleteAvatarIsLoading } = useMutation<
+    ApiSuccessResponse<string>,
+    ApiErrorResponse
+  >({
+    mutationFn: async () => await userDeleteAvatar(),
+    onSuccess: (res) => {
+      toast.success("Delete avatar successfully!");
+      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
+        oldData
+          ? {
+              ...oldData,
+              data: {
+                user: {
+                  ...oldData.data.user,
+                  avatar: res.data,
+                },
+              },
+            }
+          : oldData
+      );
+      modalClose();
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Delete avatar failed!");
+    },
+  });
 
   const { mutate: userChangeAvatarMutate, isPending: userChangeAvatarIsLoading } = useMutation<
     ApiSuccessResponse<string>,
@@ -68,13 +96,19 @@ const OptionChangeAvatar = () => {
     file && userChangeAvatarMutate({ avatar: file });
   };
 
+  const handleImageDelete = () => {
+    if (authData?.avatar === "") return;
+
+    userDeleteAvatarMutate();
+  };
+
   return (
     <>
       <Modal
         isOpen={modalKey === OptionChangeAvatarModalKey}
         onOpenChange={modalClose}
-        hideCloseButton={true}
-        isDismissable={!userChangeAvatarIsLoading}>
+        hideCloseButton={userChangeAvatarIsLoading || userDeleteAvatarIsLoading}
+        isDismissable={!userChangeAvatarIsLoading || !userDeleteAvatarIsLoading}>
         <ModalContent>
           {(onClose) => {
             return (
@@ -101,6 +135,7 @@ const OptionChangeAvatar = () => {
                                   avatarInputRef.current?.click();
                                   break;
                                 case "Remove Current Photo":
+                                  handleImageDelete();
                                   break;
                                 default:
                                   break;
@@ -113,7 +148,7 @@ const OptionChangeAvatar = () => {
                       </>
                     );
                   })}
-                  {userChangeAvatarIsLoading && (
+                  {(userChangeAvatarIsLoading || userDeleteAvatarIsLoading) && (
                     <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
                       <Spinner size="md" />
                     </div>
@@ -134,6 +169,7 @@ const OptionChangeAvatar = () => {
         className="hidden"
         accept=".webp,.png,.jpg"
         ref={avatarInputRef}
+        disabled={userChangeAvatarIsLoading || userDeleteAvatarIsLoading}
       />
     </>
   );

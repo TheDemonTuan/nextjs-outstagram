@@ -68,8 +68,8 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
     <QueryClientProvider client={queryClient}>
       <ApolloProvider client={client}>
         <NextUIProvider navigate={router.push}>{children}</NextUIProvider>
-        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       </ApolloProvider>
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
     </QueryClientProvider>
   );
 };

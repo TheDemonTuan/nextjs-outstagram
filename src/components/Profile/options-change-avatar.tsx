@@ -1,5 +1,6 @@
 import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { userChangeAvatar, userDeleteAvatar } from "@/api/user";
+import { useAuth } from "@/hooks/useAuth";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
@@ -49,7 +50,7 @@ const OptionChangeAvatar = () => {
               data: {
                 user: {
                   ...oldData.data.user,
-                  avatar: res.data,
+                  avatar: "",
                 },
               },
             }
@@ -97,7 +98,7 @@ const OptionChangeAvatar = () => {
   };
 
   const handleImageDelete = () => {
-    if (authData?.avatar === "") return;
+    if (!authData?.avatar) return;
 
     userDeleteAvatarMutate();
   };

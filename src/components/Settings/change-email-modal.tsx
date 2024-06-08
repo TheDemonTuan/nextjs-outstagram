@@ -25,8 +25,8 @@ const ChangeEmailModal = () => {
   const changeEmailForm = useForm<ChangeEmailFormValidate>({
     resolver: zodResolver(ChangeEmailFormValidateSchema),
     defaultValues: {
-      newEmail: "",
-      currentEmail: authData?.email || "",
+      new_email: "",
+      current_email: authData?.email || "",
     },
   });
 
@@ -60,12 +60,12 @@ const ChangeEmailModal = () => {
   });
 
   useEffect(() => {
-    changeEmailForm.setValue("currentEmail", authData?.email || "");
+    changeEmailForm.setValue("current_email", authData?.email || "");
   }, [authData?.email, changeEmailForm]);
 
   const onSubmit = async (data: ChangeEmailFormValidate) => {
     userEditEmailMutate({
-      email: data.newEmail,
+      email: data.new_email,
     });
   };
 
@@ -88,12 +88,12 @@ const ChangeEmailModal = () => {
                       <div className="md:items-center gap-y-2 gap-x-8">
                         <FormField
                           control={changeEmailForm.control}
-                          name="currentEmail"
+                          name="current_email"
                           render={({ field }) => (
                             <FormItem>
                               <FormControl className="my-2">
                                 <Input
-                                  disabled
+                                  isDisabled
                                   endContent={
                                     <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
                                   }
@@ -107,15 +107,15 @@ const ChangeEmailModal = () => {
                         />
                         <FormField
                           control={changeEmailForm.control}
-                          name="newEmail"
+                          name="new_email"
                           render={({ field }) => (
                             <FormItem>
                               <FormControl className="my-5">
                                 <Input
                                   disabled={userEditEmailIsLoading}
                                   isRequired
-                                  isInvalid={!!changeEmailForm.formState.errors.newEmail}
-                                  errorMessage={changeEmailForm.formState.errors.newEmail?.message}
+                                  isInvalid={!!changeEmailForm.formState.errors.new_email}
+                                  errorMessage={changeEmailForm.formState.errors.new_email?.message}
                                   endContent={
                                     <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
                                   }

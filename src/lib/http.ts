@@ -43,13 +43,8 @@ http.interceptors.response.use(
     return response;
   },
   async (error: ApiErrorResponse) => {
-    const queryClient = useQueryClient();
-    const apolloClient = useApolloClient();
-
     if (error.response?.status === 401) {
       await clearJWT();
-      queryClient.clear();
-      apolloClient.clearStore();
       useJWTStore.getState().clearJWT();
     }
     return Promise.reject(error);

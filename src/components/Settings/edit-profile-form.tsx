@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { UserEditProfileParams, UserResponse, userEditProfile } from "@/api/user";
@@ -22,12 +22,6 @@ const EditProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
   const { modalOpen } = useModalStore();
   const queryClient = useQueryClient();
-
-  const [avatar, setAvatar] = useState(getUserAvatarURL(authData?.avatar));
-
-  useEffect(() => {
-    setAvatar(authData?.avatar ?? "");
-  }, [authData]);
 
   const editForm = useForm<EditProfileFormValidate>({
     resolver: zodResolver(EditProfileFormValidateSchema),
@@ -93,7 +87,7 @@ const EditProfileForm = () => {
         <div className="flex items-center gap-x-4">
           <Avatar
             className="w-16 h-16 cursor-pointer"
-            src={avatar}
+            src={getUserAvatarURL(authData?.avatar)}
             alt="User Avatar"
             onClick={() => modalOpen(OptionChangeAvatarModalKey)}
           />
@@ -256,7 +250,6 @@ const EditProfileForm = () => {
           </div>
         </form>
       </Form>
-
       <OptionChangeAvatar />
     </div>
   );

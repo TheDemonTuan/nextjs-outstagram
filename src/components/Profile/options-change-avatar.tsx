@@ -1,14 +1,12 @@
 import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { userChangeAvatar, userDeleteAvatar } from "@/api/user";
-import { useAuth } from "@/hooks/useAuth";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import { Input, Link, Spinner } from "@nextui-org/react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
+import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { log } from "console";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { toast } from "sonner";
 
 export const OptionChangeAvatarModalKey = "OptionChangeAvatar";
@@ -95,9 +93,7 @@ const OptionChangeAvatar = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    if (file) {
-      userChangeAvatarMutate({ avatar: file });
-    }
+    file && userChangeAvatarMutate({ avatar: file });
   };
 
   const handleImageDelete = () => {
@@ -163,12 +159,16 @@ const OptionChangeAvatar = () => {
           }}
         </ModalContent>
       </Modal>
-      <Input
+      <input
+        onChange={handleImageChange}
+        onClick={(e) => {
+          e.currentTarget.value = "";
+          e.currentTarget.files = null;
+        }}
         type="file"
         className="hidden"
         accept=".webp,.png,.jpg"
         ref={avatarInputRef}
-        onChange={handleImageChange}
         disabled={userChangeAvatarIsLoading || userDeleteAvatarIsLoading}
       />
     </>

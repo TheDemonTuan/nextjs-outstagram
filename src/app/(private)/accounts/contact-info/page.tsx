@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import ContactInfoForm from "@/components/Settings/contact-info-form";
 

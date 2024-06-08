@@ -7,7 +7,6 @@ import { useModalStore } from "@/stores/modal-store";
 import { Input, Link, Spinner } from "@nextui-org/react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { log } from "console";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -42,7 +41,7 @@ const OptionChangeAvatar = () => {
     ApiErrorResponse
   >({
     mutationFn: async () => await userDeleteAvatar(),
-    onSuccess: (res) => {
+    onSuccess: () => {
       toast.success("Delete avatar successfully!");
       queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
         oldData
@@ -51,7 +50,7 @@ const OptionChangeAvatar = () => {
               data: {
                 user: {
                   ...oldData.data.user,
-                  avatar: res.data,
+                  avatar: "",
                 },
               },
             }
@@ -101,7 +100,7 @@ const OptionChangeAvatar = () => {
   };
 
   const handleImageDelete = () => {
-    if (authData?.avatar === "") return;
+    if (!authData?.avatar) return;
 
     userDeleteAvatarMutate();
   };

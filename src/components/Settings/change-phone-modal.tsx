@@ -25,8 +25,8 @@ const ChangePhoneModal = () => {
   const changePhoneForm = useForm<ChangePhoneFormValidate>({
     resolver: zodResolver(ChangePhoneFromValidateSchema),
     defaultValues: {
-      currentPhone: authData?.phone || "",
-      newPhone: "",
+      current_phone: authData?.phone || "",
+      new_phone: "",
     },
   });
 
@@ -60,12 +60,12 @@ const ChangePhoneModal = () => {
   });
 
   useEffect(() => {
-    changePhoneForm.setValue("currentPhone", authData?.phone || "");
+    changePhoneForm.setValue("current_phone", authData?.phone || "");
   }, [authData?.phone, changePhoneForm]);
 
   const onSubmit = async (data: ChangePhoneFormValidate) => {
     userEditPhoneMutate({
-      phone: data.newPhone,
+      phone: data.new_phone,
     });
   };
 
@@ -88,15 +88,13 @@ const ChangePhoneModal = () => {
                       <div className="md:items-center gap-y-2 gap-x-8">
                         <FormField
                           control={changePhoneForm.control}
-                          name="currentPhone"
+                          name="current_phone"
                           render={({ field }) => (
                             <FormItem>
                               <FormControl className="my-2">
                                 <Input
-                                  disabled
-                                  endContent={
-                                    <FaPhoneFlip className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
-                                  }
+                                  isDisabled
+                                  endContent={<FaPhoneFlip className="text-xl text-default-400 flex-shrink-0 my-2" />}
                                   label="Current Phone"
                                   variant="bordered"
                                   {...field}
@@ -107,17 +105,17 @@ const ChangePhoneModal = () => {
                         />
                         <FormField
                           control={changePhoneForm.control}
-                          name="newPhone"
+                          name="new_phone"
                           render={({ field }) => (
                             <FormItem>
                               <FormControl className="my-5">
                                 <Input
                                   disabled={userEditPhoneIsLoading}
                                   isRequired
-                                  isInvalid={!!changePhoneForm.formState.errors.newPhone}
-                                  errorMessage={changePhoneForm.formState.errors.newPhone?.message}
+                                  isInvalid={!!changePhoneForm.formState.errors.new_phone}
+                                  errorMessage={changePhoneForm.formState.errors.new_phone?.message}
                                   endContent={
-                                    <FaPhoneFlip className="text-2xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
+                                    <FaPhoneFlip className="text-xl text-default-400 pointer-events-none flex-shrink-0 my-2" />
                                   }
                                   label="Enter new phone"
                                   variant="bordered"

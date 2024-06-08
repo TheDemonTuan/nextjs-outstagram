@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Spinner } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,9 +6,6 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import ChangeEmailModal, { ChangeEmailModalKey } from "./change-email-modal";
 import { useModalStore } from "@/stores/modal-store";
 import ChangePhoneModal, { ChangePhoneModalKey } from "./change-phone-modal";
-import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "../Post/confirm-delete-post";
-import EditPost, { EditPostModalKey } from "../Post/edit-post";
-import VerifyOTPModal, { VerifyOTPModalKey } from "./verify-otp-form";
 
 const ContactInfo = () => {
   const { authData, authIsLoading } = useAuth();

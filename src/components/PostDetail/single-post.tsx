@@ -42,7 +42,7 @@ const SinglePost = ({ id }: { id: string }) => {
                   </div>
                 </Link>
               </HoverCardTrigger>
-              <SummaryProfile full_name={name} username={username} avatar={postImageSrc} />
+              {/* <SummaryProfile /> */}
             </HoverCard>
             <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           </div>

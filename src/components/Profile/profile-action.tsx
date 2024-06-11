@@ -135,19 +135,19 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     if (friendIsError) {
       toast.error("Error fetching friend data");
     }
-  }, [toUserID]);
+  }, [friendIsError, toUserID]);
 
   const handleSendRequest = useCallback(() => {
     friendSendRequestMutate(toUserID);
-  }, [toUserID]);
+  }, [friendSendRequestMutate, toUserID]);
 
   const handleRejectRequest = useCallback(() => {
     friendRejectMutate(toUserID);
-  }, [toUserID]);
+  }, [friendRejectMutate, toUserID]);
 
   const handleAcceptRequest = useCallback(() => {
     friendAcceptRequestMutate(toUserID);
-  }, [toUserID]);
+  }, [friendAcceptRequestMutate, toUserID]);
 
   const btnAddFriend = (
     <Button

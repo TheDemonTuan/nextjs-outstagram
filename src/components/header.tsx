@@ -20,15 +20,16 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { Button, Input, Skeleton, Spinner } from "@nextui-org/react";
 import _ from "lodash";
-import { useLazyQuery } from "@apollo/client";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
-import { UserSearchQuery } from "@/gql/graphql";
+import { UserSearchDocument, UserSearchQuery } from "@/gql/graphql";
 import { UserSearch } from "@/graphql/user";
-import { useJWTStore } from "@/stores/jwt-store";
+import { useQuery } from "@tanstack/react-query";
+import { graphQLClient } from "@/lib/graphql";
+import { userKey } from "@/api/user";
 
 const HeaderMenu = [
   {
@@ -93,7 +94,6 @@ const Header = () => {
       setIsShortHeader(false);
       setIsSearchOpen(false);
       setIsNotificationsOpen(false);
-      useJWTStore.getState().clearJWT();
     };
   }, []);
 
@@ -217,24 +217,22 @@ export default Header;
 
 const Search = () => {
   const keyWordRef = useRef<HTMLInputElement>(null);
+  const [searchKeyword, setSearchKeyword] = React.useState("");
 
-  const [getSearchResults, { data: searchData, loading: searchLoading }] = useLazyQuery<UserSearchQuery>(UserSearch, {
-    onError() {
-      toast.error("Error while searching user");
-    },
+  const {
+    data: searchData,
+    error: searchError,
+    isLoading: searchIsLoading,
+  } = useQuery({
+    queryKey: [userKey, "search", { keyword: searchKeyword }],
+    queryFn: async () => graphQLClient.request(UserSearchDocument, { keyword: searchKeyword ?? "" }),
+    enabled: !!searchKeyword,
+    staleTime: 1000,
   });
 
-  const debouncedHandleSearch = useCallback(
-    _.debounce(() => {
-      const keyword = keyWordRef.current?.value;
-      getSearchResults({
-        variables: {
-          keyword: keyword,
-        },
-      });
-    }, 1000),
-    []
-  );
+  const debouncedHandleSearch = _.debounce(() => {
+    setSearchKeyword(keyWordRef.current?.value || "");
+  }, 1000);
 
   return (
     <div className="flex flex-col">
@@ -246,9 +244,9 @@ const Search = () => {
         <span className="text-2xl p-2 font-semibold">Search</span>
         <Input
           autoFocus
-          isClearable={!searchLoading}
-          isDisabled={searchLoading}
-          endContent={searchLoading && <Spinner size="sm" />}
+          isClearable={!searchIsLoading}
+          isDisabled={searchIsLoading}
+          endContent={searchIsLoading && <Spinner size="sm" />}
           type="search"
           variant="faded"
           color="primary"
@@ -264,7 +262,7 @@ const Search = () => {
         />
       </div>
       <div className={cn("flex flex-col", !keyWordRef.current?.value && "p-6")}>
-        {keyWordRef.current?.value && !searchLoading && searchData?.userSearch?.length && (
+        {keyWordRef.current?.value && !searchIsLoading && searchData?.userSearch?.length && (
           <>
             {searchData?.userSearch?.map((user) => {
               return (
@@ -288,7 +286,7 @@ const Search = () => {
             })}
           </>
         )}
-        {keyWordRef.current?.value && !searchLoading && !searchData?.userSearch?.length && (
+        {keyWordRef.current?.value && !searchIsLoading && !searchData?.userSearch?.length && (
           <div className="flex justify-center items-center flex-1">
             <span className="text-gray-500">No results</span>
           </div>

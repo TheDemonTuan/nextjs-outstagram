@@ -1,17 +1,18 @@
 "use client";
 
-import Information from "@/components/Profile/information";
+import ProfileInformation from "@/components/Profile/profile-information";
 import { IoMdGrid } from "react-icons/io";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BiMoviePlay } from "react-icons/bi";
 import Gallery from "@/components/Profile/gallery";
-import { useLazyQuery } from "@apollo/client";
 import { toast } from "sonner";
 import { notFound } from "next/navigation";
 import { FiBookmark } from "react-icons/fi";
 import ProfileStories from "@/components/Profile/profile-stories";
-import { UserByUsernameQuery } from "@/gql/graphql";
-import { UserByUsername } from "@/graphql/user";
+import { UserByUsernameDocument, UserByUsernameQuery } from "@/gql/graphql";
+import { graphQLClient } from "@/lib/graphql";
+import { useQuery } from "@tanstack/react-query";
+import { userKey } from "@/api/user";
 
 const renderActiveTabContent = (activeTab: string, user: UserByUsernameQuery) => {
   switch (activeTab) {
@@ -28,12 +29,16 @@ const renderActiveTabContent = (activeTab: string, user: UserByUsernameQuery) =>
 
 const ProfilePage = ({ params }: { params: { username: string } }) => {
   const [activeTab, setActiveTab] = useState<string>("POSTS");
-  const [getSearchResults, { data: userData, loading: userLoading, error: userError }] =
-    useLazyQuery<UserByUsernameQuery>(UserByUsername);
 
-  useEffect(() => {
-    getSearchResults({ variables: { username: params.username } });
-  }, [getSearchResults, params.username]);
+  const {
+    data: userData,
+    error: userError,
+    isLoading: userIsLoading,
+  } = useQuery({
+    queryKey: [userKey, { username: params.username }],
+    queryFn: () => graphQLClient.request(UserByUsernameDocument, { username: params.username }),
+    enabled: !!params.username,
+  });
 
   useEffect(() => {
     if (userError) {
@@ -42,7 +47,15 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
     }
   }, [userError]);
 
-  if (userLoading) {
+  const getClassNames = useCallback(
+    (tab: string) =>
+      `py-4 mx-2 text-sm font-normal flex gap-2 ${
+        activeTab === tab ? "border-t border-gray-800 text-black" : "text-gray-400"
+      }`,
+    [activeTab]
+  );
+
+  if (userIsLoading) {
     return <div>Loading user...</div>;
   }
 
@@ -50,14 +63,9 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
     return <div>User not found</div>;
   }
 
-  const getClassNames = (tab: string) =>
-    `py-4 mx-2 text-sm font-normal flex gap-2 ${
-      activeTab === tab ? "border-t border-gray-800 text-black" : "text-gray-400"
-    }`;
-
   return (
     <div className="flex flex-col max-full mt-9 mx-16 mb-40">
-      <Information userData={userData} />
+      <ProfileInformation userData={userData} />
       <ProfileStories />
       <div className="w-full">
         <hr className="border-gray-300 mt-14 border-t mx-28" />

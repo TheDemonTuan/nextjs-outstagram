@@ -29,14 +29,9 @@ export const UserByUsername = graphql(`
     userByUsername(username: $username) {
       id
       username
-      password
       full_name
-      email
-      phone
       avatar
       bio
-      birthday
-      gender
       role
     }
   }

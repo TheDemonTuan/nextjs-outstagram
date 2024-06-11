@@ -1,32 +1,26 @@
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
-import { useLazyQuery } from "@apollo/client";
 import { Spinner, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import SummaryProfile from "./summary-profile";
-import { UserResponse } from "@/api/user";
-import { UserSuggestionQuery } from "@/gql/graphql";
-import { UserSuggestion } from "@/graphql/user";
+import { UserResponse, userKey } from "@/api/user";
+import { UserSuggestionDocument } from "@/gql/graphql";
+import { graphQLClient } from "@/lib/graphql";
+import { useQuery } from "@tanstack/react-query";
 
 const Suggestions = () => {
   const { authData } = useAuth();
-  const [
-    getUserSuggestionsResults,
-    { data: userSuggestionData, loading: userSuggestionLoading, error: userSuggestionError },
-  ] = useLazyQuery<UserSuggestionQuery>(UserSuggestion);
-
-  useEffect(() => {
-    if (authData?.id) {
-      getUserSuggestionsResults({
-        variables: {
-          count: 5,
-        },
-      });
-    }
-  }, [authData?.id, getUserSuggestionsResults]);
+  const {
+    data: userSuggestionData,
+    error: userSuggestionError,
+    isLoading: userSuggestionIsLoading,
+  } = useQuery({
+    queryKey: [userKey, "home-page"],
+    queryFn: () => graphQLClient.request(UserSuggestionDocument, { count: 5 }),
+  });
 
   useEffect(() => {
     if (userSuggestionError) {
@@ -34,7 +28,7 @@ const Suggestions = () => {
     }
   }, [userSuggestionError]);
 
-  if (userSuggestionLoading) {
+  if (userSuggestionIsLoading) {
     return <div>Loading...</div>;
   }
 

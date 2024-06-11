@@ -9,14 +9,7 @@ import ProfileAction from "./profile-action";
 import { UserByUsernameQuery } from "@/gql/graphql";
 import Friends, { FriendsModalKey } from "./friends";
 
-const UserStat = ({ count, label }: { count: number; label: string }) => (
-  <div className="mr-10">
-    <span className="font-semibold text-base leading-5">{count}</span>{" "}
-    <span className="text-base leading-5">{label}</span>
-  </div>
-);
-
-const Information = ({ userData }: { userData: UserByUsernameQuery }) => {
+const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => {
   const { modalOpen } = useModalStore();
   const { authData } = useAuth();
   const { userByUsername } = userData;
@@ -79,4 +72,21 @@ const Information = ({ userData }: { userData: UserByUsernameQuery }) => {
   );
 };
 
-export default Information;
+export default ProfileInformation;
+
+const UserStat = ({ count, label }: { count: number; label: string }) => (
+  <div className="mr-10">
+    <span className="font-semibold text-base leading-5">{count}</span>{" "}
+    <span className="text-base leading-5">{label}</span>
+  </div>
+);
+
+const ProfileInformationStat = ({ userData }: { userData: UserByUsernameQuery }) => {
+  return (
+    <>
+      <UserStat count={200} label="posts" />
+      <UserStat count={200} label="friends" />
+      <UserStat count={200} label="following" />
+    </>
+  );
+};

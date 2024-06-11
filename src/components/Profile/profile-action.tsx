@@ -4,13 +4,17 @@ import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import ProfileSettings, { ProfileSettingModalKey } from "./profile-settings";
 import { useModalStore } from "@/stores/modal-store";
-import { Button } from "@nextui-org/react";
-import { IoMdPersonAdd } from "react-icons/io";
+import { BsFillPersonPlusFill } from "react-icons/bs";
+import { BsFillPersonCheckFill } from "react-icons/bs";
+import { BsFillPersonXFill } from "react-icons/bs";
+import { IoMdRemoveCircle } from "react-icons/io";
+import { BsFillPersonDashFill } from "react-icons/bs";
 import { FiUserPlus } from "react-icons/fi";
 import { TfiMoreAlt } from "react-icons/tfi";
 import ProfileMoreOptions, { ProfileMoreOptionsModalKey } from "./profile-more-options";
 import { UseMutateFunction, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+
 import {
   FriendResponse,
   FriendStatus,
@@ -23,6 +27,7 @@ import {
 } from "@/api/friend";
 import { toast } from "sonner";
 import { UserByUsernameQuery } from "@/gql/graphql";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 
 interface ProfileActionProps {
   isMe: boolean;
@@ -130,19 +135,19 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     if (friendIsError) {
       toast.error("Error fetching friend data");
     }
-  }, [friendIsError, toUserID]);
+  }, [toUserID]);
 
   const handleSendRequest = useCallback(() => {
     friendSendRequestMutate(toUserID);
-  }, [friendSendRequestMutate, toUserID]);
+  }, [toUserID]);
 
   const handleRejectRequest = useCallback(() => {
     friendRejectMutate(toUserID);
-  }, [friendRejectMutate, toUserID]);
+  }, [toUserID]);
 
   const handleAcceptRequest = useCallback(() => {
     friendAcceptRequestMutate(toUserID);
-  }, [friendAcceptRequestMutate, toUserID]);
+  }, [toUserID]);
 
   const btnAddFriend = (
     <Button
@@ -155,25 +160,51 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   );
 
   const btnRemoveFriend = (
-    <Button size="sm" isLoading={friendRejectIsPending} className={btnClass} onClick={handleRejectRequest}>
-      Remove friend
-    </Button>
+    <Dropdown>
+      <DropdownTrigger>
+        <Button
+          size="sm"
+          isLoading={friendRejectIsPending}
+          className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]">
+          <BsFillPersonCheckFill /> Friend
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu className="my-2 mx-2 space-y-2">
+        <DropdownItem key="unfollow">
+          <span className="font-semibold text-center text-danger">Unfollow</span>
+        </DropdownItem>
+        <DropdownItem key="unfriend" onClick={handleRejectRequest}>
+          <span className="font-semibold text-center text-danger">Unfriend</span>
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
   );
 
   const btnCancelRequest = (
     <Button size="sm" isLoading={friendRejectIsPending} className={btnClass} onClick={handleRejectRequest}>
-      Cancel request
+      cancel invitation
     </Button>
   );
 
   const btnAcceptRequest = (
-    <Button
-      size="sm"
-      isLoading={friendAcceptRequestIsPending}
-      className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]"
-      onClick={handleAcceptRequest}>
-      Accept request
-    </Button>
+    <Dropdown>
+      <DropdownTrigger>
+        <Button
+          size="sm"
+          isLoading={friendAcceptRequestIsPending}
+          className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]">
+          Feedback
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu className="my-2 mx-2 space-y-2">
+        <DropdownItem key="confirm" onClick={handleAcceptRequest}>
+          <span className="font-semibold text-primary">Confirm</span>
+        </DropdownItem>
+        <DropdownItem key="delete invitation" onClick={handleRejectRequest}>
+          <span className="font-semibold text-danger">Delete invitation</span>
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
   );
 
   const renderButton = () => {

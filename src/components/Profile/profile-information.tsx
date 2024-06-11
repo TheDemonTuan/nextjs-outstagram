@@ -8,14 +8,7 @@ import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change
 import ProfileAction from "./profile-action";
 import { UserByUsernameQuery } from "@/gql/graphql";
 
-const UserStat = ({ count, label }: { count: number; label: string }) => (
-  <div className="mr-10">
-    <span className="font-semibold text-base leading-5">{count}</span>{" "}
-    <span className="text-base leading-5">{label}</span>
-  </div>
-);
-
-const Information = ({ userData }: { userData: UserByUsernameQuery }) => {
+const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => {
   const { modalOpen } = useModalStore();
   const { authData } = useAuth();
   const { userByUsername } = userData;
@@ -52,15 +45,7 @@ const Information = ({ userData }: { userData: UserByUsernameQuery }) => {
             {authData && <ProfileAction isMe={authData.id === userByUsername?.id} user={userData} />}
           </div>
           <div className="mt-6 flex flex-row">
-            <div>
-              <UserStat count={200} label="posts" />
-            </div>
-            <div>
-              <UserStat count={200} label="followers" />
-            </div>
-            <div>
-              <UserStat count={200} label="following" />
-            </div>
+            <ProfileInformationStat userData={userData} />
           </div>
           <div className="flex flex-col">
             <div className=" pt-4">
@@ -77,4 +62,21 @@ const Information = ({ userData }: { userData: UserByUsernameQuery }) => {
   );
 };
 
-export default Information;
+export default ProfileInformation;
+
+const UserStat = ({ count, label }: { count: number; label: string }) => (
+  <div className="mr-10">
+    <span className="font-semibold text-base leading-5">{count}</span>{" "}
+    <span className="text-base leading-5">{label}</span>
+  </div>
+);
+
+const ProfileInformationStat = ({ userData }: { userData: UserByUsernameQuery }) => {
+  return (
+    <>
+      <UserStat count={200} label="posts" />
+      <UserStat count={200} label="friends" />
+      <UserStat count={200} label="following" />
+    </>
+  );
+};

@@ -1,7 +1,4 @@
 import { clearJWT, getJWT } from "@/actions";
-import { useJWTStore } from "@/stores/jwt-store";
-import { useApolloClient } from "@apollo/client";
-import { useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
 export interface ApiSuccessResponse<T = null | []> {
@@ -29,7 +26,6 @@ http.interceptors.request.use(
     const jwt = await getJWT();
     if (jwt) {
       config.headers["Authorization"] = `Bearer ${jwt}`;
-      !useJWTStore.getState().jwt && useJWTStore.getState().jwt !== jwt && useJWTStore.getState().setJWT(jwt);
     }
     return config;
   },
@@ -45,7 +41,6 @@ http.interceptors.response.use(
   async (error: ApiErrorResponse) => {
     if (error.response?.status === 401) {
       await clearJWT();
-      useJWTStore.getState().clearJWT();
     }
     return Promise.reject(error);
   }

@@ -29,10 +29,6 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
   const inputRef = useRef<HTMLInputElement>(null);
   const username = post.data.user_id;
   const href = `/${username}`;
-  const usernamepost = "PostUsername";
-  const name = "name";
-  const postImageSrc = "https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp";
-
   return (
     <Dialog open={isPostModal} onOpenChange={(open: any) => !open && router.back()}>
       <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
@@ -103,7 +99,7 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
         </div>
         <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full ">
           <Image
-            src="https://res.cloudinary.com/dsjzxokur/image/upload/v1716491944/posts/ofbzb6a70ilxwzclymzk.webp"
+            src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
             fill
             objectFit="cover"
             alt="Post Image"

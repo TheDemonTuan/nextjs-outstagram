@@ -25,7 +25,7 @@ const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => 
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
           <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
-            <Avatar src={getUserAvatarURL(userByUsername?.avatar)} className="w-40 h-40 text-large" />
+            <Avatar src={getUserAvatarURL(authData?.avatar)} className="w-40 h-40 text-large" />
           </div>
         </div>
         <div className="flex flex-col mx-6">
@@ -45,11 +45,11 @@ const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => 
 
             {authData && <ProfileAction isMe={authData.id === userByUsername?.id} user={userData} />}
           </div>
-          <div className="mt-6 flex flex-row">
+          <div className="mt-8 flex flex-row">
             <ProfileInformationStat userData={userData} />
           </div>
           <div className="flex flex-col">
-            <div className=" pt-4">
+            <div className="pt-6">
               <span className="text-base font-semibold text-black-700 mr-2 leading-5">{userByUsername?.full_name}</span>
             </div>
             <div className="">
@@ -78,7 +78,7 @@ const ProfileInformationStat = ({ userData }: { userData: UserByUsernameQuery })
     <>
       <UserStat count={200} label="posts" />
       <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
-        <UserStat count={200} label="followers" />
+        <UserStat count={200} label="Friends" />
       </div>
       <UserStat count={200} label="following" />
       <Friends />

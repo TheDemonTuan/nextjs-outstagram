@@ -98,6 +98,8 @@ const PostMoreOptions = () => {
                                 case "Delete":
                                   modalOpen(ConfirmDeletePostModalKey);
                                   break;
+                                case "Go to post":
+                                  break;
                                 case "Cancel":
                                   modalClose();
                                   break;

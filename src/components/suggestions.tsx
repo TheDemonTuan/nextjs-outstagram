@@ -40,7 +40,7 @@ const Suggestions = () => {
       </div>
       {userSuggestionData?.userSuggestion.map((user) => (
         <div key={user.username} className="flex items-center justify-between gap-3">
-          <Tooltip content={user && <SummaryProfile user={user as UserResponse} />}>
+          <Tooltip content={user && <SummaryProfile user={user as UserResponse} />} placement="bottom-start">
             <div className="flex items-center gap-2 text-sm font-medium">
               <div className="flex flex-row gap-3">
                 <Link href={`/${user.username}`}>

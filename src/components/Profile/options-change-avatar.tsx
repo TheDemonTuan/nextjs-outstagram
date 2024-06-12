@@ -115,7 +115,7 @@ const OptionChangeAvatar = () => {
             return (
               <>
                 <ModalBody
-                  className={`relative mt-3 mb-3 cursor-pointer items-center p-0 ${
+                  className={`mt-3 mb-3 cursor-pointer items-center p-0 ${
                     userChangeAvatarIsLoading ? "pointer-events-none opacity-50" : ""
                   }`}>
                   <p className="text-black text-lg my-5">Change Profile Photo</p>

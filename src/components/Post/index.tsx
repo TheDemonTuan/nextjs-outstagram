@@ -56,7 +56,9 @@ const Post = () => {
                     <Card className="rounded-none shadow-none border-0">
                       <CardHeader className="p-2 flex flex-row items-center">
                         <div className="flex gap-1 items-center justify-center">
-                          <Tooltip content={post.user && <SummaryProfile user={post.user as UserResponse} />}>
+                          <Tooltip
+                            content={post.user && <SummaryProfile user={post.user as UserResponse} />}
+                            placement="bottom-start">
                             <Link
                               className="flex items-center gap-2 text-sm font-medium"
                               href={`/${post.user?.username}`}>

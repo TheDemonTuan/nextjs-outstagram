@@ -122,7 +122,7 @@ const OptionChangeAvatar = () => {
                   <hr className="w-full border-gray-300" />
                   {ListOptionChangeAvatar.map((optionItem, index) => {
                     return (
-                      <>
+                      <React.Fragment key={index}>
                         <div
                           key={index}
                           className="flex items-center gap-2"
@@ -146,7 +146,7 @@ const OptionChangeAvatar = () => {
                           <p className={cn("text-black", optionItem?.className)}>{optionItem.title}</p>
                         </div>
                         {index !== ListOptionChangeAvatar.length - 1 && <hr className="w-full my-1 border-gray-300" />}
-                      </>
+                      </React.Fragment>
                     );
                   })}
                   {(userChangeAvatarIsLoading || userDeleteAvatarIsLoading) && (

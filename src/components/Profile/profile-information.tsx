@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change-avatar";
 import ProfileAction from "./profile-action";
 import { UserByUsernameQuery } from "@/gql/graphql";
+import Friends, { FriendsModalKey } from "./friends";
 
 const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => {
   const { modalOpen } = useModalStore();
@@ -72,11 +73,15 @@ const UserStat = ({ count, label }: { count: number; label: string }) => (
 );
 
 const ProfileInformationStat = ({ userData }: { userData: UserByUsernameQuery }) => {
+  const { modalOpen } = useModalStore();
   return (
     <>
       <UserStat count={200} label="posts" />
-      <UserStat count={200} label="friends" />
+      <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
+        <UserStat count={200} label="followers" />
+      </div>
       <UserStat count={200} label="following" />
+      <Friends />
     </>
   );
 };

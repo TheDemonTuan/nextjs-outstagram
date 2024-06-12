@@ -13,7 +13,7 @@ import {
 import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { Fragment, useCallback, useEffect, useRef } from "react";
+import React, { Fragment, act, useCallback, useEffect, useRef } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
@@ -56,6 +56,7 @@ const HeaderMenu = [
     name: "Messages",
     icon: MessagesIcon,
     href: "/direct/inbox",
+    action: true,
   },
   {
     name: "Notifications",
@@ -74,141 +75,150 @@ const DisabledMenuItems = ["Explores", "Reels", "Messages", "Notifications", "Ne
 const MenuItemClass =
   "flex items-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
 
-const MenuItemClassDisabled = "flex items-center space-x-4 text-gray-900 group p-2 rounded-lg";
-
 const ShortMenuItemClass =
-  "flex items-center justify-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
+  "flex items-center justify-center space-x-4 text-gray-900 group hover:bg-gray-100 p-[9px] rounded-lg transition-colors duration-200 ease-in-out";
 
-const ShortMenuItemClassDisabled = "flex items-center justify-center space-x-4 text-gray-900 group p-2 rounded-lg";
+const ShortHeaderList = ["Search", "Notifications", "Messages"];
+const ShortHeaderSpecialList = ["Messages"];
 
 const Header = () => {
   const { modalOpen } = useModalStore();
   const pathName = usePathname();
   const { authData, authIsLoading, authIsError } = useAuth();
   const [isShortHeader, setIsShortHeader] = React.useState(false);
-  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false);
+  const [activeMenu, setActiveMenu] = React.useState("");
 
   useEffect(() => {
-    return () => {
+    const currentLink = HeaderMenu.find((item, index) =>
+      item.href ? (!index ? pathName === item.href : pathName.startsWith(item.href ?? "")) : false
+    );
+
+    if (isShortHeader && currentLink?.name && !ShortHeaderSpecialList.includes(currentLink?.name) && ShortHeaderSpecialList.includes(activeMenu)) {
       setIsShortHeader(false);
-      setIsSearchOpen(false);
-      setIsNotificationsOpen(false);
-    };
-  }, []);
+    }
+
+    if (isShortHeader) return;
+
+
+    if (currentLink?.name && ShortHeaderSpecialList.includes(currentLink?.name)) {
+      setIsShortHeader(true);
+    }
+
+    currentLink ? setActiveMenu(currentLink?.name) : setActiveMenu("");
+  }, [activeMenu, isShortHeader, pathName]);
 
   return (
     <>
       <div
         className={cn(
-          "flex flex-col h-dvh sticky top-0 border-r border-gray-300",
-          isShortHeader ? "w-[75px] space-y-8 p-2" : "w-[245px] space-y-6 p-4 pt-6"
+          "flex h-dvh fixed top-0 border-gray-300 z-50 bg-white border-r",
+          isShortHeader ? "w-[470px] rounded-r-lg" : "w-[245px] space-y-6 p-4 pt-6"
         )}>
-        <Link href={"/"} className={cn(isShortHeader ? "flex items-center justify-center p-3" : "p-2")}>
-          {!isShortHeader ? (
-            <Image
-              as={NextImage}
-              className="w-auto h-auto"
-              width={128}
-              height={128}
-              src="/logo.webp"
-              alt="Outstagram Logo"
-            />
-          ) : (
-            <InstagramIcon className="w-12 h-12" />
-          )}
-        </Link>
-        {/* Menu */}
-        <nav className="space-y-4">
-          {HeaderMenu.map((item, index) => {
-            const Icon = item.icon;
-            const isActiveClass = item.href
-              ? !index
-                ? pathName === item.href
-                : pathName.startsWith(item.href ?? "")
-              : false;
-            if (authIsError && DisabledMenuItems.includes(item.name)) {
-              return null;
-            }
-            return (
-              <Link
-                key={index}
-                href={item.href || "#"}
-                className={cn(isShortHeader ? ShortMenuItemClass : MenuItemClass, isActiveClass && "font-bold")}
-                onClick={(e) => {
-                  if (!item.href && item.action) {
-                    e.preventDefault();
-                    // setIsShortHeader(false);
-                    switch (item.name) {
-                      case "New":
-                        modalOpen(CreatePostModalKey);
-                        break;
-                      case "Search":
-                        setIsShortHeader((prev) => {
-                          setIsSearchOpen(!prev);
-                          setIsNotificationsOpen(false);
-                          return !prev;
-                        });
-                        break;
-                      case "Notifications":
-                        setIsShortHeader((prev) => {
-                          setIsNotificationsOpen(!prev);
-                          setIsSearchOpen(false);
-                          return !prev;
-                        });
-                        break;
-                      default:
-                        break;
+        <div className={cn("flex flex-col gap-6", isShortHeader ? "w-[72px] p-[10px] mt-2" : "w-full")}>
+          <Link href={"/"} className={cn("p-2", isShortHeader && "flex items-center justify-center")}>
+            {!isShortHeader ? (
+              <Image
+                as={NextImage}
+                className="w-auto h-auto"
+                width={128}
+                height={128}
+                src="/logo.webp"
+                alt="Outstagram Logo"
+              />
+            ) : (
+              <InstagramIcon className="w-12 h-12" />
+            )}
+          </Link>
+          {/* Menu */}
+          <nav className={cn(isShortHeader ? "space-y-3" : "space-y-4")}>
+            {HeaderMenu.map((item, index) => {
+              const Icon = item.icon;
+              const active = activeMenu == item?.name;
+              if (authIsError && DisabledMenuItems.includes(item.name)) {
+                return null;
+              }
+              return (
+                <Link
+                  key={index}
+                  href={item.href || "#"}
+                  className={cn(
+                    isShortHeader ? ShortMenuItemClass : MenuItemClass,
+                    active && "font-bold",
+                    active && isShortHeader && "border-2"
+                  )}
+                  onClick={(e) => {
+                    if (item.action) {
+                      !item.href && e.preventDefault();
+                      setActiveMenu((prev) => {
+                        if (prev === item.name && !ShortHeaderSpecialList.includes(item.name)) {
+                          setIsShortHeader(false);
+                          return "";
+                        }
+                        setIsShortHeader(ShortHeaderList.includes(item.name));
+                        return item.name;
+                      });
+                      switch (item.name) {
+                        case "New":
+                          modalOpen(CreatePostModalKey);
+                          break;
+                        default:
+                          break;
+                      }
                     }
-                  }
-                }}>
-                <Icon className="w-7 h-7 group-hover:scale-105" />
-                {!isShortHeader && <span>{item.name}</span>}
-              </Link>
-            );
-          })}
-          {/* Profile */}
-          {!authIsLoading ? (
-            authData && (
-              <Link href={`/${authData?.username}`} className={cn(isShortHeader ? ShortMenuItemClass : MenuItemClass)}>
-                <Avatar className="group-hover:scale-105 w-8 h-8">
-                  <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar)} />
-                  <AvatarFallback>
-                    <Spinner size="sm" />
-                  </AvatarFallback>
-                </Avatar>
-                {!isShortHeader && <span>Profile</span>}
-              </Link>
-            )
-          ) : (
-            <div className={MenuItemClass}>
-              <div>
-                <Skeleton className="flex rounded-full w-7 h-7" />
+                  }}>
+                  <Icon className={cn("w-[26px] h-[26px] group-hover:scale-105", active && "stroke-zinc-950")} />
+                  {!isShortHeader && <span>{item.name}</span>}
+                </Link>
+              );
+            })}
+            {/* Profile */}
+            {!authIsLoading ? (
+              authData && (
+                <Link
+                  href={`/${authData?.username}`}
+                  className={cn(isShortHeader ? ShortMenuItemClass : MenuItemClass)}>
+                  <Avatar className="group-hover:scale-105 w-[26px] h-[26px]">
+                    <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar)} />
+                    <AvatarFallback>
+                      <Spinner size="sm" />
+                    </AvatarFallback>
+                  </Avatar>
+                  {!isShortHeader && <span>Profile</span>}
+                </Link>
+              )
+            ) : (
+              <div className={MenuItemClass}>
+                <div>
+                  <Skeleton className="flex rounded-full w-[26px] h-[26px]" />
+                </div>
+                <Skeleton className="h-3 w-4/5 rounded-lg" />
               </div>
-              <Skeleton className="h-3 w-4/5 rounded-lg" />
-            </div>
-          )}
-          {!authData && (
-            <div className="flex flex-col w-full gap-2">
-              <Link href="/login">
-                <Button className={cn("text-lg w-full", isShortHeader && "hidden")} color="primary">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button className={cn("text-lg w-full", isShortHeader && "hidden")}>Sign Up</Button>
-              </Link>
-            </div>
-          )}
-        </nav>
-        <CreatePost />
-      </div>
-      {isShortHeader && (
-        <div className="sticky w-[396px] rounded-xl h-dvh top-0 shadow">
-          {isSearchOpen && <Search />}
-          {isNotificationsOpen && <Notification />}
+            )}
+            {!authData && (
+              <div className="flex flex-col w-full gap-2">
+                <Link href="/login">
+                  <Button className={cn("text-lg w-full", isShortHeader && "hidden")} color="primary">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button className={cn("text-lg w-full", isShortHeader && "hidden")}>Sign Up</Button>
+                </Link>
+              </div>
+            )}
+          </nav>
+          <CreatePost />
         </div>
-      )}
+        <div className="flex flex-1">
+          {isShortHeader && (
+            <div className="w-full">
+              {activeMenu === "Search" && <Search />}
+              {activeMenu === "Notifications" && <Notification />}
+              {activeMenu === "Messages" && <div>Messages</div>}
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 };
@@ -238,7 +248,7 @@ const Search = () => {
     <div className="flex flex-col">
       <div
         className={cn(
-          "flex flex-col justify-between w-full h-40 p-4",
+          "flex flex-col justify-between w-full h-[155px] p-5",
           !keyWordRef.current?.value && "border-b border-gray-300"
         )}>
         <span className="text-2xl p-2 font-semibold">Search</span>
@@ -248,7 +258,7 @@ const Search = () => {
           isDisabled={searchIsLoading}
           endContent={searchIsLoading && <Spinner size="sm" />}
           type="search"
-          variant="faded"
+          variant="bordered"
           color="primary"
           placeholder="Search"
           defaultValue=""

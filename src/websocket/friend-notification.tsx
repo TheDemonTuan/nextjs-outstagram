@@ -11,7 +11,9 @@ export const useFriendNotificationSocket = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    pusherClient.subscribe(authData?.id ?? "my-channel");
+    if (!authData) return;
+
+    pusherClient.subscribe(authData?.id);
 
     pusherClient.bind("friend-notification", (data: any) => {
       toast.info(data.message);
@@ -21,7 +23,7 @@ export const useFriendNotificationSocket = () => {
     });
 
     return () => {
-      pusherClient.unsubscribe(authData?.id ?? "my-channel");
+      pusherClient.unsubscribe(authData?.id);
     };
   }, [authData, pusherClient, queryClient]);
 };

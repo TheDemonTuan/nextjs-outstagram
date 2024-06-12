@@ -1,18 +1,13 @@
-import { UserResponse } from "@/api/user";
 import { SettingIcon } from "@/icons";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import ProfileSettings, { ProfileSettingModalKey } from "./profile-settings";
 import { useModalStore } from "@/stores/modal-store";
-import { BsFillPersonPlusFill } from "react-icons/bs";
 import { BsFillPersonCheckFill } from "react-icons/bs";
-import { BsFillPersonXFill } from "react-icons/bs";
-import { IoMdRemoveCircle } from "react-icons/io";
-import { BsFillPersonDashFill } from "react-icons/bs";
 import { FiUserPlus } from "react-icons/fi";
 import { TfiMoreAlt } from "react-icons/tfi";
 import ProfileMoreOptions, { ProfileMoreOptionsModalKey } from "./profile-more-options";
-import { UseMutateFunction, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 
 import {
@@ -20,7 +15,6 @@ import {
   FriendStatus,
   friendAcceptRequest,
   friendGetByUserID,
-  friendGetList,
   friendKey,
   friendRejectRequest,
   friendSendRequest,
@@ -28,6 +22,7 @@ import {
 import { toast } from "sonner";
 import { UserByUsernameQuery } from "@/gql/graphql";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { SiVerizon } from "react-icons/si";
 
 interface ProfileActionProps {
   isMe: boolean;
@@ -72,8 +67,9 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
 
   const {
     data: friendData,
+    error: friendError,
+    status: friendStatus,
     isLoading: friendIsLoading,
-    isError: friendIsError,
   } = useQuery<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, FriendResponse>({
     queryKey: [friendKey, toUserID],
     queryFn: async () => friendGetByUserID(toUserID),
@@ -131,23 +127,17 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     },
   });
 
-  useEffect(() => {
-    if (friendIsError) {
-      toast.error("Error fetching friend data");
-    }
-  }, [toUserID]);
-
   const handleSendRequest = useCallback(() => {
     friendSendRequestMutate(toUserID);
-  }, [toUserID]);
+  }, [friendSendRequestMutate, toUserID]);
 
   const handleRejectRequest = useCallback(() => {
     friendRejectMutate(toUserID);
-  }, [toUserID]);
+  }, [friendRejectMutate, toUserID]);
 
   const handleAcceptRequest = useCallback(() => {
     friendAcceptRequestMutate(toUserID);
-  }, [toUserID]);
+  }, [friendAcceptRequestMutate, toUserID]);
 
   const btnAddFriend = (
     <Button
@@ -182,7 +172,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
 
   const btnCancelRequest = (
     <Button size="sm" isLoading={friendRejectIsPending} className={btnClass} onClick={handleRejectRequest}>
-      cancel invitation
+      Cancel request
     </Button>
   );
 
@@ -193,6 +183,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
           size="sm"
           isLoading={friendAcceptRequestIsPending}
           className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]">
+          <SiVerizon />
           Feedback
         </Button>
       </DropdownTrigger>

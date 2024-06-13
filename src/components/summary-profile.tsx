@@ -27,7 +27,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         </div>
         <div className="flex flex-row justify-between  text-sm">
           <div className="flex-1 text-center">posts</div>
-          <div className="flex-1 text-center mx-12">followers</div>
+          <div className="flex-1 text-center mx-12">friends</div>
           <div className="flex-1 text-center">following</div>
         </div>
       </div>

@@ -25,7 +25,7 @@ const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => 
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
           <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
-            <Avatar src={getUserAvatarURL(authData?.avatar)} className="w-40 h-40 text-large" />
+            <Avatar src={getUserAvatarURL(userByUsername?.avatar)} className="w-40 h-40 text-large" />
           </div>
         </div>
         <div className="flex flex-col mx-6">

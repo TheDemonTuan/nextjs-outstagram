@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 
@@ -27,10 +28,30 @@ export default function Carousel({
         className="flex transition-transform ease-out duration-500"
         style={{ transform: `translateX(-${curr * 100}%)` }}>
         {slides.map((img, index) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={img} alt="" className="rounded-sm" key={index} />
+          <Image
+            src={img}
+            alt=""
+            className="object-cover rounded-sm  w-full h-full"
+            key={index}
+            width={500}
+            height={500}
+            layout="fixed"
+            priority
+          />
         ))}
       </div>
+      {/* <div key={index} className="w-full h-full">
+        <ReactPlayer
+          url={slide.content}
+          width="100%"
+          height="100%"
+          controls
+          playing={index === curr} 
+          muted
+          className="react-player"
+        />
+      </div> */}
+
       {slides.length > 1 && (
         <>
           <div className="absolute inset-0 flex items-center justify-between p-4">

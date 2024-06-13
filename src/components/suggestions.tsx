@@ -10,6 +10,7 @@ import { UserResponse, userKey } from "@/api/user";
 import { UserSuggestionDocument } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
 import { useQuery } from "@tanstack/react-query";
+import { SuggestionsSkeleton } from "./skeletons";
 
 const Suggestions = () => {
   const { authData } = useAuth();
@@ -29,7 +30,15 @@ const Suggestions = () => {
   }, [userSuggestionError]);
 
   if (userSuggestionIsLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <SuggestionsSkeleton />
+        <SuggestionsSkeleton />
+        <SuggestionsSkeleton />
+        <SuggestionsSkeleton />
+        <SuggestionsSkeleton />
+      </>
+    );
   }
 
   return (
@@ -60,7 +69,7 @@ const Suggestions = () => {
               </div>
             </div>
           </Tooltip>
-          <button className="text-blue-400 text-xs font-bold">Follow</button>
+          <button className="text-blue-400 text-xs font-bold">Add friends</button>
         </div>
       ))}
     </div>

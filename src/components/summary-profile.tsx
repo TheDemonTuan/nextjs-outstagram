@@ -27,7 +27,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         </div>
         <div className="flex flex-row justify-between  text-sm">
           <div className="flex-1 text-center">posts</div>
-          <div className="flex-1 text-center mx-12">followers</div>
+          <div className="flex-1 text-center mx-12">friends</div>
           <div className="flex-1 text-center">following</div>
         </div>
       </div>
@@ -35,17 +35,17 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         {props.user.posts && props.user.posts?.length > 0 ? (
           props.user.posts.map((url, index) => (
             <div key={index} className="flex-1">
-              <img src={url.caption} alt={`Image ${index + 1}`} className="w-full h-32" />
+              <Avatar src={url.caption} alt={`Image ${index + 1}`} className="w-full h-32" />
             </div>
           ))
         ) : (
           <>
             <div className="flex flex-col w-full h-32 justify-center items-center my-3">
               <Divider className="my-4" />
-              <img src="/camera.png" alt="" className="w-12 h-12" />
+              <Image src="/camera.png" alt="" width={48} height={48} className="my-2" />
               <div className="font-bold text-base">No posts yet</div>
               <div className="text-sm text-gray-400 mx-2 text-center">
-                When umaraliyevv.j shares photos and reels, you'll see them here.
+                When umaraliyevv.j shares photos and reels, you&apos;ll see them here.
               </div>
               <Divider className="my-4" />
             </div>

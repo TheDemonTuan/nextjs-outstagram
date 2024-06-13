@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import EditPost, { EditPostModalKey } from "./edit-post";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "./confirm-delete-post";
+import ViewPost from "../PostDetail/view-post";
 
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
@@ -97,6 +98,8 @@ const PostMoreOptions = () => {
                                   break;
                                 case "Delete":
                                   modalOpen(ConfirmDeletePostModalKey);
+                                  break;
+                                case "Go to post":
                                   break;
                                 case "Cancel":
                                   modalClose();

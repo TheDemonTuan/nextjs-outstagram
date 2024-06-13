@@ -1,5 +1,5 @@
 import { postKey } from "@/api/post";
-import { PostByUsernameDocument, UserByUsernameQuery } from "@/gql/graphql";
+import { PostByUsernameDocument, UserByUsernameQuery, UserProfileQuery } from "@/gql/graphql";
 import { LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import { graphQLClient } from "@/lib/graphql";
 import { Skeleton } from "@nextui-org/react";
@@ -8,18 +8,18 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
-const Gallery = ({ user }: { user: UserByUsernameQuery }) => {
-  const { userByUsername: userData } = user;
+const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
+  const { friends, posts, user, username } = userProfile.userProfile;
 
-  const {
-    data: postsData,
-    error: postsError,
-    isLoading: postsIsLoading,
-  } = useQuery({
-    queryKey: [postKey, { username: userData?.username }],
-    queryFn: () => graphQLClient.request(PostByUsernameDocument, { username: userData?.username ?? "" }),
-    enabled: !!userData?.username,
-  });
+  // const {
+  //   data: postsData,
+  //   error: postsError,
+  //   isLoading: postsIsLoading,
+  // } = useQuery({
+  //   queryKey: [postKey, { username: userData?.username }],
+  //   queryFn: () => graphQLClient.request(PostByUsernameDocument, { username: userData?.username ?? "" }),
+  //   enabled: !!userData?.username,
+  // });
 
   useEffect(() => {
     if (postsError) {

@@ -9,15 +9,15 @@ import { toast } from "sonner";
 import { notFound } from "next/navigation";
 import { FiBookmark } from "react-icons/fi";
 import ProfileStories from "@/components/Profile/profile-stories";
-import { UserByUsernameDocument, UserByUsernameQuery } from "@/gql/graphql";
+import { UserProfileDocument, UserProfileQuery } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
 import { useQuery } from "@tanstack/react-query";
 import { userKey } from "@/api/user";
 
-const renderActiveTabContent = (activeTab: string, user: UserByUsernameQuery) => {
+const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery) => {
   switch (activeTab) {
     case "POSTS":
-      return <Gallery user={user} />;
+      return <Gallery userProfile={userProfile} />;
     case "REELS":
       return <div>Reels content goes here</div>;
     case "SAVED":
@@ -31,21 +31,21 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   const [activeTab, setActiveTab] = useState<string>("POSTS");
 
   const {
-    data: userData,
-    error: userError,
-    isLoading: userIsLoading,
+    data: userProfileData,
+    error: userProfileError,
+    isLoading: userProfileIsLoading,
   } = useQuery({
-    queryKey: [userKey, { username: params.username }],
-    queryFn: () => graphQLClient.request(UserByUsernameDocument, { username: params.username }),
+    queryKey: [userKey, "profile", { username: params.username }],
+    queryFn: () => graphQLClient.request(UserProfileDocument, { username: params.username }),
     enabled: !!params.username,
   });
 
   useEffect(() => {
-    if (userError) {
+    if (userProfileError) {
       toast.error("User not found");
       notFound();
     }
-  }, [userError]);
+  }, [userProfileError]);
 
   const getClassNames = useCallback(
     (tab: string) =>
@@ -55,17 +55,17 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
     [activeTab]
   );
 
-  if (userIsLoading) {
+  if (userProfileIsLoading) {
     return <div>Loading user...</div>;
   }
 
-  if (!userData) {
+  if (!userProfileData) {
     return <div>User not found</div>;
   }
 
   return (
     <div className="flex flex-col max-full mt-9 mx-16 mb-40">
-      <ProfileInformation userData={userData} />
+      <ProfileInformation userProfile={userProfileData} />
       <ProfileStories />
       <div className="w-full">
         <hr className="border-gray-300 mt-14 border-t mx-28" />
@@ -84,7 +84,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
           SAVED
         </button>
       </div>
-      {renderActiveTabContent(activeTab, userData)}
+      {renderActiveTabContent(activeTab, userProfileData)}
     </div>
   );
 };

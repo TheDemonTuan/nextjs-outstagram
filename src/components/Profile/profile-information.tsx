@@ -6,13 +6,13 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change-avatar";
 import ProfileAction from "./profile-action";
-import { UserByUsernameQuery } from "@/gql/graphql";
+import { UserByUsernameQuery, UserProfileQuery } from "@/gql/graphql";
 import Friends, { FriendsModalKey } from "./friends";
 
-const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => {
+const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
   const { authData } = useAuth();
-  const { userByUsername } = userData;
+  const { friends, posts, user, username } = userProfile.userProfile;
 
   const handleAvatarClick = () => {
     if (authData?.id === userByUsername?.id) {

@@ -145,7 +145,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
       isLoading={friendSendRequestIsPending}
       className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]"
       onClick={handleSendRequest}>
-      Add friend
+      Add friends
     </Button>
   );
 

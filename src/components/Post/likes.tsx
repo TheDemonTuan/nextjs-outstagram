@@ -2,21 +2,18 @@ import { useModalStore } from "@/stores/modal-store";
 import { Avatar, Button, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import React from "react";
 
-export const FriendsModalKey = "Friends";
+export const LikesModalKey = "Likes";
 
-const Friends = () => {
+const Likes = () => {
   const { modalClose, modalKey } = useModalStore();
   return (
     <>
-      <Modal size="md" isOpen={modalKey === FriendsModalKey} onOpenChange={modalClose} scrollBehavior="inside">
+      <Modal size="md" isOpen={modalKey === LikesModalKey} onOpenChange={modalClose} scrollBehavior="inside">
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col items-center my-[-5px] text-base">Friends</ModalHeader>
+              <ModalHeader className="flex flex-col items-center my-[-5px] text-base">Likes</ModalHeader>
               <Divider />
-              <div className="flex items-center mx-6 my-3">
-                <Input size="sm" className="sticky top-0 z-10" />
-              </div>
               <ModalBody className="flex flex-col max-h-80">
                 <div className="flex flex-row space-y-2 cursor-pointer justify-between">
                   <div className="flex items-center">
@@ -143,4 +140,4 @@ const Friends = () => {
   );
 };
 
-export default Friends;
+export default Likes;

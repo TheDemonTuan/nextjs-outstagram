@@ -21,6 +21,8 @@ import { UserResponse } from "@/api/user";
 import { useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
+import { PostsHomeSkeleton } from "../skeletons";
+import Likes, { LikesModalKey } from "./likes";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
@@ -35,7 +37,12 @@ const Post = () => {
   });
 
   if (postsIsLoading) {
-    return <div>Loading posts...</div>;
+    return (
+      <>
+        <PostsHomeSkeleton />
+        <PostsHomeSkeleton />
+      </>
+    );
   }
 
   if (postsError) {
@@ -56,7 +63,9 @@ const Post = () => {
                     <Card className="rounded-none shadow-none border-0">
                       <CardHeader className="p-2 flex flex-row items-center">
                         <div className="flex gap-1 items-center justify-center">
-                          <Tooltip content={post.user && <SummaryProfile user={post.user as UserResponse} />}>
+                          <Tooltip
+                            content={post.user && <SummaryProfile user={post.user as UserResponse} />}
+                            placement="bottom-start">
                             <Link
                               className="flex items-center gap-2 text-sm font-medium"
                               href={`/${post.user?.username}`}>
@@ -93,38 +102,16 @@ const Post = () => {
                           <div className="relative">
                             <div className="slide-container">
                               <Carousel slides={post.post_files.map((file) => file?.url ?? "")} />
-                              {/* <ImageGallery
-                              items={post.post_files.map((file, index) => {
-                                return {
-                                  original: file.url,
-                                  index,
-                                };
-                              })}
-                              renderItem={(item) => {
-                                return (
-                                  <div className="image-gallery-image relative">
-                                    <Image
-                                      src={item.original}
-                                      alt={userData?.username + " post image"}
-                                      className="object-cover min-w-[468px] max-h-[564] w-full h-full rounded-lg shadow-lg"
-                                      width={500}
-                                      height={500}
-                                      priority
-                                    />
-                                  </div>
-                               
-                                );
-                              }}
-                              showPlayButton={false}
-                              showThumbnails={false}
-                            /> */}
                             </div>
                           </div>
                         ) : null}
                       </CardContent>
                       <CardFooter className="p-2 pb-4 grid gap-2">
                         <PostReact postID={post.id} isLiked={isUserLiked ?? false} />
-                        <span className="font-semibold text-sm">{postLikes?.length} likes</span>
+                        <div></div>
+                        <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
+                          {postLikes?.length} likes
+                        </span>
                         <div className="py-1 text-sm">
                           <span className="font-bold">{post.user?.username}</span>
                           <span className="ml-1">{post.caption}</span>
@@ -154,6 +141,7 @@ const Post = () => {
         })}
       </div>
       <PostMoreOptions />
+      <Likes />
     </>
   );
 };

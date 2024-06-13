@@ -45,11 +45,11 @@ const ProfileInformation = ({ userData }: { userData: UserByUsernameQuery }) => 
 
             {authData && <ProfileAction isMe={authData.id === userByUsername?.id} user={userData} />}
           </div>
-          <div className="mt-6 flex flex-row">
+          <div className="mt-8 flex flex-row">
             <ProfileInformationStat userData={userData} />
           </div>
           <div className="flex flex-col">
-            <div className=" pt-4">
+            <div className="pt-6">
               <span className="text-base font-semibold text-black-700 mr-2 leading-5">{userByUsername?.full_name}</span>
             </div>
             <div className="">
@@ -78,7 +78,7 @@ const ProfileInformationStat = ({ userData }: { userData: UserByUsernameQuery })
     <>
       <UserStat count={200} label="posts" />
       <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
-        <UserStat count={200} label="followers" />
+        <UserStat count={200} label="Friends" />
       </div>
       <UserStat count={200} label="following" />
       <Friends />

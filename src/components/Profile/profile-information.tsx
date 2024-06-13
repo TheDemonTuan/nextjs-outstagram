@@ -1,5 +1,5 @@
 import { VerifiedIcon } from "@/icons";
-import { Avatar, Tooltip } from "@nextui-org/react";
+import { Avatar, Tooltip, user } from "@nextui-org/react";
 import React from "react";
 import { useModalStore } from "@/stores/modal-store";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
@@ -15,7 +15,7 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
   const { friends, posts, user, username } = userProfile.userProfile;
 
   const handleAvatarClick = () => {
-    if (authData?.id === userByUsername?.id) {
+    if (authData?.id === user?.id) {
       modalOpen(OptionChangeAvatarModalKey);
     }
   };
@@ -25,15 +25,15 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
           <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
-            <Avatar src={getUserAvatarURL(userByUsername?.avatar)} className="w-40 h-40 text-large" />
+            <Avatar src={getUserAvatarURL(user?.avatar)} className="w-40 h-40 text-large" />
           </div>
         </div>
         <div className="flex flex-col mx-6">
           <div className="flex flex-row items-center">
             <div>
-              <span className="text-black-700 text-xl leading-6">{userByUsername?.username} </span>
+              <span className="text-black-700 text-xl leading-6">{username} </span>
             </div>
-            {userByUsername?.role ? (
+            {user?.role ? (
               <Tooltip color="primary" showArrow content="I'm Admin" className="mx-2 mr-5">
                 <span className="mx-2 mr-5">
                   <VerifiedIcon className="w-5 h-5" />
@@ -43,17 +43,17 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
               <div className="mx-2" />
             )}
 
-            {authData && <ProfileAction isMe={authData.id === userByUsername?.id} user={userData} />}
+            {authData && <ProfileAction isMe={authData.id === user?.id} user={userProfile} />}
           </div>
           <div className="mt-8 flex flex-row">
-            <ProfileInformationStat userData={userData} />
+            <ProfileInformationStat userData={userProfile} />
           </div>
           <div className="flex flex-col">
             <div className="pt-6">
-              <span className="text-base font-semibold text-black-700 mr-2 leading-5">{userByUsername?.full_name}</span>
+              <span className="text-base font-semibold text-black-700 mr-2 leading-5">{user?.full_name}</span>
             </div>
             <div className="">
-              <p className="text-base text-black-700 mr-2 leading-5">{userByUsername?.bio}</p>
+              <p className="text-base text-black-700 mr-2 leading-5">{user?.bio}</p>
             </div>
           </div>
         </div>
@@ -72,13 +72,14 @@ const UserStat = ({ count, label }: { count: number; label: string }) => (
   </div>
 );
 
-const ProfileInformationStat = ({ userData }: { userData: UserByUsernameQuery }) => {
+const ProfileInformationStat = ({ userData }: { userData: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
+  const { friends, posts } = userData.userProfile;
   return (
     <>
-      <UserStat count={200} label="posts" />
+      <UserStat count={posts?.length ?? 0} label="posts" />
       <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
-        <UserStat count={200} label="Friends" />
+        <UserStat count={friends?.length ?? 0} label="Friends" />
       </div>
       <UserStat count={200} label="following" />
       <Friends />

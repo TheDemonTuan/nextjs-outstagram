@@ -21,31 +21,33 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   //   enabled: !!userData?.username,
   // });
 
-  useEffect(() => {
-    if (postsError) {
-      toast.error("Error fetching posts");
-    }
-  }, [postsError]);
+  // useEffect(() => {
+  //   if (postsError) {
+  //     toast.error("Error fetching posts");
+  //   }
+  // }, [postsError]);
 
-  if (!postsIsLoading && (!postsData || !postsData.postByUsername?.length)) {
-    return (
-      <div className="flex flex-col items-center justify-center my-14">
-        <Image width={64} height={64} src="/camera-b.png" alt="camera icon" />
-        <span className="font-black text-3xl mt-10">No Posts Yet</span>
-      </div>
-    );
-  }
+  // if (!postsIsLoading && (!postsData || !postsData.postByUsername?.length)) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center my-14">
+  //       <Image width={64} height={64} src="/camera-b.png" alt="camera icon" />
+  //       <span className="font-black text-3xl mt-10">No Posts Yet</span>
+  //     </div>
+  //   );
+  // }
+
+  console.log(posts);
 
   return (
     <div className="grid grid-cols-3 gap-1 mx-28">
-      {postsIsLoading && (
+      {/* {postsIsLoading && (
         <>
           <Skeleton className="w-full h-[310px] rounded-md" />
           <Skeleton className="w-full h-[310px] rounded-md" />
           <Skeleton className="w-full h-[310px] rounded-md" />
         </>
-      )}
-      {postsData?.postByUsername?.map((post) => {
+      )} */}
+      {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         return (
           <div key={post.id} className="relative group cursor-pointer">

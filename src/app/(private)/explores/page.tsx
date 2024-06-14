@@ -8,11 +8,12 @@ const ExplorePage = () => {
       <div className="grid grid-cols-3 grid-rows-2 gap-1">
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -29,9 +30,12 @@ const ExplorePage = () => {
         </div>
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
               className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -48,9 +52,12 @@ const ExplorePage = () => {
         </div>
         <div className="col-span-1 row-span-2 relative">
           <div className="w-full h-[40rem] group">
-            <img
-              src="https://images.pexels.com/photos/1723637/pexels-photo-1723637.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717519703/posts/zbzsrsmtujs1lm9ddecf.webp"
               className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -66,9 +73,12 @@ const ExplorePage = () => {
         </div>
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
               className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -85,9 +95,12 @@ const ExplorePage = () => {
         </div>
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
               className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -106,9 +119,12 @@ const ExplorePage = () => {
       <div className="grid grid-cols-3 grid-rows-2 gap-1 mt-1">
         <div className="col-span-1 row-span-2 relative">
           <div className="w-full h-[40rem] group">
-            <img
-              src="https://images.pexels.com/photos/1723637/pexels-photo-1723637.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717519703/posts/zbzsrsmtujs1lm9ddecf.webp"
               className="w-full h-full object-cover"
+              width={500}
+              height={600}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -124,48 +140,12 @@ const ExplorePage = () => {
         </div>
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
               className="w-full h-full object-cover"
-            />
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
-              <div className="flex items-center font-bold space-x-1 mx-2">
-                <LikeHeartIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
-              </div>
-
-              <div className="flex items-center font-bold space-x-1 mx-2">
-                <MessageCircleIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="relative cursor-pointer  group">
-          <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
-              <div className="flex items-center font-bold space-x-1 mx-2">
-                <LikeHeartIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
-              </div>
-
-              <div className="flex items-center font-bold space-x-1 mx-2">
-                <MessageCircleIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative cursor-pointer  group">
-          <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
-              className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -182,9 +162,57 @@ const ExplorePage = () => {
         </div>
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
-            <img
-              src="https://images.pexels.com/photos/1529881/pexels-photo-1529881.jpeg?auto=compress&cs=tinysrgb&w=600"
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
               className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
+            />
+            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
+              <div className="flex items-center font-bold space-x-1 mx-2">
+                <LikeHeartIcon className="text-white fill-white" />
+                <p className="text-white">1</p>
+              </div>
+
+              <div className="flex items-center font-bold space-x-1 mx-2">
+                <MessageCircleIcon className="text-white fill-white" />
+                <p className="text-white">1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative cursor-pointer  group">
+          <div className="col-span-1 row-span-1 w-full h-full">
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
+            />
+            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
+              <div className="flex items-center font-bold space-x-1 mx-2">
+                <LikeHeartIcon className="text-white fill-white" />
+                <p className="text-white">1</p>
+              </div>
+
+              <div className="flex items-center font-bold space-x-1 mx-2">
+                <MessageCircleIcon className="text-white fill-white" />
+                <p className="text-white">1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="relative cursor-pointer  group">
+          <div className="col-span-1 row-span-1 w-full h-full">
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              className="w-full h-full object-cover"
+              width={500}
+              height={500}
+              alt=""
             />
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
               <div className="flex items-center font-bold space-x-1 mx-2">

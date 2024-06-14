@@ -68,16 +68,6 @@ export const UserProfile = graphql(`
         created_at
         updated_at
         deleted_at
-        post_comments {
-          id
-          post_id
-          user_id
-          content
-          active
-          created_at
-          updated_at
-          deleted_at
-        }
         post_likes {
           id
           post_id
@@ -96,7 +86,7 @@ export const UserProfile = graphql(`
           created_at
           updated_at
           deleted_at
-        }
+        }   
         user {
           id
           username

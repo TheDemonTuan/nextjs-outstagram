@@ -179,3 +179,15 @@ export function ProfileSkeleton() {
     </div>
   );
 }
+
+export function SearchHeaderSkeleton() {
+  return (
+    <div className=" w-full p-2 px-6 flex items-center gap-2 rounded-sm">
+      <Skeleton className="w-11 h-11 rounded-full" />
+      <div className="flex flex-col space-y-2">
+        <Skeleton className="h-4 w-[250px] " />
+        <Skeleton className="h-4 w-[200px] " />
+      </div>
+    </div>
+  );
+}

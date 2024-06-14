@@ -1,6 +1,7 @@
 import { UserProfileQuery } from "@/gql/graphql";
 import { LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
@@ -20,7 +21,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
       {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         return (
-          <div key={post.id} className="relative group cursor-pointer">
+          <Link key={post.id} href={`/p/${post.id}`} className="relative group cursor-pointer">
             <div className="w-full h-[310px]">
               <Image
                 className="absolute top-0 left-0 object-cover w-full h-full rounded-md"
@@ -45,7 +46,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                 <p className="text-white">1</p>
               </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>

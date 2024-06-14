@@ -40,11 +40,6 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
     enabled: !!params.username,
   });
 
-  console.log("data-checks : " + userProfileData);
-  console.log("errors-check : " + userProfileError);
-
-  console.log(params);
-
   useEffect(() => {
     if (userProfileError) {
       toast.error("User not found");

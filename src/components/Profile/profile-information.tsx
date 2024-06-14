@@ -82,7 +82,7 @@ const ProfileInformationStat = ({ userData }: { userData: UserProfileQuery }) =>
         <UserStat count={friends?.length ?? 0} label="Friends" />
       </div>
       <UserStat count={200} label="following" />
-      <Friends />
+      <Friends userData={userData} />
     </>
   );
 };

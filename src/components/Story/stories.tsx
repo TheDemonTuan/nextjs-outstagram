@@ -17,11 +17,11 @@ const Stories: React.FC = () => {
   };
 
   return (
-    <div className="relative w-max">
+    <div className="relative w-max h-full">
       <div
         onScroll={onScroll}
         ref={storiesRef}
-        className="flex space-x-2 overflow-x-scroll max-w-xl bg-white border-gray-200 scroll-smooth scrollbar-hide">
+        className="flex items-center space-x-2 overflow-x-scroll max-w-xl bg-white border-gray-200 scroll-smooth scrollbar-hide">
         {stories.map((story) => (
           <Story key={story.id} img={story.avatar} username={`${story.first_name} ${story.last_name}`} />
         ))}

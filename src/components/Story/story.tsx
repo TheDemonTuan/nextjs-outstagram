@@ -1,4 +1,6 @@
 import React from "react";
+import { Image } from "@nextui-org/react";
+import NextImage from "next/image";
 
 interface StoryProps {
   img: string;
@@ -7,13 +9,19 @@ interface StoryProps {
 
 const Story: React.FC<StoryProps> = ({ img, username }) => {
   return (
-    <div>
-      <div className="h-16 w-16 bg-gradient-to-tr from-yellow-500 to-red-600 p-[1.5px] rounded-full">
-        <div className="bg-white w-full h-full rounded-full p-1">
-          <img className="rounded-full w-full h-full" src={img} alt="" />
-        </div>
+    <div className="space-y-1">
+      <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-gradient-to-r from-yellow-300 via-red-500 to-pink-500 p-[3px]">
+        <Image
+          as={NextImage}
+          className="object-cover"
+          width={256}
+          height={256}
+          radius="full"
+          src={img}
+          alt="User Avatar"
+        />
       </div>
-      <p className="text-xs w-16 truncate text-center pt-1">{username}</p>
+      <p className="text-xs text-center w-16 truncate">{username}</p>
     </div>
   );
 };

@@ -5,29 +5,13 @@ import { graphQLClient } from "@/lib/graphql";
 import { Skeleton } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { friends, posts, user, username } = userProfile.userProfile;
 
-  // const {
-  //   data: postsData,
-  //   error: postsError,
-  //   isLoading: postsIsLoading,
-  // } = useQuery({
-  //   queryKey: [postKey, { username: userData?.username }],
-  //   queryFn: () => graphQLClient.request(PostByUsernameDocument, { username: userData?.username ?? "" }),
-  //   enabled: !!userData?.username,
-  // });
-
-  useEffect(() => {
-    if (postsError) {
-      toast.error("Error fetching posts");
-    }
-  }, [postsError]);
-
-  if (!postsIsLoading && (!postsData || !postsData.postByUsername?.length)) {
+  if (!posts || !posts.length) {
     return (
       <div className="flex flex-col items-center justify-center my-14">
         <Image width={64} height={64} src="/camera-b.png" alt="camera icon" />
@@ -38,14 +22,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
 
   return (
     <div className="grid grid-cols-3 gap-1 mx-28">
-      {postsIsLoading && (
-        <>
-          <Skeleton className="w-full h-[310px] rounded-md" />
-          <Skeleton className="w-full h-[310px] rounded-md" />
-          <Skeleton className="w-full h-[310px] rounded-md" />
-        </>
-      )}
-      {postsData?.postByUsername?.map((post) => {
+      {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         return (
           <div key={post.id} className="relative group cursor-pointer">

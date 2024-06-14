@@ -13,11 +13,14 @@ import { UserProfileDocument, UserProfileQuery } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
 import { useQuery } from "@tanstack/react-query";
 import { userKey } from "@/api/user";
+import { Skeleton } from "@nextui-org/react";
+import { ProfileSkeleton } from "@/components/skeletons";
 
 const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery) => {
   switch (activeTab) {
     case "POSTS":
       return <Gallery userProfile={userProfile} />;
+
     case "REELS":
       return <div>Reels content goes here</div>;
     case "SAVED":
@@ -56,7 +59,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   );
 
   if (userProfileIsLoading) {
-    return <div>Loading user...</div>;
+    return <ProfileSkeleton />;
   }
 
   if (!userProfileData) {

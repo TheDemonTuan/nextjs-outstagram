@@ -31,7 +31,7 @@ export default function Carousel({
           <Image
             src={img}
             alt=""
-            className="object-cover rounded-sm  w-full h-full"
+            className="object-cover rounded-sm  w-full max-h-[590px] min-h-250px"
             key={index}
             width={500}
             height={500}

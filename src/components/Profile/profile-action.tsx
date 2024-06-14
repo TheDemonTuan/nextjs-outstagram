@@ -20,13 +20,13 @@ import {
   friendSendRequest,
 } from "@/api/friend";
 import { toast } from "sonner";
-import { UserByUsernameQuery } from "@/gql/graphql";
+import { UserByUsernameQuery, UserProfileQuery } from "@/gql/graphql";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import { SiVerizon } from "react-icons/si";
 
 interface ProfileActionProps {
   isMe: boolean;
-  user: UserByUsernameQuery;
+  user: UserProfileQuery;
 }
 
 const btnClass =
@@ -34,7 +34,7 @@ const btnClass =
 
 const ProfileAction = (props: ProfileActionProps) => {
   const { modalOpen } = useModalStore();
-  const { userByUsername } = props.user;
+  const { userProfile } = props.user;
 
   return (
     <>
@@ -54,7 +54,7 @@ const ProfileAction = (props: ProfileActionProps) => {
           <ProfileSettings />
         </div>
       )}
-      {!props.isMe && userByUsername?.id && <ProfileActionGuest toUserID={userByUsername?.id} />}
+      {!props.isMe && userProfile?.user.id && <ProfileActionGuest toUserID={userProfile?.user.id} />}
     </>
   );
 };

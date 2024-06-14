@@ -89,29 +89,19 @@ const Header = () => {
   const { authData, authIsLoading, authIsError } = useAuth();
   const [isShortHeader, setIsShortHeader] = React.useState(false);
   const [activeMenu, setActiveMenu] = React.useState("");
+  const [changeMenu, setChangeMenu] = React.useState(false);
 
   useEffect(() => {
     const currentLink = HeaderMenu.find((item, index) =>
       item.href ? (!index ? pathName === item.href : pathName.startsWith(item.href ?? "")) : false
     );
 
-    if (
-      isShortHeader &&
-      currentLink?.name &&
-      !ShortHeaderSpecialList.includes(currentLink?.name) &&
-      ShortHeaderSpecialList.includes(activeMenu)
-    ) {
-      setIsShortHeader(false);
-    }
-
-    if (isShortHeader) return;
-
     if (currentLink?.name && ShortHeaderSpecialList.includes(currentLink?.name)) {
       setIsShortHeader(true);
     }
 
     currentLink ? setActiveMenu(currentLink?.name) : setActiveMenu("");
-  }, [activeMenu, isShortHeader, pathName]);
+  }, [pathName, changeMenu]);
 
   return (
     <>
@@ -153,24 +143,25 @@ const Header = () => {
                     active && isShortHeader && "border-2"
                   )}
                   onClick={(e) => {
-                    if (item.action) {
-                      if (item.name === "Messages" && !isShortHeader) return;
-                      !item.href && e.preventDefault();
-                      setActiveMenu((prev) => {
-                        if (prev === item.name && !ShortHeaderSpecialList.includes(item.name)) {
-                          setIsShortHeader(false);
-                          return "";
-                        }
-                        setIsShortHeader(ShortHeaderList.includes(item.name));
-                        return item.name;
-                      });
-                      switch (item.name) {
-                        case "New":
-                          modalOpen(CreatePostModalKey);
-                          break;
-                        default:
-                          break;
+                    !item.href && e.preventDefault();
+                    if (ShortHeaderSpecialList.includes(item.name) && !isShortHeader) return;
+                    isShortHeader && setIsShortHeader(false);
+
+                    setActiveMenu((prev) => {
+                      if (prev === item.name && !ShortHeaderSpecialList.includes(item.name)) {
+                        setChangeMenu(!changeMenu);
+                        return "";
                       }
+                      setIsShortHeader(ShortHeaderList.includes(item.name));
+                      return item.name;
+                    });
+
+                    switch (item.name) {
+                      case "New":
+                        modalOpen(CreatePostModalKey);
+                        break;
+                      default:
+                        break;
                     }
                   }}>
                   <Icon className={cn("w-[26px] h-[26px] group-hover:scale-105", active && "stroke-zinc-950")} />
@@ -224,7 +215,7 @@ const Header = () => {
           </div>
         )}
       </div>
-      <div className={cn(isShortHeader ? "w-[470px]" : "w-[245px]")} />
+      <div className={cn(activeMenu === "Messages" ? "w-[470px]" : "w-[245px]")} />
     </>
   );
 };

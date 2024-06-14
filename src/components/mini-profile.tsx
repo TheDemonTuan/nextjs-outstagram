@@ -18,9 +18,9 @@ const MiniProfile = () => {
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-3">
         <Link href={`/${authData?.username}`}>
-          <Avatar className="w-12 h-12">
+          <Avatar className="w-11 h-11">
             <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar)} />
             <AvatarFallback>
               <Spinner size="sm" />

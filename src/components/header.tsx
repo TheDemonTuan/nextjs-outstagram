@@ -31,6 +31,7 @@ import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "@/lib/graphql";
 import { userKey } from "@/api/user";
 import { SearchHeaderSkeleton } from "./skeletons";
+import SideBarInbox from "./Chats/sidebar-inbox";
 
 const HeaderMenu = [
   {
@@ -116,10 +117,10 @@ const Header = () => {
     <>
       <div
         className={cn(
-          "flex h-dvh fixed top-0 border-gray-300 z-50 bg-white border-r",
+          "fixed flex h-dvh border-gray-300 border-r z-50 bg-white",
           isShortHeader ? "w-[470px] rounded-r-lg" : "w-[245px] space-y-6 p-4 pt-6"
         )}>
-        <div className={cn("flex flex-col gap-6", isShortHeader ? "w-[72px] p-[10px] mt-2" : "w-full")}>
+        <div className={cn("flex flex-col gap-6", isShortHeader ? "w-[72px] p-[10px] mt-2 border-r" : "w-full")}>
           <Link href={"/"} className={cn("p-2", isShortHeader && "flex items-center justify-center")}>
             {!isShortHeader ? (
               <Image
@@ -138,7 +139,7 @@ const Header = () => {
           <nav className={cn(isShortHeader ? "space-y-3" : "space-y-4")}>
             {HeaderMenu.map((item, index) => {
               const Icon = item.icon;
-              const active = activeMenu == item?.name;
+              const active = activeMenu === item?.name;
               if (authIsError && DisabledMenuItems.includes(item.name)) {
                 return null;
               }
@@ -153,6 +154,7 @@ const Header = () => {
                   )}
                   onClick={(e) => {
                     if (item.action) {
+                      if (item.name === "Messages" && !isShortHeader) return;
                       !item.href && e.preventDefault();
                       setActiveMenu((prev) => {
                         if (prev === item.name && !ShortHeaderSpecialList.includes(item.name)) {
@@ -214,16 +216,15 @@ const Header = () => {
           </nav>
           <CreatePost />
         </div>
-        <div className="flex flex-1">
-          {isShortHeader && (
-            <div className="w-full">
-              {activeMenu === "Search" && <Search />}
-              {activeMenu === "Notifications" && <Notification />}
-              {activeMenu === "Messages" && <div>Messages</div>}
-            </div>
-          )}
-        </div>
+        {isShortHeader && (
+          <div className="flex-auto">
+            {activeMenu === "Search" && <Search />}
+            {activeMenu === "Notifications" && <Notification />}
+            {activeMenu === "Messages" && <SideBarInbox />}
+          </div>
+        )}
       </div>
+      <div className={cn(isShortHeader ? "w-[470px]" : "w-[245px]")} />
     </>
   );
 };

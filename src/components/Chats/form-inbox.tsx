@@ -1,3 +1,5 @@
+"use client";
+
 import { EmojiLookBottomIcon, LikeHeartIcon, ImgBoxIcon, MicIcon } from "@/icons";
 import React, { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";

@@ -250,6 +250,12 @@ const Search = () => {
     setSearchKeyword(keyWordRef.current?.value || "");
   }, 1000);
 
+  useEffect(() => {
+    if (searchError) {
+      toast.error("Something went wrong");
+    }
+  }, [searchError]);
+
   return (
     <div className="flex flex-col">
       <div

@@ -1,12 +1,7 @@
-import { postKey } from "@/api/post";
-import { PostByUsernameDocument, UserByUsernameQuery, UserProfileQuery } from "@/gql/graphql";
+import { UserProfileQuery } from "@/gql/graphql";
 import { LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
-import { graphQLClient } from "@/lib/graphql";
-import { Skeleton } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
+import React from "react";
 
 const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { friends, posts, user, username } = userProfile.userProfile;
@@ -42,7 +37,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6">
               <div className="flex items-center font-bold space-x-1 mx-2">
                 <LikeHeartIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
+                <p className="text-white">{post?.post_likes?.length || 0}</p>
               </div>
 
               <div className="flex items-center font-bold space-x-1 mx-2">

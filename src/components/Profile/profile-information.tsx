@@ -77,11 +77,11 @@ const ProfileInformationStat = ({ userData }: { userData: UserProfileQuery }) =>
   const { friends, posts } = userData.userProfile;
   return (
     <>
-      <UserStat count={posts?.length ?? 0} label="posts" />
+      <UserStat count={posts?.length || 0} label="Posts" />
       <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
-        <UserStat count={friends?.length ?? 0} label="Friends" />
+        <UserStat count={friends?.length || 0} label="Friends" />
       </div>
-      <UserStat count={200} label="following" />
+      <UserStat count={0} label="Following" />
       <Friends userData={userData} />
     </>
   );

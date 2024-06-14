@@ -20,7 +20,6 @@ const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery
   switch (activeTab) {
     case "POSTS":
       return <Gallery userProfile={userProfile} />;
-
     case "REELS":
       return <div>Reels content goes here</div>;
     case "SAVED":

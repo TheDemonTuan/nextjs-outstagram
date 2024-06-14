@@ -20,6 +20,9 @@ import { HoverCard, HoverCardTrigger } from "../ui/hover-card";
 import SummaryProfile from "../summary-profile";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
+import { LikesModalKey } from "../Post/likes";
+import { formatDistanceToNow } from "date-fns";
+import MorePosts from "./more-posts";
 
 function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostResponse> }) {
   const { modalOpen, setModalData } = useModalStore();
@@ -30,87 +33,94 @@ function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostRespo
   const username = post.data.user_id;
   const href = `/${username}`;
   return (
-    <Dialog open={isPostModal} onOpenChange={(open: any) => !open && router.back()}>
-      <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
-        <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg">
-          <DialogHeader className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-6 justify-between">
-            <div>
-              <HoverCard>
-                <HoverCardTrigger>
-                  <div className="flex flex-row items-center">
-                    <div className="">
-                      <Link href={href}>
-                        <Avatar
-                          src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
-                          className="w-8 h-8"
-                        />
-                      </Link>
+    <>
+      <Dialog open={isPostModal} onOpenChange={(open: any) => !open && router.back()}>
+        <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
+          <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg">
+            <DialogHeader className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-6 justify-between">
+              <div>
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <div className="flex flex-row items-center">
+                      <div className="">
+                        <Link href={href}>
+                          <Avatar
+                            src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
+                            className="w-8 h-8"
+                          />
+                        </Link>
+                      </div>
+                      <div className="pl-3.5">
+                        <Link href={href} className="font-semibold text-[13px] leading-[18px]">
+                          {username}
+                        </Link>
+                      </div>
                     </div>
-                    <div className="pl-3.5">
-                      <Link href={href} className="font-semibold text-[13px] leading-[18px]">
-                        {username}
-                      </Link>
-                    </div>
-                  </div>
-                </HoverCardTrigger>
-                {/* <SummaryProfile full_name={name} username={usernamepost} avatar={postImageSrc} /> */}
-              </HoverCard>
-            </div>
-            <div>
-              <span
-                onClick={() => {
-                  setModalData(post);
-                  modalOpen(PostMoreOptionsModalKey);
-                }}>
-                <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-              </span>
-            </div>
-          </DialogHeader>
+                  </HoverCardTrigger>
+                  {/* <SummaryProfile full_name={name} username={usernamepost} avatar={postImageSrc} /> */}
+                </HoverCard>
+              </div>
+              <div>
+                <span
+                  onClick={() => {
+                    setModalData(post);
+                    modalOpen(PostMoreOptionsModalKey);
+                  }}>
+                  <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer mx-5" stroke="#262626" />
+                </span>
+              </div>
+            </DialogHeader>
 
-          <PostMoreOptions />
+            <ScrollArea className="hidden md:inline border-b py-1.5">
+              <MiniPost post={post} />
+              <div className="flex flex-col">
+                <Comment />
+                <Comment />
+                <Comment />
+                <Comment />
+                <Comment />
+                <Comment />
+                <Comment />
+                <Comment />
+                <Comment />
+                <Comment />
+              </div>
+            </ScrollArea>
+            <ViewPost className="hidden md:flex border-b" />
 
-          <ScrollArea className="hidden md:inline border-b py-1.5">
-            <MiniPost post={post} />
-            <div className="flex flex-col">
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
+            <div className="px-2 hidden md:block mt-auto border-b p-2.5">
+              <PostActions />
+              <div className="flex flex-col">
+                <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
+                  1 likes
+                </span>
+
+                <span className="text-xs text-gray-500">
+                  {" "}
+                  {formatDistanceToNow(post.data.created_at, {
+                    addSuffix: true,
+                  })}
+                </span>
+              </div>
             </div>
-          </ScrollArea>
-          <ViewPost className="hidden md:flex border-b" />
-
-          <div className="px-2 hidden md:block mt-auto border-b p-2.5">
-            <PostActions />
-            <time className="text-[11px]  uppercase text-zinc-500 font-medium">
-              {new Date(post.data.created_at).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-              })}
-            </time>
+            <CommentForm postId={id} className="hidden md:inline-flex" inputRef={inputRef} />
           </div>
-          <CommentForm postId={id} className="hidden md:inline-flex" inputRef={inputRef} />
-        </div>
-        <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full ">
-          <Image
-            src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
-            fill
-            objectFit="cover"
-            alt="Post Image"
-            className="md:rounded-l-md object-cover"
-          />
-        </div>
-        <PostActions className="md:hidden border-b p-2.5" />
-        <CommentForm postId={id} className="md:hidden" inputRef={inputRef} />
-        <ViewPost className="md:hidden" />
-      </DialogContent>
-    </Dialog>
+          <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full ">
+            <Image
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              fill
+              objectFit="cover"
+              alt="Post Image"
+              className="md:rounded-l-md object-cover"
+            />
+          </div>
+          <PostActions className="md:hidden border-b p-2.5" />
+          <CommentForm postId={id} className="md:hidden" inputRef={inputRef} />
+          <ViewPost className="md:hidden" />
+        </DialogContent>
+      </Dialog>
+      <PostMoreOptions />
+    </>
   );
 }
 

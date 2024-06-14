@@ -8,12 +8,9 @@ import { Card } from "../ui/card";
 import CommentForm from "./comment-form";
 import Image from "next/image";
 import SummaryProfile from "../summary-profile";
+import MiniPost from "./mini-post";
 
 const SinglePost = ({ id }: { id: string }) => {
-  const username = "PostUsername";
-  const name = "name";
-  const postImageSrc = "https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp";
-
   return (
     <>
       <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9">
@@ -37,7 +34,9 @@ const SinglePost = ({ id }: { id: string }) => {
                       className="w-9 h-9"
                     />
                     <div className="mx-2">
-                      <span>PostUsername</span>
+                      <span className="text-small">PostUsername</span>
+                      <span className="font-bold text-medium"> • </span>
+                      <span className="text-small hover:text-gray-500">Add friends</span>
                     </div>
                   </div>
                 </Link>

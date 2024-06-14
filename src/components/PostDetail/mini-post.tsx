@@ -16,6 +16,11 @@ const MiniPost = ({ post }: { post: ApiSuccessResponse<PostResponse> }) => {
 
   const UserOwn = authData?.username;
 
+  const isEdited = post.data.created_at !== post.data.updated_at;
+
+  console.log(post.data.created_at);
+  console.log(post.data.updated_at);
+
   return (
     <div className="group p-3 px-3.5 flex items-start space-x-2.5">
       <Link href={href}>
@@ -32,12 +37,15 @@ const MiniPost = ({ post }: { post: ApiSuccessResponse<PostResponse> }) => {
           <p className="font-normal text-black">{post.data.caption}</p>
         </div>
         <div className="flex h-5 items-center space-x-2.5">
-          <span className="text-xs text-gray-500">
-            {" "}
-            {formatDistanceToNow(post.data.created_at, {
-              addSuffix: true,
-            })}
-          </span>
+          {!isEdited ? (
+            <span className="text-xs text-gray-500">
+              {formatDistanceToNow(new Date(post.data.created_at), { addSuffix: true })}
+            </span>
+          ) : (
+            <span className="text-xs text-gray-500">
+              Edited · {formatDistanceToNow(new Date(post.data.updated_at), { addSuffix: true })}
+            </span>
+          )}
         </div>
       </div>
     </div>

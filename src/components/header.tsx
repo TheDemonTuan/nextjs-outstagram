@@ -13,7 +13,7 @@ import {
 import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { Fragment, act, useCallback, useEffect, useRef } from "react";
+import React, { Fragment, act, useCallback, useEffect, useRef, useState } from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
@@ -30,6 +30,7 @@ import { UserSearch } from "@/graphql/user";
 import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "@/lib/graphql";
 import { userKey } from "@/api/user";
+import { SearchHeaderSkeleton } from "./skeletons";
 import SideBarInbox from "./Chats/sidebar-inbox";
 
 const HeaderMenu = [
@@ -233,6 +234,7 @@ export default Header;
 const Search = () => {
   const keyWordRef = useRef<HTMLInputElement>(null);
   const [searchKeyword, setSearchKeyword] = React.useState("");
+  const [skeletonCount, setSkeletonCount] = useState(0);
 
   const {
     data: searchData,
@@ -248,6 +250,24 @@ const Search = () => {
   const debouncedHandleSearch = _.debounce(() => {
     setSearchKeyword(keyWordRef.current?.value || "");
   }, 1000);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (searchIsLoading) {
+      setSkeletonCount(9);
+      timeout = setInterval(() => {
+        setSkeletonCount((prevCount) => {
+          if (prevCount < 9) {
+            return prevCount + 1;
+          } else {
+            clearInterval(timeout);
+            return prevCount;
+          }
+        });
+      }, 100);
+    }
+    return () => clearInterval(timeout);
+  }, [searchIsLoading]);
 
   return (
     <div className="flex flex-col">
@@ -277,6 +297,13 @@ const Search = () => {
         />
       </div>
       <div className={cn("flex flex-col", !keyWordRef.current?.value && "p-6")}>
+        {searchIsLoading && (
+          <>
+            {Array.from({ length: skeletonCount }).map((_, index) => (
+              <SearchHeaderSkeleton key={index} />
+            ))}
+          </>
+        )}
         {keyWordRef.current?.value && !searchIsLoading && searchData?.userSearch?.length && (
           <>
             {searchData?.userSearch?.map((user) => {

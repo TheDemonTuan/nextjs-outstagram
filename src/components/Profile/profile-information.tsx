@@ -52,7 +52,7 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
             <div className="pt-6">
               <span className="text-base font-semibold text-black-700 mr-2 leading-5">{user?.full_name}</span>
             </div>
-            <div className="">
+            <div className="pt-3">
               <p className="text-base text-black-700 mr-2 leading-5">{user?.bio}</p>
             </div>
           </div>

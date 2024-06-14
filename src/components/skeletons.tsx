@@ -98,3 +98,84 @@ export function SuggestionsSkeleton() {
     </div>
   );
 }
+
+export function ProfileSkeleton() {
+  return (
+    <div className="flex flex-col max-full mt-9 mx-16 mb-40">
+      <div className="flex flex-row mx-28">
+        <div className="mt-2 mx-16">
+          <div className="rounded-full w-40 h-40">
+            <Skeleton className="w-40 h-40 rounded-full" />
+          </div>
+        </div>
+        <div className="flex flex-col mx-6">
+          <div className="flex flex-row ">
+            <Skeleton className="h-10 w-72" />
+          </div>
+          <div className="mt-8 flex flex-row">
+            <Skeleton className="h-5 w-64" />
+          </div>
+          <div className="flex flex-col">
+            <div className="pt-6">
+              <Skeleton className="h-5 w-32" />
+            </div>
+            <div className="pt-3">
+              <Skeleton className="h-5 w-56" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-row mt-10 mx-28">
+        <div className="max-w-3xl justify-center">
+          <div className="flex space-x-8  w-full border-gray-200 mx-20">
+            <div className="flex flex-col items-center">
+              <div className="h-20 w-20 bg-gray-200 p-[1.5px] rounded-full">
+                <div className="bg-white rounded-full p-1 h-full w-full overflow-hidden">
+                  <Skeleton className="rounded-full h-full" />
+                </div>
+              </div>
+              <Skeleton className="mt-2 w-20 h-2" />
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="h-20 w-20 bg-gray-200 p-[1.5px] rounded-full">
+                <div className="bg-white rounded-full p-1 h-full w-full overflow-hidden">
+                  <Skeleton className="rounded-full h-full" />
+                </div>
+              </div>
+              <Skeleton className="mt-2 w-20 h-2" />
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="h-20 w-20 bg-gray-200 p-[1.5px] rounded-full">
+                <div className="bg-white rounded-full p-1 h-full w-full overflow-hidden">
+                  <Skeleton className="rounded-full h-full" />
+                </div>
+              </div>
+              <Skeleton className="mt-2 w-20 h-2" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full">
+        <hr className="border-gray-300 mt-14 border-t mx-28" />
+      </div>
+      <div className="flex justify-center gap-10 mb-1">
+        <button className="py-4 mx-2 text-sm font-normal flex gap-2">
+          <Skeleton className="w-[72px] h-[22px] rounded-md " />
+        </button>
+        <button className="py-4 mx-2 text-sm font-normal flex gap-2">
+          <Skeleton className="w-[72px] h-[22px] rounded-md " />
+        </button>
+        <button className="py-4 mx-2 text-sm font-normal flex gap-2">
+          <Skeleton className="w-[72px] h-[22px] rounded-md " />
+        </button>
+      </div>
+      <div className="grid grid-cols-3 gap-1 mx-28">
+        <Skeleton className="w-full h-[310px] rounded-md" />
+        <Skeleton className="w-full h-[310px] rounded-md" />
+        <Skeleton className="w-full h-[310px] rounded-md" />
+      </div>
+    </div>
+  );
+}

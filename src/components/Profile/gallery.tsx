@@ -22,13 +22,6 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
 
   return (
     <div className="grid grid-cols-3 gap-1 mx-28">
-      {/* {loading && (
-        <>
-          <Skeleton className="w-full h-[310px] rounded-md" />
-          <Skeleton className="w-full h-[310px] rounded-md" />
-          <Skeleton className="w-full h-[310px] rounded-md" />
-        </>
-      )} */}
       {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         return (

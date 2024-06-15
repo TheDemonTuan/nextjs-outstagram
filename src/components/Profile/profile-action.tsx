@@ -34,7 +34,7 @@ const btnClass =
 
 const ProfileAction = (props: ProfileActionProps) => {
   const { modalOpen } = useModalStore();
-  const { userProfile } = props.user;
+  const { user } = props.user.userProfile;
 
   return (
     <>
@@ -54,14 +54,14 @@ const ProfileAction = (props: ProfileActionProps) => {
           <ProfileSettings />
         </div>
       )}
-      {!props.isMe && userProfile?.user.id && <ProfileActionGuest toUserID={userProfile?.user.id} />}
+      {!props.isMe && user && <ProfileActionGuest user={user} />}
     </>
   );
 };
 
 export default ProfileAction;
 
-const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
+const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["user"] }) => {
   const { modalOpen } = useModalStore();
   const queryClient = useQueryClient();
 
@@ -71,10 +71,10 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     status: friendStatus,
     isLoading: friendIsLoading,
   } = useQuery<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, FriendResponse>({
-    queryKey: [friendKey, toUserID],
-    queryFn: async () => friendGetByUserID(toUserID),
+    queryKey: [friendKey, user?.id],
+    queryFn: async () => friendGetByUserID(user?.id),
     select: (data) => data.data,
-    enabled: !!toUserID,
+    enabled: !!user?.id,
   });
 
   const { mutate: friendSendRequestMutate, isPending: friendSendRequestIsPending } = useMutation<
@@ -85,7 +85,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     mutationFn: async (params) => await friendSendRequest(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [friendKey, toUserID],
+        queryKey: [friendKey, user?.id],
       });
     },
     onError: (error) => {
@@ -101,7 +101,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     mutationFn: async (params) => await friendRejectRequest(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [friendKey, toUserID],
+        queryKey: [friendKey, user?.id],
       });
     },
     onError: (error) => {
@@ -119,7 +119,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
     mutationFn: async (params) => await friendAcceptRequest(params),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [friendKey, toUserID],
+        queryKey: [friendKey, user?.id],
       });
     },
     onError: (error) => {
@@ -128,16 +128,16 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   });
 
   const handleSendRequest = useCallback(() => {
-    friendSendRequestMutate(toUserID);
-  }, [friendSendRequestMutate, toUserID]);
+    friendSendRequestMutate(user?.id);
+  }, [friendSendRequestMutate, user?.id]);
 
   const handleRejectRequest = useCallback(() => {
-    friendRejectMutate(toUserID);
-  }, [friendRejectMutate, toUserID]);
+    friendRejectMutate(user?.id);
+  }, [friendRejectMutate, user?.id]);
 
   const handleAcceptRequest = useCallback(() => {
-    friendAcceptRequestMutate(toUserID);
-  }, [friendAcceptRequestMutate, toUserID]);
+    friendAcceptRequestMutate(user?.id);
+  }, [friendAcceptRequestMutate, user?.id]);
 
   const btnAddFriend = (
     <Button
@@ -201,7 +201,7 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
   const renderButton = () => {
     switch (friendData?.status) {
       case FriendStatus.REQUESTED:
-        return friendData?.from_user_id === toUserID ? btnAcceptRequest : btnCancelRequest;
+        return friendData?.from_user_id === user?.id ? btnAcceptRequest : btnCancelRequest;
       case FriendStatus.ACCEPTED:
         return btnRemoveFriend;
       case FriendStatus.REJECTED:
@@ -220,9 +220,9 @@ const ProfileActionGuest = ({ toUserID }: { toUserID: string }) => {
       <div className="flex items-center gap-2">
         <div className="flex flex-row">{renderButton && renderButton()}</div>
         <div>
-          <Button size="sm" className={btnClass}>
-            Message
-          </Button>
+          <Link href={`/direct/inbox/${user?.username}`} className={btnClass}>
+            Inbox
+          </Link>
         </div>
         <div>
           <Button

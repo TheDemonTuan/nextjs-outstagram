@@ -108,7 +108,7 @@ const Header = () => {
     <>
       <div
         className={cn(
-          "fixed flex h-dvh border-gray-300 border-r z-50 bg-white",
+          "fixed flex h-full border-gray-300 border-r z-50 bg-white",
           isShortHeader ? "w-[470px] rounded-r-lg" : "w-[245px] space-y-6 p-4 pt-6"
         )}>
         <div className={cn("flex flex-col gap-6", isShortHeader ? "w-[72px] p-[10px] mt-2 border-r" : "w-full")}>
@@ -187,9 +187,7 @@ const Header = () => {
               )
             ) : (
               <div className={MenuItemClass}>
-                <div>
-                  <Skeleton className="flex rounded-full w-[26px] h-[26px]" />
-                </div>
+                <Skeleton className="flex rounded-full w-[26px] h-[26px]" />
                 <Skeleton className="h-3 w-4/5 rounded-lg" />
               </div>
             )}

@@ -44,7 +44,6 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
 
   useEffect(() => {
     if (userProfileError) {
-      toast.error("User not found");
       notFound();
     }
   }, [userProfileError]);

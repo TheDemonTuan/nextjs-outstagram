@@ -1,51 +1,82 @@
 "use client";
 
-import { EmojiLookBottomIcon, LikeHeartIcon, ImgBoxIcon, MicIcon } from "@/icons";
-import React, { useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import MessageInput from "./message-input";
+import { InboxResponse, InboxResponseParams, inboxKey, inboxSendMessages } from "@/api/inbox";
+import { InboxGetAllBubbleQuery, InboxGetByUsernameQuery } from "@/gql/graphql";
+import { EmojiLookBottomIcon, ImgBoxIcon, MicIcon, UnLikeHeartIcon } from "@/icons";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { moveElementToFront } from "@/lib/utils";
+import { useInboxStore } from "@/stores/inbox-store";
+import { Input, Spinner } from "@nextui-org/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { toast } from "sonner";
 
 const FormInbox = () => {
-  const [message, setMessage] = useState("");
-  const {
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<FieldValues>({
-    defaultValues: {
-      message: "",
+  const [value, setValue] = React.useState("");
+  const { username } = useInboxStore();
+  const queryClient = useQueryClient();
+
+  const { mutate: inboxSendMutate, isPending: inboxSendIsPending } = useMutation<
+    ApiSuccessResponse<InboxResponse>,
+    ApiErrorResponse,
+    InboxResponseParams
+  >({
+    mutationFn: (params) => inboxSendMessages(params),
+    onSuccess: (inbox) => {
+      queryClient.setQueryData([inboxKey, { username }], (data: InboxGetByUsernameQuery) => {
+        return { ...data, inboxGetByUsername: [...data.inboxGetByUsername, inbox.data] };
+      });
+
+      queryClient.setQueryData([inboxKey, "all"], (data: InboxGetAllBubbleQuery) => {
+        const findUserNamePosition = data.inboxGetAllBubble.findIndex((inbox) => inbox.username === username);
+        const cloneData = [...data.inboxGetAllBubble];
+        cloneData[findUserNamePosition].last_message = inbox.data.message;
+        cloneData[findUserNamePosition].created_at = inbox.data.created_at;
+        cloneData[findUserNamePosition].is_read = false;
+        moveElementToFront(cloneData, findUserNamePosition);
+        return { ...data, inboxGetAllBubble: cloneData };
+      });
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Send inbox failed!");
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {};
+  const handleSubmit = () => {
+    if (!value) return;
+    inboxSendMutate({ username, message: value });
+    setValue("");
+  };
 
   return (
-    <div className="sticky bottom-0 py-4 px-4 bg-white items-center gap-2 lg:gap-4 w-full z-10">
-      <div className="flex text-xs font-light text-gray-500 px-3 justify-end py-3">Seen just now</div>
-      <div className="border-1 py-0 px-4 flex items-center rounded-full gap-2 lg:gap-4 w-full">
-        <EmojiLookBottomIcon />
-        <form onSubmit={handleSubmit(onSubmit)} className="flex items-center gap-2 lg:gap-4 w-full">
-          <MessageInput id="message" errors={errors} required placeholder="Message..." />
-          {/* <button type="submit" className="p-2 cursor-pointer transition">
-            <span className="hover:text-sky-900 font-bold text-sky-500">
-              Send
-            </span>
-          </button> */}
-          {/* 3 icon sẽ hiển thị khi chưa nhập */}
-          <div className="flex flex-row">
-            <div className="p-2">
-              <MicIcon />
-            </div>
-            <div className="p-2">
-              <ImgBoxIcon />
-            </div>
-            <div className="p-2">
-              <LikeHeartIcon />
-            </div>
+    <Input
+      className="p-4 bg-none"
+      variant="bordered"
+      radius="full"
+      size="lg"
+      startContent={<EmojiLookBottomIcon className="w-7 h-7" />}
+      endContent={
+        inboxSendIsPending ? (
+          <Spinner size="sm" />
+        ) : !value ? (
+          <div className="flex items-center gap-4">
+            <MicIcon className="w-6 h-6" />
+            <ImgBoxIcon className="w-6 h-6" />
+            <UnLikeHeartIcon className="w-6 h-6" />
           </div>
-        </form>
-      </div>
-    </div>
+        ) : (
+          <span
+            onClick={handleSubmit}
+            onKeyDownCapture={(e) => e.key === "Enter" && handleSubmit()}
+            className="p-2 cursor-pointer transition font-bold text-primary-400 hover:text-primary-200">
+            Send
+          </span>
+        )
+      }
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      isDisabled={inboxSendIsPending}
+    />
   );
 };
 

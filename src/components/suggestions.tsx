@@ -73,6 +73,7 @@ const Suggestions = () => {
                   isShowFullName={true}
                   className="w-11 h-11"
                   avatar={user.avatar || ""}
+                  is_admin={false}
                 />
               </div>
             </div>

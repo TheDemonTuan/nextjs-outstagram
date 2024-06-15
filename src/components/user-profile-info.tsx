@@ -4,18 +4,21 @@ import { Spinner } from "@nextui-org/react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { VerifiedIcon } from "@/icons";
 const UserProfileInfo = ({
   avatar,
   full_name,
   username,
   isShowFullName,
   className,
+  is_admin,
 }: {
   avatar: string;
   full_name: string;
   username: string;
   isShowFullName: boolean;
   className: string;
+  is_admin: boolean;
 }) => {
   return (
     <>
@@ -28,9 +31,12 @@ const UserProfileInfo = ({
         </Avatar>
       </Link>
       <div className="flex-1">
-        <Link href={`/${username}`} className="font-semibold text-sm">
-          {username}
-        </Link>
+        <div className="flex items-center">
+          <Link href={`/${username}`} className="font-semibold text-sm">
+            {username}
+          </Link>
+          {is_admin && <VerifiedIcon className="w-3 h-3 mx-1" />}
+        </div>
         {isShowFullName && <h3 className="text-xs text-gray-400">{full_name}</h3>}
       </div>
     </>

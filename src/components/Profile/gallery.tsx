@@ -22,14 +22,13 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
         const postFiles = post?.post_files || [];
         return (
           <Link key={post.id} href={`/p/${post.id}`} className="relative group cursor-pointer">
-            <div className="w-full h-[310px]">
+            <div className="w-full h-[330px]">
               <Image
-                className="absolute top-0 left-0 object-cover w-full h-full rounded-md"
+                className="object-cover w-full h-full rounded-md"
                 src={post?.post_files?.[0]?.url || "/camera-b.png"}
                 alt={"image " + post.id}
                 width={500}
                 height={500}
-                sizes="(max-width: 640px) 100vw, 50vw"
               />
               {postFiles?.length > 1 && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
@@ -37,7 +36,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                 </div>
               )}
             </div>
-            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6">
+            <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6 rounded-md">
               <div className="flex items-center font-bold space-x-1 mx-2">
                 <LikeHeartIcon className="text-white fill-white" />
                 <p className="text-white">{post?.post_likes?.length || 0}</p>

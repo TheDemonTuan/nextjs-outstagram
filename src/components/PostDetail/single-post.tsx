@@ -16,7 +16,7 @@ const SinglePost = ({ id }: { id: string }) => {
       <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9">
         <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full">
           <Image
-            src="https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp"
+            src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718447676/posts/ehiplarfv0iai4ud3zh2.webp"
             alt="Post preview"
             fill
             className="md:rounded-l-md object-cover"

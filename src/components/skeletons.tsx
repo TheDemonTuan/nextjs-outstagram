@@ -9,7 +9,7 @@ export function ViewPostSkeleton() {
       <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
         <Skeleton className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full " />
 
-        <div className="flex flex-col h-full py-4 pl-3.5 pr-6 flex-1">
+        <div className="flex flex-col h-full py-4 pl-3.5 pr-6 flex-1 border-b-1">
           <div className="flex items-center space-x-4">
             <Skeleton className="h-11 w-11 rounded-full" />
             <div className="space-y-2">
@@ -19,7 +19,7 @@ export function ViewPostSkeleton() {
           </div>
           <div className="flex-1 my-4" />
 
-          <div className="flex items-center w-full space-x-4">
+          <div className="flex items-center w-full space-x-4 border-t-1">
             <div className="space-y-2 w-full">
               <Skeleton className="h-3 w-[100px] flex-1" />
               <Skeleton className="h-3 w-[200px]" />

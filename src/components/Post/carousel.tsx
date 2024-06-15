@@ -23,33 +23,22 @@ export default function Carousel({
   }, [autoSlide, autoSlideInterval, next]);
 
   return (
-    <div className="overflow-hidden relative">
+    <div className="overflow-hidden relative bg-black">
       <div
-        className="flex transition-transform ease-out duration-500"
+        className="flex transition-transform ease-out duration-500 w-full h-full"
         style={{ transform: `translateX(-${curr * 100}%)` }}>
         {slides.map((img, index) => (
           <Image
             src={img}
             alt=""
-            className="object-cover rounded-sm  w-full max-h-[590px] min-h-250px"
+            className="rounded-sm max-h-[590px] w-full object-contain flex-shrink-0"
             key={index}
-            width={500}
-            height={500}
+            width={590}
+            height={590}
             priority
           />
         ))}
       </div>
-      {/* <div key={index} className="w-full h-full">
-        <ReactPlayer
-          url={slide.content}
-          width="100%"
-          height="100%"
-          controls
-          playing={index === curr} 
-          muted
-          className="react-player"
-        />
-      </div> */}
 
       {slides.length > 1 && (
         <>

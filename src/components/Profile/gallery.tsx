@@ -27,7 +27,9 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                 className="absolute top-0 left-0 object-cover w-full h-full rounded-md"
                 src={post?.post_files?.[0]?.url || "/camera-b.png"}
                 alt={"image " + post.id}
-                fill
+                width={500}
+                height={500}
+                sizes="(max-width: 640px) 100vw, 50vw"
               />
               {postFiles?.length > 1 && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">

@@ -4,7 +4,8 @@ import React, { Fragment, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { Tooltip } from "@nextui-org/react";
+import { Divider, Tooltip } from "@nextui-org/react";
+import "react-image-gallery/styles/css/image-gallery.css";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
 import { useModalStore } from "@/stores/modal-store";
@@ -23,7 +24,7 @@ import { graphQLClient } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import Likes, { LikesModalKey } from "./likes";
 import { EmojiLookBottomIcon } from "@/icons";
-import { toast } from "sonner";
+import Image from "next/image";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
@@ -162,7 +163,20 @@ const Post = () => {
             </Card>
           );
         })}
+        <div className="border-y-1 w-full max-w-lg">
+          <div className="flex flex-col my-12 justify-center items-center text-center space-y-4">
+            <Image src="/illo-confirm-refresh-light.png" alt="" className="object-cover" width={100} height={100} />
+            <div className="space-y-1">
+              <div className="text-xl">You&apos;ve completely caught up</div>
+              <div className="text-sm text-neutral-500">You&apos;ve seen all new posts from the past 3 days.</div>
+            </div>
+            <Link href="/" className="text-sm font-semibold text-sky-500 cursor-pointer">
+              View older posts
+            </Link>
+          </div>
+        </div>
       </div>
+
       <PostMoreOptions />
       <Likes />
     </>

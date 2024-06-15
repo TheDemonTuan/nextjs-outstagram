@@ -11,6 +11,7 @@ import { UserSuggestionDocument } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
 import { useQuery } from "@tanstack/react-query";
 import { SuggestionsSkeleton } from "./skeletons";
+import UserProfileInfo from "./user-profile-info";
 
 const Suggestions = () => {
   const { authData } = useAuth();
@@ -51,8 +52,8 @@ const Suggestions = () => {
         <div key={user.username} className="flex items-center justify-between gap-3">
           <Tooltip content={user && <SummaryProfile user={user as UserResponse} />} placement="bottom-start">
             <div className="flex items-center gap-2 text-sm font-medium">
-              <div className="flex flex-row gap-3">
-                <Link href={`/${user.username}`}>
+              <div className="flex flex-row gap-3 items-center">
+                {/* <Link href={`/${user.username}`}>
                   <Avatar className="w-11 h-11">
                     <AvatarImage className="object-cover" src={getUserAvatarURL(user.avatar)} />
                     <AvatarFallback>
@@ -65,7 +66,15 @@ const Suggestions = () => {
                     {user.username}
                   </Link>
                   <h3 className="text-xs text-gray-400">{user.full_name}</h3>
-                </div>
+                </div> */}
+                <UserProfileInfo
+                  username={user.username || ""}
+                  full_name={user.full_name || ""}
+                  isShowFullName={true}
+                  className="w-11 h-11"
+                  avatar={user.avatar || ""}
+                  is_admin={false}
+                />
               </div>
             </div>
           </Tooltip>

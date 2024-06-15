@@ -29,19 +29,41 @@ export type Friend = {
   updated_at?: Maybe<Scalars['String']['output']>;
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  createTodo: User;
+export type Inbox = {
+  __typename?: 'Inbox';
+  created_at?: Maybe<Scalars['String']['output']>;
+  deleted_at?: Maybe<Scalars['String']['output']>;
+  files?: Maybe<Array<Maybe<InboxFile>>>;
+  from_user_id: Scalars['ID']['output'];
+  from_user_info?: Maybe<User>;
+  id: Scalars['ID']['output'];
+  is_read?: Maybe<Scalars['Boolean']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  to_user_id: Scalars['ID']['output'];
+  to_user_info?: Maybe<User>;
+  updated_at?: Maybe<Scalars['String']['output']>;
 };
 
-
-export type MutationCreateTodoArgs = {
-  input: NewTodo;
+export type InboxFile = {
+  __typename?: 'InboxFile';
+  active?: Maybe<Scalars['Boolean']['output']>;
+  created_at?: Maybe<Scalars['String']['output']>;
+  deleted_at?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  inbox_id: Scalars['ID']['output'];
+  type?: Maybe<Scalars['String']['output']>;
+  updated_at?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
 };
 
-export type NewTodo = {
-  text: Scalars['String']['input'];
-  userId: Scalars['String']['input'];
+export type InboxGetAllBubble = {
+  __typename?: 'InboxGetAllBubble';
+  avatar: Scalars['String']['output'];
+  created_at: Scalars['String']['output'];
+  full_name: Scalars['String']['output'];
+  is_read: Scalars['Boolean']['output'];
+  last_message: Scalars['String']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type Post = {
@@ -98,12 +120,19 @@ export type PostLike = {
 
 export type Query = {
   __typename?: 'Query';
+  inboxGetAllBubble: Array<InboxGetAllBubble>;
+  inboxGetByUsername: Array<Inbox>;
   postByUsername: Array<Post>;
   postHomePage: Array<Post>;
   userByUsername: User;
   userProfile: UserProfile;
   userSearch: Array<UserSearch>;
   userSuggestion: Array<UserSuggestion>;
+};
+
+
+export type QueryInboxGetByUsernameArgs = {
+  username: Scalars['String']['input'];
 };
 
 
@@ -181,6 +210,18 @@ export type UserSuggestion = {
   username?: Maybe<Scalars['String']['output']>;
 };
 
+export type InboxGetAllBubbleQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InboxGetAllBubbleQuery = { __typename?: 'Query', inboxGetAllBubble: Array<{ __typename?: 'InboxGetAllBubble', username: string, avatar: string, full_name: string, last_message: string, is_read: boolean, created_at: string }> };
+
+export type InboxGetByUsernameQueryVariables = Exact<{
+  username: Scalars['String']['input'];
+}>;
+
+
+export type InboxGetByUsernameQuery = { __typename?: 'Query', inboxGetByUsername: Array<{ __typename?: 'Inbox', id: string, from_user_id: string, to_user_id: string, message?: string | null, is_read?: boolean | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null }> };
+
 export type PostByUsernameQueryVariables = Exact<{
   username: Scalars['String']['input'];
 }>;
@@ -224,6 +265,8 @@ export type UserProfileQueryVariables = Exact<{
 export type UserProfileQuery = { __typename?: 'Query', userProfile: { __typename?: 'UserProfile', username: string, user: { __typename?: 'User', id: string, username?: string | null, full_name?: string | null, email?: string | null, phone?: string | null, avatar?: string | null, bio?: string | null, birthday?: string | null, gender?: boolean | null, role?: boolean | null, active?: boolean | null, is_private?: boolean | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null }, posts: Array<{ __typename?: 'Post', id: string, user_id: string, caption: string, is_hide_like: boolean, is_hide_comment: boolean, active: boolean, created_at: string, updated_at?: string | null, deleted_at?: string | null, post_likes?: Array<{ __typename?: 'PostLike', id?: string | null, post_id?: string | null, user_id?: string | null, is_liked?: boolean | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null } | null> | null, post_files?: Array<{ __typename?: 'PostFile', id?: string | null, post_id?: string | null, url?: string | null, type?: string | null, active?: boolean | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null } | null> | null, user?: { __typename?: 'User', id: string, username?: string | null, full_name?: string | null, email?: string | null, phone?: string | null, avatar?: string | null, bio?: string | null, birthday?: string | null, gender?: boolean | null, role?: boolean | null, active?: boolean | null, is_private?: boolean | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null } | null }>, friends: Array<{ __typename?: 'Friend', id: string, from_user_id: string, to_user_id: string, status?: number | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null, to_user_info?: { __typename?: 'User', id: string, username?: string | null, full_name?: string | null, email?: string | null, phone?: string | null, avatar?: string | null, bio?: string | null, birthday?: string | null, gender?: boolean | null, role?: boolean | null, active?: boolean | null, is_private?: boolean | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null } | null, from_user_info?: { __typename?: 'User', id: string, username?: string | null, full_name?: string | null, email?: string | null, phone?: string | null, avatar?: string | null, bio?: string | null, birthday?: string | null, gender?: boolean | null, role?: boolean | null, active?: boolean | null, is_private?: boolean | null, created_at?: string | null, updated_at?: string | null, deleted_at?: string | null } | null }> } };
 
 
+export const InboxGetAllBubbleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"InboxGetAllBubble"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inboxGetAllBubble"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"full_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_message"}},{"kind":"Field","name":{"kind":"Name","value":"is_read"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}}]}}]}}]} as unknown as DocumentNode<InboxGetAllBubbleQuery, InboxGetAllBubbleQueryVariables>;
+export const InboxGetByUsernameDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"InboxGetByUsername"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"inboxGetByUsername"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"from_user_id"}},{"kind":"Field","name":{"kind":"Name","value":"to_user_id"}},{"kind":"Field","name":{"kind":"Name","value":"message"}},{"kind":"Field","name":{"kind":"Name","value":"is_read"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"updated_at"}},{"kind":"Field","name":{"kind":"Name","value":"deleted_at"}}]}}]}}]} as unknown as DocumentNode<InboxGetByUsernameQuery, InboxGetByUsernameQueryVariables>;
 export const PostByUsernameDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PostByUsername"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"username"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postByUsername"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"username"},"value":{"kind":"Variable","name":{"kind":"Name","value":"username"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user_id"}},{"kind":"Field","name":{"kind":"Name","value":"caption"}},{"kind":"Field","name":{"kind":"Name","value":"is_hide_like"}},{"kind":"Field","name":{"kind":"Name","value":"is_hide_comment"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"post_files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}}]}}]}}]} as unknown as DocumentNode<PostByUsernameQuery, PostByUsernameQueryVariables>;
 export const PostHomePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PostHomePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"count"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postHomePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"count"},"value":{"kind":"Variable","name":{"kind":"Name","value":"count"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user_id"}},{"kind":"Field","name":{"kind":"Name","value":"caption"}},{"kind":"Field","name":{"kind":"Name","value":"is_hide_like"}},{"kind":"Field","name":{"kind":"Name","value":"is_hide_comment"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"full_name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"post_files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"post_likes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user_id"}},{"kind":"Field","name":{"kind":"Name","value":"is_liked"}}]}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}}]}}]}}]} as unknown as DocumentNode<PostHomePageQuery, PostHomePageQueryVariables>;
 export const UserSearchDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserSearch"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"keyword"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userSearch"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"keyword"},"value":{"kind":"Variable","name":{"kind":"Name","value":"keyword"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"full_name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}},{"kind":"Field","name":{"kind":"Name","value":"active"}}]}}]}}]} as unknown as DocumentNode<UserSearchQuery, UserSearchQueryVariables>;

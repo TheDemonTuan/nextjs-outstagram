@@ -24,7 +24,6 @@ export default function RootLayout({
           <SocketProvider>{children}</SocketProvider>
         </Provider>
         <Toaster
-          richColors
           closeButton
           position="top-right"
           toastOptions={{

@@ -1,28 +1,26 @@
-"use-client";
-import { Avatar, Image } from "@nextui-org/react";
+import { InboxGetAllBubbleQuery } from "@/gql/graphql";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { Avatar } from "@nextui-org/react";
+import { formatDistanceToNow } from "date-fns";
 import React from "react";
 
-const UserBox = () => {
+const UserBox = ({ inbox }: { inbox: InboxGetAllBubbleQuery["inboxGetAllBubble"][number] }) => {
   return (
-    <div className="flex flex-row items-center">
-      <div className="relative h-[70px] w-16">
-        <div className="relative inline-block overflow-hidden w-16 h-[70px] py-2">
-          <Avatar
-            alt="avatar"
-            src="https://images.pexels.com/photos/372166/pexels-photo-372166.jpeg?auto=compress&cs=tinysrgb&w=600"
-            className="w-14 h-14"
-          />
-        </div>
+    <div className="flex items-center gap-1">
+      <div className="relative inline-block overflow-hidden py-2">
+        <Avatar alt="avatar" src={getUserAvatarURL(inbox.avatar)} className="w-14 h-14" />
         <span className="absolute block rounded-full bg-green-500 ring-2 ring-white bottom-2 left-10 h-3 w-3 md:h-3 md:w-3" />
       </div>
-      <div className="  flex flex-col min-w-0">
-        <div className="focus:outline-none">
-          <div className="flex justify-between items-center mb-1">
-            <p className="text-base font-normal text-black">User-messages</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium text-gray-500">2m active </p>
-          </div>
+      <div className="flex flex-col focus:outline-none p-2">
+        <p className="text-base font-medium text-black">{inbox.full_name}</p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-normal text-gray-500">{inbox.last_message}</p>
+          <p className="text-sm font-normal text-gray-500">
+            •{" "}
+            {formatDistanceToNow(inbox.created_at, {
+              addSuffix: true,
+            })}
+          </p>
         </div>
       </div>
     </div>

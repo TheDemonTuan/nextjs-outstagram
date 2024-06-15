@@ -13,8 +13,7 @@ import {
 import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { Fragment, act, useCallback, useEffect, useRef, useState } from "react";
-import "react-image-gallery/styles/css/image-gallery.css";
+import React, { useEffect, useRef } from "react";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -98,6 +97,8 @@ const Header = () => {
 
     if (currentLink?.name && ShortHeaderSpecialList.includes(currentLink?.name)) {
       setIsShortHeader(true);
+    } else {
+      setIsShortHeader(false);
     }
 
     currentLink ? setActiveMenu(currentLink?.name) : setActiveMenu("");
@@ -107,7 +108,7 @@ const Header = () => {
     <>
       <div
         className={cn(
-          "fixed flex h-dvh border-gray-300 border-r z-50 bg-white",
+          "fixed flex h-full border-gray-300 border-r z-50 bg-white",
           isShortHeader ? "w-[470px] rounded-r-lg" : "w-[245px] space-y-6 p-4 pt-6"
         )}>
         <div className={cn("flex flex-col gap-6", isShortHeader ? "w-[72px] p-[10px] mt-2 border-r" : "w-full")}>
@@ -186,9 +187,7 @@ const Header = () => {
               )
             ) : (
               <div className={MenuItemClass}>
-                <div>
-                  <Skeleton className="flex rounded-full w-[26px] h-[26px]" />
-                </div>
+                <Skeleton className="flex rounded-full w-[26px] h-[26px]" />
                 <Skeleton className="h-3 w-4/5 rounded-lg" />
               </div>
             )}

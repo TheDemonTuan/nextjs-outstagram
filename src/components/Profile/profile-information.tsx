@@ -6,7 +6,7 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change-avatar";
 import ProfileAction from "./profile-action";
-import { UserByUsernameQuery, UserProfileQuery } from "@/gql/graphql";
+import {  UserProfileQuery } from "@/gql/graphql";
 import Friends, { FriendsModalKey } from "./friends";
 
 const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) => {

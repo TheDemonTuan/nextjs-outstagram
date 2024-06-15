@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
@@ -28,7 +28,7 @@ import Image from "next/image";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
-  const { authData } = useAuth();
+  const { authData, authFailureReason } = useAuth();
   const {
     data: postsData,
     error: postsError,
@@ -46,11 +46,6 @@ const Post = () => {
       </div>
     );
   }
-
-  if (postsError) {
-    return <div>Failed to load posts</div>;
-  }
-
   return (
     <>
       <div className="flex flex-col items-center gap-1">

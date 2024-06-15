@@ -3,9 +3,7 @@
 import { ContactInfoIcon, LockIcon, ShieldIcon, UserIcon } from "@/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { ChangeEvent, useRef, useState } from "react";
-import "react-image-gallery/styles/css/image-gallery.css";
-
+import React from "react";
 const HeaderSettingsMenu = [
   {
     name: "Edit profile",

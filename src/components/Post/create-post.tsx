@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from "@nextui-org/react";
 import { useModalStore } from "@/stores/modal-store";
 import Image from "next/image";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 export const CreatePostModalKey = "CreatePost";
 

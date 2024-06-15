@@ -1,11 +1,10 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { Tooltip } from "@nextui-org/react";
-import "react-image-gallery/styles/css/image-gallery.css";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
 import { useModalStore } from "@/stores/modal-store";
@@ -24,10 +23,11 @@ import { graphQLClient } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import Likes, { LikesModalKey } from "./likes";
 import { EmojiLookBottomIcon } from "@/icons";
+import { toast } from "sonner";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
-  const { authData } = useAuth();
+  const { authData, authFailureReason } = useAuth();
   const {
     data: postsData,
     error: postsError,
@@ -45,11 +45,6 @@ const Post = () => {
       </div>
     );
   }
-
-  if (postsError) {
-    return <div>Failed to load posts</div>;
-  }
-
   return (
     <>
       <div className="flex flex-col items-center gap-1">

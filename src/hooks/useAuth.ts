@@ -14,6 +14,8 @@ export const useAuth = () => {
     isLoading: authIsLoading,
     refetch: authRefetch,
     isStale: authIsStale,
+    status: authStatus,
+    failureReason: authFailureReason,
   } = useQuery<ApiSuccessResponse<AuthVerifyResponse>, ApiErrorResponse, UserResponse>({
     queryKey: [authKey],
     queryFn: async () => await authVerify(),
@@ -32,6 +34,8 @@ export const useAuth = () => {
     authIsError,
     authRefetch,
     authIsStale,
+    authStatus,
+    authFailureReason,
     authCanUse: !authIsLoading && authIsSuccess && authData,
   };
 };

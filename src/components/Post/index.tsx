@@ -23,6 +23,7 @@ import { postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import Likes, { LikesModalKey } from "./likes";
+import { EmojiLookBottomIcon } from "@/icons";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
@@ -107,7 +108,7 @@ const Post = () => {
                         </div>
                       ) : null}
                     </CardContent>
-                    <CardFooter className="p-2 pb-4 grid gap-2">
+                    <CardFooter className="p-2 grid gap-2">
                       <PostReact postID={post.id} isLiked={isUserLiked ?? false} />
                       <div></div>
                       <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
@@ -125,10 +126,9 @@ const Post = () => {
                           Wow, this photo is absolutely stunning! 😍✨
                         </div>
                         <div>
-                          <Link className="font-medium" href="#">
-                            amelia
+                          <Link className=" text-neutral-400" href={`/p/${post.id}`}>
+                            View all 39 comments
                           </Link>
-                          This post just made my day! 😃👍
                         </div>
                       </div>
                     </CardFooter>
@@ -136,20 +136,31 @@ const Post = () => {
                 </div>
               </CardContent>
               <CardFooter className="p-2">
-                <div className="flex gap-2">
-                  <Avatar className="w-9 h-9">
-                    <AvatarImage
-                      className="object-cover"
-                      alt={authData?.username ?? "User Avatar"}
-                      src={getUserAvatarURL(authData?.avatar)}
-                    />
-                    <AvatarFallback>{authData?.username}</AvatarFallback>
-                  </Avatar>
+                <div className="flex gap-2 justify-between w-full items-center">
                   <input
                     type="text"
-                    className="w-full p-2 text-sm bg-gray-100 rounded-full focus:outline-none"
+                    name="body"
+                    className="
+                    bg-transparent
+                    text-sm
+                    border-none
+                    focus:outline-none
+                    flex-1
+                    dark:text-neutral-400
+                    placeholder-neutral-400
+                    font-normal
+                    disabled:opacity-30"
                     placeholder="Add a comment..."
                   />
+                </div>
+                <div className="flex items-center space-x-3">
+                  <button
+                    hidden
+                    type="submit"
+                    className="text-sky-500 text-base font-semibold hover:text-sky-700 dark:hover:text-white disabled:cursor-not-allowed  dark:disabled:text-slate-500 disabled:text-sky-500/40 disabled:hover:text-sky-500/40 dark:disabled:hover:text-slate-500">
+                    Post
+                  </button>
+                  <EmojiLookBottomIcon className="w-4 h-4" />
                 </div>
               </CardFooter>
               {index === postsData?.postHomePage.length - 1 ? null : <hr className="border-gray-300 w-full mt-2" />}

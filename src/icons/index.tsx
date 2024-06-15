@@ -364,7 +364,7 @@ export const UserIcon = (props: SVGProps<SVGSVGElement>) => {
 export const ArchiveIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg {...props} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_1_58)">
+      <g clipPath="url(#clip0_1_58)">
         <path
           d="M12 1.505C13.7268 1.50479 15.427 1.93049 16.95 2.74436C18.473 3.55824 19.7718 4.73518 20.7313 6.17092C21.6907 7.60666 22.2813 9.25687 22.4506 10.9754C22.62 12.6939 22.3628 14.4276 21.702 16.023C21.0412 17.6184 19.9972 19.0262 18.6623 20.1217C17.3274 21.2171 15.743 21.9665 14.0493 22.3033C12.3557 22.6401 10.6051 22.5541 8.95265 22.0527C7.30022 21.5513 5.79694 20.6502 4.57599 19.429"
           stroke="#262626"

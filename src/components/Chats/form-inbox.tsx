@@ -33,8 +33,25 @@ const FormInbox = () => {
         cloneData[findUserNamePosition].last_message = inbox.data.message;
         cloneData[findUserNamePosition].created_at = inbox.data.created_at;
         cloneData[findUserNamePosition].is_read = false;
-        moveElementToFront(cloneData, findUserNamePosition);
-        return { ...data, inboxGetAllBubble: cloneData };
+        findUserNamePosition > 0 && moveElementToFront(cloneData, findUserNamePosition);
+        if (!findUserNamePosition) {
+          data.inboxGetAllBubble.shift();
+          return {
+            ...data,
+            inboxGetAllBubble: [
+              {
+                ...cloneData[findUserNamePosition],
+              },
+              ...data.inboxGetAllBubble,
+            ],
+          };
+        }
+        return {
+          ...data,
+          inboxGetAllBubble: [
+            ...cloneData,
+          ],
+        };
       });
     },
     onError: (error) => {

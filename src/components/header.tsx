@@ -13,8 +13,7 @@ import {
 import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { Fragment, act, useCallback, useEffect, useRef, useState } from "react";
-import "react-image-gallery/styles/css/image-gallery.css";
+import React, { useEffect, useRef } from "react";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -98,6 +97,8 @@ const Header = () => {
 
     if (currentLink?.name && ShortHeaderSpecialList.includes(currentLink?.name)) {
       setIsShortHeader(true);
+    } else {
+      setIsShortHeader(false);
     }
 
     currentLink ? setActiveMenu(currentLink?.name) : setActiveMenu("");

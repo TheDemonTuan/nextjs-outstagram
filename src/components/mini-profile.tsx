@@ -3,7 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { Button, Spinner } from "@nextui-org/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { useModalStore } from "@/stores/modal-store";
@@ -50,6 +50,7 @@ const SignOutModalKey = "SignOut";
 
 const SignOutAlert = () => {
   const { modalKey, modalClose } = useModalStore();
+  const queryClient = useQueryClient();
 
   const handleSignOut = async () => {
     toast.promise(clearJWT(), {
@@ -57,6 +58,7 @@ const SignOutAlert = () => {
       success: "Logged out successfully! 👋",
       error: "Failed to log out! 😵",
     });
+    queryClient.clear();
     modalClose();
   };
 

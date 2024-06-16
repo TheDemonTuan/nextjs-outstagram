@@ -1,7 +1,7 @@
 "use client";
 import { PostResponse } from "@/api/post";
 import { useRouter } from "next/navigation";
-import React, {  useRef } from "react";
+import React, { useRef } from "react";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
@@ -19,12 +19,13 @@ import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { LikesModalKey } from "../Post/likes";
 import { formatDistanceToNow } from "date-fns";
+import { PostByPostIdQuery } from "@/gql/graphql";
 
-function PostView({ id, post }: { id: string; post: ApiSuccessResponse<PostResponse> }) {
+function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPostId"] }) {
   const { modalOpen, setModalData } = useModalStore();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const username = post.data.user_id;
+  const username = post.user_id;
 
   return (
     <>

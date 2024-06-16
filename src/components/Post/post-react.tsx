@@ -1,6 +1,5 @@
-import { PostResponse, postKey } from "@/api/post";
+import { postKey } from "@/api/post";
 import { PostLikeResponse, postLike } from "@/api/post_like";
-import { PostHomePageQuery } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { BookmarkIcon, LikeHeartIcon, MessageCircleIcon, SendIcon, UnLikeHeartIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";

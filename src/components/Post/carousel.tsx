@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
-import { CldVideoPlayer } from "next-cloudinary";
-import "next-cloudinary/dist/cld-video-player.css";
+import ReactPlayer from "react-player/lazy";
 
 export default function Carousel({
   autoSlide = false,
@@ -42,16 +41,16 @@ export default function Carousel({
                 priority
               />
             ) : (
-              <CldVideoPlayer
+              <ReactPlayer
                 key={`video-${slide.id}`}
                 src={slide.url}
-                className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0"
+                className="rounded-sm max-h-[590px] min-h-[240px] w-full"
                 width={590}
                 height={590}
                 controls
-                logo={false}
-                bigPlayButton={false}
-                autoplay="on-scroll"
+                url={slide.url}
+                playing
+                loop
               />
             )}
           </Fragment>
@@ -60,7 +59,8 @@ export default function Carousel({
 
       {slides.length > 1 && (
         <>
-          <div className="absolute inset-0 flex items-center justify-between p-4">
+          <div>
+            {/* <div className="absolute inset-0 flex items-center justify-between p-4"> */}
             <button onClick={prev} className={`${curr === 0 ? "invisible" : ""}`}>
               <FaCircleChevronLeft size={23} color="#B7B8B6" />
             </button>

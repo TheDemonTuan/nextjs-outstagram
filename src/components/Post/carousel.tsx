@@ -11,7 +11,7 @@ export default function Carousel({
 }: {
   autoSlide?: boolean;
   autoSlideInterval?: number;
-  slides: { url: string; type: 0 | 1 }[];
+  slides: { id: string; url: string; type: 0 | 1 }[];
 }) {
   const [curr, setCurr] = useState(0);
 
@@ -33,7 +33,7 @@ export default function Carousel({
           <Fragment key={index}>
             {slide.type === 0 ? (
               <Image
-                key={`image-${index}`}
+                key={`image-${slide.id}`}
                 src={slide.url}
                 alt=""
                 className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0"
@@ -43,15 +43,15 @@ export default function Carousel({
               />
             ) : (
               <CldVideoPlayer
-                key={`video-${index}`}
+                key={`video-${slide.id}`}
                 src={slide.url}
                 className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0"
                 width={590}
                 height={590}
+                controls
                 logo={false}
                 bigPlayButton={false}
                 autoplay="on-scroll"
-                autoPlay={true}
               />
             )}
           </Fragment>

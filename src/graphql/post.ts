@@ -32,6 +32,7 @@ export const PostHomePage = graphql(`
         full_name
       }
       post_files {
+        id
         url
         type
       }

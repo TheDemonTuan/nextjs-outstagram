@@ -18,8 +18,8 @@ export const PostByUserName = graphql(`
 `);
 
 export const PostHomePage = graphql(`
-  query PostHomePage($count: Int!) {
-    postHomePage(count: $count) {
+  query PostHomePage($page: Int!) {
+    postHomePage(page: $page) {
       id
       user_id
       caption

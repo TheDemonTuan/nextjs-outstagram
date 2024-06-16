@@ -48,9 +48,7 @@ const FormInbox = () => {
         }
         return {
           ...data,
-          inboxGetAllBubble: [
-            ...cloneData,
-          ],
+          inboxGetAllBubble: [...cloneData],
         };
       });
     },
@@ -84,7 +82,6 @@ const FormInbox = () => {
         ) : (
           <span
             onClick={handleSubmit}
-            onKeyDownCapture={(e) => e.key === "Enter" && handleSubmit()}
             className="p-2 cursor-pointer transition font-bold text-primary-400 hover:text-primary-200">
             Send
           </span>
@@ -93,6 +90,7 @@ const FormInbox = () => {
       value={value}
       onChange={(e) => setValue(e.target.value)}
       isDisabled={inboxSendIsPending}
+      onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
     />
   );
 };

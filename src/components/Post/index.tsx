@@ -20,7 +20,7 @@ import { PostHomePageDocument } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
-import { graphQLClient } from "@/lib/graphql";
+import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import Likes, { LikesModalKey } from "./likes";
 import { EmojiLookBottomIcon } from "@/icons";
@@ -48,25 +48,26 @@ const Post = () => {
   } = useInfiniteQuery({
     queryKey: [postKey, "home-page"],
     queryFn: async ({ pageParam }) => graphQLClient.request(PostHomePageDocument, { page: pageParam }),
-    initialPageParam: 0,
+    initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {
       if (lastPage.postHomePage.length === 0) {
         return undefined;
       }
-      currentPage.current += 1;
-      return currentPage.current;
+      return ++currentPage.current;
     },
     getPreviousPageParam: (firstPage) => {
-      currentPage.current -= 1;
-      return currentPage.current;
+      return --currentPage.current;
     },
   });
 
   useEffect(() => {
-    if (inView && !postsIsLoading && !isFetchingNextPage && hasNextPage) {
+    if (!postsIsLoading && !isFetchingNextPage && hasNextPage && inView) {
       fetchNextPage();
     }
-  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage, postsIsLoading]);
+
+    return () => {
+    };
+  }, [fetchNextPage, hasNextPage, inView, isFetching, isFetchingNextPage, postsIsLoading]);
 
   if (postsIsLoading) {
     return (
@@ -79,9 +80,9 @@ const Post = () => {
   return (
     <>
       <div className="flex flex-col items-center gap-2">
-        {postsData?.pages.map((page, index) => (
-          <Fragment key={index}>
-            {page.postHomePage.map((post, index) => {
+        {postsData?.pages.map((page, pageIndex) => (
+          <Fragment key={pageIndex}>
+            {page.postHomePage.map((post) => {
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
               return (
@@ -137,8 +138,7 @@ const Post = () => {
                           ) : null}
                         </CardContent>
                         <CardFooter className="p-2 grid gap-2">
-                          <PostReact postID={post.id} isLiked={isUserLiked ?? false} />
-                          <div></div>
+                          <PostReact postID={post.id} isLiked={isUserLiked ?? false} postPage={pageIndex} />
                           <span
                             className="font-semibold text-sm cursor-pointer"
                             onClick={() => modalOpen(LikesModalKey)}>
@@ -199,13 +199,14 @@ const Post = () => {
             })}
           </Fragment>
         ))}
+        <div ref={ref} />
         {isFetchingNextPage ? (
           <div className="flex flex-col items-center gap-2">
             <PostsHomeSkeleton />
             <PostsHomeSkeleton />
           </div>
         ) : hasNextPage ? (
-          <div className="flex flex-col items-center gap-2" ref={ref}>
+          <div className="flex flex-col items-center gap-2">
             <PostsHomeSkeleton />
             <PostsHomeSkeleton />
           </div>
@@ -224,7 +225,6 @@ const Post = () => {
           )
         )}
       </div>
-
       <PostMoreOptions />
       <Likes />
     </>

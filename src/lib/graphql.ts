@@ -5,6 +5,8 @@ const endpoint = `${process.env.NEXT_PUBLIC_API_HOST}/graphql`;
 
 const getAccessToken = () => Promise.resolve(getJWT()).then((token) => `Bearer ${token}`);
 
+export const graphqlAbortController = new AbortController()
+
 const requestMiddleware: RequestMiddleware = async (request) => {
   return {
     ...request,
@@ -13,6 +15,7 @@ const requestMiddleware: RequestMiddleware = async (request) => {
       authorization: await getAccessToken(),
       "Content-Type": "application/json",
     },
+    signal: graphqlAbortController.signal,
   };
 };
 

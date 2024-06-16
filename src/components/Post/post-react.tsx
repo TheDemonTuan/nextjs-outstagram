@@ -1,5 +1,6 @@
 import { PostResponse, postKey } from "@/api/post";
 import { PostLikeResponse, postLike } from "@/api/post_like";
+import { PostHomePageQuery } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { BookmarkIcon, LikeHeartIcon, MessageCircleIcon, SendIcon, UnLikeHeartIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
@@ -8,33 +9,22 @@ import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
 
-const PostReact = ({ postID, isLiked }: { postID: string; isLiked: boolean }) => {
+const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boolean; postPage?: number }) => {
   const queryClient = useQueryClient();
   const { authData } = useAuth();
 
   const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postLike(params),
     onSuccess: (likePostData) => {
-      queryClient.setQueryData([postKey, "me"], (oldData: ApiSuccessResponse<PostResponse[]>) => {
+      queryClient.setQueryData([postKey, "home-page"], (oldData: any) => {
         return {
           ...oldData,
-          data: oldData.data.map((post) => {
-            if (post.id === postID) {
-              return {
-                ...post,
-                post_likes: post.post_likes.map((postLike) => {
-                  if (postLike.user_id === authData?.id) {
-                    return {
-                      ...postLike,
-                      is_liked: likePostData.data.is_liked,
-                    };
-                  }
-                  return postLike;
-                }),
-              };
-            }
-            return post;
-          }),
+          pages: [
+            ...oldData.pages,
+            ...oldData.pages[postPage ?? 0].postHomePage.map((post: any) =>
+              post.id === postID ? { ...post, post_likes: [...post.post_likes, ...[likePostData.data]] } : post
+            ),
+          ],
         };
       });
     },

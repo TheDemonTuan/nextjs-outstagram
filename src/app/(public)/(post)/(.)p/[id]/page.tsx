@@ -1,3 +1,5 @@
+"use client";
+
 import { postGetByPostId, postKey } from "@/api/post";
 import PostView from "@/components/PostDetail/post-view";
 import { PostByPostIdDocument } from "@/gql/graphql";
@@ -11,7 +13,7 @@ type Props = {
   };
 };
 
-const PostModal = async ({ params: { id } }: Props) => {
+const PostModal = ({ params: { id } }: Props) => {
   const {
     data: postData,
     error: postError,
@@ -28,7 +30,6 @@ const PostModal = async ({ params: { id } }: Props) => {
     }
   }, [postError]);
 
-
   if (postIsLoading) {
     return <div>Loading...</div>;
   }
@@ -37,7 +38,7 @@ const PostModal = async ({ params: { id } }: Props) => {
     return <div>User not found</div>;
   }
 
-  const {postByPostId} = postData;
+  const { postByPostId } = postData;
 
   return <PostView id={id} post={postByPostId} />;
 };

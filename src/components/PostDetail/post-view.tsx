@@ -5,7 +5,7 @@ import React, { useRef } from "react";
 import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
-import { Avatar } from "@nextui-org/react";
+import { Avatar, Tooltip } from "@nextui-org/react";
 import { ApiSuccessResponse } from "@/lib/http";
 import MiniPost from "./mini-post";
 import Comment from "./comment";
@@ -17,9 +17,10 @@ import Image from "next/image";
 import { HoverCard, HoverCardTrigger } from "../ui/hover-card";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
-import { LikesModalKey } from "../Post/likes";
+import Likes, { LikesModalKey } from "../Post/likes";
 import { formatDistanceToNow } from "date-fns";
 import { PostByPostIdQuery } from "@/gql/graphql";
+import UserProfileInfo from "../user-profile-info";
 
 function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPostId"] }) {
   const { modalOpen, setModalData } = useModalStore();
@@ -33,37 +34,25 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
         <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
           <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg">
             <DialogHeader className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-6 justify-between">
-              <div>
-                <HoverCard>
-                  <HoverCardTrigger>
-                    <div className="flex flex-row items-center">
-                      <div className="">
-                        <Link href={`/${username}`}>
-                          <Avatar
-                            src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
-                            className="w-8 h-8"
-                          />
-                        </Link>
-                      </div>
-                      <div className="pl-3.5">
-                        <Link href={`/${username}`} className="font-semibold text-[13px] leading-[18px]">
-                          {username}
-                        </Link>
-                      </div>
-                    </div>
-                  </HoverCardTrigger>
-                  {/* <SummaryProfile full_name={name} username={usernamepost} avatar={postImageSrc} /> */}
-                </HoverCard>
-              </div>
-              <div>
-                <span
-                  onClick={() => {
-                    setModalData(post);
-                    modalOpen(PostMoreOptionsModalKey);
-                  }}>
-                  <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer mx-5" stroke="#262626" />
-                </span>
-              </div>
+              <Tooltip>
+                <div className="flex flex-row items-center gap-3">
+                  <UserProfileInfo
+                    username={username || ""}
+                    full_name={""}
+                    isShowFullName={false}
+                    className="w-8 h-8"
+                    avatar="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
+                    is_admin={false}
+                  />
+                </div>
+              </Tooltip>
+              <span
+                onClick={() => {
+                  setModalData(post);
+                  modalOpen(PostMoreOptionsModalKey);
+                }}>
+                <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer mx-5" stroke="#262626" />
+              </span>
             </DialogHeader>
 
             <ScrollArea className="hidden md:inline border-b py-1.5">
@@ -84,7 +73,7 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
             <ViewPost className="hidden md:flex border-b" />
 
             <div className="px-2 hidden md:block mt-auto border-b p-2.5">
-              <PostActions />
+              <PostActions inputRef={inputRef} />
               <div className="flex flex-col">
                 <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
                   1 likes
@@ -92,7 +81,7 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
 
                 <span className="text-xs text-gray-500">
                   {" "}
-                  {formatDistanceToNow(post.data.created_at, {
+                  {formatDistanceToNow(post.created_at, {
                     addSuffix: true,
                   })}
                 </span>
@@ -115,6 +104,7 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
         </DialogContent>
       </Dialog>
       <PostMoreOptions />
+      <Likes />
     </>
   );
 }

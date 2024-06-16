@@ -132,7 +132,13 @@ const Post = () => {
                           {post?.post_files?.length ? (
                             <div className="relative">
                               <div className="slide-container">
-                                <Carousel slides={post.post_files.map((file) => file?.url ?? "")} />
+                                <Carousel
+                                  slides={post.post_files.map((file) => ({
+                                    id: file?.id ?? "",
+                                    url: file?.url ?? "",
+                                    type: file?.type === "1" ? 1 : 0,
+                                  }))}
+                                />
                               </div>
                             </div>
                           ) : null}

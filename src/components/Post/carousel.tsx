@@ -1,6 +1,8 @@
 import Image from "next/image";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Fragment } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
+import { CldVideoPlayer } from "next-cloudinary";
+import "next-cloudinary/dist/cld-video-player.css";
 
 export default function Carousel({
   autoSlide = false,
@@ -9,7 +11,7 @@ export default function Carousel({
 }: {
   autoSlide?: boolean;
   autoSlideInterval?: number;
-  slides: string[];
+  slides: { id: string; url: string; type: 0 | 1 }[];
 }) {
   const [curr, setCurr] = useState(0);
 
@@ -27,16 +29,32 @@ export default function Carousel({
       <div
         className="flex transition-transform ease-out duration-500 w-full h-full"
         style={{ transform: `translateX(-${curr * 100}%)` }}>
-        {slides.map((img, index) => (
-          <Image
-            src={img}
-            alt=""
-            className="rounded-sm max-h-[590px] w-full object-contain flex-shrink-0"
-            key={index}
-            width={590}
-            height={590}
-            priority
-          />
+        {slides.map((slide, index) => (
+          <Fragment key={index}>
+            {slide.type === 0 ? (
+              <Image
+                key={`image-${slide.id}`}
+                src={slide.url}
+                alt=""
+                className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0"
+                width={590}
+                height={590}
+                priority
+              />
+            ) : (
+              <CldVideoPlayer
+                key={`video-${slide.id}`}
+                src={slide.url}
+                className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0"
+                width={590}
+                height={590}
+                controls
+                logo={false}
+                bigPlayButton={false}
+                autoplay="on-scroll"
+              />
+            )}
+          </Fragment>
         ))}
       </div>
 

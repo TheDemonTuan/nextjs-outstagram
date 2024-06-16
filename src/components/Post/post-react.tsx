@@ -20,10 +20,40 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
         return {
           ...oldData,
           pages: [
-            ...oldData.pages,
-            ...oldData.pages[postPage ?? 0].postHomePage.map((post: any) =>
-              post.id === postID ? { ...post, post_likes: [...post.post_likes, ...[likePostData.data]] } : post
-            ),
+            ...oldData.pages.map((page: any, index: any) => {
+              if (index === postPage) {
+                return {
+                  postHomePage: [
+                    ...page.postHomePage.map((post: any) => {
+                      if (post.id === postID) {
+                        if (!post.post_likes?.length) {
+                          return {
+                            ...post,
+                            post_likes: [likePostData.data],
+                          };
+                        }
+                        return {
+                          ...post,
+                          post_likes: [
+                            ...post.post_likes.map((like: any) => {
+                              if (like.user_id === authData?.id) {
+                                return {  
+                                  ...like,
+                                  is_liked: likePostData.data.is_liked,
+                                };
+                              }
+                              return like;
+                            }),
+                          ],
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }
+              return page;
+            }),
           ],
         };
       });

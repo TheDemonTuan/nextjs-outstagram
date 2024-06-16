@@ -65,8 +65,7 @@ const Post = () => {
       fetchNextPage();
     }
 
-    return () => {
-    };
+    return () => {};
   }, [fetchNextPage, hasNextPage, inView, isFetching, isFetchingNextPage, postsIsLoading]);
 
   if (postsIsLoading) {
@@ -144,7 +143,11 @@ const Post = () => {
                           ) : null}
                         </CardContent>
                         <CardFooter className="p-2 grid gap-2">
-                          <PostReact postID={post.id} isLiked={isUserLiked ?? false} postPage={pageIndex} />
+                          <PostReact
+                            postID={post.id}
+                            isLiked={isUserLiked ?? false}
+                            postPage={pageIndex > 0 ? pageIndex : 0}
+                          />
                           <span
                             className="font-semibold text-sm cursor-pointer"
                             onClick={() => modalOpen(LikesModalKey)}>

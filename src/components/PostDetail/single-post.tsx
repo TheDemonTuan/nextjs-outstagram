@@ -19,6 +19,7 @@ import UserProfileInfo from "../user-profile-info";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { useModalStore } from "@/stores/modal-store";
 import Likes, { LikesModalKey } from "../Post/likes";
+import { SinglePostSkeleton } from "../skeletons";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -39,7 +40,7 @@ const SinglePost = ({ id }: { id: string }) => {
   }, [postError]);
 
   if (postIsLoading) {
-    return <div>Loading...</div>;
+    return <SinglePostSkeleton />;
   }
 
   if (!postData) {
@@ -48,7 +49,7 @@ const SinglePost = ({ id }: { id: string }) => {
 
   return (
     <>
-      <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9">
+      <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9 rounded-none shadow-none">
         <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full">
           <Image
             src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718447676/posts/ehiplarfv0iai4ud3zh2.webp"

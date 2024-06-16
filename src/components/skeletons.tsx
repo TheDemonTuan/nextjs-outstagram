@@ -46,8 +46,8 @@ function UserAvatarSkeleton() {
 
 export function SinglePostSkeleton() {
   return (
-    <Card className="max-w-3xl lg:max-w-4xl mx-auto hidden md:flex">
-      <div className="relative overflow-hidden h-[450px] max-w-sm lg:max-w-lg  w-full">
+    <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9 rounded-none shadow-none">
+      <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full">
         <Skeleton className="h-full w-full" />
       </div>
 
@@ -69,6 +69,23 @@ export function SinglePostSkeleton() {
         </div>
       </div>
     </Card>
+  );
+}
+
+export function MorePostSkeleton() {
+  return (
+    <div className="flex flex-col space-y-3 max-w-3xl lg:max-w-4xl mx-auto pb-20">
+      <Skeleton className="h-4 w-[200px]" />
+
+      <div className="grid grid-cols-3 gap-0.5">
+        <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
+        <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
+        <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
+        <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
+        <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
+        <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
+      </div>
+    </div>
   );
 }
 

@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
 import { PostByPostIdDocument } from "@/gql/graphql";
+import { MorePostSkeleton } from "../skeletons";
 
 const MorePosts = ({ postId }: { postId: string }) => {
   const {
@@ -25,7 +26,7 @@ const MorePosts = ({ postId }: { postId: string }) => {
   }, [postError]);
 
   if (postIsLoading) {
-    return <div>Loading...</div>;
+    return <MorePostSkeleton />;
   }
 
   if (!postData) {

@@ -33,6 +33,7 @@ export const PostHomePage = graphql(`
       }
       post_files {
         url
+        type
       }
       post_likes {
         user_id

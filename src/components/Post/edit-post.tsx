@@ -1,23 +1,48 @@
 import { useModalStore } from "@/stores/modal-store";
-import { Button, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
+import {
+  Accordion,
+  AccordionItem,
+  Button,
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@nextui-org/react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { Avatar } from "@nextui-org/react";
 import Link from "next/link";
 import { EmojiLookBottomIcon } from "@/icons";
-import { IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { Input } from "../ui/input";
+import UserProfileInfo from "../user-profile-info";
+import { MdOutlinePublic } from "react-icons/md";
+import { FaLock } from "react-icons/fa6";
+import { FaUserFriends } from "react-icons/fa";
 
 export const EditPostModalKey = "EditPost";
 
 const EditPost = () => {
   const { modalClose, modalKey } = useModalStore();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["Public"]));
   const [text, setText] = useState("");
   const maxLength = 2200;
 
   const handleChange = (event: any) => {
     const { value } = event.target;
     setText(value);
+  };
+
+  const selectedValue = React.useMemo(() => Array.from(selectedKeys).join(", ").replaceAll("_", " "), [selectedKeys]);
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -30,7 +55,7 @@ const EditPost = () => {
       <ModalContent className="h-[550px]">
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-row justify-between items-center my-[-5px]">
+            <ModalHeader className="flex justify-between items-center my-[-5px]">
               <button onClick={onClose} className="cursor-pointer font-normal text-sm ">
                 Cancel
               </button>
@@ -55,17 +80,18 @@ const EditPost = () => {
                 <Divider orientation="vertical" />
                 <div>
                   <div className="flex flex-col">
-                    <Link className="font-semibold text-[12px] leading-[18px]" href="/">
-                      <div className="flex flex-row items-center mx-4 my-4 ">
-                        <Avatar
-                          src="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
-                          className="w-7 h-7 object-cover "
-                        />
-                        <div className="mx-2">
-                          <span>PostUsername</span>
-                        </div>
-                      </div>
-                    </Link>
+                    <div className="flex items-center mx-4 my-4 gap-3">
+                      <UserProfileInfo
+                        username="tui la slmtpsd"
+                        full_name={""}
+                        isShowFullName={false}
+                        className="w-7 h-7"
+                        avatar={
+                          "https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
+                        }
+                        is_admin={false}
+                      />
+                    </div>
                     <div className="relative">
                       <span className="absolute left-2 bottom-2 text-lg ">
                         <EmojiLookBottomIcon className="w-5 h-5" />
@@ -83,28 +109,66 @@ const EditPost = () => {
                     </div>
                   </div>{" "}
                   <Divider />
-                  <div className="flex flex-col ">
-                    <div className="flex flex-row items-center justify-between my-4">
-                      <span className="mx-4 font-semibold text-sm">Accessibility</span>
-                      <IoIosArrowUp size={18} />
-                    </div>
-                    <div>
-                      <p className=" text-gray-500 text-[11px] mx-4">
-                        Alt text describes your photos for people with visual <br /> impairments. Alt text will be
-                        automatically created for <br /> your photos or you can choose to write your own.
-                      </p>
-                    </div>
-                    <div className="flex flex-row items-center">
-                      <div className="relative overflow-hidden h-12 w-12 mx-4 my-4  ">
-                        <Image
-                          src="https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp"
-                          alt="Post preview"
-                          fill
-                          className="object-cover"
-                        />
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between mx-2 my-2">
+                      <div className="flex-col flex">
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <div className="cursor-pointer font-semibold text-base mx-2">{selectedValue}</div>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Single selection example"
+                            variant="flat"
+                            disallowEmptySelection
+                            selectionMode="single"
+                            selectedKeys={selectedKeys}
+                            onSelectionChange={setSelectedKeys}>
+                            <DropdownItem key="Public" startContent={<MdOutlinePublic />}>
+                              Pubic
+                            </DropdownItem>
+                            <DropdownItem key="Private" startContent={<FaLock />}>
+                              Private
+                            </DropdownItem>
+                            <DropdownItem key="Friend" startContent={<FaUserFriends />}>
+                              Friend
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                        <div className="mx-2 text-xs">
+                          {selectedKeys.has("Public") && <span>No matter who is on or off Outstagram</span>}
+                          {selectedKeys.has("Private") && <span>Only me</span>}
+                          {selectedKeys.has("Friend") && <span>Your friends on Outstagram</span>}
+                        </div>
                       </div>
-                      <Input className="w-52 h-12 shadow-none" />
+                      <div>
+                        {selectedKeys.has("Public") && <MdOutlinePublic />}
+                        {selectedKeys.has("Private") && <FaLock />}
+                        {selectedKeys.has("Friend") && <FaUserFriends />}
+                      </div>
                     </div>
+                    <div className="flex items-center justify-between my-4 cursor-pointer" onClick={toggleAccordion}>
+                      <span className="mx-4 font-semibold text-sm">Accessibility</span>
+                      {isOpen ? <IoIosArrowUp size={18} /> : <IoIosArrowDown size={18} />}
+                    </div>
+                    {isOpen && (
+                      <div>
+                        <p className="text-gray-500 text-[11px] mx-4">
+                          Alt text describes your photos for people with visual <br /> impairments. Alt text will be
+                          automatically created for <br /> your photos or you can choose to write your own.
+                        </p>
+                        <div className="flex flex-row items-center">
+                          <div className="relative overflow-hidden h-12 w-12 mx-4 my-4">
+                            <Image
+                              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1716491951/posts/dl8e3rk8btbfmenpkr1z.webp"
+                              alt="Post preview"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <Input className="w-52 h-12 shadow-none" />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

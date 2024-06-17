@@ -13,6 +13,7 @@ export interface PostResponse {
   active: boolean;
   post_files: PostFileResponse[];
   post_likes: PostLikeResponse[];
+  privacy: number;
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
@@ -30,5 +31,14 @@ export const postCreate = async (data: FormData) =>
     })
     .then((res) => res.data);
 
-export const postGetByPostId =  async (postID: string) => 
+export const postGetByPostId = async (postID: string) =>
   http.get<ApiSuccessResponse<PostResponse>>(`posts/${postID}`).then((res) => res.data);
+
+export interface PostEditParams extends Pick<PostResponse, "caption" | "privacy"> {}
+
+export const postEdit = async (params: PostEditParams, postID: string) =>
+  http.put<ApiSuccessResponse<PostResponse>>(`posts/me/${postID}`, params).then((res) => res.data);
+
+export const postDelete = async (postID:string) =>
+  http.delete<ApiSuccessResponse<string>>(`posts/me/${postID}`).then((res) => res.data);
+

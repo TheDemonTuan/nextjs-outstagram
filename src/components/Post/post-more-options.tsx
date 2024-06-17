@@ -72,7 +72,7 @@ const UserMoreOptions = [
 ];
 
 const PostMoreOptions = () => {
-  const { modalOpen, modalClose, modalKey, modalData } = useModalStore();
+  const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const { authData } = useAuth();
 
   return (
@@ -97,6 +97,7 @@ const PostMoreOptions = () => {
                                   modalOpen(EditPostModalKey);
                                   break;
                                 case "Delete":
+                                  setModalData(modalData);
                                   modalOpen(ConfirmDeletePostModalKey);
                                   break;
                                 case "Go to post":

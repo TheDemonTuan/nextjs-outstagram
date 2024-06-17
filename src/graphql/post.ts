@@ -51,6 +51,7 @@ export const PostHomePage = graphql(`
       is_hide_like
       is_hide_comment
       active
+      privacy
       user {
         avatar
         username

@@ -208,7 +208,6 @@ const Post = () => {
             })}
           </Fragment>
         ))}
-        <div ref={ref} />
         {isFetchingNextPage ? (
           <div className="flex flex-col items-center gap-2">
             <PostsHomeSkeleton />
@@ -216,6 +215,7 @@ const Post = () => {
           </div>
         ) : hasNextPage ? (
           <div className="flex flex-col items-center gap-2">
+            <div ref={ref} />
             <PostsHomeSkeleton />
             <PostsHomeSkeleton />
           </div>

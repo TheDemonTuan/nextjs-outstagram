@@ -1,7 +1,7 @@
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
-import { Avatar } from "@nextui-org/react";
+import { Avatar, Tooltip } from "@nextui-org/react";
 import { PiDotsThreeBold } from "react-icons/pi";
 import PostActions from "./post-actions";
 import { Card } from "../ui/card";
@@ -9,11 +9,47 @@ import CommentForm from "./comment-form";
 import Image from "next/image";
 import SummaryProfile from "../summary-profile";
 import MiniPost from "./mini-post";
+import { useEffect } from "react";
+import { postGetByPostId, postKey } from "@/api/post";
+import { useQuery } from "@tanstack/react-query";
+import { graphQLClient } from "@/lib/graphql";
+import { notFound } from "next/navigation";
+import { PostByPostIdDocument } from "@/gql/graphql";
+import UserProfileInfo from "../user-profile-info";
+import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
+import { useModalStore } from "@/stores/modal-store";
+import Likes, { LikesModalKey } from "../Post/likes";
+import { SinglePostSkeleton } from "../skeletons";
 
 const SinglePost = ({ id }: { id: string }) => {
+  const { modalOpen, setModalData } = useModalStore();
+  const {
+    data: postData,
+    error: postError,
+    isLoading: postIsLoading,
+  } = useQuery({
+    queryKey: [postKey, { id }],
+    queryFn: () => graphQLClient.request(PostByPostIdDocument, { postID: id }),
+    enabled: !!id,
+  });
+
+  useEffect(() => {
+    if (postError) {
+      notFound();
+    }
+  }, [postError]);
+
+  if (postIsLoading) {
+    return <SinglePostSkeleton />;
+  }
+
+  if (!postData) {
+    return <div>User not found</div>;
+  }
+
   return (
     <>
-      <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9">
+      <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9 rounded-none shadow-none">
         <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full">
           <Image
             src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718447676/posts/ehiplarfv0iai4ud3zh2.webp"
@@ -25,25 +61,25 @@ const SinglePost = ({ id }: { id: string }) => {
 
         <div className="flex max-w-sm flex-col flex-1">
           <div className="flex items-center justify-between border-b px-5 py-3">
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Link className="font-semibold text-[13px] leading-[18px]" href="/">
-                  <div className="flex flex-row items-center  ">
-                    <Avatar
-                      src="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
-                      className="w-9 h-9"
-                    />
-                    <div className="mx-2">
-                      <span className="text-small">PostUsername</span>
-                      <span className="font-bold text-medium"> • </span>
-                      <span className="text-small hover:text-gray-500">Add friends</span>
-                    </div>
-                  </div>
-                </Link>
-              </HoverCardTrigger>
-              {/* <SummaryProfile full_name={name} username={username} avatar={postImageSrc} /> */}
-            </HoverCard>
-            <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+            <Tooltip>
+              <div className="flex flex-row items-center gap-3 font-semibold text-[13px] leading-[18px]">
+                <UserProfileInfo
+                  username={"son tung em ti pi"}
+                  full_name={""}
+                  isShowFullName={false}
+                  className="w-9 h-9"
+                  avatar="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  is_admin={false}
+                />
+              </div>
+            </Tooltip>
+            <span
+              onClick={() => {
+                setModalData(postData);
+                modalOpen(PostMoreOptionsModalKey);
+              }}>
+              <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+            </span>
           </div>
 
           <div className="flex flex-col items-center gap-1.5 flex-1 justify-center">
@@ -53,7 +89,7 @@ const SinglePost = ({ id }: { id: string }) => {
 
           {/* {post.comments.length > 0 && (
             <ScrollArea className="hidden md:inline py-1.5 flex-1">
-              <MiniPost post={post} />
+              <MiniPost post={postData.postByPostId} />
               {post.comments.map((comment) => (
                 <Comment key={comment.id} comment={comment} />
               ))}
@@ -62,18 +98,24 @@ const SinglePost = ({ id }: { id: string }) => {
 
           <div className="px-2 hidden md:block mt-auto border-y p-2.5">
             <PostActions />
-            <time className="text-[11px] uppercase text-zinc-500 font-medium">
-              {/* {new Date(post.createdAt).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-              })} */}
-              time
-            </time>
+            <div className="flex flex-col">
+              <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
+                1 likes
+              </span>
+              <time className="text-[12px] text-zinc-500 font-medium">
+                {new Date(postData.postByPostId.created_at).toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
+            </div>
           </div>
           <CommentForm postId={id} className="hidden md:inline-flex" />
         </div>
       </Card>
-      <div className="md:hidden">{/* <Post post={post} /> */}</div>
+      {/* <div className="md:hidden"><Post post={post} /></div> */}
+      <PostMoreOptions />
+      <Likes />
     </>
   );
 };

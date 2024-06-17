@@ -673,39 +673,9 @@ export const MessagesSummaryProfileIcon = (props: SVGProps<SVGSVGElement>) => {
 
 export const MultiFileIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
-    <svg
-      {...props}
-      width="24px"
-      height="24px"
-      viewBox="0 0 24.00 24.00"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      transform="rotate(90)"
-      stroke="#ffffff"
-      strokeWidth="0.00024000000000000003">
-      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
-
-      <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
-
-      <g id="SVGRepo_iconCarrier">
-        {" "}
-        <g clipPath="url(#a)">
-          {" "}
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M8 5h7.795c1.115 0 1.519.116 1.926.334.407.218.727.538.945.945.218.407.334.811.334 1.926V16a1 1 0 1 0 2 0V8.128c0-1.783-.186-2.43-.534-3.082a3.635 3.635 0 0 0-1.512-1.512C18.302 3.186 17.655 3 15.872 3H8a1 1 0 0 0 0 2zm7.721 2.334C15.314 7.116 14.91 7 13.795 7h-7.59c-1.115 0-1.519.116-1.926.334a2.272 2.272 0 0 0-.945.945C3.116 8.686 3 9.09 3 10.205v7.59c0 1.114.116 1.519.334 1.926.218.407.538.727.945.945.407.218.811.334 1.926.334h7.59c1.114 0 1.519-.116 1.926-.334.407-.218.727-.538.945-.945.218-.407.334-.811.334-1.926v-7.59c0-1.115-.116-1.519-.334-1.926a2.272 2.272 0 0 0-.945-.945z"
-            fill="#FFFFFF"
-          />{" "}
-        </g>{" "}
-        <defs>
-          {" "}
-          <clipPath id="a">
-            {" "}
-            <path fill="#FFFFFF" d="M0 0h24v24H0z" />{" "}
-          </clipPath>{" "}
-        </defs>{" "}
-      </g>
+    <svg {...props} aria-label="Carousel" fill="#FFFFFF" height="22" role="img" viewBox="0 0 48 48" width="22">
+      <title>Carousel</title>
+      <path d="M34.8 29.7V11c0-2.9-2.3-5.2-5.2-5.2H11c-2.9 0-5.2 2.3-5.2 5.2v18.7c0 2.9 2.3 5.2 5.2 5.2h18.7c2.8-.1 5.1-2.4 5.1-5.2zM39.2 15v16.1c0 4.5-3.7 8.2-8.2 8.2H14.9c-.6 0-.9.7-.5 1.1 1 1.1 2.4 1.8 4.1 1.8h13.4c5.7 0 10.3-4.6 10.3-10.3V18.5c0-1.6-.7-3.1-1.8-4.1-.5-.4-1.2 0-1.2.6z"></path>
     </svg>
   );
 };
@@ -772,6 +742,24 @@ export const MessageRequestsIcon = (props: SVGProps<SVGSVGElement>) => {
     <svg aria-label="" {...props} fill="currentColor" height="48" role="img" viewBox="0 0 24 24" width="48">
       <title></title>
       <path d="M15.507 12.752a4.5 4.5 0 1 0-4.501-4.5 4.505 4.505 0 0 0 4.5 4.5Zm0-7a2.5 2.5 0 1 1-2.501 2.5 2.502 2.502 0 0 1 2.5-2.5Zm2.444 8.252h-4.907a5.054 5.054 0 0 0-5.049 5.049v.447a1 1 0 0 0 2 0v-.447a3.053 3.053 0 0 1 3.049-3.05h4.907a3.053 3.053 0 0 1 3.05 3.05v.447a1 1 0 0 0 2 0v-.447a5.055 5.055 0 0 0-5.05-5.05Zm-8.286-2.392a.88.88 0 0 0 0-1.224c-.009-.008-.012-.02-.02-.03L6.685 7.4a.907.907 0 0 0-1.283 1.284l1.41 1.409h-4.81a.907.907 0 1 0 0 1.814h4.81l-1.41 1.41a.907.907 0 0 0 1.284 1.284l2.959-2.96c.008-.008.011-.02.02-.03Z"></path>
+    </svg>
+  );
+};
+
+export const ClipIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Clip"
+      // class="x1lliihq x1n2onr6 x9bdzbf"
+      fill="#FFFFFF"
+      height="19"
+      role="img"
+      viewBox="0 0 24 24"
+      width="19">
+      <title>Clip</title>
+      <path
+        d="m12.823 1 2.974 5.002h-5.58l-2.65-4.971c.206-.013.419-.022.642-.027L8.55 1Zm2.327 0h.298c3.06 0 4.468.754 5.64 1.887a6.007 6.007 0 0 1 1.596 2.82l.07.295h-4.629L15.15 1Zm-9.667.377L7.95 6.002H1.244a6.01 6.01 0 0 1 3.942-4.53Zm9.735 12.834-4.545-2.624a.909.909 0 0 0-1.356.668l-.008.12v5.248a.91.91 0 0 0 1.255.84l.109-.053 4.545-2.624a.909.909 0 0 0 .1-1.507l-.1-.068-4.545-2.624Zm-14.2-6.209h21.964l.015.36.003.189v6.899c0 3.061-.755 4.469-1.888 5.64-1.151 1.114-2.5 1.856-5.33 1.909l-.334.003H8.551c-3.06 0-4.467-.755-5.64-1.889-1.114-1.15-1.854-2.498-1.908-5.33L1 15.45V8.551l.003-.189Z"
+        fillRule="evenodd"></path>
     </svg>
   );
 };

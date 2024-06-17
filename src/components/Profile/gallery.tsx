@@ -1,5 +1,5 @@
 import { UserProfileQuery } from "@/gql/graphql";
-import { LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
+import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -20,19 +20,36 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
     <div className="grid grid-cols-3 gap-1 mx-28">
       {posts?.map((post) => {
         const postFiles = post?.post_files || [];
+        const firstFile = postFiles[0];
         return (
           <Link key={post.id} href={`/p/${post.id}`} className="relative group cursor-pointer">
             <div className="w-full h-[330px]">
-              <Image
-                className="object-cover w-full h-full rounded-md"
-                src={post?.post_files?.[0]?.url || "/camera-b.png"}
-                alt={"image " + post.id}
-                width={500}
-                height={500}
-              />
+              {firstFile?.type === "1" && firstFile?.url ? (
+                <video
+                  key={"video" + firstFile.id}
+                  src={firstFile?.url || "/camera-b.png"}
+                  controls={false}
+                  className="object-cover w-full h-full rounded-md"
+                />
+              ) : (
+                <Image
+                  key={"image" + firstFile?.id}
+                  className="object-cover w-full h-full rounded-md"
+                  src={firstFile?.url || "/camera-b.png"}
+                  alt={"image " + post.id}
+                  width={500}
+                  height={500}
+                  priority
+                />
+              )}
+              {postFiles.length === 1 && firstFile?.type === "1" && (
+                <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                  <ClipIcon />
+                </div>
+              )}
               {postFiles?.length > 1 && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
-                  <MultiFileIcon className="text-white" />
+                  <MultiFileIcon />
                 </div>
               )}
             </div>

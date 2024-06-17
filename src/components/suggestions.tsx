@@ -53,20 +53,6 @@ const Suggestions = () => {
           <Tooltip content={user && <SummaryProfile user={user as UserResponse} />} placement="bottom-start">
             <div className="flex items-center gap-2 text-sm font-medium">
               <div className="flex flex-row gap-3 items-center">
-                {/* <Link href={`/${user.username}`}>
-                  <Avatar className="w-11 h-11">
-                    <AvatarImage className="object-cover" src={getUserAvatarURL(user.avatar)} />
-                    <AvatarFallback>
-                      <Spinner size="sm" />
-                    </AvatarFallback>
-                  </Avatar>
-                </Link>
-                <div className="flex-1">
-                  <Link href={`/${user.username}`} className="font-semibold text-sm">
-                    {user.username}
-                  </Link>
-                  <h3 className="text-xs text-gray-400">{user.full_name}</h3>
-                </div> */}
                 <UserProfileInfo
                   username={user.username || ""}
                   full_name={user.full_name || ""}

@@ -10,7 +10,9 @@ export const PostByUserName = graphql(`
       is_hide_comment
       active
       post_files {
+        id
         url
+        type
       }
       created_at
     }

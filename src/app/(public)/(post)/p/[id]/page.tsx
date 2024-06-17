@@ -13,7 +13,7 @@ const PostPage = ({ params: { id } }: { params: { id: string } }) => {
       </Suspense>
       <Separator className="my-12 max-w-3xl lg:max-w-4xl mx-auto" />
       <Suspense>
-        <MorePosts />
+        <MorePosts postId={id} />
       </Suspense>
     </div>
   );

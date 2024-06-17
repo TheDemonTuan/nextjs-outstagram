@@ -4,9 +4,16 @@ import Link from "next/link";
 
 type Props = {
   className?: string;
+  inputRef?: React.RefObject<HTMLInputElement>;
 };
 
-function PostActions({ className }: Props) {
+function PostActions({ className, inputRef }: Props) {
+  const handleCommentIconClick = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <div className={cn("relative flex items-start w-full gap-x-2", className)}>
       <div className="flex items-center w-full">
@@ -16,10 +23,12 @@ function PostActions({ className }: Props) {
             <span className="sr-only">Like</span>
           </div>
           <div>
-            <Link href={`/`}>
-              <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-              <span className="sr-only">Comment</span>
-            </Link>
+            <MessageCircleIcon
+              className="w-6 h-6 hover:stroke-gray115 cursor-pointer"
+              stroke="#262626"
+              onClick={handleCommentIconClick}
+            />
+            <span className="sr-only">Comment</span>
           </div>
           <div>
             <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
+import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
+import { Waypoint } from "react-waypoint";
 
 export default function Carousel({
   autoSlide = false,
@@ -13,6 +15,16 @@ export default function Carousel({
   slides: { id: string; url: string; type: 0 | 1 }[];
 }) {
   const [curr, setCurr] = useState(0);
+  const [muted, setMuted] = useState(true);
+  const [shouldPlay, setShouldPlay] = useState(false);
+
+  const handleEnterViewport = () => {
+    setShouldPlay(true);
+  };
+
+  const handleExitViewport = () => {
+    setShouldPlay(false);
+  };
 
   const prev = () => setCurr((curr) => (curr === 0 ? slides.length - 1 : curr - 1));
   const next = useCallback(() => setCurr((curr) => (curr === slides.length - 1 ? 0 : curr + 1)), [slides.length]);
@@ -35,50 +47,57 @@ export default function Carousel({
                 key={`image-${slide.id}`}
                 src={slide.url}
                 alt=""
-                className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0"
+                className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0 "
                 width={590}
                 height={590}
                 priority
               />
             ) : (
-              <ReactPlayer
-                key={`video-${slide.id}`}
-                src={slide.url}
-                className="rounded-sm max-h-[590px] min-h-[240px] w-full"
-                width={590}
-                height={590}
-                controls
-                url={slide.url}
-                playing
-                loop
-              />
+              <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
+                <div className="w-full flex-shrink-0">
+                  <ReactPlayer
+                    key={`video-${slide.id}`}
+                    url={slide.url}
+                    width="100%"
+                    height="100%"
+                    className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain"
+                    controls
+                    playing={shouldPlay}
+                    muted={muted}
+                  />
+                </div>
+              </Waypoint>
             )}
           </Fragment>
         ))}
       </div>
 
       {slides.length > 1 && (
-        <>
-          <div>
-            {/* <div className="absolute inset-0 flex items-center justify-between p-4"> */}
-            <button onClick={prev} className={`${curr === 0 ? "invisible" : ""}`}>
-              <FaCircleChevronLeft size={23} color="#B7B8B6" />
-            </button>
-            <button onClick={next} className={`${curr === slides.length - 1 ? "invisible" : ""}`}>
-              <FaCircleChevronRight size={23} color="#B7B8B6" />
-            </button>
+        <div className="absolute bottom-4 right-0 left-0 z-10">
+          <div className="flex items-center justify-center gap-1">
+            {slides.map((_, i) => (
+              <div
+                key={i}
+                className={`
+                      transition-all w-2 h-2 bg-white rounded-full
+                      ${curr === i ? "p-1" : "bg-opacity-50"}
+                    `}
+              />
+            ))}
           </div>
-          <div className="absolute bottom-4 right-0 left-0">
-            <div className="flex items-center justify-center gap-1">
-              {slides.map((_, i) => (
-                <div
-                  key={i}
-                  className={`
-                    transition-all w-2 h-2 bg-white rounded-full
-                    ${curr === i ? "p-1" : "bg-opacity-50"}
-                  `}
-                />
-              ))}
+        </div>
+      )}
+
+      {slides.length > 1 && (
+        <>
+          <div className="absolute  inset-0 p-4 z-10 h-7 my-auto">
+            <div className="flex items-center justify-between">
+              <button onClick={prev} className={`${curr === 0 ? "invisible" : ""}  `}>
+                <FaCircleChevronLeft size={23} color="#B7B8B6" />
+              </button>
+              <button onClick={next} className={`${curr === slides.length - 1 ? "invisible" : ""}`}>
+                <FaCircleChevronRight size={23} color="#B7B8B6" />
+              </button>
             </div>
           </div>
         </>

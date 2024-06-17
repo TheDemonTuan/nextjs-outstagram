@@ -94,6 +94,7 @@ const PostMoreOptions = () => {
                             if (optionItem?.action) {
                               switch (optionItem.title) {
                                 case "Edit":
+                                  setModalData(modalData);
                                   modalOpen(EditPostModalKey);
                                   break;
                                 case "Delete":

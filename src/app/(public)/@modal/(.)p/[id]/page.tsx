@@ -35,7 +35,7 @@ const PostModal = ({ params: { id } }: Props) => {
   }
 
   if (!postData) {
-    return <div>User not found</div>;
+    return <div>Post not found</div>;
   }
 
   const { postByPostId } = postData;

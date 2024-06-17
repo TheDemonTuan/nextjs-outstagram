@@ -42,7 +42,7 @@ export default function Carousel({
         style={{ transform: `translateX(-${curr * 100}%)` }}>
         {slides.map((slide, index) => (
           <Fragment key={index}>
-            {slide.type === 0 ? (
+            {slide.type ? (
               <Image
                 key={`image-${slide.id}`}
                 src={slide.url}

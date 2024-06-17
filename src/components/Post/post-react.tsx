@@ -77,7 +77,7 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
           )}
           <span className="sr-only">Like</span>
         </div>
-        <Link href={`/p/${postID}`}>
+        <Link href={`/p/${postID}`} passHref>
           <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           <span className="sr-only">Comment</span>
         </Link>

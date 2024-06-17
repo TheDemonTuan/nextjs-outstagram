@@ -132,11 +132,13 @@ const Post = () => {
                             <div className="relative">
                               <div className="slide-container">
                                 <Carousel
-                                  slides={post.post_files.map((file) => ({
-                                    id: file?.id ?? "",
-                                    url: file?.url ?? "",
-                                    type: file?.type === "1" ? 1 : 0,
-                                  }))}
+                                  slides={post.post_files.map((file) => {
+                                    return {
+                                      id: file?.id ?? "",
+                                      url: file?.url ?? "",
+                                      type: file?.type === "1" ? 1 : 0,
+                                    };
+                                  })}
                                 />
                               </div>
                             </div>
@@ -165,7 +167,7 @@ const Post = () => {
                               Wow, this photo is absolutely stunning! 😍✨
                             </div>
                             <div>
-                              <Link className=" text-neutral-400" href={`/p/${post.id}`}>
+                              <Link className=" text-neutral-400" href={`/p/${post.id}`} passHref>
                                 View all 39 comments
                               </Link>
                             </div>

@@ -29,6 +29,12 @@ export const PostByPostID = graphql(`
       is_hide_comment
       privacy
       active
+      user {
+        avatar
+        username
+        full_name
+        role
+      }
       created_at
       updated_at
       deleted_at

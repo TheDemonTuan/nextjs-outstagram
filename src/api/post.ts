@@ -1,6 +1,7 @@
 import http, { ApiSuccessResponse } from "@/lib/http";
 import { PostFileResponse } from "./post_file";
 import { PostLikeResponse } from "./post_like";
+import { PostComment } from "./post_comment";
 
 export const postKey = "posts";
 
@@ -34,11 +35,19 @@ export const postCreate = async (data: FormData) =>
 export const postGetByPostId = async (postID: string) =>
   http.get<ApiSuccessResponse<PostResponse>>(`posts/${postID}`).then((res) => res.data);
 
-export interface PostEditParams extends Pick<PostResponse, "caption" | "privacy"> {}
+export interface PostEditParams extends Pick<PostResponse, "caption" | "privacy"> { }
 
 export const postEdit = async (params: PostEditParams, postID: string) =>
   http.put<ApiSuccessResponse<PostResponse>>(`posts/me/${postID}`, params).then((res) => res.data);
 
-export const postDelete = async (postID:string) =>
+export const postDelete = async (postID: string) =>
   http.delete<ApiSuccessResponse<string>>(`posts/me/${postID}`).then((res) => res.data);
 
+export interface PostCommentByPostIDParams {
+  postID: string;
+  content: string;
+  parentID?: string;
+}
+
+export const postCommentByPostId = async (params: PostCommentByPostIDParams) =>
+  http.post<ApiSuccessResponse<PostComment>>(`posts/me/comment/${params.postID}${params?.parentID ? `?parentID=${params?.parentID}` : ""}`, { content: params.content }).then((res) => res.data);

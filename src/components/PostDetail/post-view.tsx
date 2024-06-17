@@ -6,7 +6,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import MiniPost from "./mini-post";
 import Comment from "./comment";
 import ViewPost from "./view-post";
-import PostActions from "./post-actions";
 import CommentForm from "./comment-form";
 import { PiDotsThreeBold } from "react-icons/pi";
 import Image from "next/image";
@@ -18,12 +17,14 @@ import { formatDistanceToNow } from "date-fns";
 import { PostByPostIdQuery } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import { Tooltip } from "@nextui-org/react";
+import PostReact from "../Post/post-react";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 
-function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPostId"] }) {
+function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
   const { modalOpen, setModalData } = useModalStore();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const username = post.user_id;
+  const { user } = post;
 
   return (
     <Dialog defaultOpen={true} open={true} onOpenChange={(open: boolean) => !open && router.back()}>
@@ -33,12 +34,12 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
             <Tooltip>
               <div className="flex flex-row items-center gap-3">
                 <UserProfileInfo
-                  username={username || ""}
+                  username={user?.username || ""}
                   full_name={""}
                   isShowFullName={false}
                   className="w-8 h-8"
-                  avatar="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
-                  is_admin={false}
+                  avatar={getUserAvatarURL(user?.avatar)}
+                  is_admin={user?.role ?? false}
                 />
               </div>
             </Tooltip>
@@ -51,7 +52,7 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
             </span>
           </div>
 
-          <ScrollArea className="hidden md:inline border-b py-1.5">
+          <div className="hidden md:inline border-b py-1.5 overflow-y-auto">
             <MiniPost post={post} />
             <div className="flex flex-col">
               <Comment />
@@ -65,11 +66,10 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
               <Comment />
               <Comment />
             </div>
-          </ScrollArea>
+          </div>
           <ViewPost className="hidden md:flex border-b" />
-
           <div className="px-2 hidden md:block mt-auto border-b p-2.5">
-            <PostActions inputRef={inputRef} />
+            <PostReact postID={post.id} isLiked />
             <div className="flex flex-col">
               <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
                 1 likes
@@ -83,7 +83,7 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
               </span>
             </div>
           </div>
-          <CommentForm postId={id} className="hidden md:inline-flex" inputRef={inputRef} />
+          <CommentForm postId={post.id} />
         </div>
         <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full ">
           <Image
@@ -94,9 +94,7 @@ function PostView({ id, post }: { id: string; post: PostByPostIdQuery["postByPos
             className="md:rounded-l-md object-cover"
           />
         </div>
-        <PostActions className="md:hidden border-b p-2.5" />
-        <CommentForm postId={id} className="md:hidden" inputRef={inputRef} />
-        <ViewPost className="md:hidden" />
+        ,
       </DialogContent>
     </Dialog>
   );

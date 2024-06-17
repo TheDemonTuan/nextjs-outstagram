@@ -40,7 +40,7 @@ const PostModal = ({ params: { id } }: Props) => {
 
   const { postByPostId } = postData;
 
-  return <PostView id={id} post={postByPostId} />;
+  return <PostView post={postByPostId} />;
 };
 
 export default PostModal;

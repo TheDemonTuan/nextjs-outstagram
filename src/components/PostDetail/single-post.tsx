@@ -3,7 +3,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { Avatar, Tooltip } from "@nextui-org/react";
 import { PiDotsThreeBold } from "react-icons/pi";
-import PostActions from "./post-actions";
 import { Card } from "../ui/card";
 import CommentForm from "./comment-form";
 import Image from "next/image";
@@ -20,6 +19,7 @@ import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-opti
 import { useModalStore } from "@/stores/modal-store";
 import Likes, { LikesModalKey } from "../Post/likes";
 import { SinglePostSkeleton } from "../skeletons";
+import PostReact from "../Post/post-react";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -97,7 +97,7 @@ const SinglePost = ({ id }: { id: string }) => {
           )} */}
 
           <div className="px-2 hidden md:block mt-auto border-y p-2.5">
-            <PostActions />
+            <PostReact postID={id} isLiked />
             <div className="flex flex-col">
               <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
                 1 likes

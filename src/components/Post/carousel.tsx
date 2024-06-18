@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
-import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
@@ -13,7 +12,7 @@ export default function Carousel({
 }: {
   autoSlide?: boolean;
   autoSlideInterval?: number;
-  slides: { id: string; url: string; type: 0 | 1 }[];
+  slides: { id: string; url: string; type: 0 | 1; className: string }[];
 }) {
   const [curr, setCurr] = useState(0);
   const [muted, setMuted] = useState(true);
@@ -48,7 +47,8 @@ export default function Carousel({
                 key={`image-${slide.id}`}
                 src={slide.url}
                 alt=""
-                className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0 "
+                // className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0 "
+                className={cn("flex-shrink-0 rounded-sm", slide.className)}
                 width={590}
                 height={590}
                 priority
@@ -61,7 +61,8 @@ export default function Carousel({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain"
+                    // className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain"
+                    className={cn("rounded-sm", slide.className)}
                     controls
                     playing={shouldPlay}
                     muted={muted}

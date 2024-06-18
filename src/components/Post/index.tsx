@@ -137,8 +137,7 @@ const Post = () => {
                                       id: file?.id ?? "",
                                       url: file?.url ?? "",
                                       type: file?.type === "1" ? 1 : 0,
-                                      className:
-                                        "max-h-[590px] min-h-[240px] w-full object-contain rounded-sm flex-shrink-0",
+                                      className: "rounded-sm max-h-[590px] min-h-[240px] w-full object-contain",
                                     };
                                   })}
                                 />

@@ -27,6 +27,7 @@ import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { PostResponse, postCreate, postKey } from "@/api/post";
 import { toast } from "sonner";
 import { useRef, useState } from "react";
+import Carousel from "./carousel";
 
 export const AddPostModalKey = "AddPost";
 const AddPostModal = () => {
@@ -90,11 +91,13 @@ const AddPostModal = () => {
               <ModalBody>
                 <div className="flex mt-[-7px] ml-[-25px] mr-[-20px]">
                   <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 ">
-                    <Image
-                      src={URL.createObjectURL(modalData.selectedFiles[0])}
-                      alt="Post preview"
-                      fill
-                      className=" object-cover"
+                    <Carousel
+                      slides={modalData.selectedFiles.map((file: File, index: number) => ({
+                        id: index.toString(),
+                        url: URL.createObjectURL(file),
+                        type: file.type.startsWith("image/") ? 1 : 0,
+                        className: "rounded-sm h-[500px] min-h-[240px] w-full object-cover",
+                      }))}
                     />
                   </div>
 
@@ -108,7 +111,7 @@ const AddPostModal = () => {
                         isShowFullName={false}
                         className="w-7 h-7"
                         avatar={authData?.avatar || ""}
-                        is_admin={false}
+                        is_admin={authData?.role || false}
                       />
                     </div>
 

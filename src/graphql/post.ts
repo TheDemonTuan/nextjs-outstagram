@@ -43,6 +43,12 @@ export const PostByPostID = graphql(`
         url
         type
       }
+      post_comments {
+        id
+        user_id
+        content
+        created_at
+      }
     }
   }
 `);

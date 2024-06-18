@@ -25,7 +25,7 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
   const { modalOpen, setModalData } = useModalStore();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { user } = post;
+  const { user, post_comments } = post;
 
   return (
     <Dialog defaultOpen={true} open={true} onOpenChange={(open: boolean) => !open && router.back()}>
@@ -53,19 +53,10 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
             </span>
           </div>
 
-          <div className="hidden md:inline border-b py-1.5 overflow-y-auto">
+          <div className="hidden md:inline border-b py-1.5 overflow-y-auto h-[500px]">
             <MiniPost post={post} />
             <div className="flex flex-col">
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
-              <Comment />
+              <Comment comments={post_comments} />
             </div>
           </div>
           <ViewPost className="hidden md:flex border-b" />

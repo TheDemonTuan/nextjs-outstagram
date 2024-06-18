@@ -94,7 +94,7 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
                   id: file?.id ?? "",
                   url: file?.url ?? "",
                   type: file?.type === "1" ? 1 : 0,
-                  className: " max-h-[700px] min-h-[240px] w-full object-cover md:rounded-l-md",
+                  className: " max-h-[700px] w-full object-cover md:rounded-l-md",
                 };
               })}
             />

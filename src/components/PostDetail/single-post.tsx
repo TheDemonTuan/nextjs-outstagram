@@ -21,6 +21,7 @@ import Likes, { LikesModalKey } from "../Post/likes";
 import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import Carousel from "../Post/carousel";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -52,12 +53,18 @@ const SinglePost = ({ id }: { id: string }) => {
     <>
       <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9 rounded-none shadow-none">
         <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full">
-          <Image
-            src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718447676/posts/ehiplarfv0iai4ud3zh2.webp"
-            alt="Post preview"
-            fill
-            className="md:rounded-l-md object-cover"
-          />
+          {postData?.postByPostId.post_files?.length ? (
+            <Carousel
+              slides={postData?.postByPostId.post_files.map((file) => {
+                return {
+                  id: file?.id ?? "",
+                  url: file?.url ?? "",
+                  type: file?.type === "1" ? 1 : 0,
+                  className: "max-h-[600px] w-full object-cover md:rounded-l-none md:rounded-r-none",
+                };
+              })}
+            />
+          ) : null}
         </div>
 
         <div className="flex max-w-sm flex-col flex-1">

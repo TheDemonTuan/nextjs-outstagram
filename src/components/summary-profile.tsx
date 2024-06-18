@@ -20,15 +20,15 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         </div>
       </div>
       <div className="flex flex-col my-4 ">
-        <div className="flex flex-row justify-between font-semibold">
-          <div className="flex-1 text-center">2,5M</div>
-          <div className="flex-1 text-center mx-12">24k</div>
-          <div className="flex-1 text-center">5M</div>
+        <div className="flex justify-between gap-2 font-semibold">
+          <div className="">2,5M</div>
+          <div className="">24k</div>
+          <div className="">5M</div>
         </div>
-        <div className="flex flex-row justify-between  text-sm">
-          <div className="flex-1 text-center">posts</div>
-          <div className="flex-1 text-center mx-12">friends</div>
-          <div className="flex-1 text-center">following</div>
+        <div className="flex justify-between gap-2 text-sm">
+          <div className="">posts</div>
+          <div className="">friends</div>
+          <div className="">following</div>
         </div>
       </div>
       <div className="flex flex-row items-center space-x-1 mx-[-16px]">

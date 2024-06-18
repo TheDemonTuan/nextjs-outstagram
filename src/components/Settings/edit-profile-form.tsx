@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { parseDate } from "@internationalized/date";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "../Profile/options-change-avatar";
 import { useModalStore } from "@/stores/modal-store";
+import Image from "next/image";
 
 const EditProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
@@ -85,10 +86,18 @@ const EditProfileForm = () => {
     <div className="space-y-8 py-10">
       <div className="flex items-center gap-x-2 md:gap-x-5 justify-between rounded-2xl p-3 bg-[#EFEFEF]">
         <div className="flex items-center gap-x-4">
-          <Avatar
+          {/* <Avatar
             className="w-16 h-16 cursor-pointer"
             src={getUserAvatarURL(authData?.avatar)}
             alt="User Avatar"
+            onClick={() => modalOpen(OptionChangeAvatarModalKey)}
+          /> */}
+          <Image
+            src={getUserAvatarURL(authData?.avatar)}
+            alt="User Avatar"
+            className="w-16 h-16 rounded-full object-cover cursor-pointer"
+            width={64}
+            height={64}
             onClick={() => modalOpen(OptionChangeAvatarModalKey)}
           />
           <div>

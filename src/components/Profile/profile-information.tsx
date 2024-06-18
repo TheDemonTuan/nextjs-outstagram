@@ -6,8 +6,9 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "./options-change-avatar";
 import ProfileAction from "./profile-action";
-import {  UserProfileQuery } from "@/gql/graphql";
+import { UserProfileQuery } from "@/gql/graphql";
 import Friends, { FriendsModalKey } from "./friends";
+import Image from "next/image";
 
 const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
@@ -25,7 +26,14 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
           <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
-            <Avatar src={getUserAvatarURL(user?.avatar)} className="w-40 h-40 text-large" />
+            {/* <Avatar src={getUserAvatarURL(user?.avatar)} className="w-40 h-40 text-large" /> */}
+            <Image
+              src={getUserAvatarURL(user?.avatar)}
+              className="w-40 h-40 text-large rounded-full"
+              alt="User Avatar"
+              width={160}
+              height={160}
+            />
           </div>
         </div>
         <div className="flex flex-col mx-6">

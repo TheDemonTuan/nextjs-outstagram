@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "@nextui-org/react";
 import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useModalStore } from "@/stores/modal-store";
@@ -86,9 +86,8 @@ const PostMoreOptions = () => {
                 <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
                   {listOptionItem.map((optionItem, index) => {
                     return (
-                      <>
+                      <Fragment key={index}>
                         <div
-                          key={index}
                           className="flex items-center gap-2"
                           onClick={() => {
                             if (optionItem?.action) {
@@ -114,7 +113,7 @@ const PostMoreOptions = () => {
                           <p className={cn("text-black", optionItem?.className)}>{optionItem.title}</p>
                         </div>
                         {index !== listOptionItem.length - 1 && <hr className="w-full border-gray-300" />}
-                      </>
+                      </Fragment>
                     );
                   })}
                 </ModalBody>

@@ -12,6 +12,8 @@ import { graphQLClient } from "@/lib/graphql";
 import { useQuery } from "@tanstack/react-query";
 import { SuggestionsSkeleton } from "./skeletons";
 import UserProfileInfo from "./user-profile-info";
+import { HoverCard, HoverCardTrigger } from "./ui/hover-card";
+import { HoverCardContent } from "@radix-ui/react-hover-card";
 
 const Suggestions = () => {
   const { authData } = useAuth();

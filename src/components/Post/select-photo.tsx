@@ -36,6 +36,7 @@ const SelectPhotoModal = () => {
   };
 
   const handleNextClick = () => {
+    console.log(`Number of files selected: ${filesWithType.length}`);
     setFilesWithType([]);
     modalOpen(AddPostModalKey);
   };
@@ -43,6 +44,10 @@ const SelectPhotoModal = () => {
   const closeModalClick = () => {
     setFilesWithType([]);
     modalClose();
+  };
+
+  const handleDelete = (id: string) => {
+    setFilesWithType((prevFiles) => prevFiles.filter((file) => file.id !== id));
   };
 
   return (
@@ -70,18 +75,16 @@ const SelectPhotoModal = () => {
               <Divider />
               <ModalBody className="flex items-center justify-center p-0">
                 {filesWithType.length > 0 ? (
-                  <div>
-                    <CarouselDetailPost
-                      slides={filesWithType.map((file) => {
-                        return {
-                          id: file.id || "",
-                          url: file.url || "",
-                          type: file.type ? 0 : 1,
-                          className: "rounded-sm h-[450px] w-[448px] object-cover flex-shrink-0",
-                        };
-                      })}
-                    />
-                  </div>
+                  <CarouselDetailPost
+                    slides={filesWithType.map((file) => {
+                      return {
+                        id: file.id || "",
+                        url: file.url || "",
+                        type: file.type ? 0 : 1,
+                      };
+                    })}
+                    onDelete={handleDelete}
+                  />
                 ) : (
                   <>
                     <DragPhotoVideoIcon />

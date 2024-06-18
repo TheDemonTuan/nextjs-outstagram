@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
 import { Input, Link, Spinner } from "@nextui-org/react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
-import React from "react";
+import React, { Fragment } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { PostResponse, postDelete } from "@/api/post";
@@ -34,19 +34,19 @@ const ConfirmDeletePost = () => {
     mutationFn: async () => await postDelete(modalData?.id),
     onSuccess: () => {
       toast.success("Delete post successfully!");
-      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-        oldData
-          ? {
-              ...oldData,
-              data: {
-                user: {
-                  ...oldData.data.user,
-                  post: "",
-                },
-              },
-            }
-          : oldData
-      );
+      // queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
+      //   oldData
+      //     ? {
+      //         ...oldData,
+      //         data: {
+      //           user: {
+      //             ...oldData.data.user,
+      //             post: "",
+      //           },
+      //         },
+      //       }
+      //     : oldData
+      // );
       modalClose();
     },
     onError: (error) => {
@@ -79,9 +79,8 @@ const ConfirmDeletePost = () => {
                 <hr className="w-full border-gray-300" />
                 {ListConfirmDeletePost.map((optionItem, index) => {
                   return (
-                    <>
+                    <Fragment key={index}>
                       <div
-                        key={index}
                         className="flex items-center gap-2"
                         onClick={() => {
                           if (optionItem?.action) {
@@ -100,7 +99,7 @@ const ConfirmDeletePost = () => {
                         <p className={cn("text-black", optionItem?.className)}>{optionItem.title}</p>
                       </div>
                       {index !== ListConfirmDeletePost.length - 1 && <hr className="w-full my-1 border-gray-300" />}
-                    </>
+                    </Fragment>
                   );
                 })}
                 {(postDeleteIsLoading || postDeleteIsLoading) && (

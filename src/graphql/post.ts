@@ -45,9 +45,19 @@ export const PostByPostID = graphql(`
       }
       post_comments {
         id
-        user_id
         content
+        parent_id
         created_at
+        user {
+          avatar
+          username
+        }
+        parent {
+          user {
+            avatar
+            username
+          }
+        }
       }
     }
   }

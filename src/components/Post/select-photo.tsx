@@ -11,7 +11,7 @@ export const SelectPhotoModalKey = "SelectPhotoModal";
 const SelectPhotoModal = () => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [filesWithType, setFilesWithType] = useState<{ id: string; url: string; type: number }[]>([]);
+  const [filesWithType, setFilesWithType] = useState<{ id: string; url: File; type: number }[]>([]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -22,7 +22,7 @@ const SelectPhotoModal = () => {
         const fileType = file.type.startsWith("image/") ? 0 : 1;
         return {
           id: index.toString(),
-          url: URL.createObjectURL(file),
+          url: file,
           type: fileType,
         };
       });
@@ -36,6 +36,7 @@ const SelectPhotoModal = () => {
   };
 
   const handleNextClick = () => {
+    setModalData({ ...modalData, selectedFiles: filesWithType.map((file) => file.url) });
     console.log(`Number of files selected: ${filesWithType.length}`);
     setFilesWithType([]);
     modalOpen(AddPostModalKey);
@@ -79,7 +80,7 @@ const SelectPhotoModal = () => {
                     slides={filesWithType.map((file) => {
                       return {
                         id: file.id || "",
-                        url: file.url || "",
+                        url: URL.createObjectURL(file.url) || "",
                         type: file.type ? 0 : 1,
                       };
                     })}

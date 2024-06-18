@@ -7,7 +7,7 @@ import { useModalStore } from "@/stores/modal-store";
 import { Spinner } from "@nextui-org/react";
 import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useRef } from "react";
+import React, { Fragment, useRef } from "react";
 import { toast } from "sonner";
 
 export const OptionChangeAvatarModalKey = "OptionChangeAvatar";
@@ -101,6 +101,8 @@ const OptionChangeAvatar = () => {
     if (!authData?.avatar) return;
 
     userDeleteAvatarMutate();
+
+    console.log("check log");
   };
 
   return (
@@ -122,12 +124,12 @@ const OptionChangeAvatar = () => {
                   <hr className="w-full border-gray-300" />
                   {ListOptionChangeAvatar.map((optionItem, index) => {
                     return (
-                      <React.Fragment key={index}>
+                      <Fragment key={index}>
                         <div
-                          key={index}
                           className="flex items-center gap-2"
                           onClick={() => {
                             if (optionItem?.action) {
+                              console.log("Option clicked:", optionItem.title);
                               switch (optionItem.title) {
                                 case "Cancel":
                                   modalClose();
@@ -136,6 +138,7 @@ const OptionChangeAvatar = () => {
                                   avatarInputRef.current?.click();
                                   break;
                                 case "Remove Current Photo":
+                                  console.log("check click");
                                   handleImageDelete();
                                   break;
                                 default:
@@ -146,7 +149,7 @@ const OptionChangeAvatar = () => {
                           <p className={cn("text-black", optionItem?.className)}>{optionItem.title}</p>
                         </div>
                         {index !== ListOptionChangeAvatar.length - 1 && <hr className="w-full my-1 border-gray-300" />}
-                      </React.Fragment>
+                      </Fragment>
                     );
                   })}
                   {(userChangeAvatarIsLoading || userDeleteAvatarIsLoading) && (

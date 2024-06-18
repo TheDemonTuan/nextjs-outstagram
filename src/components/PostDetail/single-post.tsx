@@ -22,6 +22,7 @@ import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
+import { UserResponse } from "@/api/user";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -69,7 +70,11 @@ const SinglePost = ({ id }: { id: string }) => {
 
         <div className="flex max-w-sm flex-col flex-1">
           <div className="flex items-center justify-between border-b px-5 py-3">
-            <Tooltip>
+            <Tooltip
+              content={
+                postData.postByPostId.user && <SummaryProfile user={postData.postByPostId.user as UserResponse} />
+              }
+              placement="bottom-start">
               <div className="flex flex-row items-center gap-3 font-semibold text-[13px] leading-[18px]">
                 <UserProfileInfo
                   username={postData.postByPostId.user?.username || ""}

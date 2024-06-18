@@ -43,6 +43,10 @@ export const PostByPostID = graphql(`
         url
         type
       }
+      post_likes {
+        user_id
+        is_liked
+      }
       post_comments {
         id
         content

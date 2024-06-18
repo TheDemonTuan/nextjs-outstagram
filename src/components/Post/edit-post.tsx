@@ -115,11 +115,11 @@ const EditPost = () => {
       hideCloseButton={true}
       isDismissable={!postEditIsLoading}
       size="3xl">
-      <ModalContent className="h-[550px]">
+      <ModalContent className="h-[545px]">
         {(onClose) => (
           <div
-            className={`cursor-pointer items-center p-0 ${postEditIsLoading ? "pointer-events-none opacity-50" : ""}`}>
-            <ModalHeader className="flex justify-between items-center my-[-5px]">
+            className={`cursor-pointer items-center p-0  ${postEditIsLoading ? "pointer-events-none opacity-50" : ""}`}>
+            <ModalHeader className="flex justify-between items-center p-2 mx-2">
               <button onClick={onClose} className="cursor-pointer font-normal text-sm ">
                 Cancel
               </button>
@@ -132,8 +132,8 @@ const EditPost = () => {
               </button>
             </ModalHeader>
             <Divider />
-            <ModalBody>
-              <div className="flex mt-[-7px] ml-[-25px] mr-[-20px]">
+            <ModalBody className="p-0">
+              <div className="flex">
                 <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 ">
                   <Carousel
                     slides={modalData.post_files.map((file: PostFile) => {
@@ -141,7 +141,7 @@ const EditPost = () => {
                         id: file?.id ?? "",
                         url: file?.url ?? "",
                         type: file?.type === "1" ? 1 : 0,
-                        className: "rounded-sm h-[500px] min-h-[240px] w-full object-cover",
+                        className: "rounded-sm h-[500px] w-full object-cover",
                       };
                     })}
                   />

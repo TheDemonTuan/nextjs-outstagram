@@ -20,6 +20,8 @@ import { Tooltip } from "@nextui-org/react";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
+import SummaryProfile from "../summary-profile";
+import { UserResponse } from "@/api/user";
 
 function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
   const { modalOpen, setModalData } = useModalStore();
@@ -32,7 +34,7 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
       <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
         <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg">
           <div className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-6 justify-between">
-            <Tooltip>
+            <Tooltip content={user && <SummaryProfile user={user as UserResponse} />} placement="bottom-start">
               <div className="flex flex-row items-center gap-3">
                 <UserProfileInfo
                   username={user?.username || ""}
@@ -77,7 +79,7 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
           </div>
           <CommentForm postId={post.id} />
         </div>
-        <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full ">
+        <div className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full">
           {post?.post_files?.length ? (
             <Carousel
               slides={post.post_files.map((file) => {
@@ -85,7 +87,7 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
                   id: file?.id ?? "",
                   url: file?.url ?? "",
                   type: file?.type === "1" ? 1 : 0,
-                  className: "h-[700px] w-full object-cover md:rounded-l-md",
+                  className: "max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] w-full md:rounded-l-md object-cover",
                 };
               })}
             />

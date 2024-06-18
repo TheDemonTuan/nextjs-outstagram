@@ -47,10 +47,9 @@ export default function Carousel({
                 key={`image-${slide.id}`}
                 src={slide.url}
                 alt=""
-                // className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0 "
                 className={cn("flex-shrink-0 rounded-sm", slide.className)}
-                width={590}
-                height={590}
+                width={1000}
+                height={1000}
                 priority
               />
             ) : (
@@ -61,7 +60,6 @@ export default function Carousel({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    // className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain"
                     className={cn("rounded-sm", slide.className)}
                     controls
                     playing={shouldPlay}

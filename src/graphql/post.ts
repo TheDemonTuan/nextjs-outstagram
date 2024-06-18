@@ -38,6 +38,11 @@ export const PostByPostID = graphql(`
       created_at
       updated_at
       deleted_at
+      post_files {
+        id
+        url
+        type
+      }
     }
   }
 `);

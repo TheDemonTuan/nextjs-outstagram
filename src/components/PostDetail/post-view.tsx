@@ -19,6 +19,7 @@ import UserProfileInfo from "../user-profile-info";
 import { Tooltip } from "@nextui-org/react";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import Carousel from "../Post/carousel";
 
 function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
   const { modalOpen, setModalData } = useModalStore();
@@ -86,13 +87,18 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
           <CommentForm postId={post.id} />
         </div>
         <div className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full ">
-          <Image
-            src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
-            fill
-            objectFit="cover"
-            alt="Post Image"
-            className="md:rounded-l-md object-cover"
-          />
+          {post?.post_files?.length ? (
+            <Carousel
+              slides={post.post_files.map((file) => {
+                return {
+                  id: file?.id ?? "",
+                  url: file?.url ?? "",
+                  type: file?.type === "1" ? 1 : 0,
+                  className: " max-h-[700px] min-h-[240px] w-full object-cover md:rounded-l-md",
+                };
+              })}
+            />
+          ) : null}
         </div>
       </DialogContent>
     </Dialog>

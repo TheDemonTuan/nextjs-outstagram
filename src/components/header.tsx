@@ -31,6 +31,8 @@ import { graphQLClient } from "@/lib/graphql";
 import { userKey } from "@/api/user";
 import { SearchHeaderSkeleton } from "./skeletons";
 import SideBarInbox from "./Chats/sidebar-inbox";
+import AddPostModal, { AddPostModalKey } from "./Post/add-post";
+import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
 
 const HeaderMenu = [
   {
@@ -159,7 +161,8 @@ const Header = () => {
 
                     switch (item.name) {
                       case "New":
-                        modalOpen(CreatePostModalKey);
+                        // modalOpen(CreatePostModalKey);
+                        modalOpen(SelectPhotoModalKey);
                         break;
                       default:
                         break;
@@ -204,7 +207,8 @@ const Header = () => {
               </div>
             )}
           </nav>
-          <CreatePost />
+          {/* <CreatePost /> */}
+          <SelectPhotoModal />
         </div>
         {isShortHeader && (
           <div className="flex-auto">

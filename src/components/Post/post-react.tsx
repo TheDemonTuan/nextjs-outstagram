@@ -84,7 +84,7 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
           <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           <span className="sr-only">Comment</span>
         </Link>
-        <div onClick={() => modalOpen(SelectPhotoModalKey)}>
+        <div>
           <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           <span className="sr-only">Share</span>
         </div>
@@ -93,7 +93,6 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
         <BookmarkIcon className="w-6 h-6  hover:stroke-gray115 cursor-pointer" stroke="#262626" />
         <span className="sr-only">BookmarkIcon</span>
       </div>
-      <SelectPhotoModal />
     </div>
   );
 };

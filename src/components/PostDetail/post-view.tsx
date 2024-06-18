@@ -5,7 +5,6 @@ import { Dialog, DialogContent, DialogHeader, DialogOverlay } from "../ui/dialog
 import { ScrollArea } from "@/components/ui/scroll-area";
 import MiniPost from "./mini-post";
 import Comment from "./comment";
-import ViewPost from "./view-post";
 import CommentForm from "./comment-form";
 import { PiDotsThreeBold } from "react-icons/pi";
 import Image from "next/image";
@@ -22,12 +21,13 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
 import SummaryProfile from "../summary-profile";
 import { UserResponse } from "@/api/user";
+import Link from "next/link";
 
 function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
   const { modalOpen, setModalData } = useModalStore();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { user, post_comments } = post;
+  const { user, post_comments, post_likes } = post;
 
   return (
     <Dialog defaultOpen={true} open={true} onOpenChange={(open: boolean) => !open && router.back()}>
@@ -61,15 +61,21 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
               <Comment comments={post_comments} />
             </div>
           </div>
-          <ViewPost className="hidden md:flex border-b" />
-          <div className="px-2 hidden md:block mt-auto border-b p-2.5">
-            <PostReact postID={post.id} isLiked />
-            <div className="flex flex-col">
-              <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
-                1 likes
-              </span>
 
-              <span className="text-xs text-gray-500">
+          <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
+            <PostReact postID={post.id} isLiked />
+            <div className="flex flex-col space-y-1">
+              {post_likes && post_likes.length > 0 ? (
+                <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
+                  {post_likes.length} likes
+                </span>
+              ) : (
+                <div className="mt-1"></div>
+              )}
+
+              <span
+                className="text-xs text-gray-500 cursor-pointer active:text-gray-300"
+                onClick={() => window.location.reload()}>
                 {" "}
                 {formatDistanceToNow(post.created_at, {
                   addSuffix: true,

@@ -42,7 +42,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                   priority
                 />
               )}
-              {postFiles.length === 1 && firstFile?.type === "1" && (
+              {postFiles.length === 1 && firstFile?.type === "0" && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                   <ClipIcon />
                 </div>

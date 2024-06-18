@@ -81,6 +81,7 @@ export const PostHomePage = graphql(`
         avatar
         username
         full_name
+        role
       }
       post_files {
         id

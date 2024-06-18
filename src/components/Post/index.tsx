@@ -26,6 +26,7 @@ import Likes, { LikesModalKey } from "./likes";
 import { EmojiLookBottomIcon } from "@/icons";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
+import UserProfileInfo from "../user-profile-info";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
@@ -96,7 +97,7 @@ const Post = () => {
                             <Tooltip
                               content={post.user && <SummaryProfile user={post.user as UserResponse} />}
                               placement="bottom-start">
-                              <Link
+                              {/* <Link
                                 className="flex items-center gap-2 text-sm font-medium"
                                 href={`/${post.user?.username}`}>
                                 <Avatar className="w-9 h-9">
@@ -109,6 +110,17 @@ const Post = () => {
                                 </Avatar>
                                 {post.user?.username}
                               </Link>
+                              */}
+                              <div className="flex items-center gap-2 text-sm font-medium">
+                                <UserProfileInfo
+                                  username={post.user?.username || ""}
+                                  full_name={post.user?.full_name || ""}
+                                  isShowFullName={false}
+                                  className="w-9 h-9"
+                                  avatar={post.user?.avatar || ""}
+                                  is_admin={post.user?.role || false}
+                                />
+                              </div>
                             </Tooltip>
                             <span className="text-xs text-gray-500">
                               •{" "}

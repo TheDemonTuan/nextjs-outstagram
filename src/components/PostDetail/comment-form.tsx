@@ -2,7 +2,7 @@ import { PostCommentByPostIDParams, postCommentByPostId, postKey } from "@/api/p
 import { PostComment } from "@/api/post_comment";
 import { PostByPostIdQuery } from "@/gql/graphql";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { Button, Textarea } from "@nextui-org/react";
+import { Button, Spinner, Textarea } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -95,41 +95,37 @@ const CommentForm = ({ postId }: { postId: string }) => {
   };
 
   return (
-    <Textarea
-      type="text"
-      placeholder="Add a comment..."
-      className="border-none bg-transparent ring-0 focus"
-      ref={textareaRef}
-      value={content}
-      size="sm"
-      variant="underlined"
-      onValueChange={(value) => setContent(value)}
-      startContent={
-        <Popover>
-          <PopoverTrigger>
-            <BsEmojiAstonished className="text-lg cursor-pointer" size={24} />
-          </PopoverTrigger>
-          <PopoverContent className="relative w-fit h-fit">
-            <Picker
-              className="absolute z-50 top-0 right-0"
-              lazyLoadEmojis
-              // reactionsDefaultOpen
-              onEmojiClick={(e) => handleEmojiClick(e)}
-            />
-          </PopoverContent>
-        </Popover>
-      }
-      endContent={
-        <Button
-          onClick={() => handlePostComment(content, parentID)}
-          color="primary"
-          isDisabled={!content}
-          variant="light"
-          isLoading={postCommentIsPending}
-          className="hover:bg-none">
-          Post
-        </Button>
-      }></Textarea>
+    <div className="flex items-center space-x-2 px-5 p-2">
+      <Popover>
+        <PopoverTrigger>
+          <BsEmojiAstonished className="text-lg cursor-pointer" size={20} />
+        </PopoverTrigger>
+        <PopoverContent className="relative w-fit h-fit">
+          <Picker className="absolute z-50 top-0 right-0" lazyLoadEmojis onEmojiClick={(e) => handleEmojiClick(e)} />
+        </PopoverContent>
+      </Popover>
+      <Textarea
+        type="text"
+        placeholder="Add a comment..."
+        className="flex-1 border-none bg-transparent ring-0 focus px-2 mb-1"
+        ref={textareaRef}
+        value={content}
+        size="sm"
+        variant="underlined"
+        maxLength={2200}
+        maxRows={4}
+        minRows={1}
+        onValueChange={(value) => setContent(value)}
+      />
+      <button
+        onClick={() => handlePostComment(content, parentID)}
+        color="primary"
+        disabled={!content}
+        className="hover:bg-none cursor-pointer text-sky-500 text-sm font-semibold hover:text-sky-700 dark:hover:text-white disabled:cursor-default  dark:disabled:text-slate-500 disabled:text-sky-500/40 disabled:hover:text-sky-500/40 dark:disabled:hover:text-slate-500  space-x-2
+        ">
+        {postCommentIsPending ? <Spinner size="sm" /> : "Post"}
+      </button>
+    </div>
   );
 };
 

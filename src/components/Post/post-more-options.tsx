@@ -6,8 +6,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import EditPost, { EditPostModalKey } from "./edit-post";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "./confirm-delete-post";
-import ViewPost from "../PostDetail/view-post";
-
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
 const UserMeMoreOptions = [

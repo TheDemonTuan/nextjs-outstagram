@@ -32,9 +32,17 @@ import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { FormControl, FormField, FormItem, Form } from "../ui/form";
 import { ScrollArea } from "../ui/scroll-area";
+import Carousel from "./carousel";
 
 export const EditPostModalKey = "EditPost";
 const maxLength = 2200;
+
+interface PostFile {
+  id: string;
+  url: string;
+  type: string;
+}
+
 const EditPost = () => {
   const { modalClose, modalKey, modalData } = useModalStore();
 
@@ -69,19 +77,20 @@ const EditPost = () => {
     mutationFn: async (data) => await postEdit(data, modalData.id),
     onSuccess: (res) => {
       toast.success("Post updated successfully!");
-      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-        oldData
-          ? {
-              ...oldData,
-              data: {
-                user: {
-                  ...oldData.data.user,
-                  ...res.data,
-                },
-              },
-            }
-          : oldData
-      );
+      // queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
+      //   oldData
+      //     ? {
+      //         ...oldData,
+      //         data: {
+      //           user: {
+      //             ...oldData.data.user,
+      //             // ...res.data,
+      //           },
+      //         },
+      //       }
+      //     : oldData
+      // );
+      editForm.reset();
       modalClose();
     },
     onError: (error) => {
@@ -90,7 +99,7 @@ const EditPost = () => {
   });
 
   if (!modalData) {
-    return;
+    return null;
   }
   const onSubmit = async (data: EditPostFormValidate) => {
     postEditMutate({
@@ -124,15 +133,23 @@ const EditPost = () => {
             </ModalHeader>
             <Divider />
             <ModalBody>
-              <Form {...editForm}>
-                <form onSubmit={editForm.handleSubmit(onSubmit)} id="editFormID">
-                  <div className="flex mt-[-7px] ml-[-25px] mr-[-20px]">
-                    <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 ">
-                      <Image src={modalData.post_files?.[0].url} alt="Post preview" fill className=" object-cover" />
-                    </div>
+              <div className="flex mt-[-7px] ml-[-25px] mr-[-20px]">
+                <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 ">
+                  <Carousel
+                    slides={modalData.post_files.map((file: PostFile) => {
+                      return {
+                        id: file?.id ?? "",
+                        url: file?.url ?? "",
+                        type: file?.type === "1" ? 1 : 0,
+                        className: "rounded-sm h-[500px] min-h-[240px] w-full object-cover",
+                      };
+                    })}
+                  />
+                </div>
 
-                    <Divider orientation="vertical" />
-
+                <Divider orientation="vertical" />
+                <Form {...editForm}>
+                  <form onSubmit={editForm.handleSubmit(onSubmit)} id="editFormID">
                     <div className="flex flex-col">
                       <div className="flex items-center mx-3 my-4 gap-3">
                         <UserProfileInfo
@@ -262,9 +279,9 @@ const EditPost = () => {
                         </div>
                       </ScrollArea>
                     </div>
-                  </div>
-                </form>
-              </Form>
+                  </form>
+                </Form>
+              </div>
             </ModalBody>
             {postEditIsLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">

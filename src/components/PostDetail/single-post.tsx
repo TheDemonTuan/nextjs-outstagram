@@ -60,7 +60,7 @@ const SinglePost = ({ id }: { id: string }) => {
                   id: file?.id ?? "",
                   url: file?.url ?? "",
                   type: file?.type === "1" ? 1 : 0,
-                  className: "max-h-[600px] w-full object-cover md:rounded-l-none md:rounded-r-none",
+                  className: "h-[600px] w-full object-cover md:rounded-l-none md:rounded-r-none",
                 };
               })}
             />

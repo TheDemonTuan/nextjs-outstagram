@@ -34,12 +34,11 @@ import { FormControl, FormField, FormItem, Form } from "../ui/form";
 import { ScrollArea } from "../ui/scroll-area";
 
 export const EditPostModalKey = "EditPost";
-
+const maxLength = 2200;
 const EditPost = () => {
   const { modalClose, modalKey, modalData } = useModalStore();
 
   const queryClient = useQueryClient();
-  const maxLength = 2200;
 
   const editForm = useForm<EditPostFormValidate>({
     resolver: zodResolver(EditPostFormValidateSchema),
@@ -98,17 +97,14 @@ const EditPost = () => {
       caption: data.caption,
       privacy: parseInt(data.privacy),
     });
-
-    console.log(data.privacy);
-    console.log(data.caption);
   };
 
   return (
     <Modal
       isOpen={modalKey === EditPostModalKey}
       onOpenChange={modalClose}
-      hideCloseButton={postEditIsLoading || postEditIsLoading}
-      isDismissable={!postEditIsLoading || !postEditIsLoading}
+      hideCloseButton={true}
+      isDismissable={!postEditIsLoading}
       size="3xl">
       <ModalContent className="h-[550px]">
         {(onClose) => (
@@ -270,7 +266,7 @@ const EditPost = () => {
                 </form>
               </Form>
             </ModalBody>
-            {(postEditIsLoading || postEditIsLoading) && (
+            {postEditIsLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
                 <Spinner size="md" />
               </div>

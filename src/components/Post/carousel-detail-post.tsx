@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
 import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
@@ -6,7 +5,7 @@ import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
 
-export default function Carousel({
+export default function CarouselDetailPost({
   autoSlide = false,
   autoSlideInterval = 3000,
   slides,
@@ -48,7 +47,7 @@ export default function Carousel({
                 key={`image-${slide.id}`}
                 src={slide.url}
                 alt=""
-                className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain flex-shrink-0 "
+                className="rounded-sm h-[450px] w-[448px] object-cover flex-shrink-0 "
                 width={590}
                 height={590}
                 priority
@@ -61,7 +60,7 @@ export default function Carousel({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className="rounded-sm max-h-[590px] min-h-[240px] w-full object-contain"
+                    className="rounded-sm h-[450px]  w-[448px] object-cover flex-shrink-0"
                     controls
                     playing={shouldPlay}
                     muted={muted}

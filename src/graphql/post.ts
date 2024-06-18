@@ -38,6 +38,11 @@ export const PostByPostID = graphql(`
       created_at
       updated_at
       deleted_at
+      post_files {
+        id
+        url
+        type
+      }
     }
   }
 `);
@@ -51,6 +56,7 @@ export const PostHomePage = graphql(`
       is_hide_like
       is_hide_comment
       active
+      privacy
       user {
         avatar
         username

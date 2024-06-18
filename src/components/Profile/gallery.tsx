@@ -24,7 +24,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
         return (
           <Link key={post.id} href={`/p/${post.id}`} className="relative group cursor-pointer">
             <div className="w-full h-[330px]">
-              {firstFile?.type === "1" && firstFile?.url ? (
+              {firstFile?.type === "0" && firstFile?.url ? (
                 <video
                   key={"video" + firstFile.id}
                   src={firstFile?.url || "/camera-b.png"}

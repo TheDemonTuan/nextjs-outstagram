@@ -1,27 +1,30 @@
 import { z } from "zod";
 
 export const ChangePasswordFormValidateSchema = z.object({
-    currentPassword: z
+  current_password: z
     .string({
       required_error: "Password is required.",
       invalid_type_error: "Password is invalid.",
     }),
-    newPassword: z
+    new_password: z
     .string({
-      required_error: "Password is required.",
-      invalid_type_error: "Password is invalid.",
+      required_error: "New password is required.",
+      invalid_type_error: "New password is invalid.",
     })
     .min(8, {
-      message: "Password must be at least 8 characters.",
+      message: "New password must be at least 8 characters.",
     }),
-    reTypeNewPassword: z
+  re_Type_New_Password: z
     .string({
-      required_error: "Password is required.",
-      invalid_type_error: "Password is invalid.",
+      required_error: "Re-type new password is required.",
+      invalid_type_error: "Re-type new password is invalid.",
     })
     .min(8, {
-      message: "Password must be at least 8 characters.",
+      message: "Re-type new password must be at least 8 characters.",
     }),
+}).refine((data) => data.new_password === data.re_Type_New_Password, {
+  message: "New password and re-type new password must match.",
+  path: ["reTypeNewPassword"], 
 });
 
 export type ChangePasswordFormValidate = z.infer<typeof ChangePasswordFormValidateSchema>;

@@ -61,5 +61,9 @@ export const userEditEmail = async (email: string) =>
 export const userEditPhone = (phone: string) =>
   http.patch<ApiSuccessResponse<string>>("users/me/phone", { phone }).then((res) => res.data);
 
+export const userEditPassword = async (current_password: string, new_password: string) => 
+  http.patch<ApiSuccessResponse<string>>("users/me/password", {current_password, new_password}).then((res) => res.data);
+
 export const userDeleteAvatar = async () =>
   http.delete<ApiSuccessResponse<string>>("users/me/avatar").then((res) => res.data);
+

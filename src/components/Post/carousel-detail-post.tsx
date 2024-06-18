@@ -1,18 +1,21 @@
-import { cn } from "@/lib/utils";
+import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
+import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
 
-export default function Carousel({
+export default function CarouselDetailPost({
   autoSlide = false,
   autoSlideInterval = 3000,
   slides,
+  onDelete,
 }: {
   autoSlide?: boolean;
   autoSlideInterval?: number;
-  slides: { id: string; url: string; type: 0 | 1; className: string }[];
+  slides: { id: string; url: string; type: 0 | 1 }[];
+  onDelete: (id: string) => void;
 }) {
   const [curr, setCurr] = useState(0);
   const [muted, setMuted] = useState(true);
@@ -43,28 +46,40 @@ export default function Carousel({
         {slides.map((slide, index) => (
           <Fragment key={index}>
             {slide.type ? (
-              <Image
-                key={`image-${slide.id}`}
-                src={slide.url}
-                alt=""
-                className={cn("flex-shrink-0 rounded-sm", slide.className)}
-                width={1000}
-                height={1000}
-                priority
-              />
+              <div className="relative flex-shrink-0">
+                <Image
+                  key={`image-${slide.id}`}
+                  src={slide.url}
+                  alt=""
+                  className="rounded-sm h-[450px] w-[448px] object-cover flex-shrink-0 "
+                  width={590}
+                  height={590}
+                  priority
+                />
+                <div
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:opacity-85 cursor-pointer"
+                  onClick={() => onDelete(slide.id)}>
+                  &times;
+                </div>
+              </div>
             ) : (
               <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
-                <div className="w-full flex-shrink-0">
+                <div className="w-full flex-shrink-0 relative">
                   <ReactPlayer
                     key={`video-${slide.id}`}
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className={cn("rounded-sm", slide.className)}
+                    className="rounded-sm h-[450px]  w-[448px] object-cover flex-shrink-0"
                     controls
                     playing={shouldPlay}
                     muted={muted}
                   />
+                  <button
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:opacity-85 cursor-pointer"
+                    onClick={() => onDelete(slide.id)}>
+                    &times;
+                  </button>
                 </div>
               </Waypoint>
             )}

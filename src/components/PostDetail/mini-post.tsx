@@ -6,9 +6,11 @@ import { Avatar } from "@nextui-org/react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import React from "react";
+import UserProfileInfo from "../user-profile-info";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 
 const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
-  const username = post.user_id;
+  const username = post.user?.username;
   const href = `/${username}`;
 
   const isEdited = post.created_at !== post.updated_at;
@@ -16,10 +18,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
   return (
     <div className="group p-3 px-3.5 flex items-start space-x-2.5">
       <Link href={href}>
-        <Avatar
-          src="https://www.vietnamworks.com/hrinsider/wp-content/uploads/2023/12/anh-den-ngau.jpeg"
-          className="w-8 h-8"
-        />
+        <Avatar src={getUserAvatarURL(post.user?.avatar) || ""} className="w-8 h-8" />
       </Link>
       <div className="space-y-1">
         <div className="flex items-center space-x-1.5 text-[13px] leading-[18px]">

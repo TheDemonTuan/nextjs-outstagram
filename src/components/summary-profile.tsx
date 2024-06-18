@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Avatar, Button, Divider } from "@nextui-org/react";
+import { Button, Divider, Avatar } from "@nextui-org/react";
 import { MessagesIcon, MessagesSummaryProfileIcon } from "@/icons";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { UserResponse } from "@/api/user";
@@ -13,7 +13,14 @@ const SummaryProfile = (props: SummaryProfileProps) => {
   return (
     <div className="flex flex-col p-4">
       <div className="flex flex-row items-center space-x-2">
-        <Avatar src={getUserAvatarURL(props.user.avatar)} className="rounded-full w-14 h-14" alt="User Avatar" />
+        <Image
+          src={getUserAvatarURL(props.user.avatar)}
+          alt=""
+          className="rounded-full w-14 h-14"
+          width={56}
+          height={56}
+        />
+
         <div>
           <p className="font-semibold text-sm">{props.user.username}</p>
           <p className="text-sm font-normal text-gray-400">{props.user.full_name}</p>
@@ -35,7 +42,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         {props.user.posts && props.user.posts?.length > 0 ? (
           props.user.posts.map((url, index) => (
             <div key={index} className="flex-1">
-              <Avatar src={url.caption} alt={`Image ${index + 1}`} className="w-full h-32" />
+              <Avatar src={url?.caption} alt={`Image ${index + 1}`} className="w-full h-32" />
             </div>
           ))
         ) : (

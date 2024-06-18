@@ -5,6 +5,8 @@ export const ChangePasswordFormValidateSchema = z.object({
     .string({
       required_error: "Password is required.",
       invalid_type_error: "Password is invalid.",
+    }).min(8, {
+      message: "Current password must be at least 8 characters.",
     }),
     new_password: z
     .string({
@@ -25,6 +27,10 @@ export const ChangePasswordFormValidateSchema = z.object({
 }).refine((data) => data.new_password === data.re_Type_New_Password, {
   message: "New password and re-type new password must match.",
   path: ["reTypeNewPassword"], 
-});
+}).
+refine((data) => data.current_password !== data.new_password, {
+  message: "New password must be different from the current password.",
+  path: ["new_password"], 
+});;
 
 export type ChangePasswordFormValidate = z.infer<typeof ChangePasswordFormValidateSchema>;

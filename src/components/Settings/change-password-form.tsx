@@ -35,20 +35,8 @@ const ChangePasswordForm = () => {
     { current_password: string; new_password: string }
   >({
     mutationFn: async (param) => await userEditPassword(param.current_password, param.new_password),
-    onSuccess: (res) => {
+    onSuccess: () => {
       toast.success("Password updated successfully!");
-      queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-        oldData
-          ? {
-              ...oldData,
-              data: {
-                user: {
-                  ...oldData.data.user,
-                },
-              },
-            }
-          : oldData
-      );
       editForm.reset();
       setIsCurrentPasswordVisible(false);
       setIsNewPasswordVisible(false);
@@ -85,12 +73,13 @@ const ChangePasswordForm = () => {
           <FormField
             control={editForm.control}
             name="current_password"
-            render={(field) => (
+            render={({ field }) => (
               <FormItem>
                 <div className="md:items-center gap-y-2 gap-x-8">
                   <FormControl className="mt-2">
                     <Input
                       label="Current password"
+                      autoFocus
                       variant="bordered"
                       isRequired
                       isInvalid={!!editForm.formState.errors.current_password}
@@ -118,7 +107,7 @@ const ChangePasswordForm = () => {
           <FormField
             control={editForm.control}
             name="new_password"
-            render={(field) => (
+            render={({ field }) => (
               <FormItem>
                 <div className="md:items-center gap-y-2 gap-x-8">
                   <FormControl className="mt-2">
@@ -151,7 +140,7 @@ const ChangePasswordForm = () => {
           <FormField
             control={editForm.control}
             name="re_Type_New_Password"
-            render={(field) => (
+            render={({ field }) => (
               <FormItem>
                 <div className="md:items-center gap-y-2 gap-x-8">
                   <FormControl className="mt-2">

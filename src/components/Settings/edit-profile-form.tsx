@@ -6,7 +6,7 @@ import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage, FormDes
 import { UserEditProfileParams, UserResponse, userEditProfile } from "@/api/user";
 import { EditProfileFormValidate, EditProfileFormValidateSchema } from "./edit-profile-form.validate";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Avatar, Button, DatePicker, DateValue, Input, Spinner, Textarea } from "@nextui-org/react";
+import { Button, DatePicker, DateValue, Input, Spinner, Textarea } from "@nextui-org/react";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,7 @@ import { parseDate } from "@internationalized/date";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "../Profile/options-change-avatar";
 import { useModalStore } from "@/stores/modal-store";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const EditProfileForm = () => {
   const { authData, authIsLoading } = useAuth();
@@ -86,20 +87,23 @@ const EditProfileForm = () => {
     <div className="space-y-8 py-10">
       <div className="flex items-center gap-x-2 md:gap-x-5 justify-between rounded-2xl p-3 bg-[#EFEFEF]">
         <div className="flex items-center gap-x-4">
-          {/* <Avatar
-            className="w-16 h-16 cursor-pointer"
-            src={getUserAvatarURL(authData?.avatar)}
-            alt="User Avatar"
-            onClick={() => modalOpen(OptionChangeAvatarModalKey)}
-          /> */}
-          <Image
+          <Avatar className="w-16 h-16 cursor-pointer">
+            <AvatarImage
+              src={getUserAvatarURL(authData?.avatar)}
+              onClick={() => modalOpen(OptionChangeAvatarModalKey)}
+            />
+            <AvatarFallback>
+              <Spinner size="sm" />
+            </AvatarFallback>
+          </Avatar>
+          {/* <Image
             src={getUserAvatarURL(authData?.avatar)}
             alt="User Avatar"
             className="w-16 h-16 rounded-full object-cover cursor-pointer"
             width={64}
             height={64}
             onClick={() => modalOpen(OptionChangeAvatarModalKey)}
-          />
+          /> */}
           <div>
             <p className="font-medium">{authData?.username}</p>
             <p>{authData?.full_name}</p>

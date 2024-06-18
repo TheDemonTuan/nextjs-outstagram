@@ -94,7 +94,6 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
             className="md:rounded-l-md object-cover"
           />
         </div>
-        ,
       </DialogContent>
     </Dialog>
   );

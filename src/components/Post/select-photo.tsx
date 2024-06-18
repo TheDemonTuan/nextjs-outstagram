@@ -16,7 +16,7 @@ const SelectPhotoModal = () => {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
-      setModalData({ ...modalData, selectedFiles: filesArray });
+      // setModalData({ ...modalData, selectedFiles: filesArray });
 
       const filesWithType = filesArray.map((file, index) => {
         const fileType = file.type.startsWith("image/") ? 0 : 1;
@@ -37,7 +37,6 @@ const SelectPhotoModal = () => {
 
   const handleNextClick = () => {
     setModalData({ ...modalData, selectedFiles: filesWithType.map((file) => file.url) });
-    console.log(`Number of files selected: ${filesWithType.length}`);
     setFilesWithType([]);
     modalOpen(AddPostModalKey);
   };

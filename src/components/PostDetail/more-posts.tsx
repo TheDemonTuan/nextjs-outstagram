@@ -33,7 +33,7 @@ const MorePosts = ({ postId }: { postId: string }) => {
     return <div>User not found</div>;
   }
 
-  const postUsername = postData?.postByPostId.user_id;
+  const postUsername = postData?.postByPostId.user?.username;
 
   return (
     <div className="flex flex-col space-y-3 max-w-3xl lg:max-w-4xl mx-auto pb-20">
@@ -44,7 +44,7 @@ const MorePosts = ({ postId }: { postId: string }) => {
         </Link>{" "}
       </p>
 
-      <PostsGrid />
+      <PostsGrid postUsername={postUsername || ""} />
     </div>
   );
 };

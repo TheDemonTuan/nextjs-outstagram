@@ -20,6 +20,7 @@ import { useModalStore } from "@/stores/modal-store";
 import Likes, { LikesModalKey } from "../Post/likes";
 import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -64,12 +65,12 @@ const SinglePost = ({ id }: { id: string }) => {
             <Tooltip>
               <div className="flex flex-row items-center gap-3 font-semibold text-[13px] leading-[18px]">
                 <UserProfileInfo
-                  username={"son tung em ti pi"}
+                  username={postData.postByPostId.user?.username || ""}
                   full_name={""}
                   isShowFullName={false}
                   className="w-9 h-9"
-                  avatar="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  is_admin={false}
+                  avatar={getUserAvatarURL(postData.postByPostId.user?.avatar)}
+                  is_admin={postData.postByPostId.user?.role || false}
                 />
               </div>
             </Tooltip>
@@ -110,7 +111,7 @@ const SinglePost = ({ id }: { id: string }) => {
               </time>
             </div>
           </div>
-          <CommentForm postId={id} className="hidden md:inline-flex" />
+          <CommentForm postId={id} />
         </div>
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}

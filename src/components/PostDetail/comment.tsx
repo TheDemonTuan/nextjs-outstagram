@@ -43,13 +43,10 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                 </Tooltip>
                 <div className="space-y-1 mx-3">
                   <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
-                    <Tooltip
-                      content={comment?.user && <SummaryProfile user={comment.user as UserResponse} />}
-                      placement="bottom-start">
-                      <Link href={`/${comment?.user.username}`} className="font-semibold hover:text-neutral-300">
-                        {comment?.user?.username}
-                      </Link>
-                    </Tooltip>
+                    <Link href={`/${comment?.user.username}`} className="font-semibold hover:text-neutral-300">
+                      {comment?.user?.username}
+                    </Link>
+
                     <p className="font-normal text-black">{comment?.content}</p>
                   </div>
                   <div className="flex h-5 items-center space-x-2.5">
@@ -123,15 +120,10 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                           </Tooltip>
                           <div className="space-y-1 mx-3">
                             <div className="flex items-center space-x-1.5 text-[13px] leading-[18px]">
-                              <Tooltip
-                                content={reply?.user && <SummaryProfile user={reply.user as UserResponse} />}
-                                placement="bottom-start">
-                                <Link
-                                  href={`/${reply?.user.username}`}
-                                  className="font-semibold hover:text-neutral-300">
-                                  {reply?.user.username}
-                                </Link>
-                              </Tooltip>
+                              <Link href={`/${reply?.user.username}`} className="font-semibold hover:text-neutral-300">
+                                {reply?.user.username}
+                              </Link>
+
                               <p className="font-normal text-black">
                                 <Link href={`/${comment?.user.username}`} className="text-sky-600">
                                   @{comment?.user.username}
@@ -149,7 +141,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                               <button
                                 className="text-xs font-semibold text-neutral-500"
                                 onClick={() => {
-                                  setContent(`@${reply?.user.username} `);
+                                  setContent(`@${reply?.parent?.user.username} `);
                                   setParentID(comment?.id || "");
                                   setReplyUsername(reply?.user.username || "");
                                 }}>

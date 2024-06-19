@@ -107,10 +107,11 @@ const CommentForm = ({ postId }: { postId: string }) => {
       <Textarea
         type="text"
         placeholder="Add a comment..."
-        className="flex-1 border-none bg-transparent ring-0 focus px-2 mb-1"
+        className="flex-1 border-none bg-transparent ring-0 focus px-2 mb-1 focus:no-underline bg-white"
         ref={textareaRef}
         value={content}
         size="sm"
+        radius="none"
         variant="underlined"
         maxLength={2200}
         maxRows={4}

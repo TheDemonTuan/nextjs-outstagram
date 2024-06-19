@@ -65,7 +65,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   }
 
   return (
-    <div className="flex flex-col max-full mt-9 mx-16 mb-40">
+    <div className="flex flex-col max-full mt-9 mx-28 mb-40">
       <ProfileInformation userProfile={userProfileData} />
       <ProfileStories />
       <div className="w-full">

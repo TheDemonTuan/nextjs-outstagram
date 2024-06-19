@@ -35,6 +35,7 @@ const SinglePost = ({ id }: { id: string }) => {
     queryKey: [postKey, { id }],
     queryFn: () => graphQLClient.request(PostByPostIdDocument, { postID: id }),
     enabled: !!id,
+    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {

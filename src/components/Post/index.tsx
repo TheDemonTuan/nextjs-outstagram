@@ -27,12 +27,15 @@ import { EmojiLookBottomIcon } from "@/icons";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import UserProfileInfo from "../user-profile-info";
+import { useRouter } from "next/navigation";
+import { redirectHard } from "@/actions";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
   const { ref, inView } = useInView();
   const { authData } = useAuth();
   const currentPage = useRef(1);
+  const router = useRouter();
 
   const {
     status,
@@ -108,12 +111,18 @@ const Post = () => {
                                 />
                               </div>
                             </Tooltip>
-                            <span className="text-xs text-gray-500">
+                            <Link
+                              href={`/p/${post.id}`}
+                              className="text-xs text-gray-500"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                redirectHard(`/p/${post.id}`);
+                              }}>
                               •{" "}
                               {formatDistanceToNow(post.created_at, {
                                 addSuffix: true,
                               })}
-                            </span>
+                            </Link>
                           </div>
                           <span
                             className="ml-auto w-8 h-8 rounded-full"

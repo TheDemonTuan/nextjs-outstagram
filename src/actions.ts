@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const getJWT = async () => {
   return cookies().get(`${process.env.NEXT_PUBLIC_JWT_NAME}`)?.value;
@@ -25,6 +26,10 @@ export const clearJWT = async () => {
     name: process.env.NEXT_PUBLIC_JWT_NAME + "",
     maxAge: 0,
   });
-  
+
   return true;
+};
+
+export const redirectHard = async (uri: string) => {
+  redirect(uri);
 };

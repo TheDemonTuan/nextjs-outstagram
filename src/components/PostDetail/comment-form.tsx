@@ -2,7 +2,7 @@ import { PostCommentByPostIDParams, postCommentByPostId, postKey } from "@/api/p
 import { PostComment } from "@/api/post_comment";
 import { PostByPostIdQuery } from "@/gql/graphql";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { Button, Spinner, Textarea } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -13,6 +13,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useCommentStore } from "@/stores/comment-store";
+import { Textarea } from "../ui/textarea";
+import TextareaAutosize from "react-textarea-autosize";
+import { cn } from "@/lib/utils";
 
 const Picker = dynamic(
   () => {
@@ -40,6 +43,12 @@ const CommentForm = ({ postId }: { postId: string }) => {
           avatar: getUserAvatarURL(authData?.avatar || ""),
           username: authData?.username,
         },
+        parent: {
+          id: parentID,
+          user: {
+            username: replyUsername,
+          },
+        },
       };
       queryClient.setQueryData([postKey, { id: postId }], (oldData: PostByPostIdQuery) => {
         return {
@@ -53,6 +62,8 @@ const CommentForm = ({ postId }: { postId: string }) => {
       setContent("");
     },
     onError: (error) => {
+      console.log(error);
+
       toast.error(error?.response?.data?.message || "Comment post failed!");
     },
   });
@@ -107,13 +118,19 @@ const CommentForm = ({ postId }: { postId: string }) => {
           <Picker className="absolute z-50 top-0 right-0" lazyLoadEmojis onEmojiClick={(e) => handleEmojiClick(e)} />
         </PopoverContent>
       </Popover>
-      <textarea
+      <TextareaAutosize
         placeholder="Add a comment..."
-        className="flex-1 border-none bg-transparent ring-0 focus px-2 mb-0 focus:no-underline bg-white resize-none focus:outline-none"
+        className={cn(
+          "flex-1 border-none bg-transparent ring-0 focus p-2 mb-0 text-sm focus:no-underline bg-white resize-none focus:outline-none focus-visible:ring-0 shadow-none",
+          postCommentIsPending && "cursor-not-allowed opacity-50"
+        )}
         ref={textareaRef}
-        value={content}
         maxLength={2200}
-        rows={1}
+        maxRows={4}
+        autoFocus
+        disabled={postCommentIsPending}
+        cacheMeasurements
+        value={content}
         onChange={handleTextareaChange}
       />
       <button

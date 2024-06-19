@@ -90,7 +90,7 @@ const AddPostModal = () => {
               <Divider />
               <ModalBody className="p-0">
                 <div className="flex">
-                  <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 ">
+                  <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 justify-center items-center flex bg-black">
                     <Carousel
                       slides={modalData.selectedFiles.map((file: File, index: number) => ({
                         id: index.toString(),

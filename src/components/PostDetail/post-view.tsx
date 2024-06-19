@@ -86,7 +86,7 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
             </div>
             <CommentForm postId={post.id} />
           </div>
-          <div className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full">
+          <div className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full flex justify-center items-center bg-black">
             {post?.post_files?.length ? (
               <Carousel
                 slides={post.post_files.map((file) => {

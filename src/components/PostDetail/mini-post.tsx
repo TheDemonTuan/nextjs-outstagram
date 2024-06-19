@@ -35,9 +35,11 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
 
       <div className="space-y-1">
         <div className="flex items-center space-x-1.5 text-[13px] leading-[18px]">
-          <Link href={href} className="font-semibold">
-            {username}
-          </Link>
+          <Tooltip content={post.user && <SummaryProfile user={post.user as UserResponse} />} placement="bottom-start">
+            <Link href={href} className="font-semibold">
+              {username}
+            </Link>
+          </Tooltip>
           <p className="font-normal text-black">{post.caption}</p>
         </div>
         <div className="flex h-5 items-center space-x-2.5">

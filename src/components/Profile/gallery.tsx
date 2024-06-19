@@ -61,7 +61,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
 
               <div className="flex items-center font-bold space-x-1 mx-2">
                 <MessageCircleIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
+                <p className="text-white">{post?.post_comments?.length || 0}</p>
               </div>
             </div>
           </Link>

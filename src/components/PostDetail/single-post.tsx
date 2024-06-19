@@ -5,6 +5,7 @@ import { Avatar, Tooltip } from "@nextui-org/react";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { Card } from "../ui/card";
 import CommentForm from "./comment-form";
+import Comment from "./comment";
 import Image from "next/image";
 import SummaryProfile from "../summary-profile";
 import MiniPost from "./mini-post";
@@ -94,27 +95,28 @@ const SinglePost = ({ id }: { id: string }) => {
               <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
             </span>
           </div>
-
-          <div className="flex flex-col items-center gap-1.5 flex-1 justify-center">
-            <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
-            <p className="text-sm font-medium">Start the conversation.</p>
-          </div>
-
-          {/* {post.comments.length > 0 && (
-            <ScrollArea className="hidden md:inline py-1.5 flex-1">
+          {postData.postByPostId.post_comments && postData.postByPostId.post_comments?.length <= 0 ? (
+            <div className="flex flex-col items-center gap-1.5 flex-1 justify-center">
+              <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
+              <p className="text-sm font-medium">Start the conversation.</p>
+            </div>
+          ) : (
+            <div className="hidden md:inline border-b py-1.5 overflow-y-auto h-[390px]">
               <MiniPost post={postData.postByPostId} />
-              {post.comments.map((comment) => (
-                <Comment key={comment.id} comment={comment} />
-              ))}
-            </ScrollArea>
-          )} */}
+              <Comment comments={postData.postByPostId.post_comments} />
+            </div>
+          )}
 
-          <div className="px-2 hidden md:block mt-auto border-y p-2.5">
+          <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
             <PostReact postID={id} isLiked />
             <div className="flex flex-col">
-              <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
-                1 likes
-              </span>
+              {postData.postByPostId.post_likes && postData.postByPostId.post_likes.length > 0 ? (
+                <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
+                  {postData.postByPostId.post_likes.length} likes
+                </span>
+              ) : (
+                <div className="mt-1"></div>
+              )}
               <time className="text-[12px] text-zinc-500 font-medium">
                 {new Date(postData.postByPostId.created_at).toLocaleDateString("en-US", {
                   month: "long",

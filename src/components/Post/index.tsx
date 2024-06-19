@@ -235,7 +235,7 @@ const Post = () => {
           )
         )}
       </div>
-      {/* <PostMoreOptions /> */}
+      <PostMoreOptions />
       <Likes />
     </>
   );

@@ -150,7 +150,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                                 className="text-xs font-semibold text-neutral-500"
                                 onClick={() => {
                                   setContent(`@${reply?.user.username} `);
-                                  setParentID(reply?.id || "");
+                                  setParentID(comment?.id || "");
                                   setReplyUsername(reply?.user.username || "");
                                 }}>
                                 Reply

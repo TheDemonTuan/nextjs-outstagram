@@ -17,7 +17,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { parseDate } from "@internationalized/date";
 import OptionChangeAvatar, { OptionChangeAvatarModalKey } from "../Profile/options-change-avatar";
 import { useModalStore } from "@/stores/modal-store";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const EditProfileForm = () => {

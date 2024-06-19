@@ -97,20 +97,6 @@ const Post = () => {
                             <Tooltip
                               content={post.user && <SummaryProfile user={post.user as UserResponse} />}
                               placement="bottom-start">
-                              {/* <Link
-                                className="flex items-center gap-2 text-sm font-medium"
-                                href={`/${post.user?.username}`}>
-                                <Avatar className="w-9 h-9">
-                                  <AvatarImage
-                                    className="object-cover"
-                                    alt={post.user?.username ?? "User Avatar"}
-                                    src={getUserAvatarURL(post.user?.avatar)}
-                                  />
-                                  <AvatarFallback>{post.user?.username}</AvatarFallback>
-                                </Avatar>
-                                {post.user?.username}
-                              </Link>
-                              */}
                               <div className="flex items-center gap-2 text-sm font-medium">
                                 <UserProfileInfo
                                   username={post.user?.username || ""}
@@ -249,7 +235,7 @@ const Post = () => {
           )
         )}
       </div>
-      <PostMoreOptions />
+      {/* <PostMoreOptions /> */}
       <Likes />
     </>
   );

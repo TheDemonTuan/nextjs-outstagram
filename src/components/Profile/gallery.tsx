@@ -17,13 +17,13 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-1 mx-28 ">
+    <div className="grid grid-cols-3 gap-1 mx-28 max-w-screen-xl ">
       {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         const firstFile = postFiles[0];
         return (
           <Link key={post.id} href={`/p/${post.id}`} className="relative group cursor-pointer">
-            <div className="w-full h-[310px]">
+            <div className="w-full h-[300px]">
               {firstFile?.type === "0" && firstFile?.url ? (
                 <video
                   key={"video" + firstFile.id}

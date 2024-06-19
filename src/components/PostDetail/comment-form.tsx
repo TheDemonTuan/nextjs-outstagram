@@ -94,6 +94,10 @@ const CommentForm = ({ postId }: { postId: string }) => {
     setContent(content + e.emoji);
   };
 
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  };
+
   return (
     <div className="flex items-center space-x-2 px-5 p-2">
       <Popover>
@@ -104,19 +108,14 @@ const CommentForm = ({ postId }: { postId: string }) => {
           <Picker className="absolute z-50 top-0 right-0" lazyLoadEmojis onEmojiClick={(e) => handleEmojiClick(e)} />
         </PopoverContent>
       </Popover>
-      <Textarea
-        type="text"
+      <textarea
         placeholder="Add a comment..."
-        className="flex-1 border-none bg-transparent ring-0 focus px-2 mb-1 focus:no-underline bg-white"
+        className="flex-1 border-none bg-transparent ring-0 focus px-2 mb-0 focus:no-underline bg-white resize-none focus:outline-none"
         ref={textareaRef}
         value={content}
-        size="sm"
-        radius="none"
-        variant="underlined"
         maxLength={2200}
-        maxRows={4}
-        minRows={1}
-        onValueChange={(value) => setContent(value)}
+        rows={1}
+        onChange={handleTextareaChange}
       />
       <button
         onClick={() => handlePostComment(content, parentID)}

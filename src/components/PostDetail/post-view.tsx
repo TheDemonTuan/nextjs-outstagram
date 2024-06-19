@@ -15,7 +15,7 @@ import Likes, { LikesModalKey } from "../Post/likes";
 import { formatDistanceToNow } from "date-fns";
 import { PostByPostIdQuery } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
-import { Tooltip } from "@nextui-org/react";
+import { Card, Tooltip } from "@nextui-org/react";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
@@ -33,10 +33,10 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
     <>
       <Dialog defaultOpen={true} open={true} onOpenChange={(open: boolean) => !open && router.back()}>
         <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
-          <div className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg">
-            <div className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-6 justify-between">
+          <Card className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg rounded-md">
+            <div className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-5 justify-between">
               <Tooltip content={user && <SummaryProfile user={user as UserResponse} />} placement="bottom-start">
-                <div className="flex flex-row items-center gap-3">
+                <div className="flex flex-row items-center gap-3 px-1">
                   <UserProfileInfo
                     username={user?.username || ""}
                     full_name={""}
@@ -52,11 +52,11 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
                   setModalData(post);
                   modalOpen(PostMoreOptionsModalKey);
                 }}>
-                <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer mx-5" stroke="#262626" />
+                <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
               </span>
             </div>
 
-            <div className="hidden md:inline border-b py-1.5 overflow-y-auto h-[500px]">
+            <div className="hidden md:inline border-b py-1.5 px-1  overflow-y-auto h-[500px]">
               <MiniPost post={post} />
               <div className="flex flex-col">
                 <Comment comments={post_comments} />
@@ -85,8 +85,8 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
               </div>
             </div>
             <CommentForm postId={post.id} />
-          </div>
-          <div className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full flex justify-center items-center bg-black">
+          </Card>
+          <Card className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-3xl w-full flex justify-center items-center bg-black rounded-l-md rounded-r-none">
             {post?.post_files?.length ? (
               <Carousel
                 slides={post.post_files.map((file) => {
@@ -99,7 +99,7 @@ function PostView({ post }: { post: PostByPostIdQuery["postByPostId"] }) {
                 })}
               />
             ) : null}
-          </div>
+          </Card>
         </DialogContent>
       </Dialog>
       <PostMoreOptions />

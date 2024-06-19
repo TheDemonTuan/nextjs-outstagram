@@ -70,7 +70,7 @@ export default function CarouselDetailPost({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className="rounded-sm h-[450px]  w-full object-contain flex-shrink-0"
+                    className="rounded-sm h-[450px]  w-full object-cover flex-shrink-0"
                     controls
                     playing={shouldPlay}
                     muted={muted}

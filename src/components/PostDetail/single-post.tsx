@@ -54,7 +54,7 @@ const SinglePost = ({ id }: { id: string }) => {
   return (
     <>
       <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9 rounded-none shadow-none">
-        <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full">
+        <div className="relative overflow-hidden h-[600px] max-w-sm lg:max-w-lg w-full flex items-center justify-center bg-black">
           {postData?.postByPostId.post_files?.length ? (
             <Carousel
               slides={postData?.postByPostId.post_files.map((file) => {

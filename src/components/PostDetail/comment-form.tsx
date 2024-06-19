@@ -70,7 +70,6 @@ const CommentForm = ({ postId }: { postId: string }) => {
       const match = regex.exec(content);
       if (match) {
         const username = match[1];
-        console.log(username);
         if (replyUsername !== username) {
           parentID = "";
         } else {

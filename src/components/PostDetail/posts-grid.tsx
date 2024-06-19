@@ -1,6 +1,6 @@
 import { userKey } from "@/api/user";
 import { UserProfileDocument } from "@/gql/graphql";
-import { LikeHeartIcon, MessageCircleIcon } from "@/icons";
+import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import { graphQLClient } from "@/lib/graphql";
 import { HeartIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
@@ -69,6 +69,16 @@ function PostsGrid({ postUsername }: { postUsername: string }) {
                 className="object-cover -z-10 transition group-hover:filter group-hover:blur-[2px] group-hover:brightness-90 "
               />
             )}
+            {postFiles.length === 1 && firstFile?.type === "0" && (
+              <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                <ClipIcon />
+              </div>
+            )}
+            {postFiles?.length > 1 && (
+              <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                <MultiFileIcon />
+              </div>
+            )}
 
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6 rounded-none">
               <div className="flex items-center font-bold space-x-1 mx-2">
@@ -78,7 +88,7 @@ function PostsGrid({ postUsername }: { postUsername: string }) {
 
               <div className="flex items-center font-bold space-x-1 mx-2">
                 <MessageCircleIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
+                <p className="text-white">{post?.post_comments?.length || 0}</p>
               </div>
             </div>
           </Link>

@@ -1,9 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import { Button, Divider, Avatar } from "@nextui-org/react";
+import { Button, Divider } from "@nextui-org/react";
 import { MessagesIcon, MessagesSummaryProfileIcon } from "@/icons";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { UserResponse } from "@/api/user";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import Link from "next/link";
 
 interface SummaryProfileProps {
   user: UserResponse;
@@ -11,15 +13,11 @@ interface SummaryProfileProps {
 
 const SummaryProfile = (props: SummaryProfileProps) => {
   return (
-    <div className="flex flex-col p-4">
+    <Link href={`/${props.user.username}`} className="flex flex-col p-4">
       <div className="flex flex-row items-center space-x-2">
-        <Image
-          src={getUserAvatarURL(props.user.avatar)}
-          alt=""
-          className="rounded-full w-14 h-14"
-          width={56}
-          height={56}
-        />
+        <Avatar className="w-14 h-14">
+          <AvatarImage src={getUserAvatarURL(props.user.avatar)} />
+        </Avatar>
 
         <div>
           <p className="font-semibold text-sm">{props.user.username}</p>
@@ -42,7 +40,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         {props.user.posts && props.user.posts?.length > 0 ? (
           props.user.posts.map((url, index) => (
             <div key={index} className="flex-1">
-              <Avatar src={url?.caption} alt={`Image ${index + 1}`} className="w-full h-32" />
+              <Image src={url?.caption} alt={`Image ${index + 1}`} className="w-full h-32" />
             </div>
           ))
         ) : (
@@ -67,7 +65,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         </Button>
         <Button className="w-1/2 mx-1 h-9 font-medium bg-gray-200 rounded-lg">Following</Button>
       </div>
-    </div>
+    </Link>
   );
 };
 

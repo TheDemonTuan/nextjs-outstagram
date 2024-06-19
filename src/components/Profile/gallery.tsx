@@ -42,7 +42,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                   priority
                 />
               )}
-              {postFiles.length === 1 && firstFile?.type === "1" && (
+              {postFiles.length === 1 && firstFile?.type === "0" && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                   <ClipIcon />
                 </div>
@@ -61,7 +61,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
 
               <div className="flex items-center font-bold space-x-1 mx-2">
                 <MessageCircleIcon className="text-white fill-white" />
-                <p className="text-white">1</p>
+                <p className="text-white">{post?.post_comments?.length || 0}</p>
               </div>
             </div>
           </Link>

@@ -48,8 +48,8 @@ export default function Carousel({
                 src={slide.url}
                 alt=""
                 className={cn("flex-shrink-0 rounded-sm", slide.className)}
-                width={1000}
-                height={1000}
+                width={700}
+                height={700}
                 priority
               />
             ) : (
@@ -60,7 +60,7 @@ export default function Carousel({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className={cn("rounded-sm", slide.className)}
+                    className={cn("rounded-sm flex-shrink-0", slide.className)}
                     controls
                     playing={shouldPlay}
                     muted={muted}

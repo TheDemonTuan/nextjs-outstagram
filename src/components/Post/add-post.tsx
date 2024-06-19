@@ -70,12 +70,12 @@ const AddPostModal = () => {
       hideCloseButton={true}
       isDismissable={!createIsPending}
       size="3xl">
-      <ModalContent className="h-[550px]">
+      <ModalContent className="h-[545px]">
         {(onClose) => (
           <>
             <div
               className={`cursor-pointer items-center p-0 ${createIsPending ? "pointer-events-none opacity-50" : ""}`}>
-              <ModalHeader className="flex justify-between items-center my-[-5px]">
+              <ModalHeader className="flex justify-between items-center p-2 mx-2">
                 <button onClick={onClose} className="cursor-pointer font-normal text-sm ">
                   Cancel
                 </button>
@@ -88,15 +88,15 @@ const AddPostModal = () => {
                 </button>
               </ModalHeader>
               <Divider />
-              <ModalBody>
-                <div className="flex mt-[-7px] ml-[-25px] mr-[-20px]">
-                  <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 ">
+              <ModalBody className="p-0">
+                <div className="flex">
+                  <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 justify-center items-center flex bg-black">
                     <Carousel
                       slides={modalData.selectedFiles.map((file: File, index: number) => ({
                         id: index.toString(),
                         url: URL.createObjectURL(file),
                         type: file.type.startsWith("image/") ? 1 : 0,
-                        className: "rounded-sm h-[500px] min-h-[240px] w-full object-cover",
+                        className: "rounded-sm max-h-[500px] min-h-[240px] w-full object-cover",
                       }))}
                     />
                   </div>

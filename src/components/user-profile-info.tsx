@@ -31,11 +31,11 @@ const UserProfileInfo = ({
         </Avatar>
       </Link>
       <div className="flex-1">
-        <div className="flex items-center">
+        <div className="flex items-center space-x-1">
           <Link href={`/${username}`} className="font-semibold text-sm">
             {username}
           </Link>
-          {is_admin && <VerifiedIcon className="w-3 h-3 mx-1" />}
+          {is_admin && <VerifiedIcon className="w-3 h-3" />}
         </div>
         {isShowFullName && <h3 className="text-xs text-gray-400">{full_name}</h3>}
       </div>

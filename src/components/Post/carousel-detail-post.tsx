@@ -46,12 +46,12 @@ export default function CarouselDetailPost({
         {slides.map((slide, index) => (
           <Fragment key={index}>
             {slide.type ? (
-              <div className="relative flex-shrink-0">
+              <div className="relative flex-shrink-0 w-full">
                 <Image
                   key={`image-${slide.id}`}
                   src={slide.url}
                   alt=""
-                  className="rounded-sm h-[450px] w-[448px] object-cover flex-shrink-0 "
+                  className="rounded-sm h-[450px] w-full object-cover flex-shrink-0 "
                   width={590}
                   height={590}
                   priority
@@ -70,7 +70,7 @@ export default function CarouselDetailPost({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className="rounded-sm h-[450px]  w-[448px] object-cover flex-shrink-0"
+                    className="rounded-sm h-[450px]  w-full object-cover flex-shrink-0"
                     controls
                     playing={shouldPlay}
                     muted={muted}

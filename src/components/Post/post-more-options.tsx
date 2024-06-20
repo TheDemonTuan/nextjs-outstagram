@@ -75,7 +75,11 @@ const PostMoreOptions = () => {
 
   return (
     <>
-      <Modal isOpen={modalKey === PostMoreOptionsModalKey} onOpenChange={modalClose} hideCloseButton={true}>
+      <Modal
+        className="z-50"
+        isOpen={modalKey === PostMoreOptionsModalKey}
+        onOpenChange={modalClose}
+        hideCloseButton={true}>
         <ModalContent>
           {(onClose) => {
             const listOptionItem = authData?.id === modalData?.user_id ? UserMeMoreOptions : UserMoreOptions;

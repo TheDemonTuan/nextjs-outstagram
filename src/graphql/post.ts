@@ -94,6 +94,11 @@ export const PostHomePage = graphql(`
         user_id
         is_liked
       }
+      post_comments {
+        id
+        user_id
+        parent_id
+      }
       created_at
     }
   }

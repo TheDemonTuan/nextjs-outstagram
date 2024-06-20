@@ -102,13 +102,14 @@ const SinglePost = ({ id }: { id: string }) => {
               <p className="text-sm font-medium">Start the conversation.</p>
             </div>
           ) : (
-            <div className="hidden md:inline border-b py-1.5 overflow-y-auto h-[390px]">
+            <div className="hidden md:inline py-1.5 overflow-y-auto max-h-[380px]">
               <MiniPost post={postData.postByPostId} />
-              <Comment comments={postData.postByPostId.post_comments} />
+              <div className="flex flex-col">
+                <Comment comments={postData.postByPostId.post_comments} />
+              </div>
             </div>
           )}
-
-          <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
+          <div className="px-5 py-4 hidden md:block mt-auto border-b border-t p-2.5 space-y-3 sticky z-20">
             <PostReact postID={id} isLiked />
             <div className="flex flex-col">
               {postData.postByPostId.post_likes && postData.postByPostId.post_likes.length > 0 ? (
@@ -126,6 +127,7 @@ const SinglePost = ({ id }: { id: string }) => {
               </time>
             </div>
           </div>
+
           <CommentForm postId={id} />
         </div>
       </Card>

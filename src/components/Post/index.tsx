@@ -163,23 +163,18 @@ const Post = () => {
                             onClick={() => modalOpen(LikesModalKey)}>
                             {postLikes?.length} likes
                           </span>
-                          <div className="py-1 text-sm">
+                          <div className="py-0 text-sm">
                             <span className="font-bold">{post.user?.username}</span>
                             <span className="ml-1">{post.caption}</span>
                           </div>
-                          <div className="text-sm w-full grid gap-1.5">
-                            <div>
-                              <Link className="font-medium" href="#">
-                                john
-                              </Link>
-                              Wow, this photo is absolutely stunning! 😍✨
-                            </div>
-                            <div>
-                              <Link className=" text-neutral-400" href={`/p/${post.id}`} passHref>
-                                View all 39 comments
-                              </Link>
-                            </div>
-                          </div>
+
+                          {post.post_comments && post.post_comments?.length > 0 && (
+                            <Link className="text-neutral-500 text-sm" href={`/p/${post.id}`} passHref>
+                              {`View all ${post.post_comments.length} comment${
+                                post.post_comments.length > 1 ? "s" : ""
+                              }`}
+                            </Link>
+                          )}
                         </CardFooter>
                       </Card>
                     </div>

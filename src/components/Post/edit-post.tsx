@@ -134,7 +134,7 @@ const EditPost = () => {
             <Divider />
             <ModalBody className="p-0">
               <div className="flex">
-                <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 ">
+                <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg w-3/5 flex items-center ">
                   <Carousel
                     slides={modalData.post_files.map((file: PostFile) => {
                       return {

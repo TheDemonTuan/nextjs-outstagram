@@ -1,19 +1,17 @@
 "use client";
 
 import React, { Fragment, useEffect, useRef } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { Divider, Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@nextui-org/react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
 import { useModalStore } from "@/stores/modal-store";
-import PostMoreOptions, { PostMoreOptionsModalKey } from "./post-more-options";
+import { PostMoreOptionsModalKey } from "./post-more-options";
 import PostReact from "./post-react";
 import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
-import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
 import { PostHomePageDocument } from "@/gql/graphql";
@@ -22,13 +20,16 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
-import Likes, { LikesModalKey } from "./likes";
+import PostLikes, { LikesModalKey } from "./likes";
 import { EmojiLookBottomIcon } from "@/icons";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import UserProfileInfo from "../user-profile-info";
 import { useRouter } from "next/navigation";
 import { redirectHard } from "@/actions";
+import dynamic from "next/dynamic";
+
+const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
@@ -113,6 +114,8 @@ const Post = () => {
                             </Tooltip>
                             <Link
                               href={`/p/${post.id}`}
+                              passHref
+                              scroll={false}
                               className="text-xs text-gray-500"
                               onClick={(e) => {
                                 e.preventDefault();
@@ -239,8 +242,8 @@ const Post = () => {
           )
         )}
       </div>
-      <PostMoreOptions />
-      <Likes />
+      {postsData && <PostMoreOptions />}
+      <PostLikes />
     </>
   );
 };

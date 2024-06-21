@@ -18,7 +18,7 @@ import { PostByPostIdDocument } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { useModalStore } from "@/stores/modal-store";
-import Likes, { LikesModalKey } from "../Post/likes";
+import PostLikes, { LikesModalKey } from "../Post/likes";
 import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
@@ -35,7 +35,6 @@ const SinglePost = ({ id }: { id: string }) => {
     queryKey: [postKey, { id }],
     queryFn: () => graphQLClient.request(PostByPostIdDocument, { postID: id }),
     enabled: !!id,
-    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
@@ -133,7 +132,7 @@ const SinglePost = ({ id }: { id: string }) => {
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}
       <PostMoreOptions />
-      <Likes />
+      <PostLikes />
     </>
   );
 };

@@ -1,12 +1,14 @@
-"use client";
+'use client'
 
-import { postGetByPostId, postKey } from "@/api/post";
-import PostView from "@/components/PostDetail/post-view";
-import { PostByPostIdDocument } from "@/gql/graphql";
-import { graphQLClient } from "@/lib/graphql";
-import { useQuery } from "@tanstack/react-query";
-import { notFound } from "next/navigation";
-import React, { useEffect } from "react";
+import ModalLoading from "@/components/modal-loading";
+import dynamic from "next/dynamic";
+import React from "react";
+
+const PostView = dynamic(() => import("@/components/PostDetail/post-view"), {
+  loading: () => <ModalLoading />,
+  ssr: false,
+});
+
 type Props = {
   params: {
     id: string;
@@ -14,34 +16,7 @@ type Props = {
 };
 
 const PostModal = ({ params: { id } }: Props) => {
-  const {
-    data: postData,
-    error: postError,
-    isLoading: postIsLoading,
-  } = useQuery({
-    queryKey: [postKey, { id }],
-    queryFn: () => graphQLClient.request(PostByPostIdDocument, { postID: id }),
-    enabled: !!id,
-    staleTime: 1000 * 60 * 5,
-  });
-
-  useEffect(() => {
-    if (postError) {
-      notFound();
-    }
-  }, [postError]);
-
-  if (postIsLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!postData) {
-    return <div>Post not found</div>;
-  }
-
-  const { postByPostId } = postData;
-
-  return <PostView post={postByPostId} />;
+  return <PostView id={id} />;
 };
 
 export default PostModal;

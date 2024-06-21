@@ -2,9 +2,9 @@ import { useModalStore } from "@/stores/modal-store";
 import { Avatar, Button, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import React from "react";
 
-export const LikesModalKey = "Likes";
+export const LikesModalKey = "PostLikes";
 
-const Likes = () => {
+const PostLikes = () => {
   const { modalClose, modalKey } = useModalStore();
   return (
     <>
@@ -140,4 +140,4 @@ const Likes = () => {
   );
 };
 
-export default Likes;
+export default PostLikes;

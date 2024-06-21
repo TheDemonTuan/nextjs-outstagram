@@ -8,22 +8,20 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
-import SelectPhotoModal, { SelectPhotoModalKey } from "./select-photo";
 
 const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boolean; postPage?: number }) => {
   const queryClient = useQueryClient();
   const { authData } = useAuth();
-  const { modalOpen, setModalData } = useModalStore();
 
   const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postLike(params),
     onSuccess: (likePostData) => {
-      queryClient.setQueryData([postKey, "home-page"], (oldData: any) => {
-        return {
-          ...oldData,
-          pages: [
-            ...oldData.pages.map((page: any, index: any) => {
-              if (index === postPage) {
+      if (!!queryClient.getQueryData([postKey, "home-page"])) {
+        queryClient.setQueryData([postKey, "home-page"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
                 return {
                   postHomePage: [
                     ...page.postHomePage.map((post: any) => {
@@ -34,31 +32,43 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
                             post_likes: [likePostData.data],
                           };
                         }
+                        const newLikes = post.post_likes.filter((like: any) => like.user_id !== authData?.id);
                         return {
                           ...post,
-                          post_likes: [
-                            ...post.post_likes.map((like: any) => {
-                              if (like.user_id === authData?.id) {
-                                return {
-                                  ...like,
-                                  is_liked: likePostData.data.is_liked,
-                                };
-                              }
-                              return like;
-                            }),
-                          ],
+                          post_likes: [likePostData.data, ...newLikes],
                         };
                       }
                       return post;
                     }),
                   ],
                 };
-              }
-              return page;
-            }),
-          ],
-        };
-      });
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, { id: postID }])) {
+        queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
+          if (!oldData.postByPostId.post_likes?.length) {
+            return {
+              ...oldData,
+              postByPostId: {
+                ...oldData.postByPostId,
+                post_likes: [likePostData.data],
+              },
+            };
+          }
+          const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== authData?.id);
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              post_likes: [likePostData.data, ...newLikes],
+            },
+          };
+        });
+      }
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Like post failed!");

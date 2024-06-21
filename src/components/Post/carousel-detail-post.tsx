@@ -67,29 +67,6 @@ export default function CarouselDetailPost({
                   onClick={() => onDelete(slide.id)}>
                   <RiCloseLargeFill />
                 </div>
-                <div className="absolute bottom-2 left-2">
-                  <Dropdown placement="top-start" className="p-0 rounded-md">
-                    <DropdownTrigger>
-                      <button className=" rounded-full p-2 bg-black opacity-50  items-center cursor-pointer">
-                        <FaCropSimple color="white" />
-                      </button>
-                    </DropdownTrigger>
-                    <DropdownMenu className=" opacity-80 rounded-md">
-                      <DropdownItem key="original" startContent={<IoImageOutline size={20} />}>
-                        <div className="font-bold">Original</div>
-                      </DropdownItem>
-                      <DropdownItem key="1:1" startContent={<MdCropDin size={20} />}>
-                        <div className="font-bold">1:1</div>
-                      </DropdownItem>
-                      <DropdownItem key="4:5" startContent={<MdOutlineCropLandscape size={20} />}>
-                        <div className="font-bold">4:5</div>
-                      </DropdownItem>
-                      <DropdownItem key="16:9" className="flex" startContent={<MdOutlineCropPortrait size={20} />}>
-                        <div className="font-bold"> 16:9 </div>
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
               </div>
             ) : (
               <Waypoint onEnter={handleEnterViewport} onLeave={handleExitViewport}>
@@ -99,7 +76,7 @@ export default function CarouselDetailPost({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className="rounded-sm h-[450px]  w-full object-cover flex-shrink-0"
+                    className="rounded-sm h-[450px] w-full object-cover flex-shrink-0"
                     controls
                     playing={shouldPlay}
                     muted={muted}
@@ -109,29 +86,6 @@ export default function CarouselDetailPost({
                     onClick={() => onDelete(slide.id)}>
                     <RiCloseLargeFill />
                   </button>
-                  <div className="absolute bottom-2 left-2 -z-20">
-                    <Dropdown placement="top-start" className="p-0 rounded-md">
-                      <DropdownTrigger>
-                        <button className=" rounded-full p-2 bg-black opacity-50  items-center cursor-pointer">
-                          <FaCropSimple color="white" />
-                        </button>
-                      </DropdownTrigger>
-                      <DropdownMenu className=" opacity-80 rounded-md">
-                        <DropdownItem key="original" startContent={<IoImageOutline size={20} />}>
-                          <div className="font-bold">Original</div>
-                        </DropdownItem>
-                        <DropdownItem key="1:1" startContent={<MdCropDin size={20} />}>
-                          <div className="font-bold">1:1</div>
-                        </DropdownItem>
-                        <DropdownItem key="4:5" startContent={<MdOutlineCropLandscape size={20} />}>
-                          <div className="font-bold">4:5</div>
-                        </DropdownItem>
-                        <DropdownItem key="16:9" className="flex" startContent={<MdOutlineCropPortrait size={20} />}>
-                          <div className="font-bold"> 16:9 </div>
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
                 </div>
               </Waypoint>
             )}

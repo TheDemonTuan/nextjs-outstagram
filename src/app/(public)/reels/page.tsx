@@ -124,8 +124,11 @@ const ReelsPage = () => {
                   <span className="px-1">original sound - AWESOME</span>
                   <AiFillHeart size="20" />
                 </p> */}
+                {/* min-h-[480px] 
+                  max-h-[600px]
+                  max-w-[350px] */}
                 <Link href={`/p/${post.id}`} className="mt-2.5 flex">
-                  <div className="relative min-h-[480px] max-h-[600px] max-w-[350px] flex items-center bg-black rounded-xl cursor-pointer">
+                  <div className="relative min-h-[480px] max-h-[580px] max-w-[310px] flex items-center bg-black rounded-xl cursor-pointer">
                     <video
                       id={`video-${post.id}`}
                       loop

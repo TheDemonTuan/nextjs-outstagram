@@ -1,10 +1,16 @@
-import { Button } from "@nextui-org/react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
 import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
+import { RiCloseLargeFill } from "react-icons/ri";
+import { FaCropSimple } from "react-icons/fa6";
+import { IoImageOutline } from "react-icons/io5";
+import { MdCropDin } from "react-icons/md";
+import { MdOutlineCropLandscape } from "react-icons/md";
+import { MdOutlineCropPortrait } from "react-icons/md";
 
 export default function CarouselDetailPost({
   autoSlide = false,
@@ -57,9 +63,9 @@ export default function CarouselDetailPost({
                   priority
                 />
                 <div
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:opacity-85 cursor-pointer"
+                  className="absolute top-2 right-2 bg-black opacity-40 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"
                   onClick={() => onDelete(slide.id)}>
-                  &times;
+                  <RiCloseLargeFill />
                 </div>
               </div>
             ) : (
@@ -70,15 +76,15 @@ export default function CarouselDetailPost({
                     url={slide.url}
                     width="100%"
                     height="100%"
-                    className="rounded-sm h-[450px]  w-full object-cover flex-shrink-0"
+                    className="rounded-sm h-[450px] w-full object-cover flex-shrink-0"
                     controls
                     playing={shouldPlay}
                     muted={muted}
                   />
                   <button
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:opacity-85 cursor-pointer"
+                    className="absolute top-2 right-2 bg-black opacity-40 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"
                     onClick={() => onDelete(slide.id)}>
-                    &times;
+                    <RiCloseLargeFill />
                   </button>
                 </div>
               </Waypoint>

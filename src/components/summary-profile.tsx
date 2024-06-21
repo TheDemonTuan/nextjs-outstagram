@@ -13,28 +13,31 @@ interface SummaryProfileProps {
 
 const SummaryProfile = (props: SummaryProfileProps) => {
   return (
-    <Link href={`/${props.user.username}`} className="flex flex-col p-4">
-      <div className="flex flex-row items-center space-x-2">
+    <Link href={`/${props.user.username}`} className="flex flex-col p-2">
+      <div className="flex flex-row items-center space-x-3">
         <Avatar className="w-14 h-14">
           <AvatarImage src={getUserAvatarURL(props.user.avatar)} />
         </Avatar>
 
         <div>
-          <p className="font-semibold text-sm">{props.user.username}</p>
+          <p className="font-bold text-sm">{props.user.username}</p>
           <p className="text-sm font-normal text-gray-400">{props.user.full_name}</p>
         </div>
       </div>
-      <div className="flex flex-col my-4 ">
-        <div className="flex justify-between gap-2 font-semibold">
-          <div className=""></div>
-          <div className=""></div>
-          <div className=""></div>
+      <div className="flex mt-7 mb-3  justify-between mx-5">
+        <div className="text-center font-extrabold">
+          342 <br />
+          <span className="font-normal">posts</span>
         </div>
-        <div className="flex justify-between gap-2 text-sm">
-          <div className="">posts</div>
-          <div className="">friends</div>
-          <div className="">following</div>
-        </div>
+        <h3 className="text-center  font-extrabold">
+          120k <br />
+          <span className="font-normal">friends</span>
+        </h3>
+        <h3 className="text-center  font-extrabold">
+          285
+          <br />
+          <span className="font-normal">following</span>
+        </h3>
       </div>
       <div className="flex flex-row items-center space-x-1 mx-[-16px]">
         {props.user.posts && props.user.posts?.length > 0 ? (
@@ -50,7 +53,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
               <Image src="/camera.png" alt="" width={48} height={48} className="my-2" />
               <div className="font-bold text-base">No posts yet</div>
               <div className="text-sm text-gray-400 mx-2 text-center">
-                When umaraliyevv.j shares photos and reels, you&apos;ll see them here.
+                When {props.user.username} shares photos and reels, you&apos;ll see them here.
               </div>
               <Divider className="my-4" />
             </div>

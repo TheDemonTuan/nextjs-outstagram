@@ -55,7 +55,8 @@ const Suggestions = () => {
           <Tooltip
             delay={1000}
             content={user && <SummaryProfile user={user as UserResponse} />}
-            placement="bottom-start">
+            placement="bottom-start"
+            className="rounded-md">
             <div className="flex items-center gap-2 text-sm font-medium">
               <div className="flex flex-row gap-3 items-center">
                 <UserProfileInfo

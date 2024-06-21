@@ -834,3 +834,19 @@ export const MoreOptionReelsIcon = (props: SVGProps<SVGAElement>) => {
     </svg>
   );
 };
+
+export const SelectCropIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Select Crop"
+      className="x1lliihq x1n2onr6 x9bdzbf"
+      fill="#FFFFFF"
+      height="15"
+      role="img"
+      viewBox="0 0 24 24"
+      width="15">
+      <title>Select Crop</title>
+      <path d="M10 20H4v-6a1 1 0 0 0-2 0v7a1 1 0 0 0 1 1h7a1 1 0 0 0 0-2ZM20.999 2H14a1 1 0 0 0 0 2h5.999v6a1 1 0 0 0 2 0V3a1 1 0 0 0-1-1Z"></path>
+    </svg>
+  );
+};

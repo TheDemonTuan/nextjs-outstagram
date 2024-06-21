@@ -1,10 +1,16 @@
-import { Button } from "@nextui-org/react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
 import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
+import { RiCloseLargeFill } from "react-icons/ri";
+import { FaCropSimple } from "react-icons/fa6";
+import { IoImageOutline } from "react-icons/io5";
+import { MdCropDin } from "react-icons/md";
+import { MdOutlineCropLandscape } from "react-icons/md";
+import { MdOutlineCropPortrait } from "react-icons/md";
 
 export default function CarouselDetailPost({
   autoSlide = false,
@@ -57,9 +63,32 @@ export default function CarouselDetailPost({
                   priority
                 />
                 <div
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:opacity-85 cursor-pointer"
+                  className="absolute top-2 right-2 bg-black opacity-40 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"
                   onClick={() => onDelete(slide.id)}>
-                  &times;
+                  <RiCloseLargeFill />
+                </div>
+                <div className="absolute bottom-2 left-2">
+                  <Dropdown placement="top-start" className="p-0 rounded-md">
+                    <DropdownTrigger>
+                      <button className=" rounded-full p-2 bg-black opacity-50  items-center cursor-pointer">
+                        <FaCropSimple color="white" />
+                      </button>
+                    </DropdownTrigger>
+                    <DropdownMenu className=" opacity-80 rounded-md">
+                      <DropdownItem key="original" startContent={<IoImageOutline size={20} />}>
+                        <div className="font-bold">Original</div>
+                      </DropdownItem>
+                      <DropdownItem key="1:1" startContent={<MdCropDin size={20} />}>
+                        <div className="font-bold">1:1</div>
+                      </DropdownItem>
+                      <DropdownItem key="4:5" startContent={<MdOutlineCropLandscape size={20} />}>
+                        <div className="font-bold">4:5</div>
+                      </DropdownItem>
+                      <DropdownItem key="16:9" className="flex" startContent={<MdOutlineCropPortrait size={20} />}>
+                        <div className="font-bold"> 16:9 </div>
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
                 </div>
               </div>
             ) : (
@@ -76,10 +105,33 @@ export default function CarouselDetailPost({
                     muted={muted}
                   />
                   <button
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:opacity-85 cursor-pointer"
+                    className="absolute top-2 right-2 bg-black opacity-40 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"
                     onClick={() => onDelete(slide.id)}>
-                    &times;
+                    <RiCloseLargeFill />
                   </button>
+                  <div className="absolute bottom-2 left-2 -z-20">
+                    <Dropdown placement="top-start" className="p-0 rounded-md">
+                      <DropdownTrigger>
+                        <button className=" rounded-full p-2 bg-black opacity-50  items-center cursor-pointer">
+                          <FaCropSimple color="white" />
+                        </button>
+                      </DropdownTrigger>
+                      <DropdownMenu className=" opacity-80 rounded-md">
+                        <DropdownItem key="original" startContent={<IoImageOutline size={20} />}>
+                          <div className="font-bold">Original</div>
+                        </DropdownItem>
+                        <DropdownItem key="1:1" startContent={<MdCropDin size={20} />}>
+                          <div className="font-bold">1:1</div>
+                        </DropdownItem>
+                        <DropdownItem key="4:5" startContent={<MdOutlineCropLandscape size={20} />}>
+                          <div className="font-bold">4:5</div>
+                        </DropdownItem>
+                        <DropdownItem key="16:9" className="flex" startContent={<MdOutlineCropPortrait size={20} />}>
+                          <div className="font-bold"> 16:9 </div>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
                 </div>
               </Waypoint>
             )}

@@ -9,12 +9,12 @@ import Comment from "./comment";
 import Image from "next/image";
 import SummaryProfile from "../summary-profile";
 import MiniPost from "./mini-post";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { postGetByPostId, postKey } from "@/api/post";
 import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "@/lib/graphql";
 import { notFound } from "next/navigation";
-import { PostByPostIdDocument } from "@/gql/graphql";
+import { PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { useModalStore } from "@/stores/modal-store";
@@ -24,9 +24,12 @@ import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
 import { UserResponse } from "@/api/user";
+import LikesView from "../Post/likes-view";
+import { useAuth } from "@/hooks/useAuth";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
+  const { authData } = useAuth();
   const {
     data: postData,
     error: postError,
@@ -36,6 +39,14 @@ const SinglePost = ({ id }: { id: string }) => {
     queryFn: () => graphQLClient.request(PostByPostIdDocument, { postID: id }),
     enabled: !!id,
   });
+
+  const postLikesFilter = useMemo(() => {
+    return postData?.postByPostId.post_likes?.filter((like) => like?.is_liked);
+  }, [postData?.postByPostId.post_likes]);
+
+  const isLiked = useMemo(() => {
+    return postLikesFilter?.some((like) => like?.user_id === authData?.id);
+  }, [postLikesFilter, authData]);
 
   useEffect(() => {
     if (postError) {
@@ -70,7 +81,7 @@ const SinglePost = ({ id }: { id: string }) => {
         </div>
 
         <div className="flex max-w-sm flex-col flex-1">
-          <div className="flex items-center justify-between border-b px-5 py-3">
+          <div className="flex items-center justify-between border-b px-3 py-3">
             <Tooltip
               content={
                 postData.postByPostId.user && <SummaryProfile user={postData.postByPostId.user as UserResponse} />
@@ -95,6 +106,8 @@ const SinglePost = ({ id }: { id: string }) => {
               <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
             </span>
           </div>
+
+          <MiniPost post={postData.postByPostId} />
           {postData.postByPostId.post_comments && postData.postByPostId.post_comments?.length <= 0 ? (
             <div className="flex flex-col items-center gap-1.5 flex-1 justify-center">
               <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
@@ -102,22 +115,21 @@ const SinglePost = ({ id }: { id: string }) => {
             </div>
           ) : (
             <div className="hidden md:inline py-1.5 overflow-y-auto max-h-[380px]">
-              <MiniPost post={postData.postByPostId} />
               <div className="flex flex-col">
                 <Comment comments={postData.postByPostId.post_comments} />
               </div>
             </div>
           )}
+
           <div className="px-5 py-4 hidden md:block mt-auto border-b border-t p-2.5 space-y-3 sticky z-20">
-            <PostReact postID={id} isLiked />
+            <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
             <div className="flex flex-col">
-              {postData.postByPostId.post_likes && postData.postByPostId.post_likes.length > 0 ? (
-                <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
-                  {postData.postByPostId.post_likes.length} likes
-                </span>
-              ) : (
-                <div className="mt-1"></div>
-              )}
+              <LikesView
+                postLikes={postLikesFilter as PostLike[]}
+                post_userID={postData.postByPostId.user_id || ""}
+                current_userID={authData?.id || ""}
+                likesModalKey={LikesModalKey}
+              />
               <time className="text-[12px] text-zinc-500 font-medium">
                 {new Date(postData.postByPostId.created_at).toLocaleDateString("en-US", {
                   month: "long",

@@ -14,7 +14,7 @@ import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
-import { PostHomePageDocument } from "@/gql/graphql";
+import { PostHomePageDocument, PostLike } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
@@ -28,6 +28,8 @@ import UserProfileInfo from "../user-profile-info";
 import { useRouter } from "next/navigation";
 import { redirectHard } from "@/actions";
 import dynamic from "next/dynamic";
+import { Span } from "next/dist/trace";
+import LikesView from "./likes-view";
 
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
@@ -161,11 +163,14 @@ const Post = () => {
                             isLiked={isUserLiked ?? false}
                             postPage={pageIndex > 0 ? pageIndex : 0}
                           />
-                          <span
-                            className="font-semibold text-sm cursor-pointer"
-                            onClick={() => modalOpen(LikesModalKey)}>
-                            {postLikes?.length} likes
-                          </span>
+
+                          <LikesView
+                            postLikes={postLikes as PostLike[]}
+                            post_userID={post.user_id || ""}
+                            current_userID={authData?.id || ""}
+                            likesModalKey={LikesModalKey}
+                          />
+
                           <div className="py-0 text-sm">
                             <span className="font-bold">{post.user?.username}</span>
                             <span className="ml-1">{post.caption}</span>

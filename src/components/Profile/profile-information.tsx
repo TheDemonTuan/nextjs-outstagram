@@ -1,5 +1,5 @@
 import { VerifiedIcon } from "@/icons";
-import { Avatar, Tooltip, user } from "@nextui-org/react";
+import { Spinner, Tooltip, user } from "@nextui-org/react";
 import React from "react";
 import { useModalStore } from "@/stores/modal-store";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
@@ -9,6 +9,7 @@ import ProfileAction from "./profile-action";
 import { UserProfileQuery } from "@/gql/graphql";
 import Friends, { FriendsModalKey } from "./friends";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
@@ -26,14 +27,12 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
           <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
-            {/* <Avatar src={getUserAvatarURL(user?.avatar)} className="w-40 h-40 text-large" /> */}
-            <Image
-              src={getUserAvatarURL(user?.avatar)}
-              className="w-40 h-40 text-large rounded-full"
-              alt="User Avatar"
-              width={160}
-              height={160}
-            />
+            <Avatar className="w-40 h-40 text text-large">
+              <AvatarImage src={getUserAvatarURL(user?.avatar)} alt="User Avatar" />
+              <AvatarFallback>
+                <Spinner size="md" />
+              </AvatarFallback>
+            </Avatar>
           </div>
         </div>
         <div className="flex flex-col mx-6">

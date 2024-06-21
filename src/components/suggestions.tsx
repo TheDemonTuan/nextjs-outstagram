@@ -52,12 +52,16 @@ const Suggestions = () => {
       </div>
       {userSuggestionData?.userSuggestion.map((user) => (
         <div key={user.username} className="flex items-center justify-between gap-3">
-          <Tooltip content={user && <SummaryProfile user={user as UserResponse} />} placement="bottom-start">
+          <Tooltip
+            delay={1000}
+            content={user && <SummaryProfile user={user as UserResponse} />}
+            placement="bottom-start"
+            className="rounded-md">
             <div className="flex items-center gap-2 text-sm font-medium">
               <div className="flex flex-row gap-3 items-center">
                 <UserProfileInfo
                   username={user.username || ""}
-                  full_name={user.full_name || ""}
+                  full_name="Suggested for you"
                   isShowFullName={true}
                   className="w-11 h-11"
                   avatar={user.avatar || ""}

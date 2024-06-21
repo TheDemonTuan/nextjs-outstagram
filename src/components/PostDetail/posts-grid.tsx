@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { useEffect } from "react";
 import { IoMdUmbrella } from "react-icons/io";
 import { ProfileSkeleton } from "../skeletons";
+import { redirectHard } from "@/actions";
 
 function PostsGrid({ postUsername }: { postUsername: string }) {
   const {
@@ -52,6 +53,10 @@ function PostsGrid({ postUsername }: { postUsername: string }) {
         return (
           <Link
             href={`/p/${post.id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              redirectHard(`/p/${post.id}`);
+            }}
             key={post.id}
             className="relative flex items-center justify-center h-44 md:h-64 lg:h-80 group col-span-1">
             {firstFile?.type === "0" && firstFile?.url ? (

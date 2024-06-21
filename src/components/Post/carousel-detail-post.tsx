@@ -1,16 +1,10 @@
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from "@nextui-org/react";
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
-import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
 import { RiCloseLargeFill } from "react-icons/ri";
-import { FaCropSimple } from "react-icons/fa6";
-import { IoImageOutline } from "react-icons/io5";
-import { MdCropDin } from "react-icons/md";
-import { MdOutlineCropLandscape } from "react-icons/md";
-import { MdOutlineCropPortrait } from "react-icons/md";
 
 export default function CarouselDetailPost({
   autoSlide = false,
@@ -44,8 +38,16 @@ export default function CarouselDetailPost({
     return () => clearInterval(slideInterval);
   }, [autoSlide, autoSlideInterval, next]);
 
+  const handleDelete = (id: string) => {
+    const newSlides = slides.filter((slide) => slide.id !== id);
+    onDelete(id);
+    if (curr >= newSlides.length) {
+      setCurr((prev) => (prev === 0 ? 0 : prev - 1));
+    }
+  };
+
   return (
-    <div className="overflow-hidden relative bg-black">
+    <div className="overflow-hidden relative bg-white">
       <div
         className="flex transition-transform ease-out duration-500 w-full h-full"
         style={{ transform: `translateX(-${curr * 100}%)` }}>
@@ -64,7 +66,7 @@ export default function CarouselDetailPost({
                 />
                 <div
                   className="absolute top-2 right-2 bg-black opacity-40 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"
-                  onClick={() => onDelete(slide.id)}>
+                  onClick={() => handleDelete(slide.id)}>
                   <RiCloseLargeFill />
                 </div>
               </div>
@@ -83,7 +85,7 @@ export default function CarouselDetailPost({
                   />
                   <button
                     className="absolute top-2 right-2 bg-black opacity-40 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"
-                    onClick={() => onDelete(slide.id)}>
+                    onClick={() => handleDelete(slide.id)}>
                     <RiCloseLargeFill />
                   </button>
                 </div>

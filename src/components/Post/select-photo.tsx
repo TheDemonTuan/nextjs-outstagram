@@ -6,6 +6,7 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
+  DropdownSection,
   DropdownTrigger,
   Modal,
   ModalBody,
@@ -107,29 +108,53 @@ const SelectPhotoModal = () => {
                       })}
                       onDelete={handleDelete}
                     />
-                    <div className="absolute bottom-2 left-2">
-                      <Dropdown placement="top-start" className="p-0 rounded-md">
+                    {/* <div className="absolute bottom-2 left-2">
+                      <Dropdown placement="top-start" className="p-0 rounded-md  border-small border-divider">
                         <DropdownTrigger>
                           <button className=" rounded-full p-2 bg-black opacity-50  items-center cursor-pointer">
                             <FaCropSimple color="white" />
                           </button>
                         </DropdownTrigger>
-                        <DropdownMenu className=" opacity-80 rounded-md">
-                          <DropdownItem key="original" startContent={<IoImageOutline size={20} />}>
-                            <div className="font-bold">Original</div>
+                        <DropdownMenu className="rounded-md">
+                          <DropdownItem
+                            key="original"
+                            title={
+                              <div className="flex items-center space-x-2">
+                                <span className="font-bold">Original</span>
+                                <IoImageOutline size={20} />
+                              </div>
+                            }>
+                            <Divider />
                           </DropdownItem>
-                          <DropdownItem key="1:1" startContent={<MdCropDin size={20} />}>
-                            <div className="font-bold">1:1</div>
-                          </DropdownItem>
-                          <DropdownItem key="4:5" startContent={<MdOutlineCropLandscape size={20} />}>
-                            <div className="font-bold">4:5</div>
-                          </DropdownItem>
-                          <DropdownItem key="16:9" className="flex" startContent={<MdOutlineCropPortrait size={20} />}>
-                            <div className="font-bold"> 16:9 </div>
-                          </DropdownItem>
+
+                          <DropdownItem
+                            key="1:1"
+                            title={
+                              <div className="flex items-center space-x-2">
+                                <span className="font-bold">1:1</span>
+                                <MdCropDin size={20} />
+                              </div>
+                            }></DropdownItem>
+
+                          <DropdownItem
+                            key="4:5"
+                            title={
+                              <div className="flex items-center space-x-2">
+                                <span className="font-bold">4:5</span>
+                                <MdOutlineCropLandscape size={20} />
+                              </div>
+                            }></DropdownItem>
+                          <DropdownItem
+                            key="16:9"
+                            title={
+                              <div className="flex items-center space-x-2">
+                                <span className="font-bold"> 16:9 </span>
+                                <MdOutlineCropPortrait size={20} />
+                              </div>
+                            }></DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
-                    </div>
+                    </div> */}
                   </>
                 ) : (
                   <Tabs

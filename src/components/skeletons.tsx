@@ -1,13 +1,13 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "./ui/card";
-import { Divider } from "@nextui-org/react";
+import { Divider, Modal, ModalContent } from "@nextui-org/react";
 
 export function ViewPostSkeleton() {
   return (
-    <Dialog open>
-      <DialogContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
-        <Skeleton className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full " />
+    <Modal isOpen={true}>
+      <ModalContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] rounded-r-md rounded-l-none">
+        <Skeleton className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full rounded-none" />
 
         <div className="flex flex-col h-full py-4 pl-3.5 pr-6 flex-1 border-b-1">
           <div className="flex items-center space-x-4">
@@ -27,8 +27,8 @@ export function ViewPostSkeleton() {
             </div>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </ModalContent>
+    </Modal>
   );
 }
 
@@ -77,7 +77,7 @@ export function MorePostSkeleton() {
     <div className="flex flex-col space-y-3 max-w-3xl lg:max-w-4xl mx-auto pb-20">
       <Skeleton className="h-4 w-[200px]" />
 
-      <div className="grid grid-cols-3 gap-0.5">
+      <div className="grid grid-cols-3 gap-1">
         <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
         <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />
         <Skeleton className="h-44 md:h-64 lg:h-80 group col-span-1" />

@@ -1,3 +1,4 @@
+"use client";
 import { userKey } from "@/api/user";
 import { UserProfileDocument } from "@/gql/graphql";
 import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
@@ -35,14 +36,6 @@ function PostsGrid({ postUsername }: { postUsername: string }) {
         <p className="font-semibold text-sm text-neutral-400">No more posts.</p>
       </div>
     );
-  }
-
-  if (userProfileIsLoading) {
-    return <ProfileSkeleton />;
-  }
-
-  if (!userProfileData) {
-    return <div>User not found</div>;
   }
 
   return (

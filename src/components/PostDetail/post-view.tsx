@@ -19,11 +19,11 @@ import { UserResponse } from "@/api/user";
 import { useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
-import ModalLoading from "../modal-loading";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { redirectHard } from "@/actions";
 import LikesView from "../Post/likes-view";
+import { ViewPostSkeleton } from "../skeletons";
 
 function PostView({ id }: { id: string }) {
   const { modalOpen, setModalData, modalKey } = useModalStore();
@@ -56,7 +56,7 @@ function PostView({ id }: { id: string }) {
   }, [postError]);
 
   if (postIsLoading) {
-    return <ModalLoading />;
+    return <ViewPostSkeleton />;
   }
 
   if (!postData) {
@@ -117,18 +117,14 @@ function PostView({ id }: { id: string }) {
                   likesModalKey={LikesModalKey}
                 />
 
-                <Link
-                  href={`p/${postData.postByPostId.id}`}
+                <span
                   className="text-xs text-gray-500 cursor-pointer active:text-gray-300"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    redirectHard(`/p/${postData.postByPostId.id}`);
-                  }}>
+                  onClick={() => window.location.reload()}>
                   {" "}
                   {formatDistanceToNow(postData.postByPostId.created_at, {
                     addSuffix: true,
                   })}
-                </Link>
+                </span>
               </div>
             </div>
             <CommentForm postId={postData.postByPostId.id} />

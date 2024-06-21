@@ -30,6 +30,7 @@ import { redirectHard } from "@/actions";
 import dynamic from "next/dynamic";
 import { Span } from "next/dist/trace";
 import LikesView from "./likes-view";
+import { FaRegHeart } from "react-icons/fa6";
 
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
@@ -91,6 +92,10 @@ const Post = () => {
             {page.postHomePage.map((post) => {
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
+
+              const userComments = post?.post_comments
+                ?.filter((comment) => comment?.user_id === authData?.id)
+                .slice(0, 2);
               return (
                 <Card
                   key={post.id}
@@ -187,6 +192,17 @@ const Post = () => {
                       </Card>
                     </div>
                   </CardContent>
+                  <CardFooter className="grid gap-1 px-2 py-1">
+                    {userComments?.map((comment) => (
+                      <div key={comment?.id} className="text-sm flex items-center justify-between">
+                        <div>
+                          <span className="font-bold">{comment?.user.username}</span>
+                          <span className="ml-1">{comment?.content}</span>
+                        </div>
+                        <FaRegHeart size={12} />
+                      </div>
+                    ))}
+                  </CardFooter>
                   <CardFooter className="p-2">
                     <div className="flex gap-2 justify-between w-full items-center">
                       <input

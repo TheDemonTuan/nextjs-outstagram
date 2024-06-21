@@ -26,6 +26,7 @@ import Carousel from "../Post/carousel";
 import { UserResponse } from "@/api/user";
 import LikesView from "../Post/likes-view";
 import { useAuth } from "@/hooks/useAuth";
+import { redirectHard } from "@/actions";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();

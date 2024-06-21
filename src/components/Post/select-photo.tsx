@@ -1,4 +1,4 @@
-import { DragPhotoVideoIcon, GalleryIcon, VideoAddIcon } from "@/icons";
+import { ArrowLeftIcon, DragPhotoVideoIcon, GalleryIcon, VideoAddIcon } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
 import {
   Button,
@@ -33,11 +33,7 @@ const SelectPhotoModal = () => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
 
-      if (selectedTab === "reels" && filesArray.length > 1) {
-        // Allow only one video
-        alert("You can only select one video.");
-        return;
-      }
+      if (selectedTab === "reels" && filesArray.length > 1) return;
 
       const filesWithType = filesArray.map((file, index) => {
         const fileType = file.type.startsWith("image/") ? 0 : 1;
@@ -71,6 +67,10 @@ const SelectPhotoModal = () => {
     setFilesWithType((prevFiles) => prevFiles.filter((file) => file.id !== id));
   };
 
+  const backSelectPhoto = () => {
+    setFilesWithType([]);
+  };
+
   return (
     <>
       <Modal size="md" isOpen={modalKey === SelectPhotoModalKey} onOpenChange={closeModalClick} hideCloseButton={true}>
@@ -81,8 +81,8 @@ const SelectPhotoModal = () => {
                 <ModalHeader className="flex gap-1 items-center justify-center p-3">Create new post</ModalHeader>
               ) : (
                 <ModalHeader className="flex justify-between items-center my-[-5px]">
-                  <button onClick={onClose} className="cursor-pointer font-normal text-sm ">
-                    Cancel
+                  <button onClick={backSelectPhoto} className="cursor-pointe font-normal text-sm ">
+                    <ArrowLeftIcon className="w-3 h-3 " />
                   </button>
                   <div className="text-lg font-medium">Choose Photo</div>
                   <button

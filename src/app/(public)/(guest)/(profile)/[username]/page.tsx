@@ -15,13 +15,15 @@ import { useQuery } from "@tanstack/react-query";
 import { userKey } from "@/api/user";
 import { Skeleton } from "@nextui-org/react";
 import { ProfileSkeleton } from "@/components/skeletons";
+import { ReelsIcon, ReelsProfileIcon, VideoAddIcon } from "@/icons";
+import Reel from "@/components/Profile/reel";
 
 const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery) => {
   switch (activeTab) {
     case "POSTS":
       return <Gallery userProfile={userProfile} />;
     case "REELS":
-      return <div>Reels content goes here</div>;
+      return <Reel userProfile={userProfile} />;
     case "SAVED":
       return <div>Saved content goes here</div>;
     default:
@@ -77,7 +79,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
           POSTS
         </button>
         <button className={getClassNames("REELS")} onClick={() => setActiveTab("REELS")}>
-          <BiMoviePlay className="w-5 h-5" />
+          <ReelsProfileIcon width={19} height={19} />
           REELS
         </button>
         <button className={getClassNames("SAVED")} onClick={() => setActiveTab("SAVED")}>

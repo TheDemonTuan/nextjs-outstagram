@@ -18,7 +18,7 @@ import { PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { useModalStore } from "@/stores/modal-store";
-import PostLikes, { LikesModalKey } from "../Post/likes";
+import PostLikes, { LikesModalKey } from "../Post/post-likes";
 import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";

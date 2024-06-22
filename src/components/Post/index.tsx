@@ -20,7 +20,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
-import PostLikes, { LikesModalKey } from "./likes";
+import PostLikes, { LikesModalKey } from "./post-likes";
 import { EmojiLookBottomIcon } from "@/icons";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
@@ -31,6 +31,7 @@ import dynamic from "next/dynamic";
 import { Span } from "next/dist/trace";
 import LikesView from "./likes-view";
 import { FaRegHeart } from "react-icons/fa6";
+import { pages } from "next/dist/build/templates/app-page";
 
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
@@ -185,7 +186,7 @@ const Post = () => {
                           <div className="py-0 text-sm">
                             <span className={`font-bold ${!isExpanded ? "line-clamp-2" : ""}`}>
                               {post.user?.username}
-                              <span className="ml-1 font-normal">{post.caption} </span>
+                              <span className="ml-1 font-normal">{post.caption}</span>
                             </span>
                             {post.caption.split("\n").length > 2 && (
                               <button onClick={toggleExpand} className="text-neutral-500 focus:outline-none">

@@ -22,7 +22,12 @@ const LikesView = ({
   return (
     <>
       {postLikes.length > 0 || !postLikes ? (
-        <span className="text-sm cursor-pointer" onClick={() => modalOpen(likesModalKey)}>
+        <span
+          className="text-sm cursor-pointer"
+          onClick={() => {
+            setModalData(postLikes);
+            modalOpen(likesModalKey);
+          }}>
           {isCurrentUserPost ? (
             <>
               {postLikes.length === 1 ? (

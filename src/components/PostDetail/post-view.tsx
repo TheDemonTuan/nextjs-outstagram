@@ -6,7 +6,7 @@ import CommentForm from "./comment-form";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
-import { LikesModalKey } from "../Post/likes";
+import { LikesModalKey } from "../Post/post-likes";
 import { formatDistanceToNow } from "date-fns";
 import { PostByPostIdDocument, PostByPostIdQuery, PostLike } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";

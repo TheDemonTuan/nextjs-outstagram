@@ -65,15 +65,9 @@ function PostView({ id }: { id: string }) {
 
   return (
     <>
-      <Modal
-        isOpen={true}
-        onOpenChange={(open: boolean) => {
-          router.back();
-        }}
-        defaultOpen={true}
-        radius="lg">
+      <Modal isOpen={true} defaultOpen={true} onOpenChange={(open: boolean) => !open && router.back()} radius="lg">
         <ModalContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] rounded-r-md rounded-l-none">
-          <Card className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg rounded-r-sm">
+          <Card className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg rounded-r-none rounded-l-md">
             <div className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-5 justify-between">
               <Tooltip
                 content={

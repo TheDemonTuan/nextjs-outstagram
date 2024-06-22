@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import React, { Fragment, useEffect, useState } from "react";
-import { EmojiLookBottomIcon } from "@/icons";
+import { EmojiLookBottomIcon, VerifiedIcon } from "@/icons";
 import { Input } from "../ui/input";
 import UserProfileInfo from "../user-profile-info";
 import { MdOutlinePublic } from "react-icons/md";
@@ -33,6 +33,9 @@ import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { FormControl, FormField, FormItem, Form } from "../ui/form";
 import { ScrollArea } from "../ui/scroll-area";
 import Carousel from "./carousel";
+import TextareaAutosize from "react-textarea-autosize";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 
 export const EditPostModalKey = "EditPost";
 const maxLength = 2200;
@@ -152,14 +155,17 @@ const EditPost = () => {
                   <form onSubmit={editForm.handleSubmit(onSubmit)} id="editFormID">
                     <div className="flex flex-col">
                       <div className="flex items-center mx-3 my-4 gap-3">
-                        <UserProfileInfo
-                          username={modalData.user.username}
-                          full_name={""}
-                          isShowFullName={false}
-                          className="w-7 h-7"
-                          avatar={modalData.user.avatar}
-                          is_admin={false}
-                        />
+                        <Avatar className="w-7 h-7 cursor-default">
+                          <AvatarImage className="object-cover" src={getUserAvatarURL(modalData.user.avatar)} />
+                          <AvatarFallback>
+                            <Spinner size="sm" />
+                          </AvatarFallback>
+                        </Avatar>
+
+                        <div className="flex items-center space-x-1 cursor-text">
+                          <span className="font-semibold text-sm">{modalData.user.username}</span>
+                          {modalData.user.role && <VerifiedIcon className="w-3 h-3" />}
+                        </div>
                       </div>
                       <FormField
                         control={editForm.control}
@@ -167,24 +173,30 @@ const EditPost = () => {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-2 bottom-2 text-lg ">
-                                  <EmojiLookBottomIcon className="w-5 h-5 cursor-pointer" />
-                                </span>
-                                <textarea
+                              <>
+                                <TextareaAutosize
                                   {...field}
-                                  className="shadow-none bg-white w-72 mx-4 mr-[-10px] max-h-[170px] h-[170px] border-none focus:outline-none text-sm"
+                                  className="shadow-none bg-white w-72 mx-4 mr-[-10px] max-h-[170px] h-[170px] border-none focus:outline-none text-sm resize-none"
                                   placeholder="Write a caption..."
                                   maxLength={maxLength}
+                                  minRows={7}
+                                  maxRows={7}
+                                  autoFocus
                                 />
-                                <span className="absolute bottom-3 right-2 text-xs">{field.value?.length} / 2200</span>
-                              </div>
+
+                                <div className="flex items-center justify-between px-4 py-2">
+                                  <span className="left-2 bottom-2 text-lg ">
+                                    <EmojiLookBottomIcon className="w-5 h-5 cursor-pointer" />
+                                  </span>
+                                  <span className="bottom-2 right-2 text-xs">{field.value?.length} / 2200</span>
+                                </div>
+                              </>
                             </FormControl>
                           </FormItem>
                         )}
                       />{" "}
                       <Divider />
-                      <ScrollArea className="h-[250px] mr-[-7px]">
+                      <div className="h-[250px] overflow-y-auto mr-[-7px]">
                         <div className="flex flex-col px-3">
                           <Accordion type="single" collapsible className="w-full ">
                             <AccordionItem value="item1">
@@ -277,7 +289,7 @@ const EditPost = () => {
                             </AccordionItem>
                           </Accordion>
                         </div>
-                      </ScrollArea>
+                      </div>
                     </div>
                   </form>
                 </Form>

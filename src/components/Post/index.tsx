@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useEffect, useRef } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { Tooltip } from "@nextui-org/react";
@@ -40,6 +40,7 @@ const Post = () => {
   const { authData } = useAuth();
   const currentPage = useRef(1);
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const {
     status,
@@ -84,6 +85,11 @@ const Post = () => {
       </div>
     );
   }
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <>
       <div className="flex flex-col items-center gap-2">
@@ -177,8 +183,15 @@ const Post = () => {
                           />
 
                           <div className="py-0 text-sm">
-                            <span className="font-bold">{post.user?.username}</span>
-                            <span className="ml-1">{post.caption}</span>
+                            <span className={`font-bold ${!isExpanded ? "line-clamp-2" : ""}`}>
+                              {post.user?.username}
+                              <span className="ml-1 font-normal">{post.caption} </span>
+                            </span>
+                            {post.caption.split("\n").length > 2 && (
+                              <button onClick={toggleExpand} className="text-neutral-500 focus:outline-none">
+                                {isExpanded ? "less" : "more"}
+                              </button>
+                            )}
                           </div>
 
                           {post.post_comments && post.post_comments?.length > 0 && (

@@ -14,7 +14,7 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import Image from "next/image";
-import { EmojiLookBottomIcon } from "@/icons";
+import { EmojiLookBottomIcon, VerifiedIcon } from "@/icons";
 import UserProfileInfo from "../user-profile-info";
 import { MdOutlinePublic } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
@@ -28,13 +28,29 @@ import { PostResponse, postCreate, postKey } from "@/api/post";
 import { toast } from "sonner";
 import { useRef, useState } from "react";
 import Carousel from "./carousel";
+import TextareaAutosize from "react-textarea-autosize";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import dynamic from "next/dynamic";
+import { EmojiClickData } from "emoji-picker-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 
 export const AddPostModalKey = "AddPost";
+
+const Picker = dynamic(
+  () => {
+    return import("emoji-picker-react");
+  },
+  { ssr: false }
+);
+
 const AddPostModal = () => {
   const { modalClose, modalKey, modalData } = useModalStore();
   const { authData } = useAuth();
   const queryClient = useQueryClient();
-  const captionRef = useRef<HTMLTextAreaElement>(null);
+  // const captionRef = useRef<HTMLTextAreaElement>(null);
+  const [caption, setCaption] = useState("");
+  const [charCount, setCharCount] = useState(0);
 
   const { mutate: createMutate, isPending: createIsPending } = useMutation<
     ApiSuccessResponse<PostResponse>,
@@ -59,9 +75,24 @@ const AddPostModal = () => {
     modalData.selectedFiles.forEach((file: File) => {
       formData.append("files", file);
     });
-    formData.append("caption", captionRef.current?.value || "");
+    // formData.append("caption", captionRef.current?.value || "");
+    formData.append("caption", caption || "");
     createMutate(formData);
   };
+
+  const handleEmojiClick = (e: EmojiClickData) => {
+    setCaption(caption + e.emoji);
+    setCharCount(caption.length + e.emoji.length);
+
+    console.log("check emoji");
+  };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCaption(e.target.value);
+    setCharCount(e.target.value.length);
+  };
+
+  const isImage = modalData?.selectedFiles?.some((file: File) => file.type.startsWith("image/")) ?? false;
 
   return (
     <Modal
@@ -79,7 +110,13 @@ const AddPostModal = () => {
                 <button onClick={onClose} className="cursor-pointer font-normal text-sm ">
                   Cancel
                 </button>
-                <div className="text-lg font-medium">Create new post</div>
+
+                {isImage ? (
+                  <span className="text-lg font-medium">Create new post</span>
+                ) : (
+                  <div className="text-lg font-medium">New reel</div>
+                )}
+
                 <button
                   type="button"
                   onClick={handleAddPost}
@@ -105,30 +142,48 @@ const AddPostModal = () => {
 
                   <div className="flex flex-col">
                     <div className="flex items-center mx-3 my-4 gap-3">
-                      <UserProfileInfo
-                        username={authData?.username || ""}
-                        full_name={""}
-                        isShowFullName={false}
-                        className="w-7 h-7"
-                        avatar={authData?.avatar || ""}
-                        is_admin={authData?.role || false}
-                      />
+                      <Avatar className="w-7 h-7 cursor-default">
+                        <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar || "")} />
+                        <AvatarFallback>
+                          <Spinner size="sm" />
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className="flex items-center space-x-1 cursor-text">
+                        <span className="font-semibold text-sm">{authData?.username || ""}</span>
+                        {authData?.role && <VerifiedIcon className="w-3 h-3" />}
+                      </div>
                     </div>
 
-                    <div className="relative">
-                      <span className="absolute left-2 bottom-2 text-lg ">
-                        <EmojiLookBottomIcon className="w-5 h-5 cursor-pointer" />
-                      </span>
-                      <textarea
-                        className="shadow-none bg-white w-72 mx-4 mr-[-10px] max-h-[170px] h-[170px] border-none focus:outline-none text-sm"
-                        placeholder="Write a caption..."
-                        maxLength={2200}
-                        ref={captionRef}
-                      />
+                    <TextareaAutosize
+                      className="shadow-none resize-none bg-white w-72 mx-4 mr-[-7px] max-h-[170px] h-[170px] border-none focus:outline-none text-sm"
+                      placeholder="Write a caption..."
+                      autoFocus
+                      maxLength={2200}
+                      value={caption}
+                      // ref={captionRef}
+                      maxRows={7}
+                      minRows={7}
+                      onChange={handleTextareaChange}
+                    />
+                    <div className="flex items-center justify-between px-4 py-2">
+                      <Popover>
+                        <PopoverTrigger>
+                          <EmojiLookBottomIcon className="text-lg cursor-pointer w-5 h-5" />
+                        </PopoverTrigger>
+                        <PopoverContent className="relative w-fit h-fit z-50">
+                          <Picker
+                            className="absolute z-50 top-0 right-0"
+                            lazyLoadEmojis
+                            onEmojiClick={(e) => handleEmojiClick(e)}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <span className="bottom-2 right-2 text-xs">{charCount} / 2200</span>
                     </div>
 
                     <Divider />
-                    <ScrollArea className="h-[250px] mr-[-7px]">
+                    <div className="h-[250px] overflow-y-auto mr-[-7px]">
                       <div className="flex flex-col px-3">
                         <Accordion type="single" collapsible className="w-full ">
                           <AccordionItem value="item1">
@@ -204,17 +259,30 @@ const AddPostModal = () => {
                               </div>
                             </AccordionContent>
                           </AccordionItem>
+
+                          {isImage ? (
+                            <span>""</span>
+                          ) : (
+                            <span className="text-xs text-neutral-500 my-3 flex">
+                              Your followers can see your reel in their feeds and on <br /> your profile.
+                            </span>
+                          )}
                         </Accordion>
                       </div>
-                    </ScrollArea>
+                    </div>
                   </div>
                 </div>
               </ModalBody>
-              {createIsPending && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
-                  <Spinner size="md" />
-                </div>
-              )}
+              {createIsPending &&
+                (isImage ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+                    <Spinner size="lg" />
+                  </div>
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+                    <Spinner size="lg" color="danger" />
+                  </div>
+                ))}
             </div>
           </>
         )}

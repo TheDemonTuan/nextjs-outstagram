@@ -81,7 +81,7 @@ const SinglePost = ({ id }: { id: string }) => {
           ) : null}
         </div>
 
-        <div className="flex max-w-sm flex-col flex-1">
+        <div className="flex max-w-sm flex-col flex-1 lg:max-w-lg w-full h-[600px]">
           <div className="flex items-center justify-between border-b px-3 py-3">
             <Tooltip
               content={
@@ -107,20 +107,19 @@ const SinglePost = ({ id }: { id: string }) => {
               <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
             </span>
           </div>
-
-          <MiniPost post={postData.postByPostId} />
-          {postData.postByPostId.post_comments && postData.postByPostId.post_comments?.length <= 0 ? (
-            <div className="flex flex-col items-center gap-1.5 flex-1 justify-center">
-              <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
-              <p className="text-sm font-medium">Start the conversation.</p>
-            </div>
-          ) : (
-            <div className="hidden md:inline py-1.5 overflow-y-auto max-h-[380px]">
+          <div className="hidden md:inline py-1.5 overflow-y-auto max-h-[360px]">
+            <MiniPost post={postData.postByPostId} />
+            {postData.postByPostId.post_comments && postData.postByPostId.post_comments?.length <= 0 ? (
+              <div className="flex flex-col items-center gap-1.5 h-[300px] justify-center">
+                <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
+                <p className="text-sm font-medium">Start the conversation.</p>
+              </div>
+            ) : (
               <div className="flex flex-col">
                 <Comment comments={postData.postByPostId.post_comments} />
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           <div className="px-5 py-4 hidden md:block mt-auto border-b border-t p-2.5 space-y-3 sticky z-20">
             <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />

@@ -1,4 +1,3 @@
-"use client";
 import { userKey } from "@/api/user";
 import { UserProfileDocument } from "@/gql/graphql";
 import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";

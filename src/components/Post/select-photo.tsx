@@ -29,6 +29,9 @@ const SelectPhotoModal = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [filesWithType, setFilesWithType] = useState<{ id: string; url: File; type: number }[]>([]);
   const [selectedTab, setSelectedTab] = useState<"photos" | "reels">("photos");
+  const [imageCropRatio, setImageCropRatio] = useState<number>(1);
+
+  const [videoCropRatio, setVideoCropRatio] = useState<number>(16 / 9);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -72,6 +75,14 @@ const SelectPhotoModal = () => {
     setFilesWithType([]);
   };
 
+  const handleImageCropSelect = (ratio: number) => {
+    setImageCropRatio(ratio);
+  };
+
+  const handleVideoCropSelect = (ratio: number) => {
+    setVideoCropRatio(ratio);
+  };
+
   return (
     <>
       <Modal size="md" isOpen={modalKey === SelectPhotoModalKey} onOpenChange={closeModalClick} hideCloseButton={true}>
@@ -107,54 +118,100 @@ const SelectPhotoModal = () => {
                         };
                       })}
                       onDelete={handleDelete}
+                      cropRatio={imageCropRatio}
+                      videoRatio={videoCropRatio}
                     />
-                    {/* <div className="absolute bottom-2 left-2">
-                      <Dropdown placement="top-start" className="p-0 rounded-md  border-small border-divider">
-                        <DropdownTrigger>
-                          <button className=" rounded-full p-2 bg-black opacity-50  items-center cursor-pointer">
-                            <FaCropSimple color="white" />
-                          </button>
-                        </DropdownTrigger>
-                        <DropdownMenu className="rounded-md">
-                          <DropdownItem
-                            key="original"
-                            title={
-                              <div className="flex items-center space-x-2">
-                                <span className="font-bold">Original</span>
-                                <IoImageOutline size={20} />
-                              </div>
-                            }>
-                            <Divider />
-                          </DropdownItem>
+                    <div className="absolute bottom-2 left-2">
+                      {filesWithType[0]?.type ? (
+                        <>
+                          <Dropdown
+                            placement="top-start"
+                            className="p-0 rounded-md border-small border-divider bg-black bg-opacity-70 
+                            ">
+                            <DropdownTrigger>
+                              <button className="rounded-full p-2 bg-black opacity-50 items-center cursor-pointer">
+                                <FaCropSimple color="white" />
+                              </button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                              className="rounded-md my-2"
+                              variant="light"
+                              closeOnSelect={false}
+                              selectionMode="single">
+                              <DropdownItem
+                                key="9:16"
+                                textValue="9/16"
+                                onPress={() => handleVideoCropSelect(9 / 16)}
+                                className={videoCropRatio === 9 / 16 ? " text-white" : "text-gray-400"}>
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-bold">9:16</span>
+                                  <MdOutlineCropPortrait size={25} />
+                                </div>
+                              </DropdownItem>
+                              <DropdownItem
+                                key="16:9"
+                                textValue="16/9"
+                                onPress={() => handleVideoCropSelect(16 / 9)}
+                                className={videoCropRatio === 16 / 9 ? " text-white" : "text-gray-400"}>
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-bold">16:9</span>
+                                  <MdOutlineCropLandscape size={25} />
+                                </div>
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </>
+                      ) : (
+                        <>
+                          <Dropdown placement="top-start" className="p-0 rounded-lg  bg-black bg-opacity-70">
+                            <DropdownTrigger>
+                              <button className="rounded-full p-2 bg-black opacity-50 items-center cursor-pointer">
+                                <FaCropSimple color="white" />
+                              </button>
+                            </DropdownTrigger>
+                            <DropdownMenu
+                              className="rounded-md my-2"
+                              variant="light"
+                              closeOnSelect={false}
+                              selectionMode="single">
+                              <DropdownItem
+                                key="1:1"
+                                textValue="1/1"
+                                onPress={() => handleImageCropSelect(1)}
+                                className={imageCropRatio === 1 ? " text-white" : "text-gray-400"}>
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-bold">1:1</span>
+                                  <MdCropDin size={25} />
+                                </div>
+                              </DropdownItem>
 
-                          <DropdownItem
-                            key="1:1"
-                            title={
-                              <div className="flex items-center space-x-2">
-                                <span className="font-bold">1:1</span>
-                                <MdCropDin size={20} />
-                              </div>
-                            }></DropdownItem>
+                              <DropdownItem
+                                key="4:5"
+                                textValue="4/5"
+                                onPress={() => handleImageCropSelect(4 / 5)}
+                                className={imageCropRatio === 4 / 5 ? " text-white" : "text-gray-400"}>
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-bold">4:5</span>
+                                  <MdOutlineCropPortrait size={25} />
+                                </div>
+                              </DropdownItem>
 
-                          <DropdownItem
-                            key="4:5"
-                            title={
-                              <div className="flex items-center space-x-2">
-                                <span className="font-bold">4:5</span>
-                                <MdOutlineCropLandscape size={20} />
-                              </div>
-                            }></DropdownItem>
-                          <DropdownItem
-                            key="16:9"
-                            title={
-                              <div className="flex items-center space-x-2">
-                                <span className="font-bold"> 16:9 </span>
-                                <MdOutlineCropPortrait size={20} />
-                              </div>
-                            }></DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div> */}
+                              <DropdownItem
+                                key="16:9"
+                                textValue="16/9"
+                                onPress={() => handleImageCropSelect(16 / 9)}
+                                showDivider={true}
+                                className={imageCropRatio === 16 / 9 ? " text-white" : "text-gray-400"}>
+                                <div className="flex items-center space-x-2">
+                                  <span className="font-bold ">16:9</span>
+                                  <MdOutlineCropLandscape size={25} />
+                                </div>
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </Dropdown>
+                        </>
+                      )}
+                    </div>
                   </>
                 ) : (
                   <Tabs

@@ -94,6 +94,8 @@ const AddPostModal = () => {
 
   const isImage = modalData?.selectedFiles?.some((file: File) => file.type.startsWith("image/")) ?? false;
 
+  console.log(isImage);
+
   return (
     <Modal
       isOpen={modalKey === AddPostModalKey}
@@ -133,7 +135,7 @@ const AddPostModal = () => {
                         id: index.toString(),
                         url: URL.createObjectURL(file),
                         type: file.type.startsWith("image/") ? 1 : 0,
-                        className: "rounded-sm max-h-[500px] min-h-[240px] w-full object-cover",
+                        className: "rounded-sm max-h-[500px] min-h-[240px] w-full object-contain",
                       }))}
                     />
                   </div>

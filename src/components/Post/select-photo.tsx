@@ -15,23 +15,29 @@ import {
   Tab,
   Tabs,
 } from "@nextui-org/react";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useCallback, useRef, useState } from "react";
 import AddPostModal, { AddPostModalKey } from "./add-post";
 import CarouselDetailPost from "./carousel-detail-post";
 import { FaCropSimple } from "react-icons/fa6";
 import { MdCropDin, MdOutlineCropLandscape, MdOutlineCropPortrait } from "react-icons/md";
 import { IoImageOutline } from "react-icons/io5";
+import { Area } from "react-easy-crop";
 
 export const SelectPhotoModalKey = "SelectPhotoModal";
 
 const SelectPhotoModal = () => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // const [filesWithType, setFilesWithType] = useState<{ id: string; url: File; type: number }[]>([]);
   const [filesWithType, setFilesWithType] = useState<{ id: string; url: File; type: number }[]>([]);
+
   const [selectedTab, setSelectedTab] = useState<"photos" | "reels">("photos");
   const [imageCropRatio, setImageCropRatio] = useState<number>(1);
 
   const [videoCropRatio, setVideoCropRatio] = useState<number>(16 / 9);
+
+  const tempCroppedAreas = useRef<{ [key: string]: Area }>({});
+  const tempCroppedAreaPixels = useRef<{ [key: string]: Area }>({});
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -47,7 +53,6 @@ const SelectPhotoModal = () => {
           type: fileType,
         };
       });
-
       setFilesWithType(filesWithType);
     }
   };
@@ -56,11 +61,11 @@ const SelectPhotoModal = () => {
     fileInputRef.current?.click();
   };
 
-  const handleNextClick = () => {
-    setModalData({ ...modalData, selectedFiles: filesWithType.map((file) => file.url) });
-    setFilesWithType([]);
-    modalOpen(AddPostModalKey);
-  };
+  // const handleNextClick = () => {
+  //   setModalData({ ...modalData, selectedFiles: filesWithType.map((file) => file.url) });
+  //   setFilesWithType([]);
+  //   modalOpen(AddPostModalKey);
+  // };
 
   const closeModalClick = () => {
     setFilesWithType([]);
@@ -83,6 +88,141 @@ const SelectPhotoModal = () => {
     setVideoCropRatio(ratio);
   };
 
+  const getCroppedImg = (imageSrc: string, pixelCrop: Area): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = imageSrc;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        if (!ctx) {
+          reject(new Error("Failed to create canvas context"));
+          return;
+        }
+
+        canvas.width = pixelCrop.width || 0;
+        canvas.height = pixelCrop.height || 0;
+
+        ctx.drawImage(
+          img,
+          pixelCrop.x || 0,
+          pixelCrop.y || 0,
+          pixelCrop.width || 0,
+          pixelCrop.height || 0,
+          0,
+          0,
+          pixelCrop.width || 0,
+          pixelCrop.height || 0
+        );
+
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("Failed to create blob"));
+            return;
+          }
+          const file = new File([blob], "cropped-image.jpg", { type: "image/jpeg", lastModified: Date.now() });
+
+          resolve(file);
+        }, "image/jpeg");
+      };
+
+      img.onerror = (err) => {
+        reject(new Error("Failed to load image"));
+      };
+    });
+  };
+
+  const getCroppedVideo = (videoSrc: string, pixelCrop: Area): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement("video");
+      video.src = videoSrc;
+
+      video.onloadedmetadata = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        if (!ctx) {
+          reject(new Error("Failed to create canvas context"));
+          return;
+        }
+
+        canvas.width = pixelCrop.width || 0;
+        canvas.height = pixelCrop.height || 0;
+
+        video.currentTime = 0;
+
+        video.onseeked = () => {
+          ctx.drawImage(
+            video,
+            pixelCrop.x || 0,
+            pixelCrop.y || 0,
+            pixelCrop.width || 0,
+            pixelCrop.height || 0,
+            0,
+            0,
+            pixelCrop.width || 0,
+            pixelCrop.height || 0
+          );
+
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              reject(new Error("Failed to create blob"));
+              return;
+            }
+            const file = new File([blob], "cropped-video.mp4", { type: "video/mp4", lastModified: Date.now() });
+
+            resolve(file);
+          }, "video/mp4");
+        };
+
+        video.onerror = (err) => {
+          reject(new Error("Failed to load video"));
+        };
+
+        video.load();
+      };
+    });
+  };
+
+  const handleNextClick = async () => {
+    try {
+      const newFilesWithType = await Promise.all(
+        filesWithType.map(async (file) => {
+          const croppedAreaPixels = tempCroppedAreaPixels.current[file.id];
+          let croppedFile: File | undefined;
+
+          if (file.type === 0) {
+            const croppedImage = await getCroppedImg(URL.createObjectURL(file.url), croppedAreaPixels);
+            croppedFile = croppedImage;
+          }
+          // else {
+          //   const croppedVideo = await getCroppedVideo(URL.createObjectURL(file.url), croppedAreaPixels);
+          //   croppedFile = croppedVideo;
+          // }
+          // console.log(croppedFile);
+
+          return { ...file, url: croppedFile! };
+        })
+      );
+      if (newFilesWithType[0].type === 0 && newFilesWithType.length > 0) {
+        setFilesWithType(newFilesWithType);
+        setModalData({ ...modalData, selectedFiles: newFilesWithType.map((file) => file.url) });
+      } else {
+        setModalData({ ...modalData, selectedFiles: filesWithType.map((file) => file.url) });
+      }
+      setFilesWithType([]);
+      modalOpen(AddPostModalKey);
+    } catch (error) {
+      console.error("Error cropping:", error);
+    }
+  };
+
+  const handleCropComplete = (croppedArea: Area, croppedAreaPixels: Area, slideId: string) => {
+    tempCroppedAreas.current[slideId] = croppedArea;
+    tempCroppedAreaPixels.current[slideId] = croppedAreaPixels;
+  };
+
   return (
     <>
       <Modal size="md" isOpen={modalKey === SelectPhotoModalKey} onOpenChange={closeModalClick} hideCloseButton={true}>
@@ -96,7 +236,7 @@ const SelectPhotoModal = () => {
                   <button onClick={backSelectPhoto} className="cursor-pointe font-normal text-sm ">
                     <ArrowLeftIcon className="w-3 h-3 " />
                   </button>
-                  <div className="text-lg font-medium">Choose Photo</div>
+                  <div className="text-lg font-medium">Crop</div>
                   <button
                     type="button"
                     onClick={handleNextClick}
@@ -120,8 +260,9 @@ const SelectPhotoModal = () => {
                       onDelete={handleDelete}
                       cropRatio={imageCropRatio}
                       videoRatio={videoCropRatio}
+                      setCropComplete={handleCropComplete}
                     />
-                    <div className="absolute bottom-2 left-2">
+                    <div className="absolute bottom-2 left-2 z-20">
                       {filesWithType[0]?.type ? (
                         <>
                           <Dropdown
@@ -129,7 +270,7 @@ const SelectPhotoModal = () => {
                             className="p-0 rounded-md border-small border-divider bg-black bg-opacity-70 
                             ">
                             <DropdownTrigger>
-                              <button className="rounded-full p-2 bg-black opacity-50 items-center cursor-pointer">
+                              <button className="rounded-full p-2 bg-black bg-opacity-65 items-center cursor-pointer">
                                 <FaCropSimple color="white" />
                               </button>
                             </DropdownTrigger>
@@ -165,7 +306,7 @@ const SelectPhotoModal = () => {
                         <>
                           <Dropdown placement="top-start" className="p-0 rounded-lg  bg-black bg-opacity-70">
                             <DropdownTrigger>
-                              <button className="rounded-full p-2 bg-black opacity-50 items-center cursor-pointer">
+                              <button className="rounded-full p-2 bg-black bg-opacity-65 items-center cursor-pointer ">
                                 <FaCropSimple color="white" />
                               </button>
                             </DropdownTrigger>

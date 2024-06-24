@@ -3,52 +3,22 @@ import { useState, useEffect, useCallback, Fragment, use } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight, FaCropSimple } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
-import { RiCloseLargeFill } from "react-icons/ri";
-import Cropper, { Area } from "react-easy-crop";
+import { RiCloseLargeFill, RiReactjsFill } from "react-icons/ri";
 
 export default function CarouselDetailPost({
   autoSlide = false,
   autoSlideInterval = 3000,
   slides,
   onDelete,
-  setCropComplete,
-  cropRatio = 1,
-  videoRatio = 16 / 9,
 }: {
   autoSlide?: boolean;
   autoSlideInterval?: number;
-  slides: { id: string; url: string; type: 0 | 1 }[];
+  slides: { id: string; url: string; type: 1 | 0 }[];
   onDelete: (id: string) => void;
-  setCropComplete: (croppedArea: Area, croppedAreaPixels: Area, slideId: string) => void;
-  cropRatio?: number;
-  videoRatio?: number;
 }) {
   const [curr, setCurr] = useState(0);
   const [muted, setMuted] = useState(true);
   const [shouldPlay, setShouldPlay] = useState(false);
-  const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedArea, setCroppedArea] = useState<Area | null>(null);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-
-  const onCropChange = useCallback((crop: { x: number; y: number }) => {
-    setCrop(crop);
-  }, []);
-
-  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedArea(croppedArea);
-    setCroppedAreaPixels(croppedAreaPixels);
-  };
-
-  const onZoomChange = useCallback((zoom: number) => {
-    setZoom(zoom);
-  }, []);
-
-  useEffect(() => {
-    if (croppedArea && croppedAreaPixels) {
-      setCropComplete(croppedArea, croppedAreaPixels, slides[curr].id);
-    }
-  }, [croppedArea, croppedAreaPixels, curr, setCropComplete, slides]);
 
   const handleEnterViewport = () => {
     setShouldPlay(true);
@@ -93,18 +63,6 @@ export default function CarouselDetailPost({
                   height={590}
                   priority
                 />
-
-                <Cropper
-                  image={slide.url}
-                  crop={crop}
-                  aspect={cropRatio}
-                  onCropChange={onCropChange}
-                  onCropComplete={onCropComplete}
-                  zoom={zoom}
-                  onZoomChange={onZoomChange}
-                  style={{ containerStyle: { overflow: "hidden" } }}
-                  showGrid={false}
-                />
                 <div
                   className="absolute top-2 right-2 bg-black bg-opacity-65 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"
                   onClick={() => handleDelete(slide.id)}>
@@ -120,20 +78,10 @@ export default function CarouselDetailPost({
                     width="100%"
                     height="450px"
                     className="rounded-sm h-[450px] w-full object-contain flex-shrink-0"
-                    controls
-                    playing={shouldPlay}
-                    muted={muted}
-                  />
-                  <Cropper
-                    video={slide.url}
-                    crop={crop}
-                    aspect={videoRatio}
-                    onCropChange={onCropChange}
-                    onCropComplete={onCropComplete}
-                    zoom={zoom}
-                    onZoomChange={onZoomChange}
-                    style={{ containerStyle: { overflow: "hidden" } }}
-                    showGrid={false}
+                    // controls
+                    // playing={shouldPlay}
+                    playing={true}
+                    muted={false}
                   />
                   <button
                     className="absolute top-2 right-2 bg-black bg-opacity-65 text-white rounded-full w-7 h-7 flex items-center justify-center hover:opacity-85 cursor-pointer"

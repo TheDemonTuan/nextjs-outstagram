@@ -9,7 +9,7 @@ const ExplorePage = () => {
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -28,10 +28,10 @@ const ExplorePage = () => {
             </div>
           </div>
         </div>
-        <div className="relative cursor-pointer  group">
+        <div className="relative cursor-pointer group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -53,7 +53,7 @@ const ExplorePage = () => {
         <div className="col-span-1 row-span-2 relative">
           <div className="w-full h-[40rem] group">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717519703/posts/zbzsrsmtujs1lm9ddecf.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1719183177/posts/c9s6ahvlajdbn6wffpey.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -74,7 +74,7 @@ const ExplorePage = () => {
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -96,7 +96,7 @@ const ExplorePage = () => {
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -120,7 +120,7 @@ const ExplorePage = () => {
         <div className="col-span-1 row-span-2 relative">
           <div className="w-full h-[40rem] group">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717519703/posts/zbzsrsmtujs1lm9ddecf.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1719183177/posts/c9s6ahvlajdbn6wffpey.webp"
               className="w-full h-full object-cover"
               width={500}
               height={600}
@@ -141,7 +141,7 @@ const ExplorePage = () => {
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -163,7 +163,7 @@ const ExplorePage = () => {
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -186,7 +186,7 @@ const ExplorePage = () => {
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}
@@ -208,7 +208,7 @@ const ExplorePage = () => {
         <div className="relative cursor-pointer  group">
           <div className="col-span-1 row-span-1 w-full h-full">
             <Image
-              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1717240756/posts/rpw1xrecy7viw0znosas.webp"
+              src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718668878/posts/du9hfrxggsh6spnejrgu.webp"
               className="w-full h-full object-cover"
               width={500}
               height={500}

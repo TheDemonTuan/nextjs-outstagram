@@ -274,7 +274,7 @@ const EditPost = () => {
                                     change this later by going to the <br /> ··· menu at the top of the post. To hide
                                     like counts on
                                     <br />
-                                    other people's posts, go to your account settings.
+                                    other people&apos;s posts, go to your account settings.
                                     <br /> Learn more
                                   </span>
                                   <div className="flex items-center justify-between mt-3">

@@ -94,7 +94,11 @@ const ReelsPage = () => {
     <>
       <div className="mt-[10px] w-[calc(100%-90px)] max-w-[690px] mx-auto">
         {postsData?.pages.map((page) =>
-          page.postHomePage.map((post) => (
+          page.postHomePage.map((post) => {
+            const firstPostFile = post?.post_files?.[0];
+            if (!firstPostFile || firstPostFile.type !== "0") {
+              return null;
+            }
             <div
               key={post.id}
               id={`PostMain-${post.id}`}
@@ -135,7 +139,7 @@ const ReelsPage = () => {
                       controls
                       muted
                       className="rounded-xl object-cover mx-auto h-full"
-                      src={post?.post_files?.[0]?.url ?? undefined}
+                      src={firstPostFile.url || ""}
                     />
                     {hoveredVideo === post.id && (
                       <div className="absolute top-3 right-3">
@@ -147,8 +151,8 @@ const ReelsPage = () => {
                   <ReelsAction />
                 </Link>
               </div>
-            </div>
-          ))
+            </div>;
+          })
         )}
         <div ref={ref}></div>
       </div>

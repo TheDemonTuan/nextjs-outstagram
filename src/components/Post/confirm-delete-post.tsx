@@ -62,8 +62,9 @@ const ConfirmDeletePost = () => {
     <Modal
       isOpen={modalKey === ConfirmDeletePostModalKey}
       onOpenChange={modalClose}
-      hideCloseButton={postDeleteIsLoading || postDeleteIsLoading}
-      isDismissable={!postDeleteIsLoading || !postDeleteIsLoading}>
+      hideCloseButton={true}
+      isDismissable={!postDeleteIsLoading}
+      size="sm">
       <ModalContent>
         {(onClose) => {
           return (
@@ -72,8 +73,8 @@ const ConfirmDeletePost = () => {
                 className={`mt-3 mb-3 cursor-pointer items-center p-0 ${
                   postDeleteIsLoading ? "pointer-events-none opacity-50" : ""
                 }`}>
-                <div className="my-4 text-center">
-                  <p className="text-black text-lg">Delete post?</p>
+                <div className="my-5 text-center">
+                  <p className="text-black text-xl">Delete post?</p>
                   <p>Are you sure you want to delete this post?</p>
                 </div>
                 <hr className="w-full border-gray-300" />
@@ -102,7 +103,7 @@ const ConfirmDeletePost = () => {
                     </Fragment>
                   );
                 })}
-                {(postDeleteIsLoading || postDeleteIsLoading) && (
+                {postDeleteIsLoading && (
                   <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
                     <Spinner size="md" />
                   </div>

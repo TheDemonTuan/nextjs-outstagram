@@ -47,7 +47,7 @@ const SelectPhotoModal = () => {
       if (selectedTab === "reels" && filesArray.length > 1) return;
 
       const filesWithType = filesArray.map((file, index) => {
-        const fileType = file.type.startsWith("image/") ? 0 : 1;
+        const fileType = file.type.startsWith("image/") ? 1 : 0;
         return {
           id: index.toString(),
           url: file,
@@ -56,6 +56,8 @@ const SelectPhotoModal = () => {
       });
 
       setFilesWithType(filesWithType);
+
+      event.target.value = "";
     }
   };
 
@@ -65,6 +67,7 @@ const SelectPhotoModal = () => {
 
   const closeModalClick = () => {
     setFilesWithType([]);
+    setSelectedTab("photos");
     modalClose();
   };
 
@@ -295,7 +298,7 @@ const SelectPhotoModal = () => {
                         return {
                           id: file.id || "",
                           url: URL.createObjectURL(file.url) || "",
-                          type: file.type ? 0 : 1,
+                          type: file.type ? 1 : 0,
                         };
                       })}
                       onDelete={handleDelete}

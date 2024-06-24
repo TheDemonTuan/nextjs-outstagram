@@ -48,7 +48,7 @@ export default function CarouselDetailPost({
     if (croppedArea && croppedAreaPixels) {
       setCropComplete(croppedArea, croppedAreaPixels, slides[curr].id);
     }
-  }, [croppedArea, croppedAreaPixels, slides[curr].id]);
+  }, [croppedArea, croppedAreaPixels, curr, setCropComplete, slides]);
 
   const handleEnterViewport = () => {
     setShouldPlay(true);

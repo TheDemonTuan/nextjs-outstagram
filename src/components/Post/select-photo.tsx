@@ -28,7 +28,6 @@ export const SelectPhotoModalKey = "SelectPhotoModal";
 const SelectPhotoModal = () => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // const [filesWithType, setFilesWithType] = useState<{ id: string; url: File; type: number }[]>([]);
   const [filesWithType, setFilesWithType] = useState<{ id: string; url: File; type: number }[]>([]);
 
   const [selectedTab, setSelectedTab] = useState<"photos" | "reels">("photos");
@@ -43,6 +42,8 @@ const SelectPhotoModal = () => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
 
+      console.log(event.target.files);
+
       if (selectedTab === "reels" && filesArray.length > 1) return;
 
       const filesWithType = filesArray.map((file, index) => {
@@ -53,6 +54,7 @@ const SelectPhotoModal = () => {
           type: fileType,
         };
       });
+
       setFilesWithType(filesWithType);
     }
   };
@@ -60,12 +62,6 @@ const SelectPhotoModal = () => {
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-
-  // const handleNextClick = () => {
-  //   setModalData({ ...modalData, selectedFiles: filesWithType.map((file) => file.url) });
-  //   setFilesWithType([]);
-  //   modalOpen(AddPostModalKey);
-  // };
 
   const closeModalClick = () => {
     setFilesWithType([]);
@@ -88,7 +84,7 @@ const SelectPhotoModal = () => {
     setVideoCropRatio(ratio);
   };
 
-  const getCroppedImg = (imageSrc: string, pixelCrop: Area): Promise<File> => {
+  const getCroppedImg = (imageSrc: string, newName: string, typeNew: string, pixelCrop: Area): Promise<File> => {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.src = imageSrc;
@@ -121,10 +117,10 @@ const SelectPhotoModal = () => {
             reject(new Error("Failed to create blob"));
             return;
           }
-          const file = new File([blob], "cropped-image.jpg", { type: "image/jpeg", lastModified: Date.now() });
+          const file = new File([blob], newName, { type: typeNew, lastModified: Date.now() });
 
           resolve(file);
-        }, "image/jpeg");
+        }, typeNew);
       };
 
       img.onerror = (err) => {
@@ -133,55 +129,83 @@ const SelectPhotoModal = () => {
     });
   };
 
-  const getCroppedVideo = (videoSrc: string, pixelCrop: Area): Promise<File> => {
+  const getCroppedVideo = async (
+    videoSrc: string,
+    newName: string,
+    typeNew: string,
+    pixelCrop: Area
+  ): Promise<File> => {
     return new Promise((resolve, reject) => {
       const video = document.createElement("video");
       video.src = videoSrc;
+      video.crossOrigin = "anonymous";
 
-      video.onloadedmetadata = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+      let loadedMetadataCount = 0;
+      // Event listener for when metadata is loaded
+      video.onloadedmetadata = async () => {
+        console.log(`Loaded metadata ${video.duration} time(s)`);
+        try {
+          // Wait for metadata to be loaded completely
+          // await new Promise<void>((resolve) => {
+          //   video.onloadedmetadata = () => {
+          //     loadedMetadataCount++;
+          //     console.log(`Loaded metadata ${loadedMetadataCount} time(s)`);
+          //     resolve();
+          //   };
+          // });
 
-        if (!ctx) {
-          reject(new Error("Failed to create canvas context"));
-          return;
-        }
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
 
-        canvas.width = pixelCrop.width || 0;
-        canvas.height = pixelCrop.height || 0;
+          if (!ctx) {
+            reject(new Error("Failed to create canvas context"));
+            return;
+          }
 
-        video.currentTime = 0;
+          // Set canvas dimensions based on the pixelCrop or video dimensions
+          const { width, height } = video;
+          canvas.width = pixelCrop.width || width;
+          canvas.height = pixelCrop.height || height;
 
-        video.onseeked = () => {
+          // Draw cropped video frame onto canvas
           ctx.drawImage(
             video,
             pixelCrop.x || 0,
             pixelCrop.y || 0,
-            pixelCrop.width || 0,
-            pixelCrop.height || 0,
+            pixelCrop.width || width,
+            pixelCrop.height || height,
             0,
             0,
-            pixelCrop.width || 0,
-            pixelCrop.height || 0
+            canvas.width,
+            canvas.height
           );
 
+          // Convert canvas content to blob
           canvas.toBlob((blob) => {
             if (!blob) {
               reject(new Error("Failed to create blob"));
               return;
             }
-            const file = new File([blob], "cropped-video.mp4", { type: "video/mp4", lastModified: Date.now() });
+
+            // Create a File object from blob
+            const file = new File([blob], newName, {
+              type: typeNew,
+              lastModified: Date.now(),
+            });
 
             resolve(file);
-          }, "video/mp4");
-        };
-
-        video.onerror = (err) => {
-          reject(new Error("Failed to load video"));
-        };
-
-        video.load();
+          }, typeNew);
+        } catch (error) {
+          reject(error);
+        }
       };
+
+      video.onerror = (err) => {
+        reject(new Error("Failed to load video"));
+      };
+
+      // Start loading the video
+      video.load();
     });
   };
 
@@ -192,19 +216,36 @@ const SelectPhotoModal = () => {
           const croppedAreaPixels = tempCroppedAreaPixels.current[file.id];
           let croppedFile: File | undefined;
 
+          console.log(file.type);
+
           if (file.type === 0) {
-            const croppedImage = await getCroppedImg(URL.createObjectURL(file.url), croppedAreaPixels);
+            const croppedImage = await getCroppedImg(
+              URL.createObjectURL(file.url),
+              file.url.name,
+              file.url.type,
+              croppedAreaPixels
+            );
             croppedFile = croppedImage;
           }
           // else {
-          //   const croppedVideo = await getCroppedVideo(URL.createObjectURL(file.url), croppedAreaPixels);
+          //   const croppedVideo = await getCroppedVideo(
+          //     URL.createObjectURL(file.url),
+          //     file.url.name,
+          //     file.url.type,
+          //     croppedAreaPixels
+          //   );
           //   croppedFile = croppedVideo;
           // }
-          // console.log(croppedFile);
+
+          console.log(croppedFile);
 
           return { ...file, url: croppedFile! };
         })
       );
+
+      // setFilesWithType(newFilesWithType);
+      // setModalData({ ...modalData, selectedFiles: newFilesWithType.map((file) => file.url) });
+
       if (newFilesWithType[0].type === 0 && newFilesWithType.length > 0) {
         setFilesWithType(newFilesWithType);
         setModalData({ ...modalData, selectedFiles: newFilesWithType.map((file) => file.url) });

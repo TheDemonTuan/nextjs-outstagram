@@ -1,8 +1,9 @@
 import { UserProfileQuery } from "@/gql/graphql";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useModalStore } from "@/stores/modal-store";
-import { Avatar, Button, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
+import { Button, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader, Spinner } from "@nextui-org/react";
 import React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export const FriendsModalKey = "Friends";
 
@@ -28,7 +29,13 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                   return (
                     <div key={friend.id} className="flex flex-row space-y-2 cursor-pointer justify-between my-2">
                       <div className="flex items-center">
-                        <Avatar src={getUserAvatarURL(friendInfo?.avatar)} className="w-11 h-11" />
+                        <Avatar className="w-11 h-11">
+                          <AvatarImage src={getUserAvatarURL(friendInfo?.avatar)} alt="User Avatar" />
+                          <AvatarFallback>
+                            <Spinner size="sm" />
+                          </AvatarFallback>
+                        </Avatar>
+
                         <div className="flex flex-col mx-2">
                           <div className="text-sm font-bold">{friendInfo?.username}</div>
                           <div className="text-xs font-normal text-gray-500">{friendInfo?.full_name}</div>

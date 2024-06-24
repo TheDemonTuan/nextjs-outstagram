@@ -54,7 +54,7 @@ const CommentReply = ({
               className="group flex items-start justify-between space-x-2.5 w-full my-3 pr-3.5"
               onMouseEnter={() => setHoveredCommentId(reply?.id || "")}
               onMouseLeave={() => setHoveredCommentId(null)}>
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <Tooltip
                   content={reply?.user && <SummaryProfile user={reply.user as UserResponse} />}
                   placement="bottom-start">
@@ -69,16 +69,17 @@ const CommentReply = ({
                 </Tooltip>
                 <div className="mx-3">
                   <div className="flex items-center space-x-1.5 text-[13px] leading-[18px]">
-                    <Link href={`/${reply?.user.username}`} className="font-semibold hover:text-neutral-300">
-                      {reply?.user.username}
-                    </Link>
-
-                    <p className="font-normal text-black">
-                      <Link href={`/${reply?.user.username}`} className="text-sky-600">
-                        @{reply?.parent?.user.username}
-                      </Link>{" "}
-                      {reply?.content}
-                    </p>
+                    <div>
+                      <Link href={`/${reply?.user.username}`} className="font-semibold hover:text-neutral-300">
+                        {reply?.user.username}{" "}
+                      </Link>
+                      <span className="font-normal text-black">
+                        <Link href={`/${reply?.user.username}`} className="text-sky-600">
+                          @{reply?.parent?.user.username}
+                        </Link>{" "}
+                        {reply?.content}
+                      </span>
+                    </div>
                   </div>
                   <div className="flex h-5 items-center space-x-2.5">
                     <span className="text-xs text-gray-500">

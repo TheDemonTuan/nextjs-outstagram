@@ -26,10 +26,10 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
         return (
           <div key={comment?.id}>
             <div
-              className="group p-3 px-3.5 flex flex-row items-start justify-between space-x-2.5 w-full"
+              className="group p-3 px-3.5 flex items-start justify-between space-x-2.5 w-full"
               onMouseEnter={() => setHoveredCommentId(comment?.id || "")}
               onMouseLeave={() => setHoveredCommentId(null)}>
-              <div className="flex flex-row items-center">
+              <div className="flex items-start">
                 <Tooltip
                   content={comment?.user && <SummaryProfile user={comment.user as UserResponse} />}
                   placement="bottom-start">
@@ -42,13 +42,15 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                     </Avatar>
                   </Link>
                 </Tooltip>
+
                 <div className="space-y-1 mx-3">
                   <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
-                    <Link href={`/${comment?.user.username}`} className="font-semibold hover:text-neutral-300">
-                      {comment?.user?.username}
-                    </Link>
-
-                    <p className="font-normal text-black">{comment?.content}</p>
+                    <div>
+                      <Link href={`/${comment?.user.username}`} className="font-semibold hover:text-neutral-300">
+                        {comment?.user?.username}
+                      </Link>{" "}
+                      <span className="font-normal text-black">{comment?.content}</span>
+                    </div>
                   </div>
                   <div className="flex h-5 items-center space-x-2.5">
                     <span className="text-xs text-gray-500">

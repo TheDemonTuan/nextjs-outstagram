@@ -97,7 +97,10 @@ export const PostHomePage = graphql(`
       post_comments {
         id
         user_id
-        parent_id
+        content
+        user {
+          username
+        }
       }
       created_at
     }

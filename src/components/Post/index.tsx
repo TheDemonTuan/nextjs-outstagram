@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useEffect, useRef } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { Tooltip } from "@nextui-org/react";
@@ -14,13 +14,13 @@ import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
-import { PostHomePageDocument } from "@/gql/graphql";
+import { PostHomePageDocument, PostLike } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
-import PostLikes, { LikesModalKey } from "./likes";
+import PostLikes, { LikesModalKey } from "./post-likes";
 import { EmojiLookBottomIcon } from "@/icons";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
@@ -28,6 +28,10 @@ import UserProfileInfo from "../user-profile-info";
 import { useRouter } from "next/navigation";
 import { redirectHard } from "@/actions";
 import dynamic from "next/dynamic";
+import { Span } from "next/dist/trace";
+import LikesView from "./likes-view";
+import { FaRegHeart } from "react-icons/fa6";
+import { pages } from "next/dist/build/templates/app-page";
 
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
@@ -37,6 +41,7 @@ const Post = () => {
   const { authData } = useAuth();
   const currentPage = useRef(1);
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const {
     status,
@@ -81,6 +86,11 @@ const Post = () => {
       </div>
     );
   }
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <>
       <div className="flex flex-col items-center gap-2">
@@ -89,6 +99,10 @@ const Post = () => {
             {page.postHomePage.map((post) => {
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
+
+              const userComments = post?.post_comments
+                ?.filter((comment) => comment?.user_id === authData?.id)
+                .slice(0, 2);
               return (
                 <Card
                   key={post.id}
@@ -161,14 +175,24 @@ const Post = () => {
                             isLiked={isUserLiked ?? false}
                             postPage={pageIndex > 0 ? pageIndex : 0}
                           />
-                          <span
-                            className="font-semibold text-sm cursor-pointer"
-                            onClick={() => modalOpen(LikesModalKey)}>
-                            {postLikes?.length} likes
-                          </span>
+
+                          <LikesView
+                            postLikes={postLikes as PostLike[]}
+                            post_userID={post.user_id || ""}
+                            current_userID={authData?.id || ""}
+                            likesModalKey={LikesModalKey}
+                          />
+
                           <div className="py-0 text-sm">
-                            <span className="font-bold">{post.user?.username}</span>
-                            <span className="ml-1">{post.caption}</span>
+                            <span className={`font-bold ${!isExpanded ? "line-clamp-2" : ""}`}>
+                              {post.user?.username}
+                              <span className="ml-1 font-normal">{post.caption}</span>
+                            </span>
+                            {post.caption.split("\n").length > 2 && (
+                              <button onClick={toggleExpand} className="text-neutral-500 focus:outline-none">
+                                {isExpanded ? "less" : "more"}
+                              </button>
+                            )}
                           </div>
 
                           {post.post_comments && post.post_comments?.length > 0 && (
@@ -182,6 +206,17 @@ const Post = () => {
                       </Card>
                     </div>
                   </CardContent>
+                  <CardFooter className="grid gap-1 px-2 py-1">
+                    {userComments?.map((comment) => (
+                      <div key={comment?.id} className="text-sm flex items-center justify-between">
+                        <div>
+                          <span className="font-bold">{comment?.user.username}</span>
+                          <span className="ml-1">{comment?.content}</span>
+                        </div>
+                        <FaRegHeart size={12} />
+                      </div>
+                    ))}
+                  </CardFooter>
                   <CardFooter className="p-2">
                     <div className="flex gap-2 justify-between w-full items-center">
                       <input

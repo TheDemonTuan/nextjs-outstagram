@@ -1,3 +1,4 @@
+"use client";
 import { ViewPostSkeleton } from "@/components/skeletons";
 import React from "react";
 

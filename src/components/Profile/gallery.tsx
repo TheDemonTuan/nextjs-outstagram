@@ -17,7 +17,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-1 mx-28 max-w-screen-xl ">
+    <div className="grid grid-cols-3 gap-1 mx-28 max-w-screen-xl">
       {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         const firstFile = postFiles[0];

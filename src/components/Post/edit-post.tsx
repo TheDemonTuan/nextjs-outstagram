@@ -70,7 +70,7 @@ const EditPost = () => {
         privacy: privacyValue,
       });
     }
-  }, [modalData]);
+  }, [editForm, modalData]);
 
   const { mutate: postEditMutate, isPending: postEditIsLoading } = useMutation<
     ApiSuccessResponse<PostResponse>,

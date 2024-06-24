@@ -4,7 +4,7 @@ import { PostByPostIdQuery } from "@/gql/graphql";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { Button, Spinner } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { EmojiClickData } from "emoji-picker-react";
 import dynamic from "next/dynamic";
@@ -37,43 +37,47 @@ const CommentForm = ({ postId }: { postId: string }) => {
   >({
     mutationFn: (params) => postCommentByPostId(params),
     onSuccess: (commentPostData) => {
-      const fakeData = {
-        ...commentPostData.data,
-        user: {
-          avatar: getUserAvatarURL(authData?.avatar || ""),
-          username: authData?.username,
-        },
-        parent: {
-          id: parentID,
-          user: {
-            username: replyUsername,
-          },
-        },
-      };
+      const newData = fakeData(commentPostData);
       queryClient.setQueryData([postKey, { id: postId }], (oldData: PostByPostIdQuery) => {
         return {
           ...oldData,
           postByPostId: {
             ...oldData.postByPostId,
-            post_comments: [fakeData, ...(oldData.postByPostId.post_comments || [])],
+            post_comments: [newData, ...(oldData.postByPostId.post_comments || [])],
           },
         };
       });
       setContent("");
+      setParentID("");
+      setReplyUsername("");
     },
     onError: (error) => {
-      console.log(error);
-
       toast.error(error?.response?.data?.message || "Comment post failed!");
     },
   });
+
+  const fakeData = useCallback((commentPostData: ApiSuccessResponse<PostComment>) => {
+    return {
+      ...commentPostData.data,
+      user: {
+        avatar: getUserAvatarURL(authData?.avatar || ""),
+        username: authData?.username,
+      },
+      parent: {
+        id: parentID,
+        user: {
+          username: replyUsername,
+        },
+      },
+    };
+  }, [authData?.avatar, authData?.username, parentID, replyUsername]);
 
   useEffect(() => {
     textareaRef.current?.focus();
     if (content === "") {
       setParentID("");
     }
-  }, [content]);
+  }, [content, setParentID]);
 
   const handlePostComment = (content: string, parentID: string) => {
     if (parentID) {
@@ -89,8 +93,6 @@ const CommentForm = ({ postId }: { postId: string }) => {
       } else {
         parentID = "";
       }
-      setParentID("");
-      setReplyUsername("");
     }
 
     postCommentMutate({

@@ -1,19 +1,14 @@
-import { useAuth } from "@/hooks/useAuth";
-import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
-import { Spinner, Tooltip } from "@nextui-org/react";
-import Link from "next/link";
-import React, { useEffect } from "react";
-import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import SummaryProfile from "./summary-profile";
 import { UserResponse, userKey } from "@/api/user";
 import { UserSuggestionDocument } from "@/gql/graphql";
+import { useAuth } from "@/hooks/useAuth";
 import { graphQLClient } from "@/lib/graphql";
+import { Tooltip } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { toast } from "sonner";
 import { SuggestionsSkeleton } from "./skeletons";
+import SummaryProfile from "./summary-profile";
 import UserProfileInfo from "./user-profile-info";
-import { HoverCard, HoverCardTrigger } from "./ui/hover-card";
-import { HoverCardContent } from "@radix-ui/react-hover-card";
 
 const Suggestions = () => {
   const { authData } = useAuth();
@@ -22,8 +17,9 @@ const Suggestions = () => {
     error: userSuggestionError,
     isLoading: userSuggestionIsLoading,
   } = useQuery({
-    queryKey: [userKey, "home-page"],
+    queryKey: [userKey, "suggestions"],
     queryFn: () => graphQLClient.request(UserSuggestionDocument, { count: 5 }),
+    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {

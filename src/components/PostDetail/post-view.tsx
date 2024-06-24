@@ -6,9 +6,9 @@ import CommentForm from "./comment-form";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
-import { LikesModalKey } from "../Post/likes";
+import { LikesModalKey } from "../Post/post-likes";
 import { formatDistanceToNow } from "date-fns";
-import { PostByPostIdDocument, PostByPostIdQuery } from "@/gql/graphql";
+import { PostByPostIdDocument, PostByPostIdQuery, PostLike } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import { Card, Modal, ModalContent, Tooltip } from "@nextui-org/react";
 import PostReact from "../Post/post-react";
@@ -19,8 +19,11 @@ import { UserResponse } from "@/api/user";
 import { useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
-import ModalLoading from "../modal-loading";
 import { useAuth } from "@/hooks/useAuth";
+import Link from "next/link";
+import { redirectHard } from "@/actions";
+import LikesView from "../Post/likes-view";
+import { ViewPostSkeleton } from "../skeletons";
 
 function PostView({ id }: { id: string }) {
   const { modalOpen, setModalData, modalKey } = useModalStore();
@@ -53,7 +56,7 @@ function PostView({ id }: { id: string }) {
   }, [postError]);
 
   if (postIsLoading) {
-    return <ModalLoading />;
+    return <ViewPostSkeleton />;
   }
 
   if (!postData) {
@@ -62,17 +65,15 @@ function PostView({ id }: { id: string }) {
 
   return (
     <>
-      <Modal
-        isOpen={true}
-        onOpenChange={(open: boolean) => {
-          router.back();
-        }}
-        defaultOpen={true}
-        radius="lg">
-        <ModalContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px]">
-          <Card className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg rounded-md">
+      <Modal isOpen={true} defaultOpen={true} onOpenChange={(open: boolean) => !open && router.back()} radius="lg">
+        <ModalContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] rounded-r-md rounded-l-none">
+          <Card className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg rounded-r-none rounded-l-md">
             <div className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-5 justify-between">
-              <Tooltip content={postData?.postByPostId.user && <SummaryProfile user={postData?.postByPostId.user as UserResponse} />} placement="bottom-start">
+              <Tooltip
+                content={
+                  postData?.postByPostId.user && <SummaryProfile user={postData?.postByPostId.user as UserResponse} />
+                }
+                placement="bottom-start">
                 <div className="flex flex-row items-center gap-3 px-1">
                   <UserProfileInfo
                     username={postData?.postByPostId.user?.username || ""}
@@ -103,13 +104,12 @@ function PostView({ id }: { id: string }) {
             <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
               <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
               <div className="flex flex-col space-y-1">
-                {postLikesFilter && postLikesFilter.length > 0 ? (
-                  <span className="font-semibold text-sm cursor-pointer" onClick={() => modalOpen(LikesModalKey)}>
-                    {postLikesFilter.length} likes
-                  </span>
-                ) : (
-                  <div className="mt-1"></div>
-                )}
+                <LikesView
+                  postLikes={postLikesFilter as PostLike[]}
+                  post_userID={postData.postByPostId.user_id || ""}
+                  current_userID={authData?.id || ""}
+                  likesModalKey={LikesModalKey}
+                />
 
                 <span
                   className="text-xs text-gray-500 cursor-pointer active:text-gray-300"

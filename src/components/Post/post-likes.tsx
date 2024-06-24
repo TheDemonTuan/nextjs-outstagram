@@ -1,3 +1,4 @@
+import { PostLike } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
 import { Avatar, Button, Divider, Input, Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 import React from "react";
@@ -17,12 +18,11 @@ const PostLikes = () => {
               <ModalBody className="flex flex-col max-h-80">
                 <div className="flex flex-row space-y-2 cursor-pointer justify-between">
                   <div className="flex items-center">
-                    <div>
-                      <Avatar
-                        src="https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=600"
-                        className="w-11 h-11"
-                      />
-                    </div>
+                    <Avatar
+                      src="https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=600"
+                      className="w-11 h-11"
+                    />
+
                     <div className="flex flex-col mx-2 ">
                       <div className="text-sm font-bold">ilmimohamm</div>
                       <div className="text-xs font-normal text-gray-500"> md Zain Ali 308</div>

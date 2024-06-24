@@ -872,6 +872,27 @@ export const VideoAddIcon = (props: SVGProps<SVGAElement>) => (
   </svg>
 );
 
+export const ReelsProfileIcon = (props: SVGProps<SVGAElement>) => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    height="20"
+    role="presentation"
+    viewBox="0 0 24 24"
+    width="20"
+    fill="none"
+    // {...props}
+  >
+    <path d="M14.7295 2H9.26953V6.36H14.7295V2Z" fill="currentColor" />
+    <path d="M16.2305 2V6.36H21.8705C21.3605 3.61 19.3305 2.01 16.2305 2Z" fill="currentColor" />
+    <path
+      d="M2 7.85938V16.1894C2 19.8294 4.17 21.9994 7.81 21.9994H16.19C19.83 21.9994 22 19.8294 22 16.1894V7.85938H2ZM14.44 16.1794L12.36 17.3794C11.92 17.6294 11.49 17.7594 11.09 17.7594C10.79 17.7594 10.52 17.6894 10.27 17.5494C9.69 17.2194 9.37 16.5394 9.37 15.6594V13.2594C9.37 12.3794 9.69 11.6994 10.27 11.3694C10.85 11.0294 11.59 11.0894 12.36 11.5394L14.44 12.7394C15.21 13.1794 15.63 13.7994 15.63 14.4694C15.63 15.1394 15.2 15.7294 14.44 16.1794Z"
+      fill="currentColor"
+    />
+    <path d="M7.76891 2C4.66891 2.01 2.63891 3.61 2.12891 6.36H7.76891V2Z" fill="currentColor" />
+  </svg>
+);
+
 export const GalleryIcon = (props: SVGProps<SVGAElement>) => (
   <svg
     // {...props}
@@ -924,5 +945,19 @@ export const ArrowLeftIcon = (props: SVGProps<SVGAElement>) => (
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"></polyline>
+  </svg>
+);
+
+export const PlayReelIcon = (props: SVGProps<SVGAElement>) => (
+  <svg
+    aria-label="Play count icon"
+    className="x1lliihq x1n2onr6 x9bdzbf"
+    fill="#FFFFFF"
+    height="16"
+    role="img"
+    viewBox="0 0 24 24"
+    width="16">
+    <title>Play count icon</title>
+    <path d="M5.888 22.5a3.46 3.46 0 0 1-1.721-.46l-.003-.002a3.451 3.451 0 0 1-1.72-2.982V4.943a3.445 3.445 0 0 1 5.163-2.987l12.226 7.059a3.444 3.444 0 0 1-.001 5.967l-12.22 7.056a3.462 3.462 0 0 1-1.724.462Z"></path>
   </svg>
 );

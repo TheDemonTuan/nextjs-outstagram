@@ -17,7 +17,7 @@ import React, { useEffect, useRef } from "react";
 import CreatePost, { CreatePostModalKey } from "./Post/create-post";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { Button, Input, Skeleton, Spinner } from "@nextui-org/react";
+import { Button, Divider, Input, Skeleton, Spinner } from "@nextui-org/react";
 import _ from "lodash";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { toast } from "sonner";
@@ -326,5 +326,132 @@ const Search = () => {
 };
 
 const Notification = () => {
-  return <div>Notification</div>;
+  return (
+    <div className="overflow-y-auto max-h-[728px]">
+      <div className="mx-6">
+        <div className="flex flex-col h-full w-full">
+          <span className="my-7 font-bold text-2xl">Notifications</span>
+
+          <div>
+            <span className="font-bold text-lg">This week</span>
+            <div className="my-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Avatar className="w-11 h-11">
+                    <AvatarImage src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&w=600" />
+                    <AvatarFallback></AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm mx-3">
+                    <span className="font-semibold">username</span> liked your post.
+                    <span className="text-gray-400"> 3 d</span>
+                  </span>
+                </div>
+                <NextImage
+                  src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718659293/posts/er0rkgfcmo5gzfmibgrp.webp"
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="w-12 h-12 rounded-lg"
+                />
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Avatar className="w-11 h-11">
+                    <AvatarImage src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&w=600" />
+                    <AvatarFallback></AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm mx-3">
+                    <span className="font-semibold">username</span> mentioned you in a comment: @......
+                    <span className="text-gray-400"> 3 d</span>
+                  </span>
+                </div>
+                <NextImage
+                  src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718659293/posts/er0rkgfcmo5gzfmibgrp.webp"
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="w-12 h-12 rounded-lg"
+                />
+              </div>
+            </div>
+            <Divider className="my-5" />
+          </div>
+
+          <div>
+            <span className="font-bold text-lg">This month</span>
+            <div className="my-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Avatar className="w-11 h-11">
+                    <AvatarImage src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&w=600" />
+                    <AvatarFallback></AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm mx-3">
+                    <span className="font-semibold">jack maria</span> posted a thread that you might like: Lorem Ipsum
+                    is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s,....
+                    <span className="text-gray-400"> 3 d</span>
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Avatar className="w-11 h-11">
+                    <AvatarImage src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&w=600" />
+                    <AvatarFallback></AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm mx-3">
+                    <span className="font-semibold">username</span> mentioned you in a comment: @......
+                    <span className="text-gray-400"> 3 d</span>
+                  </span>
+                </div>
+                <NextImage
+                  src="https://res.cloudinary.com/dsjzxokur/image/upload/v1718659293/posts/er0rkgfcmo5gzfmibgrp.webp"
+                  alt=""
+                  width={44}
+                  height={44}
+                  className="w-12 h-12 rounded-lg"
+                />
+              </div>
+            </div>
+            <Divider className="my-5" />
+          </div>
+          <div>
+            <span className="font-bold text-lg">Earlier</span>
+            <div className="my-4 space-y-3">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Avatar className="w-11 h-11">
+                    <AvatarImage src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&w=600" />
+                    <AvatarFallback></AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm mx-3">
+                    <span className="font-semibold">jack maria</span> posted a thread that you might like: Lorem Ipsum
+                    is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s,....
+                    <span className="text-gray-400"> 3 d</span>
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Avatar className="w-11 h-11">
+                    <AvatarImage src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&w=600" />
+                    <AvatarFallback></AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm mx-3">
+                    <span className="font-semibold">username</span> started following you.
+                    <span className="text-gray-400"> 10 d</span>
+                  </span>
+                </div>
+                <Button size="sm" className="font-semibold text-sm bg-gray-200/70 hover:bg-gray-300 px-6">
+                  Following
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };

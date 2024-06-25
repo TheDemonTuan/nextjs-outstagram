@@ -136,7 +136,7 @@ const Post = () => {
                                 redirectHard(`/p/${post.id}`);
                               }}>
                               •{" "}
-                              {formatDistanceToNow(post.created_at, {
+                              {formatDistanceToNow(post.created_at || "", {
                                 addSuffix: true,
                               })}
                             </Link>
@@ -186,9 +186,9 @@ const Post = () => {
                           <div className="py-0 text-sm">
                             <span className={`font-bold ${!isExpanded ? "line-clamp-2" : ""}`}>
                               {post.user?.username}
-                              <span className="ml-1 font-normal">{post.caption}</span>
+                              <span className="ml-1 font-normal">{post.caption} </span>
                             </span>
-                            {post.caption.split("\n").length > 2 && (
+                            {(post.caption?.split("\n").length ?? 0) > 2 && (
                               <button onClick={toggleExpand} className="text-neutral-500 focus:outline-none">
                                 {isExpanded ? "less" : "more"}
                               </button>
@@ -210,7 +210,7 @@ const Post = () => {
                     {userComments?.map((comment) => (
                       <div key={comment?.id} className="text-sm flex items-center justify-between">
                         <div>
-                          <span className="font-bold">{comment?.user.username}</span>
+                          <span className="font-bold">{comment?.user?.username}</span>
                           <span className="ml-1">{comment?.content}</span>
                         </div>
                         <FaRegHeart size={12} />

@@ -20,6 +20,24 @@ export const UserSuggestion = graphql(`
       full_name
       avatar
       active
+      role
+      posts {
+        id
+        privacy
+        active
+        post_files {
+          id
+          url
+          type
+        }
+      }
+      friends {
+        id
+        from_user_id
+        to_user_id
+        status
+      }
+      
     }
   }
 `);

@@ -44,8 +44,17 @@ export const PostByPostID = graphql(`
         type
       }
       post_likes {
+        id
         user_id
         is_liked
+         user {
+            username
+            full_name
+            avatar
+            role
+            active
+            is_private  
+          }
       }
       post_comments {
         id
@@ -93,6 +102,14 @@ export const PostHomePage = graphql(`
       post_likes {
         user_id
         is_liked
+         user {
+            username
+            full_name
+            avatar
+            role
+            is_private
+            active
+          }
       }
       post_comments {
         id

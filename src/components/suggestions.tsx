@@ -50,9 +50,9 @@ const Suggestions = () => {
         <div key={user.username} className="flex items-center justify-between gap-3">
           <Tooltip
             delay={1000}
-            content={user && <SummaryProfile user={user as UserResponse} />}
+            content={user && <SummaryProfile user={user as unknown as UserResponse} />}
             placement="bottom-start"
-            className="rounded-md">
+            className="rounded-md shadow-lg">
             <div className="flex items-center gap-2 text-sm font-medium">
               <div className="flex flex-row gap-3 items-center">
                 <UserProfileInfo
@@ -61,7 +61,7 @@ const Suggestions = () => {
                   isShowFullName={true}
                   className="w-11 h-11"
                   avatar={user.avatar || ""}
-                  is_admin={false}
+                  is_admin={user.role || false}
                 />
               </div>
             </div>

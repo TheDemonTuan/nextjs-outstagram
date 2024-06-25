@@ -7,12 +7,19 @@ import { UserResponse } from "@/api/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { User } from "@/gql/graphql";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SummaryProfileProps {
   user: UserResponse;
 }
 
 const SummaryProfile = (props: SummaryProfileProps) => {
+  const { authData } = useAuth();
+
+  const isFriend = props.user.friends.some(
+    (friend) => friend.from_user_id === authData?.id || friend.to_user_id === authData?.id
+  );
+
   return (
     <Link href={`/${props.user.username}`} className="flex flex-col p-2 w-[360px]">
       <div className="flex flex-row items-center space-x-3">
@@ -27,11 +34,11 @@ const SummaryProfile = (props: SummaryProfileProps) => {
       </div>
       <div className="flex mt-6 mb-3  justify-between mx-5">
         <div className="text-center font-extrabold">
-          {props.user.posts.length} <br />
+          {props.user.posts.length || 0} <br />
           <span className="font-normal">posts</span>
         </div>
         <h3 className="text-center  font-extrabold">
-          {props.user.friends.length} <br />
+          {props.user.friends.length || 0} <br />
           <span className="font-normal">friends</span>
         </h3>
         <h3 className="text-center  font-extrabold">
@@ -80,12 +87,17 @@ const SummaryProfile = (props: SummaryProfileProps) => {
       </div>
 
       <div className="flex flex-row items-center mt-4">
-        <Button className="w-1/2 mx-1 h-9 text-white font-medium bg-primary-400 rounded-lg">
-          {" "}
-          <MessagesSummaryProfileIcon stroke="#FFFFFF" className="w-5 h-5" />
-          Message
-        </Button>
-        <Button className="w-1/2 mx-1 h-9 font-medium bg-gray-200 rounded-lg">Following</Button>
+        {isFriend ? (
+          <>
+            <Button className="w-1/2 mx-1 h-9 text-white font-medium bg-primary-400 rounded-lg">
+              <MessagesSummaryProfileIcon stroke="#FFFFFF" className="w-5 h-5" />
+              Message
+            </Button>
+            <Button className="w-1/2 mx-1 h-9 font-medium bg-gray-200 rounded-lg">Friend</Button>
+          </>
+        ) : (
+          <Button className="w-full mx-1 h-9 text-white font-medium bg-primary-400 rounded-lg">Add friend</Button>
+        )}
       </div>
     </Link>
   );

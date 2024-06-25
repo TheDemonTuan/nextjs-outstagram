@@ -105,7 +105,7 @@ function PostView({ id }: { id: string }) {
                 <LikesView
                   postLikes={postLikesFilter as PostLike[]}
                   post_userID={postData.postByPostId.user_id || ""}
-                  current_userName={authData?.id || ""}
+                  current_userID={authData?.id || ""}
                   likesModalKey={LikesModalKey}
                 />
 

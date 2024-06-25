@@ -6,14 +6,14 @@ import { PostLike } from "@/gql/graphql";
 interface LikesViewProps {
   postLikes: PostLike[];
   post_userID: string;
-  current_userName: string;
+  current_userID: string;
   likesModalKey: string;
 }
 
-const LikesView = ({ postLikes, post_userID, current_userName, likesModalKey }: LikesViewProps) => {
+const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: LikesViewProps) => {
   const { modalOpen, setModalData } = useModalStore();
 
-  const isCurrentUserPost = post_userID === current_userName;
+  const isCurrentUserPost = post_userID === current_userID;
 
   const handleLikesClick = () => {
     setModalData(postLikes);
@@ -29,7 +29,7 @@ const LikesView = ({ postLikes, post_userID, current_userName, likesModalKey }: 
       );
     }
 
-    const likedByCurrentUser = postLikes.find((like) => like.user?.username === current_userName);
+    const likedByCurrentUser = postLikes.find((like) => like.user?.id === current_userID);
 
     if (isCurrentUserPost) {
       const othersCount = postLikes.length - 1;

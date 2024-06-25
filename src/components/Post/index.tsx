@@ -179,7 +179,7 @@ const Post = () => {
                           <LikesView
                             postLikes={postLikes as PostLike[]}
                             post_userID={post.user_id || ""}
-                            current_userName={authData?.id || ""}
+                            current_userID={authData?.id || ""}
                             likesModalKey={LikesModalKey}
                           />
 

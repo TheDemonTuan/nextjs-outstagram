@@ -44,7 +44,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                 <Tooltip
                   content={comment?.user && <SummaryProfile user={comment.user as UserResponse} />}
                   placement="bottom-start">
-                  <Link href={`/${comment?.user.username}`}>
+                  <Link href={`/${comment?.user?.username}`}>
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={getUserAvatarURL(comment?.user?.avatar)} />
                       <AvatarFallback>
@@ -57,7 +57,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                 <div className="space-y-1 mx-3">
                   <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
                     <div>
-                      <Link href={`/${comment?.user.username}`} className="font-semibold hover:text-neutral-300">
+                      <Link href={`/${comment?.user?.username}`} className="font-semibold hover:text-neutral-300">
                         {comment?.user?.username}
                       </Link>{" "}
                       <span className="font-normal text-black">{comment?.content}</span>
@@ -73,9 +73,9 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                     <button
                       className="text-xs font-semibold text-neutral-500"
                       onClick={() => {
-                        setContent(`@${comment?.user.username} `);
+                        setContent(`@${comment?.user?.username} `);
                         setParentID(comment?.id || "");
-                        setReplyUsername(comment?.user.username || "");
+                        setReplyUsername(comment?.user?.username || "");
                       }}>
                       Reply
                     </button>
@@ -165,7 +165,7 @@ const ReplyBox = memo(
                 <Tooltip
                   content={reply?.user && <SummaryProfile user={reply.user as UserResponse} />}
                   placement="bottom-start">
-                  <Link href={`/${reply?.user.username}`} className="hover:text-neutral-300">
+                  <Link href={`/${reply?.user?.username}`} className="hover:text-neutral-300">
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={getUserAvatarURL(reply?.user?.avatar)} />
                       <AvatarFallback>
@@ -177,12 +177,12 @@ const ReplyBox = memo(
                 <div className="mx-3">
                   <div className="flex items-center space-x-1.5 text-[13px] leading-[18px]">
                     <div>
-                      <Link href={`/${reply?.user.username}`} className="font-semibold hover:text-neutral-300">
-                        {reply?.user.username}{" "}
+                      <Link href={`/${reply?.user?.username}`} className="font-semibold hover:text-neutral-300">
+                        {reply?.user?.username}{" "}
                       </Link>
                       <span className="font-normal text-black space-x-1">
-                        <Link href={`/${reply?.user.username}`} className="text-sky-600">
-                          @{reply?.parent?.user.username}
+                        <Link href={`/${reply?.user?.username}`} className="text-sky-600">
+                          @{reply?.parent?.user?.username}
                         </Link>
                         <span>{reply?.content}</span>
                       </span>
@@ -197,7 +197,7 @@ const ReplyBox = memo(
                     <button className="text-xs font-semibold text-neutral-500">0 likes</button>
                     <button
                       className="text-xs font-semibold text-neutral-500"
-                      onClick={() => handleReplyComment(reply?.id || "", reply?.user.username || "")}>
+                      onClick={() => handleReplyComment(reply?.id || "", reply?.user?.username || "")}>
                       Reply
                     </button>
                     {hoveredCommentId === reply?.id && (

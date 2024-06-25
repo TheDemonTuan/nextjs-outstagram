@@ -16,6 +16,12 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
   const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postLike(params),
     onSuccess: (likePostData) => {
+      const fakeData = {
+        ...likePostData.data,
+        user: {
+          ...authData,
+        },
+      }
       if (!!queryClient.getQueryData([postKey, "home-page"])) {
         queryClient.setQueryData([postKey, "home-page"], (oldData: any) => {
           return {
@@ -29,13 +35,13 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
                         if (!post.post_likes?.length) {
                           return {
                             ...post,
-                            post_likes: [likePostData.data],
+                            post_likes: [fakeData],
                           };
                         }
                         const newLikes = post.post_likes.filter((like: any) => like.user_id !== authData?.id);
                         return {
                           ...post,
-                          post_likes: [likePostData.data, ...newLikes],
+                          post_likes: [fakeData, ...newLikes],
                         };
                       }
                       return post;
@@ -55,7 +61,7 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
               ...oldData,
               postByPostId: {
                 ...oldData.postByPostId,
-                post_likes: [likePostData.data],
+                post_likes: [fakeData],
               },
             };
           }
@@ -64,7 +70,7 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
             ...oldData,
             postByPostId: {
               ...oldData.postByPostId,
-              post_likes: [likePostData.data, ...newLikes],
+              post_likes: [fakeData, ...newLikes],
             },
           };
         });

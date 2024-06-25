@@ -117,7 +117,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
           <BsEmojiAstonished className="text-lg cursor-pointer" size={20} />
         </PopoverTrigger>
         <PopoverContent className="relative w-fit h-fit">
-          <Picker className="absolute z-50 top-0 right-0" lazyLoadEmojis onEmojiClick={(e) => handleEmojiClick(e)} />
+          <Picker className="" lazyLoadEmojis onEmojiClick={(e) => handleEmojiClick(e)} />
         </PopoverContent>
       </Popover>
       <TextareaAutosize

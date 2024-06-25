@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useModalStore } from "@/stores/modal-store";
 import { PostLike } from "@/gql/graphql";
@@ -13,14 +13,14 @@ interface LikesViewProps {
 const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: LikesViewProps) => {
   const { modalOpen, setModalData } = useModalStore();
 
-  const isCurrentUserPost = post_userID === current_userID;
+  const isCurrentUserPost = useMemo(() => post_userID === current_userID, [post_userID, current_userID]);
 
-  const handleLikesClick = () => {
+  const handleLikesClick = useCallback(() => {
     setModalData(postLikes);
     modalOpen(likesModalKey);
-  };
+  }, [postLikes, likesModalKey, modalOpen, setModalData]);
 
-  const renderLikesText = () => {
+  const renderLikesText = useCallback(() => {
     if (postLikes.length === 0) {
       return (
         <span className="text-sm">
@@ -73,7 +73,7 @@ const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: Li
         </span>
       );
     }
-  };
+  }, [current_userID, handleLikesClick, isCurrentUserPost, postLikes]);
 
   return <>{renderLikesText()}</>;
 };

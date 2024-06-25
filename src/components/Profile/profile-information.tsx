@@ -14,7 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
   const { authData } = useAuth();
-  const { friends, posts, user, username } = userProfile.userProfile;
+  const { posts, user, username } = userProfile.userProfile;
 
   const handleAvatarClick = () => {
     if (authData?.id === user?.id) {
@@ -81,12 +81,12 @@ const UserStat = ({ count, label }: { count: number; label: string }) => (
 
 const ProfileInformationStat = ({ userData }: { userData: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
-  const { friends, posts } = userData.userProfile;
+  const { user, posts } = userData.userProfile;
   return (
     <>
       <UserStat count={posts?.length || 0} label="Posts" />
       <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
-        <UserStat count={friends?.length || 0} label="Friends" />
+        <UserStat count={user?.friends?.length || 0} label="Friends" />
       </div>
       <UserStat count={0} label="Following" />
       <Friends userData={userData} />

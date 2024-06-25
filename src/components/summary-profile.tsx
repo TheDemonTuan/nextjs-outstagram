@@ -1,48 +1,55 @@
 import React from "react";
-import Image from "next/image";
 import { Button, Divider } from "@nextui-org/react";
 import { MessagesIcon, MessagesSummaryProfileIcon } from "@/icons";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { UserResponse } from "@/api/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
-import { User } from "@/gql/graphql";
+import { Friend, Post, User } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { redirectHard } from "@/actions";
+import Image from "next/image";
 
 interface SummaryProfileProps {
-  user: UserResponse;
+  username: string;
+  full_name: string;
+  avatar: string;
+  friends: Friend[];
+  posts: Post[];
 }
 
 const SummaryProfile = (props: SummaryProfileProps) => {
   const { authData } = useAuth();
 
-  const isFriend = props.user.friends.some(
+  const isFriend = props.friends.some(
     (friend) => friend.from_user_id === authData?.id || friend.to_user_id === authData?.id
   );
+
+  const isCurrentUser = authData?.username === props.username;
 
   return (
     <div className="flex flex-col p-2 w-[360px]">
       <div className="flex flex-row items-center space-x-3">
-        <Link href={`/${props.user.username}`}>
+        <Link href={`/${props.username}`}>
           <Avatar className="w-14 h-14">
-            <AvatarImage src={getUserAvatarURL(props.user.avatar)} />
+            <AvatarImage src={getUserAvatarURL(props.avatar)} />
           </Avatar>
         </Link>
         <div>
-          <Link href={`/${props.user.username}`} className="font-bold text-sm">
-            {props.user.username}
+          <Link href={`/${props.username}`} className="font-bold text-sm">
+            {props.username}
           </Link>
-          <p className="text-sm font-normal text-gray-400">{props.user.full_name}</p>
+          <p className="text-sm font-normal text-gray-400">{props.full_name}</p>
         </div>
       </div>
       <div className="flex mt-6 mb-3  justify-between mx-5">
         <div className="text-center font-extrabold">
-          {props.user.posts.length || 0} <br />
+          {props.posts.length || 0}
+          <br />
           <span className="font-normal">posts</span>
         </div>
         <h3 className="text-center  font-extrabold">
-          {props.user.friends.length || 0} <br />
+          {props.friends.length || 0} <br />
           <span className="font-normal">friends</span>
         </h3>
         <h3 className="text-center  font-extrabold">
@@ -52,44 +59,46 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         </h3>
       </div>
       <div className="flex flex-row items-center space-x-1 mx-[-18px]">
-        {props.user.posts && props.user.posts.length > 0 ? (
+        {props.posts && props.posts.length > 0 ? (
           <>
-            {props.user.posts.slice(0, 3).map((post) => (
-              <div key={post.id} className="flex-1">
-                {post.post_files[0].type === "1" ? (
-                  <Link
-                    href={`/p/${post.id}`}
-                    passHref
-                    onClick={(e) => {
-                      e.preventDefault();
-                      redirectHard(`/p/${post.id}`);
-                    }}>
-                    <Image
-                      src={post.post_files[0].url || ""}
-                      alt={`Image ${post.post_files[0].id + 1}`}
-                      className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
-                      width={500}
-                      height={500}
-                      priority
-                    />
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/p/${post.id}`}
-                    passHref
-                    onClick={(e) => {
-                      e.preventDefault();
-                      redirectHard(`/p/${post.id}`);
-                    }}>
-                    <video
-                      src={post.post_files[0].url || ""}
-                      className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
-                    />
-                  </Link>
-                )}
-              </div>
-            ))}
-            {Array.from({ length: 3 - props.user.posts.length }).map((_, index) => (
+            {props.posts.slice(0, 3).map((post) => {
+              const postFile = post.post_files?.[0];
+              if (!postFile) return null;
+
+              return (
+                <div key={post.id} className="flex-1">
+                  {postFile.type === "1" ? (
+                    <Link
+                      href={`/p/${post.id}`}
+                      passHref
+                      onClick={(e) => {
+                        e.preventDefault();
+                        redirectHard(`/p/${post.id}`);
+                      }}>
+                      <Image
+                        src={postFile.url || ""}
+                        alt={`Image ${postFile.id + 1}`}
+                        className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
+                        width={500}
+                        height={500}
+                        priority
+                      />
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/p/${post.id}`}
+                      passHref
+                      onClick={(e) => {
+                        e.preventDefault();
+                        redirectHard(`/p/${post.id}`);
+                      }}>
+                      <video src={postFile.url || ""} className="w-full h-32 bg-gray-200/70 object-cover rounded-md" />
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
+            {Array.from({ length: 3 - props.posts.length }).map((_, index) => (
               <div key={`empty-${index}`} className="flex-1 h-32"></div>
             ))}
           </>
@@ -99,7 +108,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
             <Image src="/camera.png" alt="" width={48} height={48} className="my-2" />
             <div className="font-bold text-base">No posts yet</div>
             <div className="text-sm text-gray-400 mx-2 text-center">
-              When {props.user.username} shares photos and reels, you&apos;ll see them here.
+              When {props.username} shares photos and reels, you&apos;ll see them here.
             </div>
             <Divider className="my-4" />
           </div>
@@ -107,19 +116,25 @@ const SummaryProfile = (props: SummaryProfileProps) => {
       </div>
 
       <div className="flex flex-row items-center mt-4">
-        {isFriend ? (
+        {isCurrentUser ? (
+          <Button className="w-full mx-1 h-9 font-semibold bg-gray-200 rounded-lg">
+            <Link href="/accounts/edit" className="flex items-center space-x-2">
+              <span>Edit Profile</span>
+            </Link>
+          </Button>
+        ) : isFriend ? (
           <>
-            <Button className="w-1/2 mx-1 h-9 text-white font-medium bg-primary-400 rounded-lg">
+            <Button className="w-1/2 mx-1 h-9 text-white font-semibold bg-primary-400 rounded-lg">
               <Link href="/direct/inbox" className="flex items-center space-x-2">
                 <MessagesSummaryProfileIcon stroke="#FFFFFF" className="w-5 h-5" />
                 <span>Message</span>
               </Link>
             </Button>
 
-            <Button className="w-1/2 mx-1 h-9 font-medium bg-gray-200 rounded-lg">Friend</Button>
+            <Button className="w-1/2 mx-1 h-9 font-semibold bg-gray-200 rounded-lg">Friend</Button>
           </>
         ) : (
-          <Button className="w-full mx-1 h-9 text-white font-medium bg-primary-400 rounded-lg">Add friend</Button>
+          <Button className="w-full mx-1 h-9 text-white font-semibold bg-primary-400 rounded-lg">Add friend</Button>
         )}
       </div>
     </div>

@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { clearJWT } from "@/actions";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { VerifiedIcon } from "@/icons";
 
 const MiniProfile = () => {
   const { authData } = useAuth();
@@ -28,9 +29,12 @@ const MiniProfile = () => {
           </Avatar>
         </Link>
         <div className="flex-1 mx-4 flex flex-col">
-          <Link href={`/${authData?.username}`} className="font-bold text-sm">
-            {authData?.username}
-          </Link>
+          <div className="flex space-x-1 items-center">
+            <Link href={`/${authData?.username}`} className="font-bold text-sm">
+              {authData?.username}
+            </Link>
+            {authData?.role && <VerifiedIcon className="w-4 h-4" />}
+          </div>
           <span className="text-sm text-gray-400">{authData?.full_name}</span>
         </div>
       </div>

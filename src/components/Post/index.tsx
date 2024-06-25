@@ -14,7 +14,7 @@ import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
-import { PostHomePageDocument, PostLike } from "@/gql/graphql";
+import { Friend, PostHomePageDocument, PostLike } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
@@ -113,8 +113,20 @@ const Post = () => {
                         <CardHeader className="p-2 flex flex-row items-center">
                           <div className="flex gap-1 items-center justify-center">
                             <Tooltip
-                              content={post.user && <SummaryProfile user={post.user as UserResponse} />}
-                              placement="bottom-start">
+                              delay={1000}
+                              content={
+                                post && (
+                                  <SummaryProfile
+                                    username={post.user?.username || ""}
+                                    full_name={post.user?.full_name || ""}
+                                    avatar={post.user?.avatar || ""}
+                                    posts={[]}
+                                    friends={post.user?.friends as Friend[]}
+                                  />
+                                )
+                              }
+                              placement="bottom-start"
+                              className="rounded-md shadow-lg">
                               <div className="flex items-center gap-2 text-sm font-medium">
                                 <UserProfileInfo
                                   username={post.user?.username || ""}

@@ -388,8 +388,8 @@ const Notification = () => {
                   </Avatar>
                   <span className="text-sm mx-3">
                     <span className="font-semibold">jack maria</span> posted a thread that you might like: Lorem Ipsum
-                    is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,....
+                    is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry&apos;s standard dummy text ever since the 1500s,....
                     <span className="text-gray-400"> 3 d</span>
                   </span>
                 </div>
@@ -427,8 +427,8 @@ const Notification = () => {
                   </Avatar>
                   <span className="text-sm mx-3">
                     <span className="font-semibold">jack maria</span> posted a thread that you might like: Lorem Ipsum
-                    is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s,....
+                    is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry&apos;s standard dummy text ever since the 1500s,....
                     <span className="text-gray-400"> 3 d</span>
                   </span>
                 </div>

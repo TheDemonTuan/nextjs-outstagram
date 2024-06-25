@@ -34,6 +34,52 @@ export const PostByPostID = graphql(`
         username
         full_name
         role
+        active
+        is_private
+        friends {
+          id
+          from_user_id
+          to_user_id
+          status
+          created_at
+          updated_at
+          deleted_at
+          from_user_info {
+            id
+            username
+            full_name
+            email
+            phone
+            avatar
+            bio
+            birthday
+            gender
+            role
+            active
+            is_private
+            created_at
+            updated_at
+            deleted_at
+          }
+          to_user_info {
+            id
+            username
+            full_name
+            email
+            phone
+            avatar
+            bio
+            birthday
+            gender
+            role
+            active
+            is_private
+            created_at
+            updated_at
+            deleted_at
+          }
+        }        
+
       }
       created_at
       updated_at
@@ -64,6 +110,51 @@ export const PostByPostID = graphql(`
         user {
           avatar
           username
+          full_name
+          role
+          friends {
+            id
+            from_user_id
+            to_user_id
+            status
+            created_at
+            updated_at
+            deleted_at
+            from_user_info {
+              id
+              username
+              full_name
+              email
+              phone
+              avatar
+              bio
+              birthday
+              gender
+              role
+              active
+              is_private
+              created_at
+              updated_at
+              deleted_at
+            }
+            to_user_info {
+              id
+              username
+              full_name
+              email
+              phone
+              avatar
+              bio
+              birthday
+              gender
+              role
+              active
+              is_private
+              created_at
+              updated_at
+              deleted_at
+            }
+          }
         }
         parent {
           id
@@ -93,6 +184,52 @@ export const PostHomePage = graphql(`
         username
         full_name
         role
+        active
+        is_private
+            friends {
+                id
+                from_user_id
+                to_user_id
+                status
+                created_at
+                updated_at
+                deleted_at
+                from_user_info {
+                    id
+                    username
+                    full_name
+                    email
+                    phone
+                    avatar
+                    bio
+                    birthday
+                    gender
+                    role
+                    active
+                    is_private
+                    created_at
+                    updated_at
+                    deleted_at
+                }
+                to_user_info {
+                    id
+                    username
+                    full_name
+                    email
+                    phone
+                    avatar
+                    bio
+                    birthday
+                    gender
+                    role
+                    active
+                    is_private
+                    created_at
+                    updated_at
+                    deleted_at
+                }
+            }
+
       }
       post_files {
         id

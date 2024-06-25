@@ -18,7 +18,7 @@ const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: Li
   const handleLikesClick = useCallback(() => {
     setModalData(postLikes);
     modalOpen(likesModalKey);
-  }, [postLikes, likesModalKey, modalOpen, setModalData]);
+  }, [setModalData, postLikes, modalOpen, likesModalKey]);
 
   const renderLikesText = useCallback(() => {
     if (postLikes.length === 0) {

@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { User } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
+import { redirectHard } from "@/actions";
 
 interface SummaryProfileProps {
   user: UserResponse;
@@ -21,14 +22,17 @@ const SummaryProfile = (props: SummaryProfileProps) => {
   );
 
   return (
-    <Link href={`/${props.user.username}`} className="flex flex-col p-2 w-[360px]">
+    <div className="flex flex-col p-2 w-[360px]">
       <div className="flex flex-row items-center space-x-3">
-        <Avatar className="w-14 h-14">
-          <AvatarImage src={getUserAvatarURL(props.user.avatar)} />
-        </Avatar>
-
+        <Link href={`/${props.user.username}`}>
+          <Avatar className="w-14 h-14">
+            <AvatarImage src={getUserAvatarURL(props.user.avatar)} />
+          </Avatar>
+        </Link>
         <div>
-          <p className="font-bold text-sm">{props.user.username}</p>
+          <Link href={`/${props.user.username}`} className="font-bold text-sm">
+            {props.user.username}
+          </Link>
           <p className="text-sm font-normal text-gray-400">{props.user.full_name}</p>
         </div>
       </div>
@@ -50,22 +54,38 @@ const SummaryProfile = (props: SummaryProfileProps) => {
       <div className="flex flex-row items-center space-x-1 mx-[-18px]">
         {props.user.posts && props.user.posts.length > 0 ? (
           <>
-            {props.user.posts.slice(0, 3).map((postFile) => (
-              <div key={postFile.id} className="flex-1">
-                {postFile.post_files[0].type === "1" ? (
-                  <Image
-                    src={postFile.post_files[0].url || ""}
-                    alt={`Image ${postFile.id + 1}`}
-                    className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
-                    width={500}
-                    height={500}
-                    priority
-                  />
+            {props.user.posts.slice(0, 3).map((post) => (
+              <div key={post.id} className="flex-1">
+                {post.post_files[0].type === "1" ? (
+                  <Link
+                    href={`/p/${post.id}`}
+                    passHref
+                    onClick={(e) => {
+                      e.preventDefault();
+                      redirectHard(`/p/${post.id}`);
+                    }}>
+                    <Image
+                      src={post.post_files[0].url || ""}
+                      alt={`Image ${post.post_files[0].id + 1}`}
+                      className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
+                      width={500}
+                      height={500}
+                      priority
+                    />
+                  </Link>
                 ) : (
-                  <video
-                    src={postFile.post_files[0].url || ""}
-                    className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
-                  />
+                  <Link
+                    href={`/p/${post.id}`}
+                    passHref
+                    onClick={(e) => {
+                      e.preventDefault();
+                      redirectHard(`/p/${post.id}`);
+                    }}>
+                    <video
+                      src={post.post_files[0].url || ""}
+                      className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
+                    />
+                  </Link>
                 )}
               </div>
             ))}
@@ -90,16 +110,19 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         {isFriend ? (
           <>
             <Button className="w-1/2 mx-1 h-9 text-white font-medium bg-primary-400 rounded-lg">
-              <MessagesSummaryProfileIcon stroke="#FFFFFF" className="w-5 h-5" />
-              Message
+              <Link href="/direct/inbox" className="flex items-center space-x-2">
+                <MessagesSummaryProfileIcon stroke="#FFFFFF" className="w-5 h-5" />
+                <span>Message</span>
+              </Link>
             </Button>
+
             <Button className="w-1/2 mx-1 h-9 font-medium bg-gray-200 rounded-lg">Friend</Button>
           </>
         ) : (
           <Button className="w-full mx-1 h-9 text-white font-medium bg-primary-400 rounded-lg">Add friend</Button>
         )}
       </div>
-    </Link>
+    </div>
   );
 };
 

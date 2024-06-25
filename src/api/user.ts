@@ -1,6 +1,7 @@
 import http, { ApiSuccessResponse } from "@/lib/http";
 import { PostResponse } from "./post";
 import { PostLikeResponse } from "./post_like";
+import { FriendResponse } from "./friend";
 
 export const userKey = "users";
 
@@ -21,6 +22,7 @@ export interface UserResponse {
   posts: PostResponse[];
   post_likes: PostLikeResponse[];
   post_comments: null;
+  friends: FriendResponse[]
 
   created_at: Date;
   updated_at: Date;

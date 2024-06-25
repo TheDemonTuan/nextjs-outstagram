@@ -6,14 +6,14 @@ import { PostLike } from "@/gql/graphql";
 interface LikesViewProps {
   postLikes: PostLike[];
   post_userID: string;
-  current_userID: string;
+  current_userName: string;
   likesModalKey: string;
 }
 
-const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: LikesViewProps) => {
+const LikesView = ({ postLikes, post_userID, current_userName, likesModalKey }: LikesViewProps) => {
   const { modalOpen, setModalData } = useModalStore();
 
-  const isCurrentUserPost = post_userID === current_userID;
+  const isCurrentUserPost = post_userID === current_userName;
 
   const handleLikesClick = () => {
     setModalData(postLikes);
@@ -29,7 +29,7 @@ const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: Li
       );
     }
 
-    const likedByCurrentUser = postLikes.find((like) => like.user_id === current_userID);
+    const likedByCurrentUser = postLikes.find((like) => like.user?.username === current_userName);
 
     if (isCurrentUserPost) {
       const othersCount = postLikes.length - 1;
@@ -44,7 +44,7 @@ const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: Li
             <>
               Liked by{" "}
               <Link href="/" className="font-semibold cursor-pointer">
-                {likedByUser?.user_id}
+                {likedByUser?.user?.username}
               </Link>{" "}
               and{" "}
               <span className="font-semibold cursor-pointer">
@@ -59,13 +59,13 @@ const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: Li
         <span className="text-sm cursor-pointer" onClick={handleLikesClick}>
           {postLikes.length === 1 ? (
             <span>
-              Liked by <span className="font-semibold">{postLikes[0]?.user_id}</span>
+              Liked by <span className="font-semibold">{postLikes[0]?.user?.username}</span>
             </span>
           ) : (
             <span>
               Liked by{" "}
               <Link href="/" className="font-semibold cursor-pointer">
-                {postLikes[0]?.user_id}
+                {postLikes[0]?.user?.username}
               </Link>{" "}
               and <span className="font-semibold cursor-pointer">others</span>
             </span>

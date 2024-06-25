@@ -105,7 +105,7 @@ function PostView({ id }: { id: string }) {
                 <LikesView
                   postLikes={postLikesFilter as PostLike[]}
                   post_userID={postData.postByPostId.user_id || ""}
-                  current_userID={authData?.id || ""}
+                  current_userName={authData?.id || ""}
                   likesModalKey={LikesModalKey}
                 />
 
@@ -113,7 +113,7 @@ function PostView({ id }: { id: string }) {
                   className="text-xs text-gray-500 cursor-pointer active:text-gray-300"
                   onClick={() => window.location.reload()}>
                   {" "}
-                  {formatDistanceToNow(postData.postByPostId.created_at, {
+                  {formatDistanceToNow(postData.postByPostId.created_at || "", {
                     addSuffix: true,
                   })}
                 </span>

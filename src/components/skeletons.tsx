@@ -20,7 +20,7 @@ export function ViewPostSkeleton() {
           <div className="flex-1 my-4" />
 
           <div className="flex items-center w-full space-x-4 border-t-1">
-            <div className="space-y-2 w-full">
+            <div className="space-y-2 w-full my-2">
               <Skeleton className="h-3 w-[100px] flex-1" />
               <Skeleton className="h-3 w-[200px]" />
               <Skeleton className="h-3 w-[50px]" />

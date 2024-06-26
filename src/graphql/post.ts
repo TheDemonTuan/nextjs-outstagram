@@ -276,6 +276,22 @@ export const PostSuggestions = graphql(`
       user{
         username
       }
+      post_files {
+        id
+        url
+        type
+        active
+      }
+      post_likes {
+        id
+        is_liked
+      }
+      post_comments {
+        id
+        post_id
+        user_id
+        parent_id
+      }
     }
   }
 `);

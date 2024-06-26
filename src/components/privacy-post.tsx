@@ -15,14 +15,14 @@ const PostPrivacy = ({ privacy }: { privacy: number }) => {
             </div>
           </Tooltip>
         )}
-        {privacy === 1 && (
+        {privacy === 2 && (
           <Tooltip content="Private" placement="top" className="px-3 py-2 rounded-lg bg-black text-white bg-opacity-65">
             <div>
               <FaLock size={12} color="#65676B" />
             </div>
           </Tooltip>
         )}
-        {privacy === 2 && (
+        {privacy === 1 && (
           <Tooltip content="Friends" placement="top" className="px-3 py-2 rounded-lg bg-black text-white bg-opacity-65">
             <div>
               <FaUserFriends size={12} color="#65676B" />

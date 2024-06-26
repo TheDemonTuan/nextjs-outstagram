@@ -108,7 +108,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     <>
       <Modal
         isOpen={modalKey === AddPostModalKey}
-        onOpenChange={() => modalOpen(ConfirmDiscardPostModalKey)}
+        onOpenChange={() => handleResetModalSelectPhoto}
         hideCloseButton={true}
         isDismissable={!createIsPending}
         size="3xl">
@@ -305,7 +305,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
           )}
         </ModalContent>
       </Modal>
-      <ConfirmDiscardPost onEventCloseModal={handleResetModalSelectPhoto} keyModal={AddPostModalKey} />
+      {/* <ConfirmDiscardPost onEventCloseModal={handleResetModalSelectPhoto} keyModal={AddPostModalKey} /> */}
     </>
   );
 };

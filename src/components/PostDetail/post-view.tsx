@@ -1,6 +1,6 @@
 import { postKey } from "@/api/post";
 import { UserResponse } from "@/api/user";
-import { Friend, PostByPostIdDocument, PostLike } from "@/gql/graphql";
+import { Friend, Post, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
@@ -96,7 +96,7 @@ function PostView({ id }: { id: string }) {
               </Tooltip>
               <span
                 onClick={() => {
-                  setModalData(postData);
+                  setModalData(postData.postByPostId);
                   modalOpen(PostMoreOptionsModalKey);
                 }}>
                 <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />

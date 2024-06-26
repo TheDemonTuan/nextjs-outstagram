@@ -110,7 +110,7 @@ const SinglePost = ({ id }: { id: string }) => {
             </Tooltip>
             <span
               onClick={() => {
-                setModalData(postData);
+                setModalData(postData.postByPostId);
                 modalOpen(PostMoreOptionsModalKey);
               }}>
               <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />

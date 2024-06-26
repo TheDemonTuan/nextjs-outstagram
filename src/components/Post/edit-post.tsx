@@ -12,6 +12,7 @@ import {
   Spinner,
   Switch,
   Textarea,
+  modal,
 } from "@nextui-org/react";
 import Image from "next/image";
 import React, { Fragment, useEffect, useState } from "react";
@@ -30,7 +31,7 @@ import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { PostEditParams, PostResponse, postEdit } from "@/api/post";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
-import { FormControl, FormField, FormItem, Form } from "../ui/form";
+import { FormControl, FormField, FormItem, Form, FormMessage } from "../ui/form";
 import { ScrollArea } from "../ui/scroll-area";
 import Carousel from "./carousel";
 import TextareaAutosize from "react-textarea-autosize";
@@ -66,7 +67,7 @@ const EditPost = () => {
 
       editForm.reset({
         ...editForm.getValues(),
-        caption: caption || "",
+        caption: caption,
         privacy: privacyValue,
       });
     }
@@ -111,10 +112,15 @@ const EditPost = () => {
     });
   };
 
+  const handleCloseModal = () => {
+    editForm.reset();
+    modalClose();
+  };
+
   return (
     <Modal
       isOpen={modalKey === EditPostModalKey}
-      onOpenChange={modalClose}
+      onOpenChange={handleCloseModal}
       hideCloseButton={true}
       isDismissable={!postEditIsLoading}
       size="3xl">
@@ -137,14 +143,14 @@ const EditPost = () => {
             <Divider />
             <ModalBody className="p-0">
               <div className="flex">
-                <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg w-3/5 flex items-center ">
+                <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg w-3/5 flex items-center bg-black">
                   <Carousel
                     slides={modalData.post_files.map((file: PostFile) => {
                       return {
                         id: file?.id ?? "",
                         url: file?.url ?? "",
                         type: file?.type === "1" ? 1 : 0,
-                        className: "rounded-sm h-[500px] w-full object-cover",
+                        className: "rounded-sm h-[500px] w-full object-contain",
                       };
                     })}
                   />
@@ -182,6 +188,7 @@ const EditPost = () => {
                                   minRows={7}
                                   maxRows={7}
                                   autoFocus
+                                  required
                                 />
 
                                 <div className="flex items-center justify-between px-4 py-2">
@@ -192,6 +199,7 @@ const EditPost = () => {
                                 </div>
                               </>
                             </FormControl>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />{" "}

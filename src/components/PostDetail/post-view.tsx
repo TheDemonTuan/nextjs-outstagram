@@ -1,6 +1,6 @@
 import { postKey } from "@/api/post";
 import { UserResponse } from "@/api/user";
-import { PostByPostIdDocument, PostLike } from "@/gql/graphql";
+import { Friend, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
@@ -68,10 +68,20 @@ function PostView({ id }: { id: string }) {
           <Card className="flex flex-col justify-between md:h-full md:order-2 w-full max-w-lg rounded-r-none rounded-l-md">
             <div className="flex border-b space-y-0 space-x-2.5 flex-row items-center py-3.5 pl-3.5 pr-5 justify-between">
               <Tooltip
+                delay={1000}
                 content={
-                  postData?.postByPostId.user && <SummaryProfile user={postData?.postByPostId.user as UserResponse} />
+                  postData.postByPostId && (
+                    <SummaryProfile
+                      username={postData.postByPostId.user?.username || ""}
+                      full_name={postData.postByPostId.user?.full_name || ""}
+                      avatar={postData.postByPostId.user?.avatar || ""}
+                      posts={[]}
+                      friends={postData.postByPostId.user?.friends as Friend[]}
+                    />
+                  )
                 }
-                placement="bottom-start">
+                placement="bottom-start"
+                className="rounded-md shadow-lg">
                 <div className="flex flex-row items-center gap-3 px-1">
                   <UserProfileInfo
                     username={postData?.postByPostId.user?.username || ""}

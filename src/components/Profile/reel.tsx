@@ -26,7 +26,7 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
         }
 
         return (
-          <Link key={post.id} href={`/p/${post.id}`} passHref className="relative group cursor-pointer">
+          <Link key={post?.id} href={`/p/${post?.id}`} passHref className="relative group cursor-pointer">
             <video
               key={"video" + firstFile.id}
               src={firstFile?.url || "/camera-b.png"}

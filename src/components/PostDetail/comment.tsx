@@ -3,7 +3,7 @@ import { Divider, Spinner, Tooltip } from "@nextui-org/react";
 import Link from "next/link";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa";
-import { PostByPostIdQuery } from "@/gql/graphql";
+import { Friend, PostByPostIdQuery } from "@/gql/graphql";
 import { formatDistanceToNow } from "date-fns";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useCommentStore } from "@/stores/comment-store";
@@ -42,8 +42,20 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
               onMouseLeave={() => setHoveredCommentId(null)}>
               <div className="flex items-start">
                 <Tooltip
-                  content={comment?.user && <SummaryProfile user={comment.user as UserResponse} />}
-                  placement="bottom-start">
+                  delay={1000}
+                  content={
+                    comment && (
+                      <SummaryProfile
+                        username={comment?.user?.username || ""}
+                        full_name={comment?.user?.full_name || ""}
+                        avatar={comment?.user?.avatar || ""}
+                        posts={[]}
+                        friends={comment?.user?.friends as Friend[]}
+                      />
+                    )
+                  }
+                  placement="bottom-start"
+                  className="rounded-md shadow-lg">
                   <Link href={`/${comment?.user?.username}`}>
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={getUserAvatarURL(comment?.user?.avatar)} />
@@ -163,8 +175,20 @@ const ReplyBox = memo(
               onMouseLeave={() => setHoveredCommentId(null)}>
               <div className="flex items-start">
                 <Tooltip
-                  content={reply?.user && <SummaryProfile user={reply.user as UserResponse} />}
-                  placement="bottom-start">
+                  delay={1000}
+                  content={
+                    reply && (
+                      <SummaryProfile
+                        username={reply?.user?.username || ""}
+                        full_name={reply?.user?.full_name || ""}
+                        avatar={reply?.user?.avatar || ""}
+                        posts={[]}
+                        friends={reply?.user?.friends as Friend[]}
+                      />
+                    )
+                  }
+                  placement="bottom-start"
+                  className="rounded-md shadow-lg">
                   <Link href={`/${reply?.user?.username}`} className="hover:text-neutral-300">
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={getUserAvatarURL(reply?.user?.avatar)} />

@@ -1,5 +1,5 @@
 import { UserResponse, userKey } from "@/api/user";
-import { UserSuggestionDocument } from "@/gql/graphql";
+import { Friend, Post, UserSuggestionDocument } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { graphQLClient } from "@/lib/graphql";
 import { Tooltip } from "@nextui-org/react";
@@ -50,7 +50,17 @@ const Suggestions = () => {
         <div key={user.username} className="flex items-center justify-between gap-3">
           <Tooltip
             delay={1000}
-            content={user && <SummaryProfile user={user as unknown as UserResponse} />}
+            content={
+              user && (
+                <SummaryProfile
+                  username={user.username || ""}
+                  full_name={user.full_name || ""}
+                  avatar={user.avatar || ""}
+                  posts={user?.posts as Post[]}
+                  friends={user.friends as Friend[]}
+                />
+              )
+            }
             placement="bottom-start"
             className="rounded-md shadow-lg">
             <div className="flex items-center gap-2 text-sm font-medium">

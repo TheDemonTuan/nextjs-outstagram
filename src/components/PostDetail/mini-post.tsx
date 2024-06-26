@@ -1,6 +1,6 @@
 "use client";
 
-import { PostByPostIdQuery } from "@/gql/graphql";
+import { Friend, PostByPostIdQuery } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
@@ -23,7 +23,21 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
   return (
     <div className="group p-3 px-3.5 flex items-start space-x-2.5">
       <Link href={href}>
-        <Tooltip content={post.user && <SummaryProfile user={post.user as UserResponse} />} placement="bottom-start">
+        <Tooltip
+          delay={1000}
+          content={
+            post && (
+              <SummaryProfile
+                username={post.user?.username || ""}
+                full_name={post.user?.full_name || ""}
+                avatar={post.user?.avatar || ""}
+                posts={[]}
+                friends={post.user?.friends as Friend[]}
+              />
+            )
+          }
+          placement="bottom-start"
+          className="rounded-md shadow-lg">
           <Avatar className="w-8 h-8">
             <AvatarImage src={getUserAvatarURL(post?.user?.avatar) || ""} />
             <AvatarFallback>
@@ -37,8 +51,20 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
         <div className="flex items-center space-x-1.5 text-[13px] leading-[18px]">
           <div>
             <Tooltip
-              content={post.user && <SummaryProfile user={post.user as UserResponse} />}
-              placement="bottom-start">
+              delay={1000}
+              content={
+                post && (
+                  <SummaryProfile
+                    username={post.user?.username || ""}
+                    full_name={post.user?.full_name || ""}
+                    avatar={post.user?.avatar || ""}
+                    posts={[]}
+                    friends={post.user?.friends as Friend[]}
+                  />
+                )
+              }
+              placement="bottom-start"
+              className="rounded-md shadow-lg">
               <Link href={href} className="font-semibold">
                 {username}
               </Link>
@@ -49,7 +75,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
         <div className="flex h-5 items-center space-x-2.5">
           {!isEdited ? (
             <span className="text-xs text-gray-500">
-              {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
+              {formatDistanceToNow(new Date(post.created_at || ""), { addSuffix: true })}
             </span>
           ) : (
             <span className="text-xs text-gray-500">

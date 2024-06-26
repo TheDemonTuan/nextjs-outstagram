@@ -14,7 +14,7 @@ import { postGetByPostId, postKey } from "@/api/post";
 import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "@/lib/graphql";
 import { notFound } from "next/navigation";
-import { PostByPostIdDocument, PostLike } from "@/gql/graphql";
+import { Friend, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { useModalStore } from "@/stores/modal-store";
@@ -23,10 +23,8 @@ import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
-import { UserResponse } from "@/api/user";
 import LikesView from "../Post/likes-view";
 import { useAuth } from "@/hooks/useAuth";
-import { redirectHard } from "@/actions";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -84,10 +82,20 @@ const SinglePost = ({ id }: { id: string }) => {
         <div className="flex max-w-sm flex-col flex-1 lg:max-w-lg w-full h-[600px]">
           <div className="flex items-center justify-between border-b px-3 py-3">
             <Tooltip
+              delay={1000}
               content={
-                postData.postByPostId.user && <SummaryProfile user={postData.postByPostId.user as UserResponse} />
+                postData.postByPostId && (
+                  <SummaryProfile
+                    username={postData.postByPostId.user?.username || ""}
+                    full_name={postData.postByPostId.user?.full_name || ""}
+                    avatar={postData.postByPostId.user?.avatar || ""}
+                    posts={[]}
+                    friends={postData.postByPostId.user?.friends as Friend[]}
+                  />
+                )
               }
-              placement="bottom-start">
+              placement="bottom-start"
+              className="rounded-md shadow-lg">
               <div className="flex flex-row items-center gap-3 font-semibold text-[13px] leading-[18px]">
                 <UserProfileInfo
                   username={postData.postByPostId.user?.username || ""}
@@ -110,7 +118,7 @@ const SinglePost = ({ id }: { id: string }) => {
           <div className="hidden md:inline py-1.5 overflow-y-auto max-h-[360px]">
             <MiniPost post={postData.postByPostId} />
             {postData.postByPostId.post_comments && postData.postByPostId.post_comments?.length <= 0 ? (
-              <div className="flex flex-col items-center gap-1.5 h-[300px] justify-center">
+              <div className="flex flex-col items-center gap-1.5 h-[250px] justify-center">
                 <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
                 <p className="text-sm font-medium">Start the conversation.</p>
               </div>
@@ -131,7 +139,7 @@ const SinglePost = ({ id }: { id: string }) => {
                 likesModalKey={LikesModalKey}
               />
               <time className="text-[12px] text-zinc-500 font-medium">
-                {new Date(postData.postByPostId.created_at).toLocaleDateString("en-US", {
+                {new Date(postData.postByPostId.created_at || "").toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
                 })}

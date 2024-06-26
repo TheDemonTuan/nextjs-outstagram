@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Divider } from "@nextui-org/react";
-import { MessagesIcon, MessagesSummaryProfileIcon } from "@/icons";
+import { MessagesIcon, MessagesSummaryProfileIcon, VerifiedIcon } from "@/icons";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { UserResponse } from "@/api/user";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -14,6 +14,7 @@ interface SummaryProfileProps {
   username: string;
   full_name: string;
   avatar: string;
+  role: boolean;
   friends: Friend[];
   posts: Post[];
 }
@@ -36,9 +37,12 @@ const SummaryProfile = (props: SummaryProfileProps) => {
           </Avatar>
         </Link>
         <div>
-          <Link href={`/${props.username}`} className="font-bold text-sm">
-            {props.username}
-          </Link>
+          <div className="flex items-center">
+            <Link href={`/${props.username}`} className="font-bold text-sm">
+              {props.username}
+            </Link>
+            {props.role && <VerifiedIcon className="w-3 h-3 ml-1" />}
+          </div>
           <p className="text-sm font-normal text-gray-400">{props.full_name}</p>
         </div>
       </div>
@@ -81,7 +85,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
                         className="w-full h-32 bg-gray-200/70 object-cover rounded-md"
                         width={500}
                         height={500}
-                        priority
+                        loading="lazy"
                       />
                     </Link>
                   ) : (
@@ -119,7 +123,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         {isCurrentUser ? (
           <Button className="w-full mx-1 h-9 font-semibold bg-gray-200 rounded-lg">
             <Link href="/accounts/edit" className="flex items-center space-x-2">
-              <span>Edit Profile</span>
+              Edit Profile
             </Link>
           </Button>
         ) : isFriend ? (

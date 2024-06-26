@@ -53,6 +53,7 @@ const PostLikes = () => {
                               username={like?.user?.username || ""}
                               full_name={like?.user?.full_name || ""}
                               avatar={like?.user?.avatar || ""}
+                              role={like?.user?.role || false}
                               posts={[]}
                               friends={like?.user?.friends as Friend[]}
                             />
@@ -79,6 +80,7 @@ const PostLikes = () => {
                                   username={like?.user?.username || ""}
                                   full_name={like?.user?.full_name || ""}
                                   avatar={like?.user?.avatar || ""}
+                                  role={like?.user?.role || false}
                                   posts={[]}
                                   friends={like?.user?.friends as Friend[]}
                                 />

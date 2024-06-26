@@ -23,7 +23,7 @@ import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
-import LikesView from "../Post/likes-view";
+import LikesView from "../likes-view";
 import { useAuth } from "@/hooks/useAuth";
 
 const SinglePost = ({ id }: { id: string }) => {
@@ -89,6 +89,7 @@ const SinglePost = ({ id }: { id: string }) => {
                     username={postData.postByPostId.user?.username || ""}
                     full_name={postData.postByPostId.user?.full_name || ""}
                     avatar={postData.postByPostId.user?.avatar || ""}
+                    role={postData.postByPostId.user?.role || false}
                     posts={[]}
                     friends={postData.postByPostId.user?.friends as Friend[]}
                   />

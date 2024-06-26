@@ -12,7 +12,7 @@ import { notFound, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { PiDotsThreeBold } from "react-icons/pi";
 import Carousel from "../Post/carousel";
-import LikesView from "../Post/likes-view";
+import LikesView from "../likes-view";
 import { LikesModalKey } from "../Post/post-likes";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import PostReact from "../Post/post-react";
@@ -75,6 +75,7 @@ function PostView({ id }: { id: string }) {
                       username={postData.postByPostId.user?.username || ""}
                       full_name={postData.postByPostId.user?.full_name || ""}
                       avatar={postData.postByPostId.user?.avatar || ""}
+                      role={postData.postByPostId.user?.role || false}
                       posts={[]}
                       friends={postData.postByPostId.user?.friends as Friend[]}
                     />

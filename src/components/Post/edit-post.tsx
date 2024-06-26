@@ -256,38 +256,6 @@ const EditPost = () => {
                               </AccordionContent>
                             </AccordionItem>
                           </Accordion>
-
-                          <Accordion type="single" collapsible className="w-full">
-                            <AccordionItem value="item2">
-                              <AccordionTrigger className="font-semibold text-sm">Advanced Settings</AccordionTrigger>
-                              <AccordionContent>
-                                <div className="flex flex-col ">
-                                  <div className="flex items-center justify-between ">
-                                    <div className="text-base">
-                                      Hide like and view counts on
-                                      <br /> this post
-                                    </div>
-                                    <Switch defaultSelected size="sm" />
-                                  </div>
-                                  <span className="text-xs text-neutral-500 my-2">
-                                    Only you will see the total number of likes and views <br /> on this post. You can
-                                    change this later by going to the <br /> ··· menu at the top of the post. To hide
-                                    like counts on
-                                    <br />
-                                    other people&apos;s posts, go to your account settings.
-                                    <br /> Learn more
-                                  </span>
-                                  <div className="flex items-center justify-between mt-3">
-                                    <div className="text-base">Turn off commenting</div>
-                                    <Switch defaultSelected size="sm" />
-                                  </div>
-                                  <span className="text-xs text-neutral-500 my-2">
-                                    You can change this later by going to the ··· menu at <br /> the top of your post.
-                                  </span>
-                                </div>
-                              </AccordionContent>
-                            </AccordionItem>
-                          </Accordion>
                         </div>
                       </div>
                     </div>

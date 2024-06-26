@@ -13,7 +13,7 @@ import { useEffect, useMemo } from "react";
 import { PiDotsThreeBold } from "react-icons/pi";
 import Carousel from "../Post/carousel";
 import LikesView from "../likes-view";
-import { LikesModalKey } from "../Post/post-likes";
+import PostLikes, { LikesModalKey } from "../Post/post-likes";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import PostReact from "../Post/post-react";
 import { ViewPostSkeleton } from "../skeletons";
@@ -114,8 +114,7 @@ function PostView({ id }: { id: string }) {
               <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
               <div className="flex flex-col space-y-1">
                 <LikesView
-                  postLikes={postLikesFilter as PostLike[]}
-                  post_userID={postData.postByPostId.user_id || ""}
+                  post={postData.postByPostId as Post}
                   current_userID={authData?.id || ""}
                   likesModalKey={LikesModalKey}
                 />
@@ -149,6 +148,7 @@ function PostView({ id }: { id: string }) {
         </ModalContent>
       </Modal>
       <PostMoreOptions />
+      <PostLikes />
     </>
   );
 }

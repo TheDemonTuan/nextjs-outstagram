@@ -14,7 +14,7 @@ import { postGetByPostId, postKey } from "@/api/post";
 import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "@/lib/graphql";
 import { notFound } from "next/navigation";
-import { Friend, PostByPostIdDocument, PostLike } from "@/gql/graphql";
+import { Friend, Post, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { useModalStore } from "@/stores/modal-store";
@@ -134,8 +134,7 @@ const SinglePost = ({ id }: { id: string }) => {
             <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
             <div className="flex flex-col">
               <LikesView
-                postLikes={postLikesFilter as PostLike[]}
-                post_userID={postData.postByPostId.user_id || ""}
+                post={postData.postByPostId as Post}
                 current_userID={authData?.id || ""}
                 likesModalKey={LikesModalKey}
               />

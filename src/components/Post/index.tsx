@@ -14,7 +14,7 @@ import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
-import { Friend, PostHomePageDocument, PostLike } from "@/gql/graphql";
+import { Friend, Post as PostGraphql, PostHomePageDocument } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
@@ -32,9 +32,6 @@ import { Span } from "next/dist/trace";
 import LikesView from "../likes-view";
 import { FaRegHeart } from "react-icons/fa6";
 import { pages } from "next/dist/build/templates/app-page";
-import { MdOutlinePublic } from "react-icons/md";
-import { FaLock } from "react-icons/fa6";
-import { FaUserFriends } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import HighlightHashtags from "../highlight-hashtags";
@@ -213,8 +210,7 @@ const Post = () => {
                           />
 
                           <LikesView
-                            postLikes={postLikes as PostLike[]}
-                            post_userID={post.user_id || ""}
+                            post={post as PostGraphql}
                             current_userID={authData?.id || ""}
                             likesModalKey={LikesModalKey}
                           />

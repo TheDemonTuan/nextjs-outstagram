@@ -214,6 +214,7 @@ export const PostHomePage = graphql(`
         type
       }
       post_likes {
+        id
         user_id
         is_liked
         user {

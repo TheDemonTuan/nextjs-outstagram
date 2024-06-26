@@ -27,6 +27,17 @@ const SummaryProfile = (props: SummaryProfileProps) => {
 
   const isCurrentUser = authData?.username === props.username;
 
+  const sortedPosts = [...props.posts].sort(
+    (a, b) => new Date(b?.created_at || "").getTime() - new Date(a?.created_at || "").getTime()
+  );
+
+  const filteredPosts = sortedPosts.filter((post) => {
+    if (post.privacy === 0) return true;
+    if (post.privacy === 1 && isFriend) return true;
+    if (post.privacy === 2 && isCurrentUser) return true;
+    return false;
+  });
+
   return (
     <div className="flex flex-col p-2 w-[360px]">
       <div className="flex flex-row items-center space-x-3">
@@ -61,7 +72,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
       <div className="flex flex-row items-center space-x-1 mx-[-18px]">
         {props.posts && props.posts.length > 0 ? (
           <>
-            {props.posts.slice(0, 3).map((post) => {
+            {filteredPosts.slice(0, 3).map((post) => {
               const postFile = post.post_files?.[0];
               if (!postFile) return null;
 
@@ -98,7 +109,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
                 </div>
               );
             })}
-            {Array.from({ length: 3 - props.posts.length }).map((_, index) => (
+            {Array.from({ length: 3 - filteredPosts.length }).map((_, index) => (
               <div key={`empty-${index}`} className="flex-1 h-32"></div>
             ))}
           </>

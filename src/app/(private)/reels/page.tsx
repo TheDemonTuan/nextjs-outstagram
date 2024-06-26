@@ -150,7 +150,7 @@ const ReelsPage = () => {
             </Link>
           </div>
         </div>
-        ;<div ref={ref}></div>
+        <div ref={ref}></div>
       </div>
     </>
   );

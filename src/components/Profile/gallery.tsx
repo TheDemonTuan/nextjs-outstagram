@@ -1,5 +1,4 @@
 import { UserProfileQuery } from "@/gql/graphql";
-import { useAuth } from "@/hooks/useAuth";
 import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +6,6 @@ import React from "react";
 
 const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { posts, user, username } = userProfile.userProfile;
-  const { authData } = useAuth();
 
   if (!posts || !posts.length) {
     return (
@@ -18,24 +16,9 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
     );
   }
 
-  const isFriend = userProfile?.userProfile.user?.friends?.some(
-    (friend) => friend?.from_user_id === authData?.id || friend?.to_user_id === authData?.id
-  );
-
-  const sortedPosts = [...posts].sort(
-    (a, b) => new Date(b?.created_at || "").getTime() - new Date(a?.created_at || "").getTime()
-  );
-
-  const filteredPosts = sortedPosts.filter((post) => {
-    if (post?.privacy === 0) return true;
-    if (post?.privacy === 1 && isFriend) return true;
-    if (post?.privacy === 2 && authData?.username === post.user?.username) return true;
-    return false;
-  });
-
   return (
     <div className="grid grid-cols-3 gap-1 mx-28 max-w-screen-xl">
-      {filteredPosts?.map((post) => {
+      {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         const firstFile = postFiles[0];
         return (

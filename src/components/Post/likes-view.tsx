@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useModalStore } from "@/stores/modal-store";
 import { PostLike } from "@/gql/graphql";
@@ -10,7 +10,8 @@ interface LikesViewProps {
   likesModalKey: string;
 }
 
-const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: LikesViewProps) => {
+// eslint-disable-next-line react/display-name
+const LikesView = memo(({ postLikes, post_userID, current_userID, likesModalKey }: LikesViewProps) => {
   const { modalOpen, setModalData } = useModalStore();
 
   const isCurrentUserPost = useMemo(() => post_userID === current_userID, [post_userID, current_userID]);
@@ -76,6 +77,6 @@ const LikesView = ({ postLikes, post_userID, current_userID, likesModalKey }: Li
   }, [current_userID, handleLikesClick, isCurrentUserPost, postLikes]);
 
   return <>{renderLikesText()}</>;
-};
+});
 
 export default LikesView;

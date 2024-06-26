@@ -78,8 +78,7 @@ export const PostByPostID = graphql(`
             updated_at
             deleted_at
           }
-        }        
-
+        }
       }
       created_at
       updated_at
@@ -93,14 +92,14 @@ export const PostByPostID = graphql(`
         id
         user_id
         is_liked
-         user {
-            username
-            full_name
-            avatar
-            role
-            active
-            is_private  
-          }
+        user {
+          username
+          full_name
+          avatar
+          role
+          active
+          is_private
+        }
       }
       post_comments {
         id
@@ -208,7 +207,6 @@ export const PostHomePage = graphql(`
             is_private
           }
         }
-
       }
       post_files {
         id
@@ -218,36 +216,36 @@ export const PostHomePage = graphql(`
       post_likes {
         user_id
         is_liked
-         user {
-            username
-            full_name
-            avatar
-            role
-            is_private
-            active
-            friends {
-              id
-              from_user_id
-              to_user_id
-              status
-              from_user_info {
-                username
-                full_name
-                avatar
-                role
-                active
-                is_private
-              }
-              to_user_info {
-                username
-                full_name
-                avatar
-                role
-                active
-                is_private
-              }
+        user {
+          username
+          full_name
+          avatar
+          role
+          is_private
+          active
+          friends {
+            id
+            from_user_id
+            to_user_id
+            status
+            from_user_info {
+              username
+              full_name
+              avatar
+              role
+              active
+              is_private
+            }
+            to_user_info {
+              username
+              full_name
+              avatar
+              role
+              active
+              is_private
             }
           }
+        }
       }
       post_comments {
         id
@@ -258,6 +256,26 @@ export const PostHomePage = graphql(`
         }
       }
       created_at
+    }
+  }
+`);
+
+export const PostSuggestions = graphql(`
+  query PostSuggestions($skipPostID: String!, $limit: Int!) {
+    postSuggestions(skipPostID: $skipPostID, limit: $limit) {
+      id
+      user_id
+      caption
+      is_hide_like
+      is_hide_comment
+      privacy
+      active
+      created_at
+      updated_at
+      deleted_at
+      user{
+        username
+      }
     }
   }
 `);

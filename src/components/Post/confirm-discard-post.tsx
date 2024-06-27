@@ -20,21 +20,19 @@ const ListConfirmDiscardPost = [
 
 const ConfirmDiscardPost = ({
   // onCloseModalSelectPhoto,
-  onEventCloseModal,
   // onResetModalSelectPhoto,
   // onCloseModalParent,
   // onBackTypePhoto,
   keyModal,
 }: {
-  onEventCloseModal: () => void;
   // onCloseModalAddPost?: () => void;
   keyModal: string;
   // onBackTypePhoto?: () => void;
 }) => {
-  const { modalClose, modalKey, modalOpen } = useModalStore();
+  const { modalData, modalClose, modalKey, modalOpen } = useModalStore();
 
   const handlePostDiscard = () => {
-    onEventCloseModal();
+    modalData.handleResetModalSelectPhoto();
     modalClose();
   };
 

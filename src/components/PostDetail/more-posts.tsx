@@ -5,8 +5,9 @@ import { useEffect } from "react";
 import { notFound } from "next/navigation";
 import { postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
-import { PostByPostIdDocument, PostSuggestionsDocument } from "@/gql/graphql";
+import { Post, PostByPostIdDocument, PostSuggestionsDocument, PostSuggestionsQuery } from "@/gql/graphql";
 import { MorePostSkeleton } from "../skeletons";
+import { log } from "console";
 
 const MorePosts = ({ postId }: { postId: string }) => {
   const {
@@ -43,8 +44,7 @@ const MorePosts = ({ postId }: { postId: string }) => {
           {postUsername}
         </Link>{" "}
       </p>
-
-      <PostsGrid postUsername={postUsername || ""} />
+      {postData && <PostsGrid postSuggestions={postData.postSuggestions as Post[]} />}
     </div>
   );
 };

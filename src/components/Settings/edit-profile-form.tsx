@@ -95,14 +95,6 @@ const EditProfileForm = () => {
               <Spinner size="sm" />
             </AvatarFallback>
           </Avatar>
-          {/* <Image
-            src={getUserAvatarURL(authData?.avatar)}
-            alt="User Avatar"
-            className="w-16 h-16 rounded-full object-cover cursor-pointer"
-            width={64}
-            height={64}
-            onClick={() => modalOpen(OptionChangeAvatarModalKey)}
-          /> */}
           <div>
             <p className="font-medium">{authData?.username}</p>
             <p>{authData?.full_name}</p>

@@ -39,7 +39,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                   alt={"image " + post?.id}
                   width={500}
                   height={500}
-                  priority
+                  loading="lazy"
                 />
               )}
               {postFiles.length === 1 && firstFile?.type === "0" && (

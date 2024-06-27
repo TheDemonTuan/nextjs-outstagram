@@ -3,7 +3,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { Tooltip } from "@nextui-org/react";
+import { Spinner, Tooltip } from "@nextui-org/react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
@@ -14,14 +14,14 @@ import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
-import { Friend, PostHomePageDocument, PostLike } from "@/gql/graphql";
+import { Friend, Post as PostGraphql, PostHomePageDocument } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import PostLikes, { LikesModalKey } from "./post-likes";
-import { EmojiLookBottomIcon } from "@/icons";
+import { EmojiLookBottomIcon, VerifiedIcon } from "@/icons";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import UserProfileInfo from "../user-profile-info";
@@ -29,9 +29,13 @@ import { useRouter } from "next/navigation";
 import { redirectHard } from "@/actions";
 import dynamic from "next/dynamic";
 import { Span } from "next/dist/trace";
-import LikesView from "./likes-view";
+import LikesView from "../likes-view";
 import { FaRegHeart } from "react-icons/fa6";
 import { pages } from "next/dist/build/templates/app-page";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import HighlightHashtags from "../highlight-hashtags";
+import PostPrivacy from "../privacy-post";
 
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
@@ -103,6 +107,7 @@ const Post = () => {
               const userComments = post?.post_comments
                 ?.filter((comment) => comment?.user_id === authData?.id)
                 .slice(0, 2);
+
               return (
                 <Card
                   key={post.id}
@@ -120,6 +125,7 @@ const Post = () => {
                                     username={post.user?.username || ""}
                                     full_name={post.user?.full_name || ""}
                                     avatar={post.user?.avatar || ""}
+                                    role={post.user?.role || false}
                                     posts={[]}
                                     friends={post.user?.friends as Friend[]}
                                   />
@@ -127,31 +133,46 @@ const Post = () => {
                               }
                               placement="bottom-start"
                               className="rounded-md shadow-lg">
-                              <div className="flex items-center gap-2 text-sm font-medium">
-                                <UserProfileInfo
-                                  username={post.user?.username || ""}
-                                  full_name={post.user?.full_name || ""}
-                                  isShowFullName={false}
-                                  className="w-9 h-9"
-                                  avatar={post.user?.avatar || ""}
-                                  is_admin={post.user?.role || false}
-                                />
+                              <div className="flex items-center text-center gap-2 text-sm font-medium">
+                                <Link href={`/${post.user?.username || ""}`}>
+                                  <Avatar className="">
+                                    <AvatarImage
+                                      className="object-cover"
+                                      src={getUserAvatarURL(post.user?.avatar || "")}
+                                    />
+                                    <AvatarFallback>
+                                      <Spinner size="sm" />
+                                    </AvatarFallback>
+                                  </Avatar>
+                                </Link>
+                                <div className="flex-1">
+                                  <div className="flex items-center space-x-1">
+                                    <Link href={`/${post.user?.username || ""}`} className="font-semibold text-sm">
+                                      {post.user?.username || ""}
+                                    </Link>
+                                    {post.user?.role && <VerifiedIcon className="w-3 h-3" />}
+                                  </div>
+                                  <div className="flex items-center">
+                                    <Link
+                                      href={`/p/${post.id}`}
+                                      passHref
+                                      scroll={false}
+                                      className="text-xs text-gray-500"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        redirectHard(`/p/${post.id}`);
+                                      }}>
+                                      {formatDistanceToNow(post.created_at || "", {
+                                        addSuffix: true,
+                                      })}
+                                    </Link>
+                                    <span className="text-gray-500 ml-1"> • </span>
+
+                                    <PostPrivacy privacy={post?.privacy || 0} />
+                                  </div>
+                                </div>
                               </div>
                             </Tooltip>
-                            <Link
-                              href={`/p/${post.id}`}
-                              passHref
-                              scroll={false}
-                              className="text-xs text-gray-500"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                redirectHard(`/p/${post.id}`);
-                              }}>
-                              •{" "}
-                              {formatDistanceToNow(post.created_at || "", {
-                                addSuffix: true,
-                              })}
-                            </Link>
                           </div>
                           <span
                             className="ml-auto w-8 h-8 rounded-full"
@@ -189,17 +210,21 @@ const Post = () => {
                           />
 
                           <LikesView
-                            postLikes={postLikes as PostLike[]}
-                            post_userID={post.user_id || ""}
+                            post={post as PostGraphql}
                             current_userID={authData?.id || ""}
                             likesModalKey={LikesModalKey}
                           />
 
                           <div className="py-0 text-sm">
-                            <span className={`font-bold ${!isExpanded ? "line-clamp-2" : ""}`}>
+                            <p className={`font-bold ${!isExpanded ? "line-clamp-2" : ""}`}>
                               {post.user?.username}
-                              <span className="ml-1 font-normal">{post.caption} </span>
-                            </span>
+                              {post.user?.role && (
+                                <VerifiedIcon className="w-3 h-3 ml-1 mb-[0.4px] inline-block items-center" />
+                              )}
+                              <span className="font-normal ml-1 text-center">
+                                <HighlightHashtags text={post?.caption || ""} />
+                              </span>
+                            </p>
                             {(post.caption?.split("\n").length ?? 0) > 2 && (
                               <button onClick={toggleExpand} className="text-neutral-500 focus:outline-none">
                                 {isExpanded ? "less" : "more"}

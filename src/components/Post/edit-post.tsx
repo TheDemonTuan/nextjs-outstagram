@@ -215,7 +215,10 @@ const EditPost = () => {
                                     control={editForm.control}
                                     name="privacy"
                                     render={({ field }) => (
-                                      <RadioGroup {...field}>
+                                      <RadioGroup
+                                        {...field}
+                                        defaultValue={field.value}
+                                        onValueChange={(value) => field.onChange(value)}>
                                         <div className="flex justify-between items-center">
                                           <div className="flex space-x-2 items-center">
                                             <MdOutlinePublic size={20} />
@@ -226,10 +229,7 @@ const EditPost = () => {
                                               </span>
                                             </div>
                                           </div>
-                                          <Radio
-                                            value="0"
-                                            checked={field.value === "0"}
-                                            onChange={() => field.onChange("0")}></Radio>
+                                          <Radio value="0" />
                                         </div>
                                         <div className="flex justify-between items-center">
                                           <div className="flex space-x-2 items-center">
@@ -239,10 +239,7 @@ const EditPost = () => {
                                               <span className="text-xs text-gray-500">Only me</span>
                                             </div>
                                           </div>
-                                          <Radio
-                                            value="2"
-                                            checked={field.value === "2"}
-                                            onChange={() => field.onChange("2")}></Radio>
+                                          <Radio value="2" />
                                         </div>
                                         <div className="flex justify-between items-center">
                                           <div className="flex space-x-2 items-center">
@@ -252,10 +249,7 @@ const EditPost = () => {
                                               <span className="text-xs text-gray-500">Your friends on Outstagram</span>
                                             </div>
                                           </div>
-                                          <Radio
-                                            value="1"
-                                            checked={field.value === "1"}
-                                            onChange={() => field.onChange("1")}></Radio>
+                                          <Radio value="1" />
                                         </div>
                                       </RadioGroup>
                                     )}

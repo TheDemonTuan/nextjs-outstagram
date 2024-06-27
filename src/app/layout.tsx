@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Roboto, Source_Sans_3 } from "next/font/google";
-import "@/styles/globals.css";
+import { Source_Sans_3 } from "next/font/google";
 import { Provider } from "@/components/provider";
 import { Toaster } from "sonner";
 import { SocketProvider } from "@/websocket";
+import "@/styles/globals.css";
+import "primereact/resources/themes/lara-light-blue/theme.css";
+import 'primereact/resources/primereact.min.css';
 
-const roboto = Source_Sans_3({ subsets: ["latin"] });
+const font = Source_Sans_3({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Outstagram",
@@ -19,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={font.className}>
         <Provider>
           <SocketProvider>{children}</SocketProvider>
         </Provider>

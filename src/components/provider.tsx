@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 import { useNotification } from "@/hooks/useNotification";
 import { sendNotification } from "@/lib/send-notification";
 import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
-import "primereact/resources/themes/lara-light-blue/theme.css";
-import 'primereact/resources/primereact.min.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {

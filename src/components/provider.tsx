@@ -7,6 +7,9 @@ import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useNotification } from "@/hooks/useNotification";
 import { sendNotification } from "@/lib/send-notification";
+import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
+import "primereact/resources/themes/lara-light-blue/theme.css";
+import 'primereact/resources/primereact.min.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,7 +48,9 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NextUIProvider navigate={router.push}>{children}</NextUIProvider>
+      <NextUIProvider navigate={router.push}>
+        <PrimeReactProvider value={{ unstyled: false }}>{children}</PrimeReactProvider>
+      </NextUIProvider>
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
     </QueryClientProvider>
   );

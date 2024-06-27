@@ -73,8 +73,6 @@ const PostMoreOptions = () => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const { authData } = useAuth();
 
-  console.log(modalData.user_id);
-
   return (
     <>
       <Modal isOpen={modalKey === PostMoreOptionsModalKey} onOpenChange={modalClose} hideCloseButton={true}>

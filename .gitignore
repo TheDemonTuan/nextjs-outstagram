@@ -6,9 +6,9 @@
 .pnp.js
 .yarn/install-state.gz
 
-/.miliion
+/.million
 /.vscode
-.env.production
+/.env.production
 
 # testing
 /coverage
@@ -28,9 +28,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# env files (can opt-in for commiting if needed)
-.env*
 
 # vercel
 .vercel

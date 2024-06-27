@@ -1,5 +1,9 @@
 "use client";
 
+import { userKey } from "@/api/user";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserSearchDocument } from "@/gql/graphql";
+import { useAuth } from "@/hooks/useAuth";
 import {
   AddIcon,
   DiscoverIcon,
@@ -10,29 +14,22 @@ import {
   ReelsIcon,
   SearchIcon,
 } from "@/icons";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { graphQLClient } from "@/lib/graphql";
+import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
+import { Button, Divider, Image, Input, Skeleton, Spinner } from "@nextui-org/react";
+import { useQuery } from "@tanstack/react-query";
+import _ from "lodash";
+import NextImage from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef } from "react";
-import CreatePost, { CreatePostModalKey } from "./Post/create-post";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
-import { Button, Divider, Input, Skeleton, Spinner } from "@nextui-org/react";
-import _ from "lodash";
-import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { AiOutlineMenu } from "react-icons/ai";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Image } from "@nextui-org/react";
-import NextImage from "next/image";
-import { UserSearchDocument, UserSearchQuery } from "@/gql/graphql";
-import { UserSearch } from "@/graphql/user";
-import { useQuery } from "@tanstack/react-query";
-import { graphQLClient } from "@/lib/graphql";
-import { userKey } from "@/api/user";
-import { SearchHeaderSkeleton } from "./skeletons";
 import SideBarInbox from "./Chats/sidebar-inbox";
-import AddPostModal, { AddPostModalKey } from "./Post/add-post";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
+import { SearchHeaderSkeleton } from "./skeletons";
 
 const HeaderMenu = [
   {
@@ -207,8 +204,12 @@ const Header = () => {
               </div>
             )}
           </nav>
-          {/* <CreatePost /> */}
-          <SelectPhotoModal />
+          <div className="h-full flex justify-start items-end py-2">
+            <div className={cn(MenuItemClass, "w-full cursor-pointer")}>
+              <AiOutlineMenu className={cn("w-7 h-7 group-hover:scale-105")} />
+              {!isShortHeader && <span className="text-lg">More</span>}
+            </div>
+          </div>
         </div>
         {isShortHeader && (
           <div className="flex-auto">
@@ -219,6 +220,7 @@ const Header = () => {
         )}
       </div>
       <div className={cn(activeMenu === "Messages" ? "w-[470px]" : "w-[245px]")} />
+      <SelectPhotoModal />
     </>
   );
 };

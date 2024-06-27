@@ -3,7 +3,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { Avatar, Tooltip } from "@nextui-org/react";
 import { PiDotsThreeBold } from "react-icons/pi";
-import { Card } from "../ui/card";
 import CommentForm from "./comment-form";
 import Comment from "./comment";
 import Image from "next/image";
@@ -25,6 +24,7 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
 import LikesView from "../likes-view";
 import { useAuth } from "@/hooks/useAuth";
+import { Card } from "../ui/card";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -60,6 +60,7 @@ const SinglePost = ({ id }: { id: string }) => {
   if (!postData) {
     return <div>User not found</div>;
   }
+  const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
 
   return (
     <>
@@ -96,7 +97,8 @@ const SinglePost = ({ id }: { id: string }) => {
                 )
               }
               placement="bottom-start"
-              className="rounded-md shadow-lg">
+              className="rounded-md shadow-lg"
+              isDisabled={!isLoggedIn}>
               <div className="flex flex-row items-center gap-3 font-semibold text-[13px] leading-[18px]">
                 <UserProfileInfo
                   username={postData.postByPostId.user?.username || ""}
@@ -108,13 +110,15 @@ const SinglePost = ({ id }: { id: string }) => {
                 />
               </div>
             </Tooltip>
-            <span
-              onClick={() => {
-                setModalData(postData.postByPostId);
-                modalOpen(PostMoreOptionsModalKey);
-              }}>
-              <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-            </span>
+            {isLoggedIn && (
+              <span
+                onClick={() => {
+                  setModalData(postData.postByPostId);
+                  modalOpen(PostMoreOptionsModalKey);
+                }}>
+                <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+              </span>
+            )}
           </div>
           <div className="hidden md:inline py-1.5 overflow-y-auto max-h-[360px]">
             <MiniPost post={postData.postByPostId} />
@@ -131,23 +135,34 @@ const SinglePost = ({ id }: { id: string }) => {
           </div>
 
           <div className="px-5 py-4 hidden md:block mt-auto border-b border-t p-2.5 space-y-3 sticky z-20">
-            <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
-            <div className="flex flex-col">
-              <LikesView
-                post={postData.postByPostId as Post}
-                current_userID={authData?.id || ""}
-                likesModalKey={LikesModalKey}
-              />
-              <time className="text-[12px] text-zinc-500 font-medium">
-                {new Date(postData.postByPostId.created_at || "").toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-            </div>
-          </div>
+            {isLoggedIn ? (
+              <>
+                <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
+                <div className="flex flex-col">
+                  <LikesView
+                    post={postData.postByPostId as Post}
+                    current_userID={authData?.id || ""}
+                    likesModalKey={LikesModalKey}
+                  />
 
-          <CommentForm postId={id} />
+                  <time className="text-[12px] text-zinc-500 font-medium">
+                    {new Date(postData.postByPostId.created_at || "").toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
+              </>
+            ) : (
+              <p className="flex items-center justify-center my-16 text-md font-medium text-gray-400">
+                <Link href="/login" className="text-[#0497F6] mr-1">
+                  Log in{" "}
+                </Link>{" "}
+                to like or comment on this post.
+              </p>
+            )}
+          </div>
+          {isLoggedIn && <CommentForm postId={id} />}
         </div>
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}

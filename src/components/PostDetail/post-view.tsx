@@ -1,6 +1,6 @@
 import { postKey } from "@/api/post";
 import { UserResponse } from "@/api/user";
-import { Friend, PostByPostIdDocument, PostLike } from "@/gql/graphql";
+import { Friend, Post, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
@@ -12,8 +12,8 @@ import { notFound, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { PiDotsThreeBold } from "react-icons/pi";
 import Carousel from "../Post/carousel";
-import LikesView from "../Post/likes-view";
-import { LikesModalKey } from "../Post/post-likes";
+import LikesView from "../likes-view";
+import PostLikes, { LikesModalKey } from "../Post/post-likes";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import PostReact from "../Post/post-react";
 import { ViewPostSkeleton } from "../skeletons";
@@ -75,6 +75,7 @@ function PostView({ id }: { id: string }) {
                       username={postData.postByPostId.user?.username || ""}
                       full_name={postData.postByPostId.user?.full_name || ""}
                       avatar={postData.postByPostId.user?.avatar || ""}
+                      role={postData.postByPostId.user?.role || false}
                       posts={[]}
                       friends={postData.postByPostId.user?.friends as Friend[]}
                     />
@@ -95,7 +96,7 @@ function PostView({ id }: { id: string }) {
               </Tooltip>
               <span
                 onClick={() => {
-                  setModalData(postData);
+                  setModalData(postData.postByPostId);
                   modalOpen(PostMoreOptionsModalKey);
                 }}>
                 <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
@@ -113,8 +114,7 @@ function PostView({ id }: { id: string }) {
               <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
               <div className="flex flex-col space-y-1">
                 <LikesView
-                  postLikes={postLikesFilter as PostLike[]}
-                  post_userID={postData.postByPostId.user_id || ""}
+                  post={postData.postByPostId as Post}
                   current_userID={authData?.id || ""}
                   likesModalKey={LikesModalKey}
                 />
@@ -148,6 +148,7 @@ function PostView({ id }: { id: string }) {
         </ModalContent>
       </Modal>
       <PostMoreOptions />
+      <PostLikes />
     </>
   );
 }

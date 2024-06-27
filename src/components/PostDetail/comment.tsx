@@ -49,6 +49,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                         username={comment?.user?.username || ""}
                         full_name={comment?.user?.full_name || ""}
                         avatar={comment?.user?.avatar || ""}
+                        role={comment?.user?.role || false}
                         posts={[]}
                         friends={comment?.user?.friends as Friend[]}
                       />
@@ -182,6 +183,7 @@ const ReplyBox = memo(
                         username={reply?.user?.username || ""}
                         full_name={reply?.user?.full_name || ""}
                         avatar={reply?.user?.avatar || ""}
+                        role={reply?.user?.role || false}
                         posts={[]}
                         friends={reply?.user?.friends as Friend[]}
                       />

@@ -14,7 +14,7 @@ import { postGetByPostId, postKey } from "@/api/post";
 import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "@/lib/graphql";
 import { notFound } from "next/navigation";
-import { Friend, PostByPostIdDocument, PostLike } from "@/gql/graphql";
+import { Friend, Post, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import UserProfileInfo from "../user-profile-info";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import { useModalStore } from "@/stores/modal-store";
@@ -23,7 +23,7 @@ import { SinglePostSkeleton } from "../skeletons";
 import PostReact from "../Post/post-react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Carousel from "../Post/carousel";
-import LikesView from "../Post/likes-view";
+import LikesView from "../likes-view";
 import { useAuth } from "@/hooks/useAuth";
 
 const SinglePost = ({ id }: { id: string }) => {
@@ -89,6 +89,7 @@ const SinglePost = ({ id }: { id: string }) => {
                     username={postData.postByPostId.user?.username || ""}
                     full_name={postData.postByPostId.user?.full_name || ""}
                     avatar={postData.postByPostId.user?.avatar || ""}
+                    role={postData.postByPostId.user?.role || false}
                     posts={[]}
                     friends={postData.postByPostId.user?.friends as Friend[]}
                   />
@@ -109,7 +110,7 @@ const SinglePost = ({ id }: { id: string }) => {
             </Tooltip>
             <span
               onClick={() => {
-                setModalData(postData);
+                setModalData(postData.postByPostId);
                 modalOpen(PostMoreOptionsModalKey);
               }}>
               <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
@@ -133,8 +134,7 @@ const SinglePost = ({ id }: { id: string }) => {
             <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
             <div className="flex flex-col">
               <LikesView
-                postLikes={postLikesFilter as PostLike[]}
-                post_userID={postData.postByPostId.user_id || ""}
+                post={postData.postByPostId as Post}
                 current_userID={authData?.id || ""}
                 likesModalKey={LikesModalKey}
               />

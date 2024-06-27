@@ -56,6 +56,7 @@ const Suggestions = () => {
                   username={user.username || ""}
                   full_name={user.full_name || ""}
                   avatar={user.avatar || ""}
+                  role={user.role || false}
                   posts={user?.posts as Post[]}
                   friends={user.friends as Friend[]}
                 />

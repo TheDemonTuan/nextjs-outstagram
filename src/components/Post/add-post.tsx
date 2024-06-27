@@ -53,6 +53,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
   // const captionRef = useRef<HTMLTextAreaElement>(null);
   const [caption, setCaption] = useState("");
   const [charCount, setCharCount] = useState(0);
+  const [privacy, setPrivacy] = useState("0");
 
   const { mutate: createMutate, isPending: createIsPending } = useMutation<
     ApiSuccessResponse<PostResponse>,
@@ -81,6 +82,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     });
     // formData.append("caption", captionRef.current?.value || "");
     formData.append("caption", caption || "");
+    formData.append("privacy", privacy);
     createMutate(formData);
   };
 
@@ -108,7 +110,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     <>
       <Modal
         isOpen={modalKey === AddPostModalKey}
-        onOpenChange={() => modalOpen(ConfirmDiscardPostModalKey)}
+        onOpenChange={() => handleResetModalSelectPhoto}
         hideCloseButton={true}
         isDismissable={!createIsPending}
         size="3xl">
@@ -207,7 +209,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                               <AccordionTrigger className="font-semibold text-sm">Privacy</AccordionTrigger>
                               <AccordionContent>
                                 <div className="flex flex-col space-y-3">
-                                  <RadioGroup>
+                                  <RadioGroup defaultValue={privacy} onValueChange={(value) => setPrivacy(value)}>
                                     <div className="flex justify-between items-center">
                                       <div className="flex space-x-2 items-center">
                                         <MdOutlinePublic size={20} />
@@ -218,7 +220,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                                           </span>
                                         </div>
                                       </div>
-                                      <Radio value="0"></Radio>
+                                      <Radio value="0" />
                                     </div>
                                     <div className="flex justify-between items-center">
                                       <div className="flex space-x-2 items-center">
@@ -228,7 +230,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                                           <span className="text-xs text-gray-500">Only me</span>
                                         </div>
                                       </div>
-                                      <Radio value="2"></Radio>
+                                      <Radio value="2" />
                                     </div>
                                     <div className="flex justify-between items-center">
                                       <div className="flex space-x-2 items-center">
@@ -238,7 +240,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                                           <span className="text-xs text-gray-500">Your friends on Outstagram</span>
                                         </div>
                                       </div>
-                                      <Radio value="1"></Radio>
+                                      <Radio value="1" />
                                     </div>
                                   </RadioGroup>
                                 </div>
@@ -305,7 +307,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
           )}
         </ModalContent>
       </Modal>
-      <ConfirmDiscardPost onEventCloseModal={handleResetModalSelectPhoto} keyModal={AddPostModalKey} />
+      {/* <ConfirmDiscardPost onEventCloseModal={handleResetModalSelectPhoto} keyModal={AddPostModalKey} /> */}
     </>
   );
 };

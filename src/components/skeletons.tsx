@@ -5,7 +5,7 @@ import { Divider, Modal, ModalContent } from "@nextui-org/react";
 
 export function ViewPostSkeleton() {
   return (
-    <Modal isOpen={true}>
+    <Modal isOpen={true} hideCloseButton={true}>
       <ModalContent className="flex gap-0 flex-col md:flex-row items-start p-0 md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] rounded-r-md rounded-l-none">
         <Skeleton className="relative overflow-hidden h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-2xl w-full rounded-none" />
 

@@ -1,18 +1,16 @@
 "use client";
 
 import { Friend, PostByPostIdQuery } from "@/gql/graphql";
-import { useAuth } from "@/hooks/useAuth";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import React from "react";
-import UserProfileInfo from "../user-profile-info";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Spinner } from "@nextui-org/spinner";
 import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
-import { UserResponse } from "@/api/user";
+import HighlightHashtags from "../highlight-hashtags";
+import PostPrivacy from "../privacy-post";
 
 const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
   const username = post.user?.username;
@@ -31,6 +29,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
                 username={post.user?.username || ""}
                 full_name={post.user?.full_name || ""}
                 avatar={post.user?.avatar || ""}
+                role={post.user?.role || false}
                 posts={[]}
                 friends={post.user?.friends as Friend[]}
               />
@@ -58,6 +57,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
                     username={post.user?.username || ""}
                     full_name={post.user?.full_name || ""}
                     avatar={post.user?.avatar || ""}
+                    role={post.user?.role || false}
                     posts={[]}
                     friends={post.user?.friends as Friend[]}
                   />
@@ -69,10 +69,12 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
                 {username}
               </Link>
             </Tooltip>{" "}
-            <span className="font-normal text-black">{post.caption}</span>
+            <span className="font-normal text-black">
+              <HighlightHashtags text={post?.caption || ""} />
+            </span>
           </div>
         </div>
-        <div className="flex h-5 items-center space-x-2.5">
+        <div className="flex h-5 items-center space-x-1.5">
           {!isEdited ? (
             <span className="text-xs text-gray-500">
               {formatDistanceToNow(new Date(post.created_at || ""), { addSuffix: true })}
@@ -82,6 +84,9 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
               Edited · {formatDistanceToNow(new Date(post.updated_at || ""), { addSuffix: true })}
             </span>
           )}
+          <span className="text-xs text-gray-500">·</span>
+
+          <PostPrivacy privacy={post?.privacy || 0} />
         </div>
       </div>
     </div>

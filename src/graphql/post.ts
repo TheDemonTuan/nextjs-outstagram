@@ -214,6 +214,7 @@ export const PostHomePage = graphql(`
         type
       }
       post_likes {
+        id
         user_id
         is_liked
         user {
@@ -275,6 +276,22 @@ export const PostSuggestions = graphql(`
       deleted_at
       user{
         username
+      }
+      post_files {
+        id
+        url
+        type
+        active
+      }
+      post_likes {
+        id
+        is_liked
+      }
+      post_comments {
+        id
+        post_id
+        user_id
+        parent_id
       }
     }
   }

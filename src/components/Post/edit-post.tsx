@@ -15,7 +15,7 @@ import {
   modal,
 } from "@nextui-org/react";
 import Image from "next/image";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { EmojiLookBottomIcon, VerifiedIcon } from "@/icons";
 import { Input } from "../ui/input";
 import UserProfileInfo from "../user-profile-info";
@@ -102,6 +102,15 @@ const EditPost = () => {
     },
   });
 
+  const slides = useMemo(() => {
+    return modalData?.post_files?.map((file: PostFile) => ({
+      id: file?.id ?? "",
+      url: file?.url ?? "",
+      type: file?.type === "1" ? 1 : 0,
+      className: "rounded-sm h-[500px] w-full object-contain",
+    }));
+  }, [modalData.post_files]);
+
   if (!modalData) {
     return null;
   }
@@ -144,16 +153,7 @@ const EditPost = () => {
             <ModalBody className="p-0">
               <div className="flex">
                 <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg w-3/5 flex items-center bg-black">
-                  <Carousel
-                    slides={modalData.post_files.map((file: PostFile) => {
-                      return {
-                        id: file?.id ?? "",
-                        url: file?.url ?? "",
-                        type: file?.type === "1" ? 1 : 0,
-                        className: "rounded-sm h-[500px] w-full object-contain",
-                      };
-                    })}
-                  />
+                  <Carousel slides={slides} />
                 </div>
 
                 <Divider orientation="vertical" />

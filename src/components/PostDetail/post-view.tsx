@@ -22,6 +22,7 @@ import UserProfileInfo from "../user-profile-info";
 import Comment from "./comment";
 import CommentForm from "./comment-form";
 import MiniPost from "./mini-post";
+import Link from "next/link";
 
 function PostView({ id }: { id: string }) {
   const { modalOpen, setModalData, modalKey } = useModalStore();
@@ -61,6 +62,8 @@ function PostView({ id }: { id: string }) {
     return <div>Post not found</div>;
   }
 
+  const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
+
   return (
     <>
       <Modal isOpen={true} defaultOpen={true} onOpenChange={(open: boolean) => !open && router.back()} radius="lg">
@@ -82,7 +85,8 @@ function PostView({ id }: { id: string }) {
                   )
                 }
                 placement="bottom-start"
-                className="rounded-md shadow-lg">
+                className="rounded-md shadow-lg"
+                isDisabled={!isLoggedIn}>
                 <div className="flex flex-row items-center gap-3 px-1">
                   <UserProfileInfo
                     username={postData?.postByPostId.user?.username || ""}
@@ -94,13 +98,15 @@ function PostView({ id }: { id: string }) {
                   />
                 </div>
               </Tooltip>
-              <span
-                onClick={() => {
-                  setModalData(postData.postByPostId);
-                  modalOpen(PostMoreOptionsModalKey);
-                }}>
-                <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-              </span>
+              {isLoggedIn && (
+                <span
+                  onClick={() => {
+                    setModalData(postData.postByPostId);
+                    modalOpen(PostMoreOptionsModalKey);
+                  }}>
+                  <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+                </span>
+              )}
             </div>
 
             <div className="hidden md:inline border-b py-1.5 px-1  overflow-y-auto h-[500px]">
@@ -111,25 +117,37 @@ function PostView({ id }: { id: string }) {
             </div>
 
             <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
-              <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
-              <div className="flex flex-col space-y-1">
-                <LikesView
-                  post={postData.postByPostId as Post}
-                  current_userID={authData?.id || ""}
-                  likesModalKey={LikesModalKey}
-                />
+              {isLoggedIn ? (
+                <>
+                  <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
 
-                <span
-                  className="text-xs text-gray-500 cursor-pointer active:text-gray-300"
-                  onClick={() => window.location.reload()}>
-                  {" "}
-                  {formatDistanceToNow(postData.postByPostId.created_at || "", {
-                    addSuffix: true,
-                  })}
-                </span>
-              </div>
+                  <div className="flex flex-col space-y-1">
+                    <LikesView
+                      post={postData.postByPostId as Post}
+                      current_userID={authData?.id || ""}
+                      likesModalKey={LikesModalKey}
+                    />
+
+                    <span
+                      className="text-xs text-gray-500 cursor-pointer active:text-gray-300"
+                      onClick={() => window.location.reload()}>
+                      {" "}
+                      {formatDistanceToNow(postData.postByPostId.created_at || "", {
+                        addSuffix: true,
+                      })}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <p className="flex items-center justify-center mb-10 text-sm font-semibold text-gray-500">
+                  <Link href="/login" className="text-[#0497F6] mr-1">
+                    Log in{" "}
+                  </Link>{" "}
+                  to like or comment on this post.
+                </p>
+              )}
             </div>
-            <CommentForm postId={postData.postByPostId.id} />
+            {isLoggedIn && <CommentForm postId={postData.postByPostId.id} />}
           </Card>
           <Card className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-3xl w-full flex justify-center items-center bg-black rounded-none">
             {postData.postByPostId?.post_files?.length ? (

@@ -6,20 +6,42 @@ import { UserSearchDocument } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import {
   AddIcon,
+  BookmarkIcon,
   DiscoverIcon,
   HomeIcon,
   InstagramIcon,
   MessagesIcon,
   Notifications,
   ReelsIcon,
+  ReportAProblemIcon,
   SearchIcon,
+  SettingIcon,
+  SwitchAppearance,
+  YourActivityIcon,
 } from "@/icons";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import { Button, Divider, Image, Input, Skeleton, Spinner } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
+import {
+  Button,
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Skeleton,
+  Spinner,
+} from "@nextui-org/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import NextImage from "next/image";
 import Link from "next/link";
@@ -30,6 +52,7 @@ import { toast } from "sonner";
 import SideBarInbox from "./Chats/sidebar-inbox";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
 import { SearchHeaderSkeleton } from "./skeletons";
+import { clearJWT } from "@/actions";
 
 const HeaderMenu = [
   {
@@ -205,10 +228,59 @@ const Header = () => {
             )}
           </nav>
           <div className="h-full flex justify-start items-end py-2">
-            <div className={cn(MenuItemClass, "w-full cursor-pointer")}>
-              <AiOutlineMenu className={cn("w-7 h-7 group-hover:scale-105")} />
-              {!isShortHeader && <span className="text-lg">More</span>}
-            </div>
+            <Dropdown placement="top-start">
+              <DropdownTrigger className="active:font-extrabold">
+                <div className={cn(MenuItemClass, "w-full cursor-pointer")}>
+                  <AiOutlineMenu className={cn("w-7 h-7 group-hover:scale-105")} />
+                  {!isShortHeader && <span className="text-lg">More</span>}
+                </div>
+              </DropdownTrigger>
+              <DropdownMenu
+                className="w-64"
+                variant="flat"
+                // selectionMode="single"
+                // closeOnSelect={false}
+              >
+                <DropdownSection showDivider={true}>
+                  <DropdownItem
+                    className="py-4 hover:bg-[#F2F2F2]"
+                    startContent={<SettingIcon className="w-5 h-5 ml-2" />}>
+                    <span className="mx-1">Settings</span>
+                  </DropdownItem>
+                  <DropdownItem
+                    className="py-4 pl-4 hover:bg-[#F2F2F2]"
+                    startContent={<YourActivityIcon className="w-5 h-5 ml-2" />}>
+                    {" "}
+                    <Link href="/your_activity/interactions" className="mx-1">
+                      Your Activity
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem
+                    className="py-4 hover:bg-[#F2F2F2]"
+                    startContent={<BookmarkIcon className="w-5 h-5 ml-2" stroke="#000000" />}>
+                    {" "}
+                    <Link href={`/${authData?.username}?tab=SAVED`} className="mx-1">
+                      Saved
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem
+                    className="py-4 pl-4 hover:bg-[#F2F2F2]"
+                    startContent={<SwitchAppearance className="w-5 h-5 ml-2" />}>
+                    {" "}
+                    <span className="mx-1">Switch appearance</span>
+                  </DropdownItem>
+                  <DropdownItem
+                    className="py-4 pl-4 hover:bg-[#F2F2F2]"
+                    startContent={<ReportAProblemIcon className="w-5 h-5 pl-2" />}>
+                    <span className="mx-1">Report a problem</span>
+                  </DropdownItem>
+                </DropdownSection>
+                <DropdownItem className="py-4 hover:bg-[#F2F2F2]" onClick={() => modalOpen(SignOutModalKey)}>
+                  <span className="px-2">Log out</span>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            {/* </div> */}
           </div>
         </div>
         {isShortHeader && (
@@ -221,6 +293,7 @@ const Header = () => {
       </div>
       <div className={cn(activeMenu === "Messages" ? "w-[470px]" : "w-[245px]")} />
       <SelectPhotoModal />
+      {/* <SignOutAlert /> */}
     </>
   );
 };
@@ -455,5 +528,45 @@ const Notification = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const SignOutModalKey = "SignOut";
+
+const SignOutAlert = () => {
+  const { modalKey, modalClose } = useModalStore();
+  const queryClient = useQueryClient();
+
+  const handleSignOut = async () => {
+    toast.promise(clearJWT(), {
+      loading: "Logging out... 🚪",
+      success: "Logged out successfully! 👋",
+      error: "Failed to log out! 😵",
+    });
+    queryClient.clear();
+    modalClose();
+  };
+
+  return (
+    <Modal isOpen={SignOutModalKey === modalKey} onOpenChange={modalClose}>
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">Sign Out</ModalHeader>
+            <ModalBody>
+              <p>Are you sure you want to sign out?</p>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={onClose}>
+                No
+              </Button>
+              <Button color="primary" onPress={handleSignOut}>
+                Yes
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 };

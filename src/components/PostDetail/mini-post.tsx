@@ -11,10 +11,15 @@ import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
 import HighlightHashtags from "../highlight-hashtags";
 import PostPrivacy from "../privacy-post";
+import { useAuth } from "@/hooks/useAuth";
 
 const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
+  const { authData } = useAuth();
+
   const username = post.user?.username;
   const href = `/${username}`;
+
+  const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
 
   const isEdited = post.created_at !== post.updated_at;
 
@@ -36,7 +41,8 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
             )
           }
           placement="bottom-start"
-          className="rounded-md shadow-lg">
+          className="rounded-md shadow-lg"
+          isDisabled={!isLoggedIn}>
           <Avatar className="w-8 h-8">
             <AvatarImage src={getUserAvatarURL(post?.user?.avatar) || ""} />
             <AvatarFallback>
@@ -64,7 +70,8 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
                 )
               }
               placement="bottom-start"
-              className="rounded-md shadow-lg">
+              className="rounded-md shadow-lg"
+              isDisabled={!isLoggedIn}>
               <Link href={href} className="font-semibold">
                 {username}
               </Link>

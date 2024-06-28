@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BiMoviePlay } from "react-icons/bi";
 import Gallery from "@/components/Profile/gallery";
 import { toast } from "sonner";
-import { notFound } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import { FiBookmark } from "react-icons/fi";
 import ProfileStories from "@/components/Profile/profile-stories";
 import { UserProfileDocument, UserProfileQuery } from "@/gql/graphql";
@@ -32,7 +32,9 @@ const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery
 };
 
 const ProfilePage = ({ params }: { params: { username: string } }) => {
-  const [activeTab, setActiveTab] = useState<string>("POSTS");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") || "POSTS";
+  const [activeTab, setActiveTab] = useState<string>(initialTab);
 
   const {
     data: userProfileData,

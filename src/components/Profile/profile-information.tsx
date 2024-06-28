@@ -16,8 +16,10 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
   const { authData } = useAuth();
   const { posts, user, username } = userProfile.userProfile;
 
+  const isCurrentUser = authData?.id === user?.id;
+
   const handleAvatarClick = () => {
-    if (authData?.id === user?.id) {
+    if (isCurrentUser) {
       modalOpen(OptionChangeAvatarModalKey);
     }
   };
@@ -26,7 +28,9 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
     <>
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
-          <div className="rounded-full w-40 h-40 cursor-pointer" onClick={handleAvatarClick}>
+          <div
+            className={`rounded-full w-40 h-40 ${isCurrentUser ? "cursor-pointer" : ""}`}
+            onClick={handleAvatarClick}>
             <Avatar className="w-40 h-40 text text-large">
               <AvatarImage src={getUserAvatarURL(user?.avatar)} alt="User Avatar" />
               <AvatarFallback>

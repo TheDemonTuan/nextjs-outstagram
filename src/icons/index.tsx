@@ -798,18 +798,18 @@ export const DragPhotoVideoIcon = (props: SVGProps<SVGAElement>) => {
 export const ShareReelsIcon = (props: SVGProps<SVGAElement>) => {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="#00000" xmlns="http://www.w3.org/2000/svg">
-      <g id="SVGRepo_bgCarrier" stroke-width="0" />
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
-      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+      <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
 
       <g id="SVGRepo_iconCarrier">
         {" "}
         <path
           d="M20.7914 12.6075C21.0355 12.3982 21.1575 12.2936 21.2023 12.1691C21.2415 12.0598 21.2415 11.9403 21.2023 11.831C21.1575 11.7065 21.0355 11.6019 20.7914 11.3926L12.3206 4.13202C11.9004 3.77182 11.6903 3.59172 11.5124 3.58731C11.3578 3.58348 11.2101 3.6514 11.1124 3.77128C11 3.90921 11 4.18595 11 4.73942V9.03468C8.86532 9.40813 6.91159 10.4898 5.45971 12.1139C3.87682 13.8846 3.00123 16.176 3 18.551V19.163C4.04934 17.8989 5.35951 16.8766 6.84076 16.166C8.1467 15.5395 9.55842 15.1684 11 15.0706V19.2607C11 19.8141 11 20.0909 11.1124 20.2288C11.2101 20.3487 11.3578 20.4166 11.5124 20.4128C11.6903 20.4084 11.9004 20.2283 12.3206 19.8681L20.7914 12.6075Z"
           stroke="#000000"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />{" "}
       </g>
     </svg>
@@ -851,113 +851,473 @@ export const SelectCropIcon = (props: SVGProps<SVGAElement>) => {
   );
 };
 
-export const VideoAddIcon = (props: SVGProps<SVGAElement>) => (
-  <svg
-    aria-hidden="true"
-    focusable="false"
-    height="24"
-    role="presentation"
-    viewBox="0 0 24 24"
-    width="24"
-    fill="none"
-    // {...props}
-  >
-    <path d="M14.7295 2H9.26953V6.36H14.7295V2Z" fill="currentColor" />
-    <path d="M16.2305 2V6.36H21.8705C21.3605 3.61 19.3305 2.01 16.2305 2Z" fill="currentColor" />
-    <path
-      d="M2 7.85938V16.1894C2 19.8294 4.17 21.9994 7.81 21.9994H16.19C19.83 21.9994 22 19.8294 22 16.1894V7.85938H2ZM14.44 16.1794L12.36 17.3794C11.92 17.6294 11.49 17.7594 11.09 17.7594C10.79 17.7594 10.52 17.6894 10.27 17.5494C9.69 17.2194 9.37 16.5394 9.37 15.6594V13.2594C9.37 12.3794 9.69 11.6994 10.27 11.3694C10.85 11.0294 11.59 11.0894 12.36 11.5394L14.44 12.7394C15.21 13.1794 15.63 13.7994 15.63 14.4694C15.63 15.1394 15.2 15.7294 14.44 16.1794Z"
-      fill="currentColor"
-    />
-    <path d="M7.76891 2C4.66891 2.01 2.63891 3.61 2.12891 6.36H7.76891V2Z" fill="currentColor" />
-  </svg>
-);
-
-export const ReelsProfileIcon = (props: SVGProps<SVGAElement>) => (
-  <svg
-    aria-hidden="true"
-    focusable="false"
-    height="20"
-    role="presentation"
-    viewBox="0 0 24 24"
-    width="20"
-    fill="none"
-    // {...props}
-  >
-    <path d="M14.7295 2H9.26953V6.36H14.7295V2Z" fill="currentColor" />
-    <path d="M16.2305 2V6.36H21.8705C21.3605 3.61 19.3305 2.01 16.2305 2Z" fill="currentColor" />
-    <path
-      d="M2 7.85938V16.1894C2 19.8294 4.17 21.9994 7.81 21.9994H16.19C19.83 21.9994 22 19.8294 22 16.1894V7.85938H2ZM14.44 16.1794L12.36 17.3794C11.92 17.6294 11.49 17.7594 11.09 17.7594C10.79 17.7594 10.52 17.6894 10.27 17.5494C9.69 17.2194 9.37 16.5394 9.37 15.6594V13.2594C9.37 12.3794 9.69 11.6994 10.27 11.3694C10.85 11.0294 11.59 11.0894 12.36 11.5394L14.44 12.7394C15.21 13.1794 15.63 13.7994 15.63 14.4694C15.63 15.1394 15.2 15.7294 14.44 16.1794Z"
-      fill="currentColor"
-    />
-    <path d="M7.76891 2C4.66891 2.01 2.63891 3.61 2.12891 6.36H7.76891V2Z" fill="currentColor" />
-  </svg>
-);
-
-export const GalleryIcon = (props: SVGProps<SVGAElement>) => (
-  <svg
-    // {...props}
-    aria-hidden="true"
-    focusable="false"
-    height="24"
-    role="presentation"
-    viewBox="0 0 24 24"
-    width="24"
-    fill="none">
-    <path
-      d="M2.58078 19.0112L2.56078 19.0312C2.29078 18.4413 2.12078 17.7713 2.05078 17.0312C2.12078 17.7613 2.31078 18.4212 2.58078 19.0112Z"
-      fill="currentColor"
-    />
-    <path
-      d="M9.00109 10.3811C10.3155 10.3811 11.3811 9.31553 11.3811 8.00109C11.3811 6.68666 10.3155 5.62109 9.00109 5.62109C7.68666 5.62109 6.62109 6.68666 6.62109 8.00109C6.62109 9.31553 7.68666 10.3811 9.00109 10.3811Z"
-      fill="currentColor"
-    />
-    <path
-      d="M16.19 2H7.81C4.17 2 2 4.17 2 7.81V16.19C2 17.28 2.19 18.23 2.56 19.03C3.42 20.93 5.26 22 7.81 22H16.19C19.83 22 22 19.83 22 16.19V13.9V7.81C22 4.17 19.83 2 16.19 2ZM20.37 12.5C19.59 11.83 18.33 11.83 17.55 12.5L13.39 16.07C12.61 16.74 11.35 16.74 10.57 16.07L10.23 15.79C9.52 15.17 8.39 15.11 7.59 15.65L3.85 18.16C3.63 17.6 3.5 16.95 3.5 16.19V7.81C3.5 4.99 4.99 3.5 7.81 3.5H16.19C19.01 3.5 20.5 4.99 20.5 7.81V12.61L20.37 12.5Z"
-      fill="currentColor"
-    />
-  </svg>
-);
-
-export const ArrowLeftIcon = (props: SVGProps<SVGAElement>) => (
-  <svg
-    aria-label="Back"
-    className="x1lliihq x1n2onr6 x5n08af"
-    fill="currentColor"
-    height="18"
-    role="img"
-    viewBox="0 0 24 24"
-    width="18">
-    <title>Back</title>
-    <line
+export const VideoAddIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      height="24"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="24"
       fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      x1="2.909"
-      x2="22.001"
-      y1="12.004"
-      y2="12.004"></line>
-    <polyline
-      fill="none"
-      points="9.276 4.726 2.001 12.004 9.276 19.274"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"></polyline>
-  </svg>
-);
+      // {...props}
+    >
+      <path d="M14.7295 2H9.26953V6.36H14.7295V2Z" fill="currentColor" />
+      <path d="M16.2305 2V6.36H21.8705C21.3605 3.61 19.3305 2.01 16.2305 2Z" fill="currentColor" />
+      <path
+        d="M2 7.85938V16.1894C2 19.8294 4.17 21.9994 7.81 21.9994H16.19C19.83 21.9994 22 19.8294 22 16.1894V7.85938H2ZM14.44 16.1794L12.36 17.3794C11.92 17.6294 11.49 17.7594 11.09 17.7594C10.79 17.7594 10.52 17.6894 10.27 17.5494C9.69 17.2194 9.37 16.5394 9.37 15.6594V13.2594C9.37 12.3794 9.69 11.6994 10.27 11.3694C10.85 11.0294 11.59 11.0894 12.36 11.5394L14.44 12.7394C15.21 13.1794 15.63 13.7994 15.63 14.4694C15.63 15.1394 15.2 15.7294 14.44 16.1794Z"
+        fill="currentColor"
+      />
+      <path d="M7.76891 2C4.66891 2.01 2.63891 3.61 2.12891 6.36H7.76891V2Z" fill="currentColor" />
+    </svg>
+  );
+};
 
-export const PlayReelIcon = (props: SVGProps<SVGAElement>) => (
-  <svg
-    aria-label="Play count icon"
-    className="x1lliihq x1n2onr6 x9bdzbf"
-    fill="#FFFFFF"
-    height="16"
-    role="img"
-    viewBox="0 0 24 24"
-    width="16">
-    <title>Play count icon</title>
-    <path d="M5.888 22.5a3.46 3.46 0 0 1-1.721-.46l-.003-.002a3.451 3.451 0 0 1-1.72-2.982V4.943a3.445 3.445 0 0 1 5.163-2.987l12.226 7.059a3.444 3.444 0 0 1-.001 5.967l-12.22 7.056a3.462 3.462 0 0 1-1.724.462Z"></path>
-  </svg>
-);
+export const ReelsProfileIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      height="20"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="20"
+      fill="none"
+      // {...props}
+    >
+      <path d="M14.7295 2H9.26953V6.36H14.7295V2Z" fill="currentColor" />
+      <path d="M16.2305 2V6.36H21.8705C21.3605 3.61 19.3305 2.01 16.2305 2Z" fill="currentColor" />
+      <path
+        d="M2 7.85938V16.1894C2 19.8294 4.17 21.9994 7.81 21.9994H16.19C19.83 21.9994 22 19.8294 22 16.1894V7.85938H2ZM14.44 16.1794L12.36 17.3794C11.92 17.6294 11.49 17.7594 11.09 17.7594C10.79 17.7594 10.52 17.6894 10.27 17.5494C9.69 17.2194 9.37 16.5394 9.37 15.6594V13.2594C9.37 12.3794 9.69 11.6994 10.27 11.3694C10.85 11.0294 11.59 11.0894 12.36 11.5394L14.44 12.7394C15.21 13.1794 15.63 13.7994 15.63 14.4694C15.63 15.1394 15.2 15.7294 14.44 16.1794Z"
+        fill="currentColor"
+      />
+      <path d="M7.76891 2C4.66891 2.01 2.63891 3.61 2.12891 6.36H7.76891V2Z" fill="currentColor" />
+    </svg>
+  );
+};
+
+export const GalleryIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      // {...props}
+      aria-hidden="true"
+      focusable="false"
+      height="24"
+      role="presentation"
+      viewBox="0 0 24 24"
+      width="24"
+      fill="none">
+      <path
+        d="M2.58078 19.0112L2.56078 19.0312C2.29078 18.4413 2.12078 17.7713 2.05078 17.0312C2.12078 17.7613 2.31078 18.4212 2.58078 19.0112Z"
+        fill="currentColor"
+      />
+      <path
+        d="M9.00109 10.3811C10.3155 10.3811 11.3811 9.31553 11.3811 8.00109C11.3811 6.68666 10.3155 5.62109 9.00109 5.62109C7.68666 5.62109 6.62109 6.68666 6.62109 8.00109C6.62109 9.31553 7.68666 10.3811 9.00109 10.3811Z"
+        fill="currentColor"
+      />
+      <path
+        d="M16.19 2H7.81C4.17 2 2 4.17 2 7.81V16.19C2 17.28 2.19 18.23 2.56 19.03C3.42 20.93 5.26 22 7.81 22H16.19C19.83 22 22 19.83 22 16.19V13.9V7.81C22 4.17 19.83 2 16.19 2ZM20.37 12.5C19.59 11.83 18.33 11.83 17.55 12.5L13.39 16.07C12.61 16.74 11.35 16.74 10.57 16.07L10.23 15.79C9.52 15.17 8.39 15.11 7.59 15.65L3.85 18.16C3.63 17.6 3.5 16.95 3.5 16.19V7.81C3.5 4.99 4.99 3.5 7.81 3.5H16.19C19.01 3.5 20.5 4.99 20.5 7.81V12.61L20.37 12.5Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const ArrowLeftIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Back"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="18"
+      role="img"
+      viewBox="0 0 24 24"
+      width="18">
+      <title>Back</title>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="2.909"
+        x2="22.001"
+        y1="12.004"
+        y2="12.004"></line>
+      <polyline
+        fill="none"
+        points="9.276 4.726 2.001 12.004 9.276 19.274"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"></polyline>
+    </svg>
+  );
+};
+
+export const PlayReelIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Play count icon"
+      className="x1lliihq x1n2onr6 x9bdzbf"
+      fill="#FFFFFF"
+      height="16"
+      role="img"
+      viewBox="0 0 24 24"
+      width="16">
+      <title>Play count icon</title>
+      <path d="M5.888 22.5a3.46 3.46 0 0 1-1.721-.46l-.003-.002a3.451 3.451 0 0 1-1.72-2.982V4.943a3.445 3.445 0 0 1 5.163-2.987l12.226 7.059a3.444 3.444 0 0 1-.001 5.967l-12.22 7.056a3.462 3.462 0 0 1-1.724.462Z"></path>
+    </svg>
+  );
+};
+
+//More
+
+export const ReportAProblemIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Report a problem"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="18"
+      role="img"
+      viewBox="0 0 24 24"
+      width="18">
+      <title>Report a problem</title>
+      <path d="M18.001 1h-12a5.006 5.006 0 0 0-5 5v9.005a5.006 5.006 0 0 0 5 5h2.514l2.789 2.712a1 1 0 0 0 1.394 0l2.787-2.712h2.516a5.006 5.006 0 0 0 5-5V6a5.006 5.006 0 0 0-5-5Zm3 14.005a3.003 3.003 0 0 1-3 3h-2.936a1 1 0 0 0-.79.387l-2.274 2.212-2.276-2.212a1 1 0 0 0-.79-.387H6a3.003 3.003 0 0 1-3-3V6a3.003 3.003 0 0 1 3-3h12a3.003 3.003 0 0 1 3 3Zm-9-1.66a1.229 1.229 0 1 0 1.228 1.228A1.23 1.23 0 0 0 12 13.344Zm0-8.117a1.274 1.274 0 0 0-.933.396 1.108 1.108 0 0 0-.3.838l.347 4.861a.892.892 0 0 0 1.77 0l.348-4.86a1.106 1.106 0 0 0-.3-.838A1.272 1.272 0 0 0 12 5.228Z"></path>
+    </svg>
+  );
+};
+
+export const YourActivityIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Your Activity"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="18"
+      role="img"
+      viewBox="0 0 24 24"
+      width="18">
+      <title>Your Activity</title>
+      <path d="M19 1H5C2.794 1 1 2.794 1 5v14c0 2.206 1.794 4 4 4h14c2.206 0 4-1.794 4-4V5c0-2.206-1.794-4-4-4ZM5 3h14c1.103 0 2 .897 2 2v6h-2.382l-2.723-5.447c-.34-.678-1.45-.678-1.79 0L9 15.764l-2.105-4.211A1 1 0 0 0 6 11H3V5c0-1.103.897-2 2-2Zm14 18H5c-1.103 0-2-.897-2-2v-6h2.382l2.723 5.447a1 1 0 0 0 1.79 0L15 8.236l2.105 4.211A1 1 0 0 0 18 13h3v6c0 1.103-.897 2-2 2Z"></path>
+    </svg>
+  );
+};
+
+export const SwitchAppearance = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Theme icon"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="18"
+      role="img"
+      viewBox="0 0 24 24"
+      width="18">
+      <title>Theme icon</title>
+      <path d="M12.00018,4.5a1,1,0,0,0,1-1V2a1,1,0,0,0-2,0V3.5A1.00005,1.00005,0,0,0,12.00018,4.5ZM5.28241,6.69678A.99989.99989,0,1,0,6.69647,5.28271l-1.06054-1.061A.99989.99989,0,0,0,4.22186,5.63574ZM4.50018,12a1,1,0,0,0-1-1h-1.5a1,1,0,0,0,0,2h1.5A1,1,0,0,0,4.50018,12Zm.78223,5.30322-1.06055,1.061a.99989.99989,0,1,0,1.41407,1.41406l1.06054-1.061a.99989.99989,0,0,0-1.41406-1.41407ZM12.00018,19.5a1.00005,1.00005,0,0,0-1,1V22a1,1,0,0,0,2,0V20.5A1,1,0,0,0,12.00018,19.5Zm6.71729-2.19678a.99989.99989,0,0,0-1.41406,1.41407l1.06054,1.061A.99989.99989,0,0,0,19.778,18.36426ZM22.00018,11h-1.5a1,1,0,0,0,0,2h1.5a1,1,0,0,0,0-2ZM18.01044,6.98975a.996.996,0,0,0,.707-.293l1.06055-1.061A.99989.99989,0,0,0,18.364,4.22168l-1.06054,1.061a1,1,0,0,0,.707,1.707ZM12.00018,6a6,6,0,1,0,6,6A6.00657,6.00657,0,0,0,12.00018,6Zm0,10a4,4,0,1,1,4-4A4.00458,4.00458,0,0,1,12.00018,16Z"></path>
+    </svg>
+  );
+};
+
+//Your activity
+export const InteractionsIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Interactions, review and delete likes, comments and your other interactions."
+      className="x1lliihq x1n2onr6 xyb1xck"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Interactions, review and delete likes, comments and your other interactions.</title>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        x1="2.369"
+        x2="22.25"
+        y1="16.803"
+        y2="16.803"></line>
+      <polyline
+        fill="none"
+        points="17.322 11.855 22.25 16.803 17.322 21.75"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"></polyline>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        x1="21.631"
+        x2="1.75"
+        y1="7.197"
+        y2="7.197"></line>
+      <polyline
+        fill="none"
+        points="6.678 12.145 1.75 7.197 6.678 2.25"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"></polyline>
+    </svg>
+  );
+};
+
+export const VideoPhotoActivityIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Photos and videos, view, archive or delete photos that you've shared."
+      className="x1lliihq x1n2onr6 xyb1xck"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Photos and videos, view, archive or delete photos that you&apos;ve shared.</title>
+      <path d="m18.509 14.757-4.285-2.474a.857.857 0 0 0-1.286.743v4.948a.857.857 0 0 0 1.286.742l4.285-2.474a.857.857 0 0 0 0-1.485ZM5.225 3.977a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25ZM19.5 7.5h-3v-3a4.004 4.004 0 0 0-4-4h-8a4.004 4.004 0 0 0-4 4v8a4.004 4.004 0 0 0 4 4h3v3a4.004 4.004 0 0 0 4 4h8a4.004 4.004 0 0 0 4-4v-8a4.004 4.004 0 0 0-4-4Zm-12 7h-3a1.997 1.997 0 0 1-1.882-1.349l2.607-2.607L7.5 12.819Zm.23-4.28L6.41 8.9a1.679 1.679 0 0 0-2.37 0L2.5 10.44V4.5a2.003 2.003 0 0 1 2-2h8a2.003 2.003 0 0 1 2 2v3h-3a3.992 3.992 0 0 0-3.77 2.72ZM21.5 19.5a2.003 2.003 0 0 1-2 2h-8a2.003 2.003 0 0 1-2-2v-8a2.003 2.003 0 0 1 2-2h8a2.003 2.003 0 0 1 2 2Z"></path>
+    </svg>
+  );
+};
+
+export const AccountHistoryIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Account history – review changes that you've made to your account since you created it."
+      className="x1lliihq x1n2onr6 xyb1xck"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Account history – review changes that you&apos;ve made to your account since you created it.</title>
+      <rect
+        fill="none"
+        height="18.669"
+        rx="2"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        width="20"
+        x="2"
+        y="3.331"></rect>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="2"
+        x2="22"
+        y1="7.778"
+        y2="7.778"></line>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="6.666"
+        x2="6.666"
+        y1="2"
+        y2="4.665"></line>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="17.555"
+        x2="17.555"
+        y1="2"
+        y2="4.667"></line>
+      <circle cx="12" cy="12.666" r="1.001"></circle>
+      <circle cx="12" cy="17.112" r="1.001"></circle>
+      <circle cx="17" cy="12.666" r="1.001"></circle>
+      <circle cx="17" cy="17.112" r="1.001"></circle>
+      <circle cx="7" cy="12.666" r="1.001"></circle>
+      <circle cx="7" cy="17.112" r="1.001"></circle>
+    </svg>
+  );
+};
+
+export const RecentlyDeletedIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M18 6L17.1991 18.0129C17.129 19.065 17.0939 19.5911 16.8667 19.99C16.6666 20.3412 16.3648 20.6235 16.0011 20.7998C15.588 21 15.0607 21 14.0062 21H9.99377C8.93927 21 8.41202 21 7.99889 20.7998C7.63517 20.6235 7.33339 20.3412 7.13332 19.99C6.90607 19.5911 6.871 19.065 6.80086 18.0129L6 6M4 6H20M16 6L15.7294 5.18807C15.4671 4.40125 15.3359 4.00784 15.0927 3.71698C14.8779 3.46013 14.6021 3.26132 14.2905 3.13878C13.9376 3 13.523 3 12.6936 3H11.3064C10.477 3 10.0624 3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729 3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6"
+        stroke="#000000"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+// Interactions
+export const TymInteractionsIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label=""
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="12"
+      role="img"
+      viewBox="0 0 24 24"
+      width="12">
+      <title></title>
+      <path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938m0-2a6.04 6.04 0 0 0-4.797 2.127 6.052 6.052 0 0 0-4.787-2.127A6.985 6.985 0 0 0 .5 9.122c0 3.61 2.55 5.827 5.015 7.97.283.246.569.494.853.747l1.027.918a44.998 44.998 0 0 0 3.518 3.018 2 2 0 0 0 2.174 0 45.263 45.263 0 0 0 3.626-3.115l.922-.824c.293-.26.59-.519.885-.774 2.334-2.025 4.98-4.32 4.98-7.94a6.985 6.985 0 0 0-6.708-7.218Z"></path>
+    </svg>
+  );
+};
+
+export const CommentInteractionsIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label=""
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="12"
+      role="img"
+      viewBox="0 0 24 24"
+      width="12">
+      <title></title>
+      <path
+        d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinejoin="round"
+        strokeWidth="2"></path>
+    </svg>
+  );
+};
+
+//Photos and Videos
+export const PostsPhotosAndVideosIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label=""
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="12"
+      role="img"
+      viewBox="0 0 24 24"
+      width="12">
+      <title></title>
+      <rect
+        fill="none"
+        height="18"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        width="18"
+        x="3"
+        y="3"></rect>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="9.015"
+        x2="9.015"
+        y1="3"
+        y2="21"></line>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="14.985"
+        x2="14.985"
+        y1="3"
+        y2="21"></line>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="21"
+        x2="3"
+        y1="9.015"
+        y2="9.015"></line>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="21"
+        x2="3"
+        y1="14.985"
+        y2="14.985"></line>
+    </svg>
+  );
+};
+
+export const ReelsPhotosAndVideosIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label=""
+      className="x1lliihq x1n2onr6 x1roi4f4"
+      fill="currentColor"
+      height="12"
+      role="img"
+      viewBox="0 0 24 24"
+      width="12">
+      <title></title>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="2.049"
+        x2="21.95"
+        y1="7.002"
+        y2="7.002"></line>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="13.504"
+        x2="16.362"
+        y1="2.001"
+        y2="7.002"></line>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="7.207"
+        x2="10.002"
+        y1="2.11"
+        y2="7.002"></line>
+      <path
+        d="M2 12.001v3.449c0 2.849.698 4.006 1.606 4.945.94.908 2.098 1.607 4.946 1.607h6.896c2.848 0 4.006-.699 4.946-1.607.908-.939 1.606-2.096 1.606-4.945V8.552c0-2.848-.698-4.006-1.606-4.945C19.454 2.699 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.546 2 5.704 2 8.552Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"></path>
+      <path
+        d="M9.763 17.664a.908.908 0 0 1-.454-.787V11.63a.909.909 0 0 1 1.364-.788l4.545 2.624a.909.909 0 0 1 0 1.575l-4.545 2.624a.91.91 0 0 1-.91 0Z"
+        fill-rule="evenodd"></path>
+    </svg>
+  );
+};

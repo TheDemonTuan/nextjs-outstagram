@@ -26,7 +26,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { PostResponse, postCreate, postKey } from "@/api/post";
 import { toast } from "sonner";
-import { useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import Carousel from "./carousel";
 import TextareaAutosize from "react-textarea-autosize";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -75,16 +75,14 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     },
   });
 
-  const handleAddPost = () => {
-    const formData = new FormData();
-    modalData.selectedFiles.forEach((file: File) => {
-      formData.append("files", file);
-    });
-    // formData.append("caption", captionRef.current?.value || "");
-    formData.append("caption", caption || "");
-    formData.append("privacy", privacy);
-    createMutate(formData);
-  };
+  const slides = useMemo(() => {
+    return modalData?.selectedFiles?.map((file: File, index: number) => ({
+      id: index.toString(),
+      url: URL.createObjectURL(file),
+      type: file.type.startsWith("image/") ? 1 : 0,
+      className: "rounded-sm max-h-[500px] min-h-[240px] w-full object-contain",
+    }));
+  }, [modalData.selectedFiles]);
 
   const handleEmojiClick = (e: EmojiClickData) => {
     setCaption(caption + e.emoji);
@@ -100,17 +98,28 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
 
   const isImage = modalData?.selectedFiles?.some((file: File) => file.type.startsWith("image/")) ?? false;
 
-  const handleResetModalSelectPhoto = () => {
+  const handleResetModalSelectPhoto = useCallback(() => {
     setModalData([]);
     onResetModalSelectPhoto();
     modalClose();
+  }, [modalClose, onResetModalSelectPhoto, setModalData]);
+
+  const handleAddPost = () => {
+    const formData = new FormData();
+    modalData.selectedFiles.forEach((file: File) => {
+      formData.append("files", file);
+    });
+    // formData.append("caption", captionRef.current?.value || "");
+    formData.append("caption", caption || "");
+    formData.append("privacy", privacy);
+    createMutate(formData);
   };
 
   return (
     <>
       <Modal
         isOpen={modalKey === AddPostModalKey}
-        onOpenChange={() => handleResetModalSelectPhoto}
+        onOpenChange={handleResetModalSelectPhoto}
         hideCloseButton={true}
         isDismissable={!createIsPending}
         size="3xl">
@@ -147,14 +156,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                 <ModalBody className="p-0">
                   <div className="flex">
                     <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg  w-3/5 justify-center items-center flex bg-black">
-                      <Carousel
-                        slides={modalData.selectedFiles.map((file: File, index: number) => ({
-                          id: index.toString(),
-                          url: URL.createObjectURL(file),
-                          type: file.type.startsWith("image/") ? 1 : 0,
-                          className: "rounded-sm max-h-[500px] min-h-[240px] w-full object-contain",
-                        }))}
-                      />
+                      <Carousel slides={slides} />
                     </div>
 
                     <Divider orientation="vertical" />

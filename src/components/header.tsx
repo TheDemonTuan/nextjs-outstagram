@@ -249,11 +249,9 @@ const Header = () => {
                   </DropdownItem>
                   <DropdownItem
                     className="py-4 pl-4 hover:bg-[#F2F2F2]"
+                    href="/your_activity/interactions"
                     startContent={<YourActivityIcon className="w-5 h-5 ml-2" />}>
-                    {" "}
-                    <Link href="/your_activity/interactions" className="mx-1">
-                      Your Activity
-                    </Link>
+                    Your Activity
                   </DropdownItem>
                   <DropdownItem
                     className="py-4 hover:bg-[#F2F2F2]"

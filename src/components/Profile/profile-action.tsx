@@ -72,7 +72,7 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
     isLoading: friendIsLoading,
   } = useQuery<ApiSuccessResponse<FriendResponse>, ApiErrorResponse, FriendResponse>({
     queryKey: [friendKey, user?.id],
-    queryFn: async () => friendGetByUserID(user?.id),
+    queryFn: async () => friendGetByUserID(user?.id || ""),
     select: (data) => data.data,
     enabled: !!user?.id,
   });
@@ -83,13 +83,14 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
     string
   >({
     mutationFn: async (params) => await friendSendRequest(params),
-    onSuccess: () => {
+    onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Send friend request failed!");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: [friendKey, user?.id],
       });
-    },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message || "Send friend request failed!");
     },
   });
 
@@ -99,15 +100,14 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
     string
   >({
     mutationFn: async (params) => await friendRejectRequest(params),
-    onSuccess: () => {
+    onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Reject friend request failed");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: [friendKey, user?.id],
       });
-    },
-    onError: (error) => {
-      console.log(error);
-
-      toast.error(error?.response?.data?.message || "Reject friend request failed");
     },
   });
 
@@ -117,26 +117,27 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
     string
   >({
     mutationFn: async (params) => await friendAcceptRequest(params),
-    onSuccess: () => {
+    onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Accept friend request failed");
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: [friendKey, user?.id],
       });
     },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message || "Accept friend request failed");
-    },
   });
 
   const handleSendRequest = useCallback(() => {
-    friendSendRequestMutate(user?.id);
+    friendSendRequestMutate(user?.id || "");
   }, [friendSendRequestMutate, user?.id]);
 
   const handleRejectRequest = useCallback(() => {
-    friendRejectMutate(user?.id);
+    friendRejectMutate(user?.id || "");
   }, [friendRejectMutate, user?.id]);
 
   const handleAcceptRequest = useCallback(() => {
-    friendAcceptRequestMutate(user?.id);
+    friendAcceptRequestMutate(user?.id || "");
   }, [friendAcceptRequestMutate, user?.id]);
 
   const btnAddFriend = (

@@ -259,7 +259,9 @@ const Header = () => {
                     className="py-4 hover:bg-[#F2F2F2]"
                     startContent={<BookmarkIcon className="w-5 h-5 ml-2" stroke="#000000" />}>
                     {" "}
-                    <span className="mx-1">Saved</span>
+                    <Link href={`/${authData?.username}?tab=SAVED`} className="mx-1">
+                      Saved
+                    </Link>
                   </DropdownItem>
                   <DropdownItem
                     className="py-4 pl-4 hover:bg-[#F2F2F2]"

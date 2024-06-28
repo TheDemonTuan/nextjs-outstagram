@@ -1,12 +1,14 @@
-import React, { Fragment } from "react";
-import { Link } from "@nextui-org/react";
+import React, { Fragment, useState } from "react";
 import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useModalStore } from "@/stores/modal-store";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import EditPost, { EditPostModalKey } from "./edit-post";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "./confirm-delete-post";
+import { redirectHard } from "@/actions";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
+
+const hostLocal = "http://localhost:3001";
 
 const UserMeMoreOptions = [
   {
@@ -26,6 +28,7 @@ const UserMeMoreOptions = [
   },
   {
     title: "Go to post",
+    action: true,
   },
   {
     title: "About this account",
@@ -50,12 +53,14 @@ const UserMoreOptions = [
   },
   {
     title: "Go to post",
+    action: true,
   },
   {
     title: "Share to ...",
   },
   {
     title: "Copy link",
+    action: true,
   },
   {
     title: "Embed",
@@ -72,6 +77,11 @@ const UserMoreOptions = [
 const PostMoreOptions = () => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const { authData } = useAuth();
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${hostLocal}/p/${modalData?.id}?utm_source=og_web_copy_link`);
+    modalClose();
+  };
 
   return (
     <>
@@ -99,6 +109,11 @@ const PostMoreOptions = () => {
                                   modalOpen(ConfirmDeletePostModalKey);
                                   break;
                                 case "Go to post":
+                                  modalClose();
+                                  redirectHard(`/p/${modalData?.id}`);
+                                  break;
+                                case "Copy link":
+                                  handleCopyLink();
                                   break;
                                 case "Cancel":
                                   modalClose();

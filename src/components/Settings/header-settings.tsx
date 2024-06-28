@@ -13,12 +13,12 @@ const HeaderSettingsMenu = [
   {
     name: "Change password",
     icon: ShieldIcon,
-    href: "/accounts/change-password",
+    href: "/accounts/change_password",
   },
   {
     name: "Contact info",
     icon: ContactInfoIcon,
-    href: "/accounts/contact-info",
+    href: "/accounts/contact_info",
   },
   {
     name: "Private account",

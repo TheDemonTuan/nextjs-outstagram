@@ -4,12 +4,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
 import { useInboxStore } from "@/stores/inbox-store";
-import { Avatar } from "@nextui-org/react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, useEffect, useRef } from "react";
 import { animateScroll } from "react-scroll";
+import { Avatar, AvatarImage } from "../ui/avatar";
 
 const ChatInbox = ({ username }: { username: string }) => {
   const { user } = useInboxStore();
@@ -43,7 +43,9 @@ const ChatInbox = ({ username }: { username: string }) => {
   return (
     <div id="chat-inbox" className="flex-auto flex flex-col gap-10 overflow-y-auto p-4">
       <div className="flex flex-col items-center gap-4 mt-6">
-        <Avatar alt="User Avatar" src={getUserAvatarURL(user?.avatar)} className="w-24 h-24" />
+        <Avatar className="w-24 h-24">
+          <AvatarImage src={getUserAvatarURL(user?.avatar)} alt="User Avatar" />
+        </Avatar>
         <div className="font-semibold text-lg text-black ">{user?.full_name}</div>
         <div className="text-sm text-gray-500 font-light">{user?.username} · Outstagram </div>
         <Link
@@ -127,7 +129,10 @@ const meMessage = (message: string) => {
 const youMessage = (message: string, avatar: string) => {
   return (
     <div className="flex gap-2 justify-start">
-      <Avatar alt="User Avatar" src={getUserAvatarURL(avatar)} className="w-8 h-8" />
+      <Avatar className="w-8 h-8">
+        <AvatarImage src={getUserAvatarURL(avatar)} alt="User Avatar" />
+      </Avatar>
+
       <div className="text-sm w-fit overflow-hidden bg-[#EFEFEF] text-black rounded-full py-2 px-4">{message}</div>
     </div>
   );

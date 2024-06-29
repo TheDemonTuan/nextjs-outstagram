@@ -52,7 +52,7 @@ import { toast } from "sonner";
 import SideBarInbox from "./Chats/sidebar-inbox";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
 import { SearchHeaderSkeleton } from "./skeletons";
-import { clearJWT } from "@/actions";
+import { logoutToken } from "@/actions";
 
 const HeaderMenu = [
   {
@@ -536,7 +536,7 @@ const SignOutAlert = () => {
   const queryClient = useQueryClient();
 
   const handleSignOut = async () => {
-    toast.promise(clearJWT(), {
+    toast.promise(logoutToken(), {
       loading: "Logging out... 🚪",
       success: "Logged out successfully! 👋",
       error: "Failed to log out! 😵",

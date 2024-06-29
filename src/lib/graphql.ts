@@ -1,9 +1,9 @@
-import { getJWT } from "@/actions";
+import { getToken } from "@/actions";
 import { GraphQLClient, RequestMiddleware } from "graphql-request";
 
 const endpoint = `${process.env.NEXT_PUBLIC_API_HOST}/graphql`;
 
-const getAccessToken = () => Promise.resolve(getJWT()).then((token) => `Bearer ${token}`);
+const getAccessToken = () => Promise.resolve(getToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME ?? "access_token")).then((token) => `Bearer ${token}`);
 
 export const graphqlAbortController = new AbortController()
 

@@ -22,6 +22,8 @@ export const useAuth = () => {
     select: (res) => res?.data.user,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    // retry: 3,
+    // retryDelay: 1000,
   });
 
   return {

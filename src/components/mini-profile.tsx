@@ -8,7 +8,7 @@ import React from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { useModalStore } from "@/stores/modal-store";
 import { toast } from "sonner";
-import { clearJWT } from "@/actions";
+import { logoutToken } from "@/actions";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { VerifiedIcon } from "@/icons";
@@ -57,7 +57,7 @@ const SignOutAlert = () => {
   const queryClient = useQueryClient();
 
   const handleSignOut = async () => {
-    toast.promise(clearJWT(), {
+    toast.promise(logoutToken(), {
       loading: "Logging out... 🚪",
       success: "Logged out successfully! 👋",
       error: "Failed to log out! 😵",

@@ -1,4 +1,4 @@
-import { clearJWT, getJWT } from "@/actions";
+import { logoutToken, getToken, refreshToken, setToken } from "@/actions";
 import axios, { AxiosError } from "axios";
 
 export interface ApiSuccessResponse<T = null | []> {
@@ -23,10 +23,8 @@ const http = axios.create({
 
 http.interceptors.request.use(
   async (config) => {
-    const jwt = await getJWT();
-    if (jwt) {
-      config.headers["Authorization"] = `Bearer ${jwt}`;
-    }
+    const accessToken = await getToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME || "access_token");
+    accessToken && (config.headers["Authorization"] = `Bearer ${accessToken}`);
     return config;
   },
   (error) => {
@@ -40,7 +38,24 @@ http.interceptors.response.use(
   },
   async (error: ApiErrorResponse) => {
     if (error.response?.status === 401) {
-      await clearJWT();
+      try {
+        const accessToken = await refreshToken();
+
+        if (!accessToken) {
+          throw new Error("No access token found");
+        }
+
+        await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME || "access_token", accessToken, new Date(Date.now() + 1000 * 60 * 30));
+        if (error.config) {
+          error.config.headers["Authorization"] = `Bearer ${accessToken}`;
+          return http.request(error.config);
+        }
+
+        return Promise.reject(error);
+      } catch (err) {
+        await logoutToken();
+        return Promise.reject(error);
+      }
     }
     return Promise.reject(error);
   }

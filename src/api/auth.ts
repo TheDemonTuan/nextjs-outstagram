@@ -1,4 +1,4 @@
-import { setJWT } from "@/actions";
+import { setToken } from "@/actions";
 import http, { ApiSuccessResponse } from "@/lib/http";
 import { UserResponse } from "./user";
 
@@ -13,15 +13,16 @@ export interface AuthLoginParams {
 
 export interface AuthLoginResponse {
   user: UserResponse;
-  token: string;
+  access_token: string;
+  refresh_token: string;
 }
 
 export const authLogin = async (params: AuthLoginParams) =>
   http.post<ApiSuccessResponse<AuthLoginResponse>>("auth/login", params).then(async (res) => {
-    const authToken = res.data.data.token;
+    const { access_token, refresh_token } = res.data.data;
+    access_token && await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME ?? "access_token", access_token, new Date(Date.now() + 1000 * 60 * 30));
+    refresh_token && await setToken(process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "refresh_token", refresh_token, new Date(Date.now() + 1000 * 60 * 60 * 24 * 15));
 
-   authToken && await setJWT(authToken);
-    
     return res.data;
   });
 
@@ -39,10 +40,10 @@ export interface AuthRegisterResponse extends AuthLoginResponse { }
 
 export const authRegister = async (params: AuthRegisterParams) =>
   http.post<ApiSuccessResponse<AuthRegisterResponse>>("auth/register", params).then(async (res) => {
-    const authToken = res.data.data.token;
+    const { access_token, refresh_token } = res.data.data;
+    access_token && await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME ?? "access_token", access_token, new Date(Date.now() + 1000 * 60 * 30));
+    refresh_token && await setToken(process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "refresh_token", refresh_token, new Date(Date.now() + 1000 * 60 * 60 * 24 * 15));
 
-    authToken && await setJWT(authToken);
-    
     return res.data;
   });
 

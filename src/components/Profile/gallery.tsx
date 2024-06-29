@@ -10,7 +10,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   if (!posts || !posts.length) {
     return (
       <div className="flex flex-col items-center justify-center my-14">
-        <Image width={64} height={64} src="/camera-b.png" alt="camera icon" />
+        <Image width={64} height={64} src="/camera-b.png" alt="camera icon" className="object-cover" />
         <span className="font-black text-3xl mt-10">No Posts Yet</span>
       </div>
     );

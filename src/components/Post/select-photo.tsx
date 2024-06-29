@@ -4,16 +4,15 @@ import { Button, Divider, Modal, ModalBody, ModalContent, ModalHeader, Tab, Tabs
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import AddPostModal, { AddPostModalKey } from "./add-post";
 import CarouselDetailPost from "./carousel-detail-post";
-import ConfirmDiscardPost, { ConfirmDiscardPostModalKey } from "./confirm-discard-post";
 
 export const SelectPhotoModalKey = "SelectPhotoModal";
 
-const SelectPhotoModal = () => {
+const SelectPhotoModal = ({ defaultTab = "photos" }: { defaultTab?: "photos" | "reels" }) => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [filesWithType, setFilesWithType] = useState<{ id: string; url: File; type: number }[]>([]);
 
-  const [selectedTab, setSelectedTab] = useState<"photos" | "reels">("photos");
+  const [selectedTab, setSelectedTab] = useState<"photos" | "reels">(defaultTab);
 
   useEffect(() => {
     if (modalData?.selectedFiles) {
@@ -164,7 +163,7 @@ const SelectPhotoModal = () => {
         ref={fileInputRef}
         type="file"
         className="hidden"
-        accept={selectedTab === "photos" ? ".webp,.png,.jpg" : ".mp4"}
+        accept={selectedTab === "photos" ? ".webp,.png,.jpg,.jpeg" : ".mp4"}
         multiple={selectedTab === "photos"}
         onChange={handleFileChange}
       />

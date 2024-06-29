@@ -13,14 +13,11 @@ import {
   Switch,
   Textarea,
 } from "@nextui-org/react";
-import Image from "next/image";
 import { ArrowLeftIcon, EmojiLookBottomIcon, VerifiedIcon } from "@/icons";
-import UserProfileInfo from "../user-profile-info";
 import { MdOutlinePublic } from "react-icons/md";
 import { FaLock } from "react-icons/fa6";
 import { FaUserFriends } from "react-icons/fa";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ScrollArea } from "../ui/scroll-area";
 import { useAuth } from "@/hooks/useAuth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
@@ -87,8 +84,6 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
   const handleEmojiClick = (e: EmojiClickData) => {
     setCaption(caption + e.emoji);
     setCharCount(caption.length + e.emoji.length);
-
-    console.log("check emoji");
   };
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

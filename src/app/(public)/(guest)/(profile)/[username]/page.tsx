@@ -17,6 +17,7 @@ import { Skeleton } from "@nextui-org/react";
 import { ProfileSkeleton } from "@/components/skeletons";
 import { ReelsIcon, ReelsProfileIcon, VideoAddIcon } from "@/icons";
 import Reel from "@/components/Profile/reel";
+import Saved from "@/components/Profile/saved";
 
 const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery) => {
   switch (activeTab) {
@@ -25,7 +26,7 @@ const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery
     case "REELS":
       return <Reel userProfile={userProfile} />;
     case "SAVED":
-      return <div>Saved content goes here</div>;
+      return <Saved />;
     default:
       return null;
   }

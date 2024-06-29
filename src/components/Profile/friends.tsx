@@ -14,9 +14,10 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { VerifiedIcon } from "@/icons";
+import { AddFriendsRequestIcon, VerifiedIcon } from "@/icons";
 import Link from "next/link";
 import SummaryProfile from "../summary-profile";
+import { IoIosSearch } from "react-icons/io";
 
 export const FriendsModalKey = "Friends";
 
@@ -38,10 +39,15 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
               <ModalHeader className="flex flex-col items-center my-[-5px] text-base">Friends</ModalHeader>
               <Divider />
               <div className="flex items-center mx-6 my-3">
-                <Input size="sm" className="sticky top-0 z-10" />
+                <Input
+                  size="sm"
+                  className="sticky top-0 z-10"
+                  placeholder="Search"
+                  startContent={<IoIosSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />}
+                />
               </div>
               <ModalBody className="flex flex-col max-h-80">
-                {user?.friends &&
+                {user?.friends && user.friends.length > 0 ? (
                   user.friends.map((friend) => {
                     const friendInfo =
                       user?.id === friend?.from_user_info?.id ? friend?.to_user_info : friend?.from_user_info;
@@ -58,6 +64,7 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                                   avatar={friendInfo?.avatar || ""}
                                   posts={[]}
                                   friends={friendInfo?.friends as Friend[]}
+                                  role={friendInfo?.role || false}
                                 />
                               )
                             }
@@ -85,6 +92,7 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                                       avatar={friendInfo?.avatar || ""}
                                       posts={[]}
                                       friends={friendInfo?.friends as Friend[]}
+                                      role={friendInfo?.role || false}
                                     />
                                   )
                                 }
@@ -104,7 +112,15 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                         </Button>
                       </div>
                     );
-                  })}
+                  })
+                ) : (
+                  <div className="flex flex-col mt-5 items-center h-full text-center space-y-3 ">
+                    <AddFriendsRequestIcon />
+                    <span className="text-2xl font-bold">Friends</span>
+
+                    <p className="text-sm">You&apos;ll see all of the people who friended you here.</p>
+                  </div>
+                )}
                 <div className="mt-1"></div>
               </ModalBody>
             </>

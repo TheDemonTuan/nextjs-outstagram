@@ -62,6 +62,9 @@ const config = {
       transformOrigin: {
         'left': 'left',
       },
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(to right, #27c4f5, #a307ba, #fd8d32, #70c050, #27c4f5)',
+      },
     },
   },
   plugins: [

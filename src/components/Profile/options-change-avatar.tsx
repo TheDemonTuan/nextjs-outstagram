@@ -171,7 +171,7 @@ const OptionChangeAvatar = () => {
         }}
         type="file"
         className="hidden"
-        accept=".webp,.png,.jpg"
+        accept=".webp,.png,.jpg,.jpeg"
         ref={avatarInputRef}
         disabled={userChangeAvatarIsLoading || userDeleteAvatarIsLoading}
       />

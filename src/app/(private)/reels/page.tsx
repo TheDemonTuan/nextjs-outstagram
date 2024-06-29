@@ -9,6 +9,7 @@ import { useInView } from "react-intersection-observer";
 import { MoreOptionReelsIcon } from "@/icons";
 import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
+import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
 
 interface Reel {
   id: string;
@@ -43,16 +44,8 @@ const reelsByReelID: Reel[] = [
 ];
 
 const ReelsPage = () => {
-  const { ref, inView } = useInView();
+  const { ref } = useInView();
   const [hoveredVideo, setHoveredVideo] = useState("");
-
-  const handleMouseEnter = (postId: string) => {
-    setHoveredVideo(postId.toString());
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredVideo("");
-  };
 
   useEffect(() => {
     if (reelsByReelID.length > 0) {
@@ -74,21 +67,21 @@ const ReelsPage = () => {
     }
   }, []);
 
+  const handleMouseEnter = (postId: string) => {
+    setHoveredVideo(postId.toString());
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredVideo("");
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center max-w-screen-2xl mx-auto">
-        <div className="fixed top-1/2 right-6 transform -translate-y-1/2 space-y-6">
-          <div className="w-10 h-10 rounded-full border flex items-center justify-center bg-gray-200">
-            <BiChevronUp size={30} className="text-black cursor-pointer hover:text-gray-300" />
-          </div>
-          <div className="w-10 h-10 rounded-full border flex items-center justify-center bg-gray-200">
-            <BiChevronDown size={30} className="text-black cursor-pointer hover:text-gray-300" />
-          </div>
-        </div>
         {reelsByReelID.map((post) => (
           <div key={post.id} id={`PostMain-${post.id}`} className="py-10 relative">
             <div className="pl-3 w-full px-4">
-              <Link href={`/p/${post.id}`} className="flex">
+              <Link href={`/r/${post.id}`} className="flex">
                 <div
                   className="relative h-[633px] max-w-[355px] flex items-center rounded-xl  bg-black border-y-1 border-white cursor-pointer"
                   onMouseEnter={() => handleMouseEnter(post.id)}
@@ -126,6 +119,13 @@ const ReelsPage = () => {
           </div>
         ))}
         <div ref={ref}></div>
+        {/* Example loading */}
+        <div className="flex justify-center items-center h-full">
+          <LoadingDotsReels />
+        </div>
+        <div className="flex justify-center items-center h-full">
+          <ReelsSkeleton />
+        </div>
       </div>
     </>
   );

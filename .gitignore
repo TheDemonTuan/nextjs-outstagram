@@ -9,6 +9,7 @@
 /.million
 /.vscode
 /.env.production
+/.env.development
 
 # testing
 /coverage

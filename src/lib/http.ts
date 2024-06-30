@@ -48,7 +48,7 @@ http.interceptors.response.use(
         await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME || "access_token", accessToken, new Date(Date.now() + 1000 * 60 * 30));
         if (error.config) {
           error.config.headers["Authorization"] = `Bearer ${accessToken}`;
-          return http.request(error.config);
+          return Promise.resolve(http.request(error.config));
         }
 
         return Promise.reject(error);

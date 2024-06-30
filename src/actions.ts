@@ -23,18 +23,24 @@ export const setToken = async (name: string, value: string, expires: Date) => {
 };
 
 export const logoutToken = async () => {
-  const refreshToken = await getToken(process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "refresh_token");
-  refreshToken && await authLogout(refreshToken);
+  try {
+    const refreshToken = await getToken(process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "refresh_token");
+    refreshToken && await authLogout(refreshToken);
+  } catch (error) {
+    // console.log("Failed to logout", error);
+    
+  } finally {
+    cookies().delete({
+      name: process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "access_token",
+      maxAge: 0,
+    });
 
-  cookies().delete({
-    name: process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "access_token",
-    maxAge: 0,
-  });
+    cookies().delete({
+      name: process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME ?? "access_token",
+      maxAge: 0,
+    });
+  }
 
-  cookies().delete({
-    name: process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME ?? "access_token",
-    maxAge: 0,
-  });
 };
 
 export const redirectHard = async (uri: string) => {

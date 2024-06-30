@@ -3,7 +3,7 @@ import http, { ApiSuccessResponse } from "@/lib/http";
 import { UserResponse } from "./user";
 
 const setJWT = async (access_token: string, refresh_token: string) => {
-  access_token && await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME ?? "access_token", access_token, new Date(Date.now() + 1000 * 60 * 30));
+  access_token && await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME ?? "access_token", access_token, new Date(Date.now() + 1000 * 60 * 5));
   refresh_token && await setToken(process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "refresh_token", refresh_token, new Date(Date.now() + 1000 * 60 * 60 * 24 * 15));
 }
 

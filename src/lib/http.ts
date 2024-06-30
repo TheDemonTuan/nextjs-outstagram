@@ -45,7 +45,7 @@ http.interceptors.response.use(
           throw new Error("No access token found");
         }
 
-        await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME || "access_token", accessToken, new Date(Date.now() + 1000 * 60 * 30));
+        await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME || "access_token", accessToken, new Date(Date.now() + 1000 * 60 * 5));
         if (error.config) {
           error.config.headers["Authorization"] = `Bearer ${accessToken}`;
           return Promise.resolve(http.request(error.config));

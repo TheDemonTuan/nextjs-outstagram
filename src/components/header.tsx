@@ -24,6 +24,7 @@ import { graphQLClient } from "@/lib/graphql";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
 import {
+  Badge,
   Button,
   Divider,
   Dropdown,
@@ -53,6 +54,8 @@ import SideBarInbox from "./Chats/sidebar-inbox";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
 import { SearchHeaderSkeleton } from "./skeletons";
 import { logoutToken } from "@/actions";
+import { useNotificationsStore } from "@/stores/notification-store";
+import { formatDistanceToNow } from "date-fns";
 
 const HeaderMenu = [
   {
@@ -111,6 +114,7 @@ const Header = () => {
   const [isShortHeader, setIsShortHeader] = React.useState(false);
   const [activeMenu, setActiveMenu] = React.useState("");
   const [changeMenu, setChangeMenu] = React.useState(false);
+  const { total } = useNotificationsStore();
 
   useEffect(() => {
     const currentLink = HeaderMenu.find((item, index) =>
@@ -188,7 +192,19 @@ const Header = () => {
                         break;
                     }
                   }}>
-                  <Icon className={cn("w-[26px] h-[26px] group-hover:scale-105", active && "stroke-zinc-950")} />
+                  {item.name === "Notifications" ? (
+                    <Badge color="danger" content={total} shape="circle">
+                      <Icon className={cn("w-[26px] h-[26px] group-hover:scale-105", active && "stroke-zinc-950")} />
+                    </Badge>
+                  ) : (
+                    <Icon
+                      className={cn(
+                        "w-[26px] h-[26px] group-hover:scale-105 p-overlay-badge",
+                        active && "stroke-zinc-950"
+                      )}
+                    />
+                  )}
+
                   {!isShortHeader && <span>{item.name}</span>}
                 </Link>
               );
@@ -399,16 +415,42 @@ const Search = () => {
 };
 
 const Notification = () => {
+  const { notifications, resetTotal } = useNotificationsStore();
+
+  useEffect(() => {
+    resetTotal();
+  }, [resetTotal]);
+
   return (
     <div className="overflow-y-auto max-h-[728px]">
-      <div className="mx-6">
-        <div className="flex flex-col h-full w-full">
-          <span className="my-7 font-bold text-2xl">Notifications</span>
-
-          <div>
-            <span className="font-bold text-lg">This week</span>
-            <div className="my-4 space-y-3">
-              <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-2 py-4">
+        <span className="font-bold text-2xl px-4">Notifications</span>
+        <span className="font-bold text-lg px-4">New</span>
+        <div className="flex flex-col gap-2">
+          {notifications.map((notification, index) => (
+            <Link
+              href={`/${notification.username}`}
+              className="flex justify-between items-center hover:bg-gray-100 p-2 rounded-md transition-colors duration-200 ease-in-out"
+              key={index}>
+              <div className="flex items-center gap-2 px-2">
+                <Avatar className="w-11 h-11">
+                  <AvatarImage src={getUserAvatarURL(notification.avatar)} />
+                  <AvatarFallback></AvatarFallback>
+                </Avatar>
+                <span className="text-sm">
+                  <span className="font-semibold">{notification.username}</span> {notification.message}
+                  <span className="text-gray-400 text-xs">
+                    {" "}
+                    {formatDistanceToNow(notification.createdAt || "", {
+                      addSuffix: true,
+                    })}
+                  </span>
+                </span>
+              </div>
+              {/* <NextImage src={notification.image} alt="" width={44} height={44} className="w-12 h-12 rounded-lg" /> */}
+            </Link>
+          ))}
+          {/* <div className="flex justify-between items-center">
                 <div className="flex items-center">
                   <Avatar className="w-11 h-11">
                     <AvatarImage src="https://images.pexels.com/photos/395196/pexels-photo-395196.jpeg?auto=compress&cs=tinysrgb&w=600" />
@@ -445,12 +487,11 @@ const Notification = () => {
                   height={44}
                   className="w-12 h-12 rounded-lg"
                 />
-              </div>
-            </div>
-            <Divider className="my-5" />
-          </div>
+              </div> */}
+        </div>
+        <Divider className="my-5" />
 
-          <div>
+        {/* <div>
             <span className="font-bold text-lg">This month</span>
             <div className="my-4 space-y-3">
               <div className="flex justify-between items-center">
@@ -488,8 +529,8 @@ const Notification = () => {
               </div>
             </div>
             <Divider className="my-5" />
-          </div>
-          <div>
+          </div> */}
+        {/* <div>
             <span className="font-bold text-lg">Earlier</span>
             <div className="my-4 space-y-3">
               <div className="flex justify-between items-center">
@@ -522,8 +563,7 @@ const Notification = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </div> */}
       </div>
     </div>
   );

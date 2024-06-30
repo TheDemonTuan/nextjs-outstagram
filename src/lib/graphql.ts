@@ -1,6 +1,5 @@
 import { getToken } from "@/actions";
 import { GraphQLClient, RequestMiddleware } from "graphql-request";
-import http from "./http";
 
 const endpoint = `${process.env.NEXT_PUBLIC_API_HOST}/graphql`;
 
@@ -8,9 +7,9 @@ const getAccessToken = () => Promise.resolve(getToken(process.env.NEXT_PUBLIC_AC
 
 export const graphqlAbortController = new AbortController()
 
-const customFetch = (url: URL | RequestInfo, options?: RequestInit) => {
+const customFetch = async (url: URL | RequestInfo, options?: RequestInit) => {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
   options = options || {};
   options.signal = controller.signal;

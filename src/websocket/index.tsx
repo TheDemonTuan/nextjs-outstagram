@@ -1,12 +1,14 @@
-'use client'
+"use client";
 
 import { usePusherStore } from "@/stores/pusher-store";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Pusher from "pusher-js";
-import { useFriendNotificationSocket } from "./friend-notification";
+import { useInternalSocket } from "./internal-socket";
+import { Toast } from "primereact/toast";
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const { setPusherClient } = usePusherStore();
+  const toast = useRef(null);
 
   useEffect(() => {
     var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY ?? "", {
@@ -16,6 +18,12 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     // sendNotification("Hello", "This is a test notification");
   }, [setPusherClient]);
 
-  useFriendNotificationSocket();
-  return <>{children}</>;
+  useInternalSocket(toast);
+
+  return (
+    <>
+      {children}
+      <Toast ref={toast} position="bottom-center" />
+    </>
+  );
 };

@@ -1,17 +1,17 @@
 "use client";
 import React from "react";
-import { signInWithPopup, FacebookAuthProvider, getAdditionalUserInfo } from "firebase/auth";
-import { auth, provider } from "@/firebase";
+import { signInWithPopup, FacebookAuthProvider, getAdditionalUserInfo, GithubAuthProvider } from "firebase/auth";
+import { auth, githubProvider } from "@/firebase";
 
 const HighlightTextarea = () => {
 
   const handleLogin = async () => {
-    const result = await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, githubProvider);
 
     // The signed-in user info.
     const user = result.user;
     // This gives you a Facebook Access Token.
-    const credential = FacebookAuthProvider.credentialFromResult(result);
+    const credential = GithubAuthProvider.credentialFromResult(result);
     const token = credential?.accessToken;
 
     // The signed-in user info.
@@ -22,7 +22,7 @@ const HighlightTextarea = () => {
 
   return (
     <div>
-      <button onClick={handleLogin}>Login with Facebook</button>
+      <button onClick={handleLogin}>Login with Github</button>
     </div>
   )
 };

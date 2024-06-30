@@ -66,6 +66,8 @@ export const authLogout = async (refreshToken: string) => http.delete(`auth/logo
 export enum OAuthProvider {
   DEFAULT = 0,
   FACEBOOK = 1,
+  GOOGLE = 2,
+  GITHUB = 3,
 }
 
 export interface AuthOAuthLoginParams {

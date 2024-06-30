@@ -1,11 +1,13 @@
-"use client";
-
+import OAuth from "@/components/OAuth";
 import RegisterForm from "@/components/Register/register-form";
 import { InstagramIcon } from "@/icons";
-import { Button, Input } from "@nextui-org/react";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
-import { FaFacebook } from "react-icons/fa";
+
+export const metadata: Metadata = {
+  title: "Register - Outstagram",
+};
 
 const RegisterPage = () => {
   return (
@@ -31,12 +33,7 @@ const RegisterPage = () => {
             }}
           />
         </div>
-        <div className="mb-4 flex items-center justify-center">
-          <Button className="flex items-center" variant="ghost">
-            <FaFacebook className="mr-2 h-4 w-4" />
-            Register with Facebook
-          </Button>
-        </div>
+        <OAuth />
         <div className="text-center">
           <Link className="text-sm" href="#">
             Forgot password?

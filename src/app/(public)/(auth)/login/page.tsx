@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import LoginForm from "@/components/Login/login-form";
 import { InstagramIcon } from "@/icons";
@@ -36,10 +36,12 @@ const LoginPage = () => {
           />
         </div>
         <div className="mb-4 flex items-center justify-center">
-          <Button className="flex items-center" variant="ghost">
-            <FaFacebook className="mr-2 h-4 w-4" />
-            Log in with Facebook
-          </Button>
+          <Link href="/oauth-facebook">
+            <Button className="flex items-center" variant="ghost">
+              <FaFacebook className="mr-2 h-4 w-4" />
+              Log in with Facebook
+            </Button>
+          </Link>
         </div>
         <div className="text-center">
           <Link className="text-sm" href="#">
@@ -48,7 +50,7 @@ const LoginPage = () => {
         </div>
       </div>
       <div className="mt-8">
-        <span className="text-sm text-gray-500">Don't have an account?</span>
+        <span className="text-sm text-gray-500">Don&apos;t have an account?</span>
         <Link className="text-sm font-semibold" href="/register">
           Register
         </Link>

@@ -14,3 +14,45 @@
 html {
     scroll-behavior: smooth;
 }
+
+
+.reels {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background: rgb(77, 232, 244);
+  border-radius: 50%;
+  animation: leftToRight 0.8s ease-in-out infinite;
+  mix-blend-mode: darken;
+  transform: scale(1);
+}
+
+.reels.red {
+  background: rgb(253, 62, 62);
+  animation: rightToLeft 0.8s ease-in-out infinite;
+}
+
+@keyframes leftToRight {
+  0% {
+    transform: translateX(0);
+    width: 20px;
+  }
+
+  25% {
+    width: 25px;
+  }
+
+  50% {
+    transform: translateX(100%);
+    width: 20px;
+  }
+}
+
+@keyframes rightToLeft {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+}

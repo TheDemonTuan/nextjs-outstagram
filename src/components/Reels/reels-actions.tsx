@@ -3,15 +3,34 @@ import {
   BookmarkIcon,
   LikeHeartIcon,
   MessageCircleIcon,
+  PlusReelsIcon,
   ShareReelsIcon,
   UnLikeHeartIcon,
 } from "@/icons";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Spinner } from "@nextui-org/react";
 
 export default function ReelsAction() {
   return (
     <>
       <div className="relative mr-[75px]">
-        <div className="absolute bottom-0 pl-2 space-y-2">
+        <div className="absolute bottom-0 pl-5 space-y-2">
+          <div className="relative">
+            <Avatar className=" h-[50px] w-[50px] cursor-pointer my-6">
+              <AvatarImage
+                src="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
+                alt="user avatar"
+              />
+              <AvatarFallback>
+                <Spinner size="sm" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="absolute bottom-[-5px] left-3.5 bg-red-500 rounded-full p-1 hover:bg-red-600">
+              <PlusReelsIcon fill="#FFFFFF" />
+            </div>
+          </div>
+
           <div className=" text-center">
             <button className="rounded-full bg-gray-200 p-3 cursor-pointer">
               {/* {!hasClickedLike ? (

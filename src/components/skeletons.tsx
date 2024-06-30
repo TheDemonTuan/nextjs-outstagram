@@ -208,3 +208,36 @@ export function SearchHeaderSkeleton() {
     </div>
   );
 }
+
+export function LoadingDotsReels() {
+  return (
+    <>
+      <div className="reels"></div>
+      <div className="reels red"></div>
+    </>
+  );
+}
+
+export function LoadingTopBar() {
+  return (
+    <>
+      <div className="h-1 bg-custom-gradient bg-[length:500%] animate-[LoadingBarProgress_2s_linear_infinite,LoadingBarEnter_.5s_ease-out] transform-origin-left w-full"></div>
+      <div className="fixed left-0 right-0 top-0 z-12"></div>
+    </>
+  );
+}
+
+export function ReelsSkeleton() {
+  return (
+    <div className="flex flex-col space-y-3">
+      <div className="flex items-center space-x-3">
+        <Skeleton className="h-9 w-9 rounded-full" />
+        <Skeleton className="h-4 w-[250px]" />
+      </div>
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-[250px]" />
+        <Skeleton className="h-4 w-[200px]" />
+      </div>
+    </div>
+  );
+}

@@ -51,7 +51,10 @@ const LoginForm = () => {
 
   return (
     <Form {...loginForm}>
-      <form method="post" onSubmit={loginForm.handleSubmit(onSubmit)} className="mb-4 space-y-4 bg-white p-8 border rounded">
+      <form
+        method="post"
+        onSubmit={loginForm.handleSubmit(onSubmit)}
+        className="mb-4 space-y-4 bg-white p-8 border rounded">
         <FormField
           control={loginForm.control}
           name="username"

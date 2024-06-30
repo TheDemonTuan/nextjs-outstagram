@@ -8,7 +8,7 @@ export default function PostDetailNotFound() {
         The link you followed may be broken, or the page may have been removed.
         <Link href="/" className="text-[#00376b]">
           {" "}
-          Go back to Instagram.
+          Go back to Outstagram.
         </Link>
       </p>
     </div>

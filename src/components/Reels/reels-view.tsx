@@ -52,11 +52,6 @@ function ReelsView({ id }: { id: string }) {
     console.log("loopThroughPostsDown");
   };
 
-  const handleCloseModal = () => {
-    modalClose();
-    console.log("Dong modal ");
-  };
-
   return (
     <>
       <Modal size="full" isOpen={true} defaultOpen={true} onOpenChange={modalClose} radius="lg">
@@ -108,12 +103,13 @@ function ReelsView({ id }: { id: string }) {
               </div>
             </div>
 
-            <div id="InfoSection" className="lg:max-w-[550px] relative w-full h-full bg-white">
-              <div className="py-7" />
-
-              <div>
+            <div
+              id="InfoSection"
+              className="lg:max-w-[550px] relative w-full h-full bg-white overflow-y-auto scrollbar-hide">
+              <div className="pt-5 border-b-1">
                 <ReelsCommentsHeader />
               </div>
+
               <ReelsComments />
             </div>
           </div>

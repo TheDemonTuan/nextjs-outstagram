@@ -10,18 +10,28 @@ const GuestGuard = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const { authIsSuccess, authIsError, authIsFetching } = useAuth();
+  const { authIsSuccess, authIsLoading,authIsError } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (authIsSuccess) {
-      router.replace("/");
+      const lastVisited = sessionStorage.getItem("last_visited");
+      if (lastVisited) {
+        router.replace(lastVisited);
+        sessionStorage.removeItem("last_visited");
+      } else {
+        router.replace("/");
+      }
     }
   }, [authIsSuccess, router]);
 
+  if (authIsLoading) {
+    return <Spinner className="flex justify-center" size="lg" label="Loading..." color="secondary" />;
+  }
+
   return (
     <>
-      {!authIsFetching && authIsError ? children : <Spinner className="flex justify-center" size="lg" label="Loading..." color="secondary" />}
+      {authIsError && children}
     </>
   );
 };

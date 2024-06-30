@@ -3,8 +3,10 @@
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
+
+const listNotAuth = ["/login", "/register", "/forgot-password", "/oauth"];
 
 const AuthGuard = ({
   children,
@@ -13,22 +15,28 @@ const AuthGuard = ({
 }>) => {
   const { authCanUse, authIsError, authIsStale } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
   const queryClient = useQueryClient();
 
   useEffect(() => {
     if (authIsError) {
-      router.replace("/login");
+      if (listNotAuth.includes(pathname)) {
+        return;
+      }
+      sessionStorage.setItem("last_visited", pathname);
+      router.replace(`/login?callback=${pathname}`);
       queryClient.clear();
     }
-  }, [authIsError, queryClient, router]);
+  }, [authIsError, pathname, queryClient, router]);
 
   useEffect(() => {
-    if (authIsStale) {
+    if (authIsStale && authCanUse) {
       queryClient.invalidateQueries({
         queryKey: ["auth"],
       });
     }
-  }, [authIsStale, queryClient]);
+  }, [authCanUse, authIsStale, queryClient]);
 
   return (
     <>{authCanUse ? children : <Spinner label="Loading..." color="secondary" size="lg" className="w-full h-full" />}</>

@@ -11,9 +11,11 @@ import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { Button, DatePicker, DateValue, Input } from "@nextui-org/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const registerForm = useForm<RegisterFormValidate>({
     resolver: zodResolver(RegisterFormValidateSchema),
@@ -22,7 +24,6 @@ const RegisterForm = () => {
       full_name: "",
       username: "",
       password: "",
-      birthday: new Date(),
     },
   });
 
@@ -40,6 +41,7 @@ const RegisterForm = () => {
       toast.success("Register successfully!");
       registerForm.reset();
       queryClient.setQueryData(["auth"], res);
+
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Register failed!");

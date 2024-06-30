@@ -12,3 +12,16 @@ export const moveElementToFront = <T>(arr: T[], targetIndex: number): T[] => {
   }
   return arr;
 }
+
+export const convertToSlug = (text: string) => {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .replace(/\s+/g, '')
+    .replace(/[^a-z0-9\-]/g, '')
+    .replace(/\-\-+/g, '')
+    .trim();
+}

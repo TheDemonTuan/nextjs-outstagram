@@ -1,15 +1,13 @@
-"use client";
-
 import LoginForm from "@/components/Login/login-form";
+import OAuth from "@/components/OAuth";
 import { InstagramIcon } from "@/icons";
-import { Button } from "@nextui-org/react";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
-import { FaFacebook } from "react-icons/fa";
 
-// export const metadata: Metadata = {
-//   title: "Login - Outstagram",
-// };
+export const metadata: Metadata = {
+  title: "Login - Outstagram",
+};
 
 const LoginPage = () => {
   return (
@@ -35,14 +33,7 @@ const LoginPage = () => {
             }}
           />
         </div>
-        <div className="mb-4 flex items-center justify-center">
-          <Link href="/oauth-facebook">
-            <Button className="flex items-center" variant="ghost">
-              <FaFacebook className="mr-2 h-4 w-4" />
-              Log in with Facebook
-            </Button>
-          </Link>
-        </div>
+        <OAuth />
         <div className="text-center">
           <Link className="text-sm" href="#">
             Forgot password?

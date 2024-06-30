@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import http, { ApiSuccessResponse } from "./lib/http";
-import { AuthLoginResponse } from "./api/auth";
+import { AuthLoginResponse, authLogout } from "./api/auth";
 
 export const getToken = async (name: string) => {
   return cookies().get(name)?.value;
@@ -24,9 +24,7 @@ export const setToken = async (name: string, value: string, expires: Date) => {
 
 export const logoutToken = async () => {
   const refreshToken = await getToken(process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "refresh_token");
-  refreshToken && await http.post("auth/logout", {
-    refresh_token: refreshToken,
-  });
+  refreshToken && await authLogout(refreshToken);
 
   cookies().delete({
     name: process.env.NEXT_PUBLIC_REFRESH_TOKEN_NAME ?? "access_token",

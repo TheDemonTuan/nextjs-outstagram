@@ -40,14 +40,6 @@ export const OauthFormValidateSchema = z.object({
     .regex(/^[a-zA-Z0-9]+$/, {
       message: "Username must be alphanumeric.",
     }),
-  password: z
-    .string({
-      required_error: "Password is required.",
-      invalid_type_error: "Password is invalid.",
-    })
-    .min(8, {
-      message: "Password must be at least 8 characters.",
-    }),
   birthday: z.date({
     required_error: "A date of birth is required.",
     invalid_type_error: "A date of birth is invalid.",

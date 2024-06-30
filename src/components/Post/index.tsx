@@ -259,16 +259,7 @@ const Post = () => {
                       <input
                         type="text"
                         name="body"
-                        className="
-                    bg-transparent
-                    text-sm
-                    border-none
-                    focus:outline-none
-                    flex-1
-                    dark:text-neutral-400
-                    placeholder-neutral-400
-                    font-normal
-                    disabled:opacity-30"
+                        className="bg-transparent text-sm border-none focus:outline-none flex-1 dark:text-neutral-400 placeholder-neutral-400 font-normal disabled:opacity-30"
                         placeholder="Add a comment..."
                       />
                     </div>

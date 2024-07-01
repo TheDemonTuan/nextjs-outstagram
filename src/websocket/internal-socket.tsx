@@ -34,9 +34,10 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
       switch (data.type) {
         case "friend-action":
           toastRef.current.show({
-            severity: "success",
+            severity: "info",
             summary: data.message,
             sticky: true,
+            life: 3000,
             content: (props: any) => (
               <div className="flex flex-col items-start flex-1">
                 <div className="flex items-center gap-2">

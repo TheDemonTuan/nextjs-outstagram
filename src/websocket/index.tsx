@@ -1,10 +1,11 @@
 "use client";
 
 import { usePusherStore } from "@/stores/pusher-store";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Pusher from "pusher-js";
 import { useInternalSocket } from "./internal-socket";
 import { Toast } from "primereact/toast";
+import { useNotificationsStore } from "@/stores/notification-store";
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const { setPusherClient } = usePusherStore();

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export interface Notifications {
+export interface SocketNotifications {
     type: string;
     username: string;
     avatar: string;
@@ -11,8 +11,8 @@ export interface Notifications {
 interface NotificationsState {
     total: number;
     resetTotal: () => void;
-    notifications: Notifications[];
-    addNotification: (notification: Notifications) => void;
+    notifications: SocketNotifications[];
+    addNotification: (notification: SocketNotifications) => void;
     clearNotifications: () => void;
 }
 

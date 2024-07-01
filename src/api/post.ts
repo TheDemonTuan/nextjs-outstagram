@@ -5,6 +5,11 @@ import { PostComment } from "./post_comment";
 
 export const postKey = "posts";
 
+export enum PostType {
+  DEFAULT = 1,
+  REEL = 2,
+}
+
 export interface PostResponse {
   id: string;
   user_id: string;
@@ -14,6 +19,7 @@ export interface PostResponse {
   active: boolean;
   post_files: PostFileResponse[];
   post_likes: PostLikeResponse[];
+  type: PostType
   privacy: number;
   created_at: Date;
   updated_at: Date;

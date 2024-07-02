@@ -14,12 +14,97 @@ import { Friend, Post } from "@/gql/graphql";
 import SummaryProfile from "../summary-profile";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { PostLikeResponse, postLike } from "@/api/post_like";
+import { postKey } from "@/api/post";
+import { toast } from "sonner";
 
 interface ReelsActionProps {
   reelAction: Post;
+  isLiked: boolean;
+  postPage?: number;
 }
 
-export default function ReelsAction({ reelAction }: ReelsActionProps) {
+export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActionProps) {
+  const queryClient = useQueryClient();
+  const { authData } = useAuth();
+
+  const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
+    mutationFn: async (params) => await postLike(params),
+    onSuccess: (likePostData) => {
+      const fakeData = {
+        ...likePostData.data,
+        user: {
+          ...authData,
+        },
+      };
+      if (!!queryClient.getQueryData([postKey, "reels-page"])) {
+        queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postReel: [
+                    ...page.postReel.map((post: any) => {
+                      if (post.id === reelAction.id) {
+                        if (!post.post_likes?.length) {
+                          return {
+                            ...post,
+                            post_likes: [fakeData],
+                          };
+                        }
+                        const newLikes = post.post_likes.filter((like: any) => like.user_id !== authData?.id);
+                        return {
+                          ...post,
+                          post_likes: [fakeData, ...newLikes],
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, { id: reelAction.id }])) {
+        queryClient.setQueryData([postKey, { id: reelAction.id }], (oldData: any) => {
+          if (!oldData.postByPostId.post_likes?.length) {
+            return {
+              ...oldData,
+              postByPostId: {
+                ...oldData.postByPostId,
+                post_likes: [fakeData],
+              },
+            };
+          }
+          const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== authData?.id);
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              post_likes: [fakeData, ...newLikes],
+            },
+          };
+        });
+      }
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message);
+
+      toast.error(error?.response?.data?.message || "Like post failed!");
+    },
+  });
+
+  const handleLikePost = async () => {
+    postLikeMutate(reelAction.id);
+  };
+
   return (
     <>
       <div className="relative mr-[75px]">
@@ -54,19 +139,18 @@ export default function ReelsAction({ reelAction }: ReelsActionProps) {
           </Tooltip>
           <div className="space-y-2">
             <div className="mb-2">
-              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 ">
-                {/* {!hasClickedLike ? (
-                                <LikeHeartIcon color={likes?.length > 0 && userLiked ? '#ff2626' : ''} size="25"/>
-                            ) : ( */}
-                {/* <LikeHeartIcon width={22} height={22} fill="#00000" /> */}
-                {/* )} */}
-                <LikeHeartIcon width={23} height={23} fill="#00000" />
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1" onClick={handleLikePost}>
+                {isLiked ? (
+                  <LikeHeartIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer text-red-500" />
+                ) : (
+                  <LikeHeartIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer text-black" />
+                )}
               </button>
               <span>{reelAction.post_likes?.length}</span>
             </div>
 
             <Link href={`/r/${reelAction.id}`}>
-              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300 border-none">
                 <MessageCircleIcon width={23} height={23} fill="#00000" />
               </button>
               <span>{reelAction.post_comments?.length}</span>

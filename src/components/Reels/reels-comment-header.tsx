@@ -9,27 +9,50 @@ import { BiLoaderCircle } from "react-icons/bi";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import HighlightHashtags from "../highlight-hashtags";
 import { BookMarkReelsCommentIcon, BookMarkReelsIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
+import { PostByPostIdQuery } from "@/gql/graphql";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { formatDistanceToNow } from "date-fns";
 
-export default function ReelsCommentsHeader() {
+interface ReelsHeaderCommentsProps {
+  reelHeaderData: PostByPostIdQuery;
+}
+
+const hostLocal = "http://localhost:3001";
+
+export default function ReelsCommentsHeader({ reelHeaderData }: ReelsHeaderCommentsProps) {
+  const reelData = reelHeaderData.postByPostId;
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`);
+  };
+  const linkReels = `${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`;
+
   return (
     <>
       <div className="py-5 mx-6 bg-[#F8F8F8] rounded-xl">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center">
-            <Link href={`/`}>
+            <Link href={`/${reelData.user?.username}`}>
               <Avatar className="w-11 h-11">
-                <AvatarImage src="https://images.pexels.com/photos/1379636/pexels-photo-1379636.jpeg?auto=compress&cs=tinysrgb&w=400" />
+                <AvatarImage src={getUserAvatarURL(reelData.user?.avatar) || ""} />
               </Avatar>
             </Link>
             <div className="ml-3 pt-0.5 flex flex-col">
-              <Link href={`/`} className="relative z-10 text-[18px] leading-6 text-lg text font-bold hover:underline">
-                username
+              <Link
+                href={`/${reelData.user?.username}`}
+                className="relative z-10 text-[18px] leading-6 text-lg text font-bold hover:underline">
+                {reelData.user?.username}
               </Link>
 
               <div className="relative z-0 text-sm -mt-0">
-                full_name
+                {reelData.user?.full_name}
                 <span className="relative -top-[3px] text-sm pl-1 pr-0.5 ">.</span>
-                <span className="text-sm">Time create</span>
+                <span className="text-sm">
+                  {" "}
+                  {formatDistanceToNow(reelData.created_at || "", {
+                    addSuffix: true,
+                  })}
+                </span>
               </div>
             </div>
           </div>
@@ -44,7 +67,7 @@ export default function ReelsCommentsHeader() {
 
         <p className="flex item-center gap-2 px-4 mt-2 text-sm">
           <ImMusic size="17" />
-          original sound - username
+          original sound - {reelData.user?.username}
         </p>
       </div>
 
@@ -55,14 +78,14 @@ export default function ReelsCommentsHeader() {
 
             {/* <BiLoaderCircle className="animate-spin" size="25" /> */}
           </button>
-          <span className=" pl-2 pr-4 text-sm text-gray-800 font-semibold ">16.6K</span>
+          <span className=" pl-2 pr-4 text-sm text-gray-800 font-semibold ">{reelData.post_likes?.length}</span>
         </div>
 
         <div className="pb-4 text-center flex items-center">
           <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
             <MessageCircleIcon width={22} height={22} fill="#00000" />
           </div>
-          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">185</span>
+          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">{reelData.post_comments?.length}</span>
         </div>
 
         <div className="pb-4 text-center flex items-center">
@@ -82,16 +105,19 @@ export default function ReelsCommentsHeader() {
       <div className="relative flex items-center mt-1 mx-8 border py-1.5 rounded-lg bg-[#F1F1F2]">
         <input
           readOnly
-          className="flex items-center px-3 w-full border-none outline-0 bg-[#F1F1F2]"
-          value="https://www.tiktok.com/@"
+          className="flex items-center px-3 w-[400px] border-none outline-0 bg-[#F1F1F2] cursor-text"
+          value={linkReels}
+          disabled
         />
-        <button className="absolute right-0 border font-bold text-base py-1.5 px-4 border-none hover:bg-white rounded-r-lg">
+        <button
+          onClick={() => handleCopyLink}
+          className="absolute right-0 border font-bold text-base py-1.5 px-4 border-none hover:bg-white rounded-r-lg">
           Copy link
         </button>
       </div>
 
       <div className="z-10 top-0 sticky mt-5 mx-8 font-bold border-b-2 pb-4 border-black">
-        Comments <span>(185)</span>
+        Comments <span>({reelData.post_comments?.length})</span>
       </div>
     </>
   );

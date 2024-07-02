@@ -16,14 +16,15 @@ import { graphQLClient } from "@/lib/graphql";
 import { Post, PostFile, PostReelDocument } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "@/components/Post/post-more-options";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import Image from "next/image";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
   const currentPage = useRef(1);
   const { ref, inView } = useInView();
   const { modalOpen, setModalData } = useModalStore();
-  const router = useRouter();
+  const { authData } = useAuth();
 
   const {
     status,
@@ -38,7 +39,7 @@ const ReelsPage = () => {
     hasNextPage,
     hasPreviousPage,
   } = useInfiniteQuery({
-    queryKey: [postKey, "reel-page"],
+    queryKey: [postKey, "reels-page"],
     queryFn: async ({ pageParam }) => graphQLClient.request(PostReelDocument, { page: pageParam }),
     initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {
@@ -98,16 +99,14 @@ const ReelsPage = () => {
     setHoveredVideo("");
   };
 
-  const handleVideoClick = (reelId: string) => {
-    router.push(`/r/${reelId}`);
-  };
-
   return (
     <>
       <div className="flex flex-col items-center justify-center max-w-screen-2xl mx-auto">
         {reelsData?.pages.map((page, pageIndex) => (
           <Fragment key={pageIndex}>
             {page.postReel.map((reel) => {
+              const postLikes = reel?.post_likes?.filter((like) => like?.is_liked);
+              const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
               return (
                 <div key={reel.id} id={`PostMain-${reel.id}`} className="py-10 relative">
                   <div className="pl-3 w-full px-4">
@@ -116,17 +115,17 @@ const ReelsPage = () => {
                         className="relative h-[633px] max-w-[355px] flex items-center rounded-xl bg-black border-white cursor-pointer"
                         onMouseEnter={() => handleMouseEnter(reel.id)}
                         onMouseLeave={handleMouseLeave}>
-                        <video
-                          id={`video-${reel.id}`}
-                          autoPlay
-                          controls={hoveredVideo === reel.id}
-                          loop
-                          muted
-                          className="object-cover rounded-xl mx-auto h-full"
-                          src={reel.post_files?.[0]?.url ?? ""}
-                          onClick={() => handleVideoClick(reel.id)}
-                        />
-
+                        <Link href={`/r/${reel.id}`} className="h-[633px] max-w-[355px]">
+                          <video
+                            id={`video-${reel.id}`}
+                            autoPlay
+                            controls={hoveredVideo === reel.id}
+                            loop
+                            muted
+                            className="object-cover rounded-xl mx-auto h-full"
+                            src={reel.post_files?.[0]?.url ?? ""}
+                          />
+                        </Link>
                         {hoveredVideo === reel.id && (
                           <div
                             className="absolute top-3 right-3 z-10"
@@ -138,9 +137,7 @@ const ReelsPage = () => {
                           </div>
                         )}
                         <div
-                          className={`absolute left-3 text-white ${
-                            hoveredVideo === reel.id ? "bottom-16" : "bottom-2 "
-                          }`}>
+                          className={`absolute bottom-2 left-3 text-white ${hoveredVideo === reel.id ? "pb-14" : ""}`}>
                           <div className="font-medium hover:underline cursor-pointer pb-2">{reel.user?.username}</div>
                           <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">{reel.caption}</p>
                           <p className="text-[14px] pb-1 flex items-center text-white">
@@ -150,7 +147,11 @@ const ReelsPage = () => {
                           </p>
                         </div>
                       </div>
-                      <ReelsAction reelAction={reel as Post} />
+                      <ReelsAction
+                        reelAction={reel as Post}
+                        isLiked={isUserLiked ?? false}
+                        postPage={pageIndex > 0 ? pageIndex : 0}
+                      />
                     </div>
                   </div>
                 </div>
@@ -159,15 +160,30 @@ const ReelsPage = () => {
           </Fragment>
         ))}
         <div ref={ref}></div>
-        {isFetchingNextPage && (
+        {isFetchingNextPage ? (
           <div className="flex justify-center items-center h-full mr-20 mb-5">
             <LoadingDotsReels />
           </div>
-        )}
-        {hasNextPage && (
+        ) : hasNextPage ? (
           <div className="flex justify-center items-center h-full mr-20 mb-5">
             <LoadingDotsReels />
           </div>
+        ) : (
+          authData && (
+            <div>
+              {" "}
+              <div className="flex flex-col my-12 justify-center items-center text-center space-y-4">
+                <Image src="/illo-confirm-refresh-light.png" alt="" className="object-cover" width={100} height={100} />
+                <div className="space-y-1">
+                  <div className="text-xl">You&apos;ve completely caught up</div>
+                  <div className="text-sm text-neutral-500">You&apos;ve seen all new reels from the past 3 days.</div>
+                </div>
+                <Link href="/" className="text-sm font-semibold text-red-500 cursor-pointer">
+                  View older reels
+                </Link>
+              </div>
+            </div>
+          )
         )}
       </div>
       {reelsData && <PostMoreOptions />}

@@ -45,7 +45,7 @@ const Post = () => {
   const currentPage = useRef(1);
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [showLikeIcons, setShowLikeIcons] = useState<{ [key: string]: { visible: boolean; rotation: number } }>({});
+  const [showLikeIcons, setShowLikeIcons] = useState<{ [key: string]: { visible: boolean } }>({});
 
   const {
     status,
@@ -96,19 +96,17 @@ const Post = () => {
   };
 
   const handleDoubleClick = (postId: string) => {
-    const randomRotation = Math.floor(Math.random() * 60) - 30;
     setShowLikeIcons((prevState) => ({
       ...prevState,
-      [postId]: { visible: true, rotation: randomRotation },
+      [postId]: { visible: true },
     }));
     setTimeout(() => {
       setShowLikeIcons((prevState) => ({
         ...prevState,
-        [postId]: { visible: false, rotation: 0 },
+        [postId]: { visible: false },
       }));
     }, 1000);
   };
-
   return (
     <>
       <div className="flex flex-col items-center gap-2">
@@ -217,7 +215,7 @@ const Post = () => {
                                 <div className="absolute inset-0 flex items-center justify-center">
                                   <span
                                     style={{
-                                      transform: `rotate(${showLikeIcons[post.id].rotation}deg) scale(1)`,
+                                      transform: `scale(1)`,
                                       opacity: "1",
                                       animation: "likeAnimation 0.6s ease",
                                     }}>

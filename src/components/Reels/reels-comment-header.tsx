@@ -1,15 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { AiFillHeart } from "react-icons/ai";
-import { BsChatDots, BsTrash3 } from "react-icons/bs";
 import { ImMusic } from "react-icons/im";
-import { useEffect, useState } from "react";
-import { BiLoaderCircle } from "react-icons/bi";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import HighlightHashtags from "../highlight-hashtags";
-import { BookMarkReelsCommentIcon, BookMarkReelsIcon, LikeHeartIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
-import { PostByPostIdQuery } from "@/gql/graphql";
+import { BookMarkReelsCommentIcon, LikeHeartIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
+import { Friend, PostByPostIdQuery } from "@/gql/graphql";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { formatDistanceToNow } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,8 +13,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { PostLikeResponse, postLike } from "@/api/post_like";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { postKey } from "@/api/post";
-import ReelsAction from "./reels-actions";
 import { toast } from "sonner";
+import { Tooltip } from "@nextui-org/react";
+import SummaryProfile from "../summary-profile";
 
 const hostLocal = "http://localhost:3001";
 interface ReelsHeaderCommentsProps {
@@ -42,37 +39,37 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
           ...authData,
         },
       };
-      // if (!!queryClient.getQueryData([postKey, "reels-page"])) {
-      //   queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
-      //     return {
-      //       ...oldData,
-      //       pages: [
-      //         ...oldData.pages.map((page: any, index: any) => {
-      //           return {
-      //             postReel: [
-      //               ...page.postReel.map((reel: any) => {
-      //                 if (reel.id === reelData.id) {
-      //                   if (!reel.post_likes?.length) {
-      //                     return {
-      //                       ...reel,
-      //                       post_likes: [fakeData],
-      //                     };
-      //                   }
-      //                   const newLikes = reel.post_likes.filter((like: any) => like.user_id !== authData?.id);
-      //                   return {
-      //                     ...reel,
-      //                     post_likes: [fakeData, ...newLikes],
-      //                   };
-      //                 }
-      //                 return reel;
-      //               }),
-      //             ],
-      //           };
-      //         }),
-      //       ],
-      //     };
-      //   });
-      // }
+      if (!!queryClient.getQueryData([postKey, "reels-page"])) {
+        queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postReel: [
+                    ...page.postReel.map((reel: any) => {
+                      if (reel.id === reelData.id) {
+                        if (!reel.post_likes?.length) {
+                          return {
+                            ...reel,
+                            post_likes: [fakeData],
+                          };
+                        }
+                        const newLikes = reel.post_likes.filter((like: any) => like.user_id !== authData?.id);
+                        return {
+                          ...reel,
+                          post_likes: [fakeData, ...newLikes],
+                        };
+                      }
+                      return reel;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
 
       if (!!queryClient.getQueryData([postKey, { id: reelData.id }])) {
         queryClient.setQueryData([postKey, { id: reelData.id }], (oldData: any) => {
@@ -106,7 +103,8 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`);
+    navigator.clipboard.writeText(`${hostLocal}/r/${reelData?.id}?utm_source=og_web_copy_link`);
+    toast.success("Link copied to clipboard");
   };
 
   return (
@@ -114,17 +112,51 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
       <div className="py-5 mx-6 bg-[#F8F8F8] rounded-xl">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center">
-            <Link href={`/${reelData.user?.username}`}>
-              <Avatar className="w-11 h-11">
-                <AvatarImage src={getUserAvatarURL(reelData.user?.avatar) || ""} />
-              </Avatar>
-            </Link>
-            <div className="ml-3 pt-0.5 flex flex-col">
-              <Link
-                href={`/${reelData.user?.username}`}
-                className="relative z-10 text-[18px] leading-6 text-lg text font-bold hover:underline">
-                {reelData.user?.username}
+            <Tooltip
+              delay={1000}
+              content={
+                reelData && (
+                  <SummaryProfile
+                    username={reelData.user?.username || ""}
+                    full_name={reelData.user?.full_name || ""}
+                    avatar={reelData.user?.avatar || ""}
+                    role={reelData.user?.role || false}
+                    posts={[]}
+                    friends={reelData.user?.friends as Friend[]}
+                  />
+                )
+              }
+              placement="bottom-start"
+              className="rounded-md shadow-lg">
+              <Link href={`/${reelData.user?.username}`}>
+                <Avatar className="w-11 h-11">
+                  <AvatarImage src={getUserAvatarURL(reelData.user?.avatar) || ""} />
+                </Avatar>
               </Link>
+            </Tooltip>
+            <div className="ml-3 pt-0.5 flex flex-col">
+              <Tooltip
+                delay={1000}
+                content={
+                  reelData && (
+                    <SummaryProfile
+                      username={reelData.user?.username || ""}
+                      full_name={reelData.user?.full_name || ""}
+                      avatar={reelData.user?.avatar || ""}
+                      role={reelData.user?.role || false}
+                      posts={[]}
+                      friends={reelData.user?.friends as Friend[]}
+                    />
+                  )
+                }
+                placement="bottom-start"
+                className="rounded-md shadow-lg">
+                <Link
+                  href={`/${reelData.user?.username}`}
+                  className="relative z-10 text-[18px] leading-6 text-lg text font-bold hover:underline">
+                  {reelData.user?.username}
+                </Link>
+              </Tooltip>
 
               <div className="relative z-0 text-sm -mt-0">
                 {reelData.user?.full_name}
@@ -144,7 +176,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
         </div>
 
         <p className="px-4 mt-4 text-md">
-          <HighlightHashtags text="Viva La Vida #lyrics #fyp" />
+          <HighlightHashtags text={reelData?.caption || ""} />
         </p>
 
         <p className="flex item-center gap-2 px-4 mt-2 text-sm">
@@ -161,8 +193,6 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
             ) : (
               <LikeHeartIcon className="w-5 h-5 hover:stroke-gray115 cursor-pointer text-black" />
             )}
-
-            {/* <BiLoaderCircle className="animate-spin" size="25" /> */}
           </button>
           <span className=" pl-2 pr-4 text-sm text-gray-800 font-semibold ">{reelData.post_likes?.length}</span>
         </div>
@@ -196,7 +226,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
           disabled
         />
         <button
-          onClick={() => handleCopyLink}
+          onClick={handleCopyLink}
           className="absolute right-0 border font-bold text-base py-1.5 px-4 border-none hover:bg-white rounded-r-lg">
           Copy link
         </button>

@@ -75,7 +75,7 @@ const ReelsView = ({ id }: { id: string }) => {
         }}
         radius="lg">
         <ModalContent>
-          <div className="lg:flex justify-between w-full h-screen bg-black overflow-auto">
+          <div className="lg:flex justify-between w-full h-screen bg-black">
             <div className="lg:w-[calc(100%-540px)] h-full relative">
               <button
                 onClick={() => {
@@ -130,12 +130,14 @@ const ReelsView = ({ id }: { id: string }) => {
 
             <div
               id="InfoSection"
-              className="lg:max-w-[550px] relative w-full h-full bg-white overflow-y-auto scrollbar-hide">
+              className="lg:max-w-[550px] relative w-full h-full bg-white 
+              overflow-y-auto scrollbar-hide
+              ">
               <div className="pt-5 border-b-1">
                 <ReelsCommentsHeader reelHeaderData={reelData} isLiked={isLiked ?? false} />
               </div>
 
-              <ReelsComments />
+              <ReelsComments reelComments={reelData.postByPostId.post_comments} postId={reelData.postByPostId.id} />
             </div>
           </div>
         </ModalContent>

@@ -1,10 +1,9 @@
 import { UserProfileQuery } from "@/gql/graphql";
-import { ClipIcon, LikeHeartIcon, MessageCircleIcon, PlayReelIcon } from "@/icons";
+import { LikeHeartIcon, MessageCircleIcon, PlayReelIcon } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import React from "react";
 import SelectPhotoModal, { SelectPhotoModalKey } from "../Post/select-photo";
-import { PostType } from "@/api/post";
 
 const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();

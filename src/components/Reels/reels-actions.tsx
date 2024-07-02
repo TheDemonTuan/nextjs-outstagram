@@ -95,8 +95,6 @@ export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActi
       }
     },
     onError: (error) => {
-      console.log(error?.response?.data?.message);
-
       toast.error(error?.response?.data?.message || "Like post failed!");
     },
   });

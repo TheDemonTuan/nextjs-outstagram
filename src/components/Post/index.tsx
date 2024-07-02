@@ -17,11 +17,11 @@ import Carousel from "./carousel";
 import { Friend, Post as PostGraphql, PostHomePageDocument } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { postKey } from "@/api/post";
+import { PostType, postKey } from "@/api/post";
 import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import PostLikes, { LikesModalKey } from "./post-likes";
-import { EmojiLookBottomIcon, VerifiedIcon } from "@/icons";
+import { EmojiLookBottomIcon, LikeDoubleTapIcon, VerifiedIcon } from "@/icons";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import UserProfileInfo from "../user-profile-info";
@@ -36,7 +36,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import HighlightHashtags from "../highlight-hashtags";
 import PostPrivacy from "../privacy-post";
-
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
 const Post = () => {
@@ -46,6 +45,7 @@ const Post = () => {
   const currentPage = useRef(1);
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showLikeIcons, setShowLikeIcons] = useState<{ [key: string]: { visible: boolean; rotation: number } }>({});
 
   const {
     status,
@@ -95,12 +95,30 @@ const Post = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const handleDoubleClick = (postId: string) => {
+    const randomRotation = Math.floor(Math.random() * 60) - 30;
+    setShowLikeIcons((prevState) => ({
+      ...prevState,
+      [postId]: { visible: true, rotation: randomRotation },
+    }));
+    setTimeout(() => {
+      setShowLikeIcons((prevState) => ({
+        ...prevState,
+        [postId]: { visible: false, rotation: 0 },
+      }));
+    }, 1000);
+  };
+
   return (
     <>
       <div className="flex flex-col items-center gap-2">
         {postsData?.pages.map((page, pageIndex) => (
           <Fragment key={pageIndex}>
             {page.postHomePage.map((post) => {
+              if (post.type !== PostType.DEFAULT) {
+                return null;
+              }
+
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
 
@@ -187,18 +205,30 @@ const Post = () => {
                         <CardContent className="p-2">
                           {post?.post_files?.length ? (
                             <div className="relative">
-                              <div className="slide-container">
+                              <div className="slide-container" onDoubleClick={() => handleDoubleClick(post.id)}>
                                 <Carousel
                                   slides={post.post_files.map((file) => {
                                     return {
                                       id: file?.id ?? "",
                                       url: file?.url ?? "",
-                                      type: file?.type === "1" ? 1 : 0,
                                       className: "rounded-sm max-h-[590px] min-h-[240px] w-full object-contain",
                                     };
                                   })}
+                                  type={post.type || PostType.DEFAULT}
                                 />
                               </div>
+                              {showLikeIcons[post.id]?.visible && (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <span
+                                    style={{
+                                      transform: `rotate(${showLikeIcons[post.id].rotation}deg) scale(1)`,
+                                      opacity: "1",
+                                      animation: "likeAnimation 0.6s ease",
+                                    }}>
+                                    <LikeDoubleTapIcon />
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           ) : null}
                         </CardContent>

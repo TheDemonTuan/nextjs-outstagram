@@ -1,4 +1,4 @@
-import { postKey } from "@/api/post";
+import { PostType, postKey } from "@/api/post";
 import { UserResponse } from "@/api/user";
 import { Friend, Post, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
@@ -156,10 +156,10 @@ function PostView({ id }: { id: string }) {
                   return {
                     id: file?.id ?? "",
                     url: file?.url ?? "",
-                    type: file?.type === "1" ? 1 : 0,
                     className: "max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] w-full object-cover",
                   };
                 })}
+                type={postData.postByPostId.type ?? PostType.DEFAULT}
               />
             ) : null}
           </Card>

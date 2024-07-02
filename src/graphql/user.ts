@@ -24,11 +24,11 @@ export const UserSuggestion = graphql(`
       posts {
         id
         privacy
+        type
         active
         post_files {
           id
           url
-          type
         }
         created_at
       }
@@ -125,6 +125,7 @@ export const UserProfile = graphql(`
         is_hide_comment
         active
         privacy
+        type
         created_at
         post_likes {
           id
@@ -139,7 +140,6 @@ export const UserProfile = graphql(`
           id
           post_id
           url
-          type
           active
         } post_comments {
           id

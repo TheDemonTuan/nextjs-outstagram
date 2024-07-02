@@ -4,6 +4,7 @@ import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import React from "react";
 import SelectPhotoModal, { SelectPhotoModalKey } from "../Post/select-photo";
+import { PostType } from "@/api/post";
 
 const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
@@ -31,7 +32,7 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
         const postFiles = post?.post_files || [];
         const firstFile = postFiles[0];
 
-        if (!firstFile || firstFile.type !== "0") {
+        if (!firstFile || post?.type !== PostType.REEL) {
           return null;
         }
 

@@ -21,10 +21,11 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
       {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         const firstFile = postFiles[0];
+
         return (
           <Link key={post?.id} href={`/p/${post?.id}`} className="relative group cursor-pointer">
             <div className="w-full h-[300px]">
-              {firstFile?.type === "0" && firstFile?.url ? (
+              {post?.type && firstFile?.url ? (
                 <video
                   key={"video" + firstFile.id}
                   src={firstFile?.url || "/camera-b.png"}
@@ -42,7 +43,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                   loading="lazy"
                 />
               )}
-              {postFiles.length === 1 && firstFile?.type === "0" && (
+              {postFiles.length === 1 && post?.type && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                   <ClipIcon />
                 </div>

@@ -54,15 +54,28 @@ function ReelsView({ id }: { id: string }) {
 
   return (
     <>
-      <Modal size="full" isOpen={true} defaultOpen={true} onOpenChange={modalClose} radius="lg">
+      <Modal
+        size="full"
+        isOpen={true}
+        defaultOpen={true}
+        onOpenChange={(open: boolean) => {
+          if (!open) {
+            modalClose();
+            router.back();
+          }
+        }}
+        radius="lg">
         <ModalContent>
           <div className="lg:flex justify-between w-full h-screen bg-black overflow-auto">
             <div className="lg:w-[calc(100%-540px)] h-full relative">
-              <Link
-                href={`/reels`}
+              <button
+                onClick={() => {
+                  modalClose();
+                  router.back();
+                }}
                 className="absolute text-white z-20 m-5 rounded-full bg-gray-400 bg-opacity-40 p-1.5 hover:bg-gray-800">
                 <AiOutlineClose size="27" />
-              </Link>
+              </button>
 
               <button
                 onClick={() => loopThroughPostsUp()}

@@ -9,7 +9,7 @@ import Image from "next/image";
 import SummaryProfile from "../summary-profile";
 import MiniPost from "./mini-post";
 import { useEffect, useMemo } from "react";
-import { postGetByPostId, postKey } from "@/api/post";
+import { PostType, postGetByPostId, postKey } from "@/api/post";
 import { useQuery } from "@tanstack/react-query";
 import { graphQLClient } from "@/lib/graphql";
 import { notFound } from "next/navigation";
@@ -72,10 +72,10 @@ const SinglePost = ({ id }: { id: string }) => {
                 return {
                   id: file?.id ?? "",
                   url: file?.url ?? "",
-                  type: file?.type === "1" ? 1 : 0,
                   className: "h-[600px] w-full object-cover md:rounded-l-none md:rounded-r-none",
                 };
               })}
+              type={postData.postByPostId.type ?? PostType.DEFAULT}
             />
           ) : null}
         </div>

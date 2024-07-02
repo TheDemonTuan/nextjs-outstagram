@@ -9,6 +9,7 @@ import { Friend, Post, User } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { redirectHard } from "@/actions";
 import Image from "next/image";
+import { PostType } from "@/api/post";
 
 interface SummaryProfileProps {
   username: string;
@@ -71,7 +72,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
 
               return (
                 <div key={post.id} className="flex-1">
-                  {postFile.type === "1" ? (
+                  {post.type === PostType.DEFAULT ? (
                     <Link
                       href={`/p/${post.id}`}
                       passHref

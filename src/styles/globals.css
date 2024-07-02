@@ -56,3 +56,14 @@ html {
     transform: translateX(-100%);
   }
 }
+
+@keyframes likeAnimation {
+  0% {
+    transform: rotate(var(--random-rotation, 0deg)) scale(0.75);
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate(var(--random-rotation, 0deg)) scale(1);
+    opacity: 1;
+  }
+}

@@ -102,7 +102,6 @@ const ReelsPage = () => {
         {reelsData?.pages.map((page, pageIndex) => (
           <Fragment key={pageIndex}>
             {page.postReel.map((reel) => {
-              if (reel.type !== PostType.REEL) return null;
               return (
                 <div key={reel.id} id={`PostMain-${reel.id}`} className="py-10 relative">
                   <div className="pl-3 w-full px-4">

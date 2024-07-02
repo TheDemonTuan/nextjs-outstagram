@@ -5,7 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
-  const { posts, user, username } = userProfile.userProfile;
+  const { posts, reels, user, username } = userProfile.userProfile;
 
   if (!posts || !posts.length) {
     return (

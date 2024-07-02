@@ -115,10 +115,6 @@ const Post = () => {
         {postsData?.pages.map((page, pageIndex) => (
           <Fragment key={pageIndex}>
             {page.postHomePage.map((post) => {
-              if (post.type !== PostType.DEFAULT) {
-                return null;
-              }
-
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
 

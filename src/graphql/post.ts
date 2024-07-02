@@ -8,11 +8,11 @@ export const PostByUserName = graphql(`
       caption
       is_hide_like
       is_hide_comment
+      type
       active
       post_files {
         id
         url
-        type
       }
       created_at
     }
@@ -28,6 +28,7 @@ export const PostByPostID = graphql(`
       is_hide_like
       is_hide_comment
       privacy
+      type
       active
       user {
         avatar
@@ -86,7 +87,6 @@ export const PostByPostID = graphql(`
       post_files {
         id
         url
-        type
       }
       post_likes {
         id
@@ -178,6 +178,7 @@ export const PostHomePage = graphql(`
       is_hide_comment
       active
       privacy
+      type
       user {
         avatar
         username
@@ -211,7 +212,7 @@ export const PostHomePage = graphql(`
       post_files {
         id
         url
-        type
+        
       }
       post_likes {
         id
@@ -261,6 +262,61 @@ export const PostHomePage = graphql(`
   }
 `);
 
+export const PostReel = graphql(`
+  query PostReel($page: Int!) {
+    postReel(page: $page) {
+        id
+        user_id
+        caption
+        is_hide_like
+        is_hide_comment
+        privacy
+        type
+        active
+        created_at
+        user {
+            username
+            full_name
+            email
+            phone
+            avatar
+            bio
+            birthday
+            gender
+            role
+            active
+            is_private
+            friends {
+                id
+                from_user_id
+                to_user_id
+                status
+            }
+        }
+        post_files {
+            id
+            url
+            active
+        }
+        post_likes {
+            id
+            post_id
+            user_id
+            is_liked
+        }
+        post_comments {
+            id
+            post_id
+            user_id
+            parent_id
+            content
+            active
+        }
+    }
+  }
+`);
+
+
 export const PostSuggestions = graphql(`
   query PostSuggestions($skipPostID: String!, $limit: Int!) {
     postSuggestions(skipPostID: $skipPostID, limit: $limit) {
@@ -270,6 +326,7 @@ export const PostSuggestions = graphql(`
       is_hide_like
       is_hide_comment
       privacy
+      type
       active
       created_at
       updated_at
@@ -280,7 +337,6 @@ export const PostSuggestions = graphql(`
       post_files {
         id
         url
-        type
         active
       }
       post_likes {

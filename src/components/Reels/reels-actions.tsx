@@ -9,59 +9,83 @@ import {
 } from "@/icons";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Spinner } from "@nextui-org/react";
+import { Spinner, Tooltip } from "@nextui-org/react";
+import { Friend, Post } from "@/gql/graphql";
+import SummaryProfile from "../summary-profile";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import Link from "next/link";
 
-export default function ReelsAction() {
+interface ReelsActionProps {
+  reelAction: Post;
+}
+
+export default function ReelsAction({ reelAction }: ReelsActionProps) {
   return (
     <>
       <div className="relative mr-[75px]">
-        <div className="absolute bottom-0 pl-5 space-y-2">
-          <div className="relative">
-            <Avatar className=" h-[50px] w-[50px] cursor-pointer my-6">
-              <AvatarImage
-                src="https://images.pexels.com/photos/1042423/pexels-photo-1042423.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="user avatar"
-              />
-              <AvatarFallback>
-                <Spinner size="sm" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="absolute bottom-[-5px] left-3.5 bg-red-500 rounded-full p-1 hover:bg-red-600">
-              <PlusReelsIcon fill="#FFFFFF" />
+        <div className="absolute bottom-0 pl-5 text-center text-xs text-gray-800 font-semibold">
+          <Tooltip
+            delay={1000}
+            content={
+              reelAction && (
+                <SummaryProfile
+                  username={reelAction.user?.username || ""}
+                  full_name={reelAction.user?.full_name || ""}
+                  avatar={reelAction.user?.avatar || ""}
+                  role={reelAction.user?.role || false}
+                  posts={[]}
+                  friends={reelAction.user?.friends as Friend[]}
+                />
+              )
+            }
+            placement="bottom-start"
+            className="rounded-md shadow-lg">
+            <div className="relative mb-6">
+              <Avatar className=" h-[50px] w-[50px] cursor-pointer">
+                <AvatarImage src={getUserAvatarURL(reelAction.user?.avatar || "")} alt="user avatar" />
+                <AvatarFallback>
+                  <Spinner size="sm" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="absolute bottom-[-5px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
+                <PlusReelsIcon fill="#FFFFFF" />
+              </div>
             </div>
-          </div>
-
-          <div className=" text-center">
-            <button className="rounded-full bg-gray-200 p-3 cursor-pointer">
-              {/* {!hasClickedLike ? (
+          </Tooltip>
+          <div className="space-y-2">
+            <div className="mb-2">
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 ">
+                {/* {!hasClickedLike ? (
                                 <LikeHeartIcon color={likes?.length > 0 && userLiked ? '#ff2626' : ''} size="25"/>
                             ) : ( */}
-              <LikeHeartIcon width={22} height={22} fill="#00000" />
-              {/* )} */}
-            </button>
-            <span className="text-xs text-gray-800 font-semibold">{/* {likes?.length} */} 1</span>
+                {/* <LikeHeartIcon width={22} height={22} fill="#00000" /> */}
+                {/* )} */}
+                <LikeHeartIcon width={23} height={23} fill="#00000" />
+              </button>
+              <span>{reelAction.post_likes?.length}</span>
+            </div>
+
+            <Link href={`/r/${reelAction.id}`}>
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
+                <MessageCircleIcon width={23} height={23} fill="#00000" />
+              </button>
+              <span>{reelAction.post_comments?.length}</span>
+            </Link>
+
+            <div>
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
+                <BookMarkReelsIcon width={22} height={22} className="" fill="#00000" />
+              </button>
+              <span className="">55</span>
+            </div>
+
+            <div>
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
+                <ShareReelsIcon width={22} height={22} />
+              </button>
+              <span className="">55</span>
+            </div>
           </div>
-
-          <button className=" text-center">
-            <div className="rounded-full bg-gray-200 p-3 cursor-pointer">
-              <MessageCircleIcon width={23} height={23} fill="#00000" />
-            </div>
-            <span className="text-xs text-gray-800 font-semibold">1</span>
-          </button>
-
-          <button className="text-center">
-            <div className="rounded-full bg-gray-200 p-3 cursor-pointer">
-              <BookMarkReelsIcon width={22} height={22} className="" fill="#00000" />
-            </div>
-            <span className="text-xs text-gray-800 font-semibold">55</span>
-          </button>
-
-          <button className="text-center">
-            <div className="rounded-full bg-gray-200 p-3 cursor-pointer">
-              <ShareReelsIcon width={22} height={22} />
-            </div>
-            <span className="text-xs text-gray-800 font-semibold">55</span>
-          </button>
         </div>
       </div>
     </>

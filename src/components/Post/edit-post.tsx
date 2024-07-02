@@ -28,7 +28,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { PostEditParams, PostResponse, postEdit } from "@/api/post";
+import { PostEditParams, PostPrivacy, PostResponse, postEdit } from "@/api/post";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { FormControl, FormField, FormItem, Form, FormMessage } from "../ui/form";
@@ -56,14 +56,15 @@ const EditPost = () => {
     resolver: zodResolver(EditPostFormValidateSchema),
     defaultValues: {
       caption: "",
-      privacy: "0",
+      privacy: PostPrivacy.PUBLIC.toString(),
     },
   });
 
   useEffect(() => {
     if (modalData) {
       const { caption, privacy } = modalData;
-      const privacyValue = privacy === 0 ? "0" : privacy === 1 ? "1" : privacy === 2 ? "2" : "0";
+      const privacyValue =
+        privacy === PostPrivacy.PUBLIC ? "0" : PostPrivacy.FRIEND === 1 ? "1" : PostPrivacy.PRIVATE === 2 ? "2" : "0";
 
       editForm.reset({
         ...editForm.getValues(),
@@ -106,8 +107,7 @@ const EditPost = () => {
     return modalData?.post_files?.map((file: PostFile) => ({
       id: file?.id ?? "",
       url: file?.url ?? "",
-      type: file?.type === "1" ? 1 : 0,
-      className: "rounded-sm h-[500px] w-full object-contain",
+      className: "rounded-sm max-h-[500px] min-h-[240px] w-full object-contain",
     }));
   }, [modalData.post_files]);
 
@@ -152,8 +152,8 @@ const EditPost = () => {
             <Divider />
             <ModalBody className="p-0">
               <div className="flex">
-                <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg w-3/5 flex items-center bg-black">
-                  <Carousel slides={slides} />
+                <div className="relative overflow-hidden h-[500px] max-w-sm lg:max-w-lg w-3/5 flex justify-center items-center bg-black">
+                  <Carousel slides={slides} type={modalData?.type} />
                 </div>
 
                 <Divider orientation="vertical" />
@@ -229,7 +229,7 @@ const EditPost = () => {
                                               </span>
                                             </div>
                                           </div>
-                                          <Radio value="0" />
+                                          <Radio value={PostPrivacy.PUBLIC.toString()} />
                                         </div>
                                         <div className="flex justify-between items-center">
                                           <div className="flex space-x-2 items-center">
@@ -239,7 +239,7 @@ const EditPost = () => {
                                               <span className="text-xs text-gray-500">Only me</span>
                                             </div>
                                           </div>
-                                          <Radio value="2" />
+                                          <Radio value={PostPrivacy.PRIVATE.toString()} />
                                         </div>
                                         <div className="flex justify-between items-center">
                                           <div className="flex space-x-2 items-center">
@@ -249,7 +249,7 @@ const EditPost = () => {
                                               <span className="text-xs text-gray-500">Your friends on Outstagram</span>
                                             </div>
                                           </div>
-                                          <Radio value="1" />
+                                          <Radio value={PostPrivacy.FRIEND.toString()} />
                                         </div>
                                       </RadioGroup>
                                     )}

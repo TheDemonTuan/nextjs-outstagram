@@ -229,7 +229,7 @@ export function LoadingTopBar() {
 
 export function ReelsSkeleton() {
   return (
-    <div className="flex flex-col space-y-3">
+    <div className="flex flex-col space-y-3 mb-10">
       <div className="flex items-center space-x-3">
         <Skeleton className="h-9 w-9 rounded-full" />
         <Skeleton className="h-4 w-[250px]" />

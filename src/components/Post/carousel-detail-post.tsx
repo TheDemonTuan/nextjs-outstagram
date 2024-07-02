@@ -3,7 +3,8 @@ import { useState, useEffect, useCallback, Fragment, use } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight, FaCropSimple } from "react-icons/fa6";
 import ReactPlayer from "react-player/lazy";
 import { Waypoint } from "react-waypoint";
-import { RiCloseLargeFill, RiReactjsFill } from "react-icons/ri";
+import { RiCloseLargeFill } from "react-icons/ri";
+import { PostType } from "@/api/post";
 
 export default function CarouselDetailPost({
   autoSlide = false,
@@ -13,7 +14,7 @@ export default function CarouselDetailPost({
 }: {
   autoSlide?: boolean;
   autoSlideInterval?: number;
-  slides: { id: string; url: string; type: 1 | 0 }[];
+  slides: { id: string; url: string; type: PostType.DEFAULT | PostType.REEL }[];
   onDelete: (id: string) => void;
 }) {
   const [curr, setCurr] = useState(0);

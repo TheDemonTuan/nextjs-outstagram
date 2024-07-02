@@ -4,12 +4,13 @@ import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import React from "react";
 import SelectPhotoModal, { SelectPhotoModalKey } from "../Post/select-photo";
+import { PostType } from "@/api/post";
 
 const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
-  const { posts } = userProfile.userProfile;
+  const { reels } = userProfile.userProfile;
 
-  if (!posts || !posts.length) {
+  if (!reels || !reels.length) {
     return (
       <>
         <div className="flex flex-col items-center justify-start my-5 space-y-3">
@@ -27,16 +28,16 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
 
   return (
     <div className="grid grid-cols-4 gap-1 mx-28 max-w-screen-xl">
-      {posts?.map((post) => {
-        const postFiles = post?.post_files || [];
+      {reels?.map((reel) => {
+        const postFiles = reel?.post_files || [];
         const firstFile = postFiles[0];
 
-        if (!firstFile || firstFile.type !== "0") {
+        if (!firstFile || reel?.type !== PostType.REEL) {
           return null;
         }
 
         return (
-          <Link key={post?.id} href={`/p/${post?.id}`} passHref className="relative group cursor-pointer">
+          <Link key={reel?.id} href={`/p/${reel?.id}`} passHref className="relative group cursor-pointer">
             <video
               key={"video" + firstFile.id}
               src={firstFile?.url || "/camera-b.png"}
@@ -54,12 +55,12 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6 rounded-md">
               <div className="flex items-center font-bold space-x-1 mx-2">
                 <LikeHeartIcon className="text-white fill-white" />
-                <p className="text-white">{post?.post_likes?.length || 0}</p>
+                <p className="text-white">{reel?.post_likes?.length || 0}</p>
               </div>
 
               <div className="flex items-center font-bold space-x-1 mx-2">
                 <MessageCircleIcon className="text-white fill-white" />
-                <p className="text-white">{post?.post_comments?.length || 0}</p>
+                <p className="text-white">{reel?.post_comments?.length || 0}</p>
               </div>
             </div>
           </Link>

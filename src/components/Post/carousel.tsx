@@ -1,3 +1,4 @@
+import { PostType } from "@/api/post";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState, useEffect, useCallback, Fragment } from "react";
@@ -9,10 +10,12 @@ export default function Carousel({
   autoSlide = false,
   autoSlideInterval = 3000,
   slides,
+  type,
 }: {
   autoSlide?: boolean;
   autoSlideInterval?: number;
-  slides: { id: string; url: string; type: 0 | 1; className: string }[];
+  slides: { id: string; url: string; className: string }[];
+  type: PostType.DEFAULT | PostType.REEL;
 }) {
   const [curr, setCurr] = useState(0);
   const [muted, setMuted] = useState(true);
@@ -42,7 +45,7 @@ export default function Carousel({
         style={{ transform: `translateX(-${curr * 100}%)` }}>
         {slides.map((slide, index) => (
           <Fragment key={index}>
-            {slide.type ? (
+            {type === PostType.DEFAULT ? (
               <Image
                 key={`image-${slide.id}`}
                 src={slide.url}

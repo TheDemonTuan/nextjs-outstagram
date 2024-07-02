@@ -24,11 +24,11 @@ export const UserSuggestion = graphql(`
       posts {
         id
         privacy
+        type
         active
         post_files {
           id
           url
-          type
         }
         created_at
       }
@@ -125,6 +125,7 @@ export const UserProfile = graphql(`
         is_hide_comment
         active
         privacy
+        type
         created_at
         post_likes {
           id
@@ -139,7 +140,6 @@ export const UserProfile = graphql(`
           id
           post_id
           url
-          type
           active
         } post_comments {
           id
@@ -165,6 +165,65 @@ export const UserProfile = graphql(`
           deleted_at
         }
       }
+      reels {
+            id
+            user_id
+            caption
+            is_hide_like
+            is_hide_comment
+            privacy
+            type
+            active
+            created_at
+            updated_at
+            deleted_at
+            user {
+                id
+                username
+                full_name
+                email
+                phone
+                avatar
+                bio
+                birthday
+                gender
+                role
+                active
+                is_private
+                created_at
+                updated_at
+                deleted_at
+            }
+            post_files {
+                id
+                post_id
+                url
+                active
+                created_at
+                updated_at
+                deleted_at
+            }
+            post_likes {
+                id
+                post_id
+                user_id
+                is_liked
+                created_at
+                updated_at
+                deleted_at
+            }
+            post_comments {
+                id
+                post_id
+                user_id
+                parent_id
+                content
+                active
+                created_at
+                updated_at
+                deleted_at
+            }
+        }
     }
   }
 `);

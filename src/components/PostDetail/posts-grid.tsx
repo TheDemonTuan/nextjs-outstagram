@@ -27,7 +27,7 @@ const PostsGrid = ({ postSuggestions }: { postSuggestions: Post[] }) => {
             }}
             key={post.id}
             className="relative flex items-center justify-center h-44 md:h-64 lg:h-80 group col-span-1">
-            {firstFile?.type === "0" && firstFile?.url ? (
+            {post.type && firstFile?.url ? (
               <video
                 key={"video" + firstFile.id}
                 src={firstFile?.url || "/camera-b.png"}
@@ -42,7 +42,7 @@ const PostsGrid = ({ postSuggestions }: { postSuggestions: Post[] }) => {
                 className="object-cover -z-10 transition group-hover:filter group-hover:blur-[2px] group-hover:brightness-90 "
               />
             )}
-            {postFiles.length === 1 && firstFile?.type === "0" && (
+            {postFiles.length === 1 && post.type && (
               <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                 <ClipIcon />
               </div>

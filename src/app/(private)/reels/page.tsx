@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { Spinner } from "@nextui-org/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,62 +10,83 @@ import { MoreOptionReelsIcon } from "@/icons";
 import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
-
-interface Reel {
-  id: string;
-  video_url: string;
-  username: string;
-  full_name: string;
-  caption: string;
-}
-
-const reelsByReelID: Reel[] = [
-  {
-    id: "1",
-    video_url: "https://videos.pexels.com/video-files/6423982/6423982-sd_360_640_29fps.mp4",
-    username: "user1",
-    full_name: "User One",
-    caption: "Caption for user1",
-  },
-  {
-    id: "2",
-    video_url: "https://cdn.pixabay.com/video/2019/05/22/23881-337972830_tiny.mp4",
-    username: "user2",
-    full_name: "User Two",
-    caption: "Caption for user2",
-  },
-  {
-    id: "3",
-    video_url: "https://cdn.pixabay.com/video/2021/04/13/70960-536644237_tiny.mp4",
-    username: "user3",
-    full_name: "User Three",
-    caption: "Caption for user3",
-  },
-];
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { PostType, postKey } from "@/api/post";
+import { graphQLClient } from "@/lib/graphql";
+import { Post, PostFile, PostReelDocument } from "@/gql/graphql";
+import { useModalStore } from "@/stores/modal-store";
+import PostMoreOptions, { PostMoreOptionsModalKey } from "@/components/Post/post-more-options";
 
 const ReelsPage = () => {
-  const { ref } = useInView();
   const [hoveredVideo, setHoveredVideo] = useState("");
+  const currentPage = useRef(1);
+  const { ref, inView } = useInView();
+  const { modalOpen, setModalData } = useModalStore();
+
+  const {
+    status,
+    data: reelsData,
+    error: reelsError,
+    isLoading: reelsIsLoading,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+  } = useInfiniteQuery({
+    queryKey: [postKey, "post-reel"],
+    queryFn: async ({ pageParam }) => graphQLClient.request(PostReelDocument, { page: pageParam }),
+    initialPageParam: currentPage.current,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.postReel.length === 0) {
+        return undefined;
+      }
+      return ++currentPage.current;
+    },
+    getPreviousPageParam: (firstPage) => {
+      return --currentPage.current;
+    },
+  });
 
   useEffect(() => {
-    if (reelsByReelID.length > 0) {
-      reelsByReelID.forEach((post) => {
-        const video = document.getElementById(`video-${post.id}`) as HTMLVideoElement;
-        const postMainElement = document.getElementById(`PostMain-${post.id}`);
+    if (!reelsIsLoading && !isFetchingNextPage && hasNextPage && inView) {
+      fetchNextPage();
+    }
 
-        if (video && postMainElement) {
-          const observer = new IntersectionObserver(
-            (entries) => {
-              entries[0].isIntersecting ? video.play() : video.pause();
-            },
-            { threshold: [0.6] }
-          );
+    return () => {};
+  }, [fetchNextPage, hasNextPage, inView, isFetching, isFetchingNextPage, reelsIsLoading]);
 
-          observer.observe(postMainElement);
-        }
+  useEffect(() => {
+    if (reelsData && reelsData.pages && reelsData.pages.length > 0) {
+      reelsData.pages.forEach((page) => {
+        page.postReel.forEach((post) => {
+          const video = document.getElementById(`video-${post.id}`) as HTMLVideoElement | null;
+          const postMainElement = document.getElementById(`PostMain-${post.id}`);
+
+          if (video && postMainElement) {
+            const observer = new IntersectionObserver(
+              (entries) => {
+                entries[0].isIntersecting ? video.play() : video.pause();
+              },
+              { threshold: [0.6] }
+            );
+
+            observer.observe(postMainElement);
+          }
+        });
       });
     }
-  }, []);
+  }, [reelsData]);
+
+  if (reelsIsLoading) {
+    return (
+      <div className="flex flex-col items-center justify-end gap-2 min-h-screen">
+        <ReelsSkeleton />
+      </div>
+    );
+  }
 
   const handleMouseEnter = (postId: string) => {
     setHoveredVideo(postId.toString());
@@ -78,55 +99,70 @@ const ReelsPage = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-center max-w-screen-2xl mx-auto">
-        {reelsByReelID.map((post) => (
-          <div key={post.id} id={`PostMain-${post.id}`} className="py-10 relative">
-            <div className="pl-3 w-full px-4">
-              <Link href={`/r/${post.id}`} className="flex">
-                <div
-                  className="relative h-[633px] max-w-[355px] flex items-center rounded-xl  bg-black border-y-1 border-white cursor-pointer"
-                  onMouseEnter={() => handleMouseEnter(post.id)}
-                  onMouseLeave={handleMouseLeave}>
-                  <video
-                    id={`video-${post.id}`}
-                    autoPlay
-                    controls={hoveredVideo === post.id}
-                    loop
-                    muted
-                    className="object-contain rounded-xl mx-auto h-full "
-                    src={post.video_url}
-                  />
-                  {hoveredVideo === post.id && (
-                    <>
-                      <div className="absolute top-3 right-3">
-                        <MoreOptionReelsIcon className="" fill="#ffff" />
+        {reelsData?.pages.map((page, pageIndex) => (
+          <Fragment key={pageIndex}>
+            {page.postReel.map((reel) => {
+              return (
+                <div key={reel.id} id={`PostMain-${reel.id}`} className="py-10 relative">
+                  <div className="pl-3 w-full px-4">
+                    <div className="flex">
+                      <div
+                        className="relative h-[633px] max-w-[355px] flex items-center rounded-xl bg-black border-white cursor-pointer"
+                        onMouseEnter={() => handleMouseEnter(reel.id)}
+                        onMouseLeave={handleMouseLeave}>
+                        <Link href={`/r/${reel.id}`} className="h-[633px] max-w-[355px]">
+                          <video
+                            id={`video-${reel.id}`}
+                            autoPlay
+                            controls={hoveredVideo === reel.id}
+                            loop
+                            muted
+                            className="object-cover rounded-xl mx-auto h-full"
+                            src={reel.post_files?.[0]?.url ?? ""}
+                          />
+                        </Link>
+                        {hoveredVideo === reel.id && (
+                          <div
+                            className="absolute top-3 right-3 z-10"
+                            onClick={() => {
+                              setModalData(reel);
+                              modalOpen(PostMoreOptionsModalKey);
+                            }}>
+                            <MoreOptionReelsIcon fill="#ffff" />
+                          </div>
+                        )}
+                        <div
+                          className={`absolute bottom-2 left-3 text-white ${hoveredVideo === reel.id ? "pb-14" : ""}`}>
+                          <div className="font-medium hover:underline cursor-pointer pb-2">{reel.user?.username}</div>
+                          <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">{reel.caption}</p>
+                          <p className="text-[14px] pb-1 flex items-center text-white">
+                            <ImMusic size="17" />
+                            <span className="px-1">original sound - AWESOME</span>
+                            <AiFillHeart size="20" />
+                          </p>
+                        </div>
                       </div>
-                    </>
-                  )}
-                  <div className={`absolute bottom-2 left-3 text-white ${hoveredVideo === post.id ? "pb-14" : ""}`}>
-                    <div className="font-medium  hover:underline cursor-pointer pb-2">{post.username}</div>
-                    <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">{post.caption}</p>
-                    <p className="text-[14px] pb-1 flex items-center text-white">
-                      <ImMusic size="17" />
-                      <span className="px-1">original sound - AWESOME</span>
-                      <AiFillHeart size="20" />
-                    </p>
+                      <ReelsAction reelAction={reel as Post} />
+                    </div>
                   </div>
                 </div>
-
-                <ReelsAction />
-              </Link>
-            </div>
-          </div>
+              );
+            })}
+          </Fragment>
         ))}
         <div ref={ref}></div>
-        {/* Example loading */}
-        <div className="flex justify-center items-center h-full">
-          <LoadingDotsReels />
-        </div>
-        <div className="flex justify-center items-center h-full">
-          <ReelsSkeleton />
-        </div>
+        {isFetchingNextPage && (
+          <div className="flex justify-center items-center h-full mr-20 mb-5">
+            <LoadingDotsReels />
+          </div>
+        )}
+        {hasNextPage && (
+          <div className="flex justify-center items-center h-full mr-20 mb-5">
+            <LoadingDotsReels />
+          </div>
+        )}
       </div>
+      {reelsData && <PostMoreOptions />}
     </>
   );
 };

@@ -2,8 +2,9 @@ import { ArrowLeftIcon, DragPhotoVideoIcon, GalleryIcon, VideoAddIcon } from "@/
 import { useModalStore } from "@/stores/modal-store";
 import { Button, Divider, Modal, ModalBody, ModalContent, ModalHeader, Tab, Tabs } from "@nextui-org/react";
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import AddPostModal, { AddPostModalKey } from "./add-post";
+import AddPostModal, { AddPostModalKey } from "./create-post";
 import CarouselDetailPost from "./carousel-detail-post";
+import { PostType } from "@/api/post";
 
 export const SelectPhotoModalKey = "SelectPhotoModal";
 
@@ -19,7 +20,7 @@ const SelectPhotoModal = ({ defaultTab = "photos" }: { defaultTab?: "photos" | "
       const existingFiles = modalData.selectedFiles.map((file: File, index: number) => ({
         id: index.toString(),
         url: file,
-        type: file.type.startsWith("image/") ? 1 : 0,
+        type: file.type.startsWith("image/") ? PostType.DEFAULT : PostType.REEL,
       }));
       setFilesWithType(existingFiles);
     }
@@ -32,7 +33,7 @@ const SelectPhotoModal = ({ defaultTab = "photos" }: { defaultTab?: "photos" | "
       if (selectedTab === "reels" && filesArray.length > 1) return;
 
       const filesWithType = filesArray.map((file, index) => {
-        const fileType = file.type.startsWith("image/") ? 1 : 0;
+        const fileType = file.type.startsWith("image/") ? PostType.DEFAULT : PostType.REEL;
         return {
           id: index.toString(),
           url: file,
@@ -100,7 +101,7 @@ const SelectPhotoModal = ({ defaultTab = "photos" }: { defaultTab?: "photos" | "
                         return {
                           id: file.id || "",
                           url: URL.createObjectURL(file.url) || "",
-                          type: file.type ? 1 : 0,
+                          type: file.type ? PostType.DEFAULT : PostType.REEL,
                         };
                       })}
                       onDelete={handleDelete}

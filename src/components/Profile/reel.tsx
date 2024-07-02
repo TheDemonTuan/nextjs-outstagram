@@ -32,14 +32,10 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
         const postFiles = reel?.post_files || [];
         const firstFile = postFiles[0];
 
-        if (!firstFile || reel?.type !== PostType.REEL) {
-          return null;
-        }
-
         return (
           <Link key={reel?.id} href={`/p/${reel?.id}`} passHref className="relative group cursor-pointer">
             <video
-              key={"video" + firstFile.id}
+              key={"video" + firstFile?.id}
               src={firstFile?.url || "/camera-b.png"}
               controls={false}
               muted

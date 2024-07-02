@@ -1,4 +1,4 @@
-import { getToken } from "@/actions";
+import { getToken, refreshToken, setToken } from "@/actions";
 import { GraphQLClient, RequestMiddleware } from "graphql-request";
 
 const endpoint = `${process.env.NEXT_PUBLIC_API_HOST}/graphql`;
@@ -14,15 +14,35 @@ const customFetch = async (url: URL | RequestInfo, options?: RequestInit) => {
   options = options || {};
   options.signal = controller.signal;
 
-  return fetch(url, options).then(response => {
-    clearTimeout(timeoutId);
-    return response;
-  }).catch(error => {
-    if (error.name === 'AbortError') {
-      throw new Error('Request timeout');
+  const attemptFetch = async (retry: boolean = true) => {
+    try {
+      const response = await fetch(url, options);
+      clearTimeout(timeoutId);
+      if (response.status === 401 && retry) {
+        const accessToken = await refreshToken();
+        
+        if (!accessToken) {
+          throw new Error("No access token found");
+        }
+
+        await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME || "access_token", accessToken, new Date(Date.now() + 1000 * 60 * 5));
+        options.headers = {
+          ...options.headers,
+          Authorization: `Bearer ${accessToken}`,
+        };
+        
+        return attemptFetch(false);
+      }
+      return response;
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        throw new Error('Request timeout');
+      }
+      throw error;
     }
-    throw error;
-  });
+  };
+
+  return attemptFetch();
 };
 
 const requestMiddleware: RequestMiddleware = async (request) => {

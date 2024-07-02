@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useNotification } from "@/hooks/useNotification";
 import { sendNotification } from "@/lib/send-notification";
 import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
+import Tailwind from 'primereact/passthrough/tailwind';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,7 +48,7 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <NextUIProvider navigate={router.push}>
-        <PrimeReactProvider value={{ unstyled: false }}>{children}</PrimeReactProvider>
+        <PrimeReactProvider value={{ unstyled: true, pt: Tailwind }}>{children}</PrimeReactProvider>
       </NextUIProvider>
       <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
     </QueryClientProvider>

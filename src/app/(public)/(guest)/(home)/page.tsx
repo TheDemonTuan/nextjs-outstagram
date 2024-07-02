@@ -15,7 +15,7 @@ const HomePage = () => {
     <div className="flex-auto grid grid-flow-col justify-evenly p-6">
       <div className="flex flex-col col-span-1 gap-4">
         <Stories />
-        {<Post />}
+        {authCanUse && <Post />}
         {!authCanUse && (
           <div className="flex flex-col items-center gap-2">
             <p className="text-lg font-semibold">Welcome to Outstagram</p>

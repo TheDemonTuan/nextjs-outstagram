@@ -1,13 +1,14 @@
 import { friendKey } from "@/api/friend";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useNotificationsStore } from "@/stores/notification-store";
 import { usePusherStore } from "@/stores/pusher-store";
+import { Button, Spinner } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { Avatar } from "primereact/avatar";
-import { Button } from "primereact/button";
 import React, { MutableRefObject, RefObject, useEffect } from "react";
+import toast from "react-hot-toast";
 import useSound from "use-sound";
 
 export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
@@ -33,44 +34,82 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
       });
       switch (data.type) {
         case "friend-action":
-          toastRef.current.show({
-            severity: "info",
-            summary: data.message,
-            sticky: true,
-            life: 3000,
-            content: (props: any) => (
-              <div className="flex flex-col items-start flex-1">
-                <div className="flex items-center gap-2">
-                  <Avatar image={getUserAvatarURL(data.avatar)} shape="circle" />
-                  <span className="font-bold text-900">{data.username}</span>
+          toast.custom((t) => (
+            <div
+              className={`${
+                t.visible ? "animate-enter" : "animate-leave"
+              } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+              <div className="flex-1 w-0 p-4">
+                <div className="flex items-start">
+                  <Link href={`/${data.username}`} className="flex-shrink-0 pt-0.5">
+                    <Avatar className="w-11 h-11">
+                      <AvatarImage className="object-cover" src={getUserAvatarURL(data.avatar)} />
+                      <AvatarFallback>
+                        <Spinner size="sm" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+                  <div className="ml-3 flex-1">
+                    <p className="text-sm font-medium text-gray-900">{data.username}</p>
+                    <p className="mt-1 text-sm text-gray-500">{data.message}</p>
+                  </div>
                 </div>
-                <div className="font-medium text-lg my-2 text-900">{props.message.summary}</div>
-                <Link href={`/${data.username}`}>
-                  <Button label="View Profile" severity="info" />
-                </Link>
               </div>
-            ),
-          });
+            </div>
+          ));
           queryClient.invalidateQueries({
             queryKey: [friendKey, data.fromUserID],
           });
           break;
         case "post-like":
-          toastRef.current.show({
-            severity: "success",
-            summary: "Can you send me the report?",
-            sticky: true,
-            content: (props: any) => (
-              <div className="flex flex-column align-items-left" style={{ flex: "1" }}>
-                <div className="flex align-items-center gap-2">
-                  <Avatar image="/images/avatar/amyelsner.png" shape="circle" />
-                  <span className="font-bold text-900">Amy Elsner</span>
+          toast.custom((t) => (
+            <div
+              className={`${
+                t.visible ? "animate-enter" : "animate-leave"
+              } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+              <div className="flex-1 w-0 p-4">
+                <div className="flex items-start">
+                  <Link href={`/${data.username}`} className="flex-shrink-0 pt-0.5">
+                    <Avatar className="w-11 h-11">
+                      <AvatarImage className="object-cover" src={getUserAvatarURL(data.avatar)} />
+                      <AvatarFallback>
+                        <Spinner size="sm" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+                  <div className="ml-3 flex-1">
+                    <p className="text-sm font-medium text-gray-900">{data.username}</p>
+                    <p className="mt-1 text-sm text-gray-500">{data.message}</p>
+                  </div>
                 </div>
-                <div className="font-medium text-lg my-3 text-900">{props.message.summary}</div>
-                <Button className="p-button-sm flex" label="Reply" severity="success"></Button>
               </div>
-            ),
-          });
+            </div>
+          ));
+          break;
+        case "post-comment":
+          toast.custom((t) => (
+            <div
+              className={`${
+                t.visible ? "animate-enter" : "animate-leave"
+              } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+              <div className="flex-1 w-0 p-4">
+                <div className="flex items-start">
+                  <Link href={`/${data.username}`} className="flex-shrink-0 pt-0.5">
+                    <Avatar className="w-11 h-11">
+                      <AvatarImage className="object-cover" src={getUserAvatarURL(data.avatar)} />
+                      <AvatarFallback>
+                        <Spinner size="sm" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </Link>
+                  <div className="ml-3 flex-1">
+                    <p className="text-sm font-medium text-gray-900">{data.username}</p>
+                    <p className="mt-1 text-sm text-gray-500">{data.message}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ));
           break;
         default:
           break;

@@ -62,9 +62,9 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     mutationFn: async (params) => await postCreate(params),
     onSuccess: (res) => {
       toast.success("Add new post successfully!");
-      queryClient.setQueryData([postKey, "me"], (oldData: ApiSuccessResponse<PostResponse[]>) =>
-        oldData ? { ...oldData, data: [res.data, ...oldData.data] } : oldData
-      );
+      queryClient.invalidateQueries({
+        queryKey: [postKey, "home-page"],
+      });
       onResetModalSelectPhoto();
       setModalData([]);
       modalClose();

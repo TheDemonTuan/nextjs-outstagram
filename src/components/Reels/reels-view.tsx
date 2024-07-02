@@ -32,6 +32,14 @@ const ReelsView = ({ id }: { id: string }) => {
     staleTime: 1000 * 60 * 5,
   });
 
+  const postLikesFilter = useMemo(() => {
+    return reelData?.postByPostId.post_likes?.filter((like) => like?.is_liked);
+  }, [reelData?.postByPostId.post_likes]);
+
+  const isLiked = useMemo(() => {
+    return postLikesFilter?.some((like) => like?.user_id === authData?.id);
+  }, [postLikesFilter, authData]);
+
   useEffect(() => {
     if (reelError) {
       notFound();
@@ -45,8 +53,6 @@ const ReelsView = ({ id }: { id: string }) => {
   if (!reelData) {
     return <div>Post not found</div>;
   }
-
-  console.log(reelData);
 
   const loopThroughPostsUp = () => {
     console.log("loopThroughPostsUp");
@@ -126,7 +132,7 @@ const ReelsView = ({ id }: { id: string }) => {
               id="InfoSection"
               className="lg:max-w-[550px] relative w-full h-full bg-white overflow-y-auto scrollbar-hide">
               <div className="pt-5 border-b-1">
-                <ReelsCommentsHeader reelHeaderData={reelData} />
+                <ReelsCommentsHeader reelHeaderData={reelData} isLiked={isLiked ?? false} />
               </div>
 
               <ReelsComments />

@@ -8,24 +8,106 @@ import { useEffect, useState } from "react";
 import { BiLoaderCircle } from "react-icons/bi";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import HighlightHashtags from "../highlight-hashtags";
-import { BookMarkReelsCommentIcon, BookMarkReelsIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
+import { BookMarkReelsCommentIcon, BookMarkReelsIcon, LikeHeartIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
 import { PostByPostIdQuery } from "@/gql/graphql";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { formatDistanceToNow } from "date-fns";
-
-interface ReelsHeaderCommentsProps {
-  reelHeaderData: PostByPostIdQuery;
-}
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import { PostLikeResponse, postLike } from "@/api/post_like";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { postKey } from "@/api/post";
+import ReelsAction from "./reels-actions";
+import { toast } from "sonner";
 
 const hostLocal = "http://localhost:3001";
+interface ReelsHeaderCommentsProps {
+  reelHeaderData: PostByPostIdQuery;
+  isLiked: boolean;
+}
 
-export default function ReelsCommentsHeader({ reelHeaderData }: ReelsHeaderCommentsProps) {
+export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHeaderCommentsProps) {
   const reelData = reelHeaderData.postByPostId;
+  const linkReels = `${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`;
+
+  const queryClient = useQueryClient();
+  const { authData } = useAuth();
+
+  const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
+    mutationFn: async (params) => await postLike(params),
+    onSuccess: (likePostData) => {
+      const fakeData = {
+        ...likePostData.data,
+        user: {
+          ...authData,
+        },
+      };
+      // if (!!queryClient.getQueryData([postKey, "reels-page"])) {
+      //   queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
+      //     return {
+      //       ...oldData,
+      //       pages: [
+      //         ...oldData.pages.map((page: any, index: any) => {
+      //           return {
+      //             postReel: [
+      //               ...page.postReel.map((reel: any) => {
+      //                 if (reel.id === reelData.id) {
+      //                   if (!reel.post_likes?.length) {
+      //                     return {
+      //                       ...reel,
+      //                       post_likes: [fakeData],
+      //                     };
+      //                   }
+      //                   const newLikes = reel.post_likes.filter((like: any) => like.user_id !== authData?.id);
+      //                   return {
+      //                     ...reel,
+      //                     post_likes: [fakeData, ...newLikes],
+      //                   };
+      //                 }
+      //                 return reel;
+      //               }),
+      //             ],
+      //           };
+      //         }),
+      //       ],
+      //     };
+      //   });
+      // }
+
+      if (!!queryClient.getQueryData([postKey, { id: reelData.id }])) {
+        queryClient.setQueryData([postKey, { id: reelData.id }], (oldData: any) => {
+          if (!oldData.postByPostId.post_likes?.length) {
+            return {
+              ...oldData,
+              postByPostId: {
+                ...oldData.postByPostId,
+                post_likes: [fakeData],
+              },
+            };
+          }
+          const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== authData?.id);
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              post_likes: [fakeData, ...newLikes],
+            },
+          };
+        });
+      }
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Like post failed!");
+    },
+  });
+
+  const handleLikePost = async () => {
+    postLikeMutate(reelData.id);
+  };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`);
   };
-  const linkReels = `${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`;
 
   return (
     <>
@@ -73,8 +155,12 @@ export default function ReelsCommentsHeader({ reelHeaderData }: ReelsHeaderComme
 
       <div className="flex items-center px-8 mt-4 space-x-2 justify-stretch">
         <div className="pb-4 text-center flex items-center">
-          <button className="rounded-full bg-gray-200 p-2 cursor-pointer">
-            <AiFillHeart color="#ff2626" size="22" />
+          <button className="rounded-full bg-gray-200 p-2 cursor-pointer" onClick={handleLikePost}>
+            {isLiked ? (
+              <LikeHeartIcon className="w-5 h-5 hover:stroke-gray115 cursor-pointer text-red-500" />
+            ) : (
+              <LikeHeartIcon className="w-5 h-5 hover:stroke-gray115 cursor-pointer text-black" />
+            )}
 
             {/* <BiLoaderCircle className="animate-spin" size="25" /> */}
           </button>

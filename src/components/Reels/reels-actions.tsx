@@ -20,6 +20,7 @@ import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { PostLikeResponse, postLike } from "@/api/post_like";
 import { postKey } from "@/api/post";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 interface ReelsActionProps {
   reelAction: Post;
@@ -48,21 +49,21 @@ export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActi
               ...oldData.pages.map((page: any, index: any) => {
                 return {
                   postReel: [
-                    ...page.postReel.map((post: any) => {
-                      if (post.id === reelAction.id) {
-                        if (!post.post_likes?.length) {
+                    ...page.postReel.map((reel: any) => {
+                      if (reel.id === reelAction.id) {
+                        if (!reel.post_likes?.length) {
                           return {
-                            ...post,
+                            ...reel,
                             post_likes: [fakeData],
                           };
                         }
-                        const newLikes = post.post_likes.filter((like: any) => like.user_id !== authData?.id);
+                        const newLikes = reel.post_likes.filter((like: any) => like.user_id !== authData?.id);
                         return {
-                          ...post,
+                          ...reel,
                           post_likes: [fakeData, ...newLikes],
                         };
                       }
-                      return post;
+                      return reel;
                     }),
                   ],
                 };

@@ -1,26 +1,18 @@
-import {
-  BookMarkReelsIcon,
-  BookmarkIcon,
-  LikeHeartIcon,
-  MessageCircleIcon,
-  PlusReelsIcon,
-  ShareReelsIcon,
-  UnLikeHeartIcon,
-} from "@/icons";
+import { BookMarkReelsIcon, LikeHeartIcon, MessageCircleIcon, PlusReelsIcon, ShareReelsIcon } from "@/icons";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Spinner, Tooltip } from "@nextui-org/react";
-import { Friend, Post } from "@/gql/graphql";
-import SummaryProfile from "../summary-profile";
-import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
-import Link from "next/link";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/hooks/useAuth";
-import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { PostLikeResponse, postLike } from "@/api/post_like";
 import { postKey } from "@/api/post";
+import { PostLikeResponse, postLike } from "@/api/post_like";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Friend, Post } from "@/gql/graphql";
+import { useAuth } from "@/hooks/useAuth";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { Spinner, Tooltip } from "@nextui-org/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import SummaryProfile from "../summary-profile";
+import { memo, useMemo } from "react";
 
 interface ReelsActionProps {
   reelAction: Post;
@@ -28,7 +20,8 @@ interface ReelsActionProps {
   postPage?: number;
 }
 
-export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActionProps) {
+// eslint-disable-next-line react/display-name
+const ReelsAction = memo(({ reelAction, isLiked, postPage }: ReelsActionProps) => {
   const queryClient = useQueryClient();
   const { authData } = useAuth();
 
@@ -41,7 +34,7 @@ export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActi
           ...authData,
         },
       };
-      if (!!queryClient.getQueryData([postKey, "reels-page"])) {
+      if (queryClient.getQueryData([postKey, "reels-page"])) {
         queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
           return {
             ...oldData,
@@ -73,7 +66,7 @@ export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActi
         });
       }
 
-      if (!!queryClient.getQueryData([postKey, { id: reelAction.id }])) {
+      if (queryClient.getQueryData([postKey, { id: reelAction.id }])) {
         queryClient.setQueryData([postKey, { id: reelAction.id }], (oldData: any) => {
           if (!oldData.postByPostId.post_likes?.length) {
             return {
@@ -99,6 +92,11 @@ export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActi
       toast.error(error?.response?.data?.message || "Like post failed!");
     },
   });
+
+  const totalLiked = useMemo(
+    () => reelAction.post_likes?.filter((like) => like?.is_liked)?.length,
+    [reelAction.post_likes]
+  );
 
   const handleLikePost = async () => {
     postLikeMutate(reelAction.id);
@@ -145,7 +143,7 @@ export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActi
                   <LikeHeartIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer text-black" />
                 )}
               </button>
-              <span>{reelAction.post_likes?.length}</span>
+              <span>{totalLiked}</span>
             </div>
 
             <Link href={`/r/${reelAction.id}`}>
@@ -173,4 +171,6 @@ export default function ReelsAction({ reelAction, isLiked, postPage }: ReelsActi
       </div>
     </>
   );
-}
+});
+
+export default ReelsAction;

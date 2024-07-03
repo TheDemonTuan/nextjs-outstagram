@@ -79,7 +79,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
     }
   }, [content, setParentID]);
 
-  const handlePostComment = (content: string, parentID: string) => {
+  const handlePostComment = useCallback((content: string, parentID: string) => {
     if (parentID) {
       const regex = /@(\w+)/g;
       const match = regex.exec(content);
@@ -100,7 +100,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
       content,
       parentID,
     });
-  };
+  }, [postCommentMutate, postId, replyUsername]);
 
   const handleEmojiClick = (e: EmojiClickData) => {
     setContent(content + e.emoji);

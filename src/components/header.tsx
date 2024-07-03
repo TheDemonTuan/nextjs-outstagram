@@ -56,6 +56,7 @@ import { SearchHeaderSkeleton } from "./skeletons";
 import { logoutToken } from "@/actions";
 import { useNotificationsStore } from "@/stores/notification-store";
 import { formatDistanceToNow } from "date-fns";
+import LogoutModal, { LogoutModalKey } from "./LogoutModal";
 
 const HeaderMenu = [
   {
@@ -289,7 +290,7 @@ const Header = () => {
                     <span className="mx-1">Report a problem</span>
                   </DropdownItem>
                 </DropdownSection>
-                <DropdownItem className="py-4 hover:bg-[#F2F2F2]" onClick={() => modalOpen(SignOutModalKey)}>
+                <DropdownItem className="py-4 hover:bg-[#F2F2F2]" onClick={() => modalOpen(LogoutModalKey)}>
                   <span className="px-2">Log out</span>
                 </DropdownItem>
               </DropdownMenu>
@@ -307,7 +308,7 @@ const Header = () => {
       </div>
       <div className={cn(activeMenu === "Messages" ? "w-[470px]" : "w-[245px]")} />
       <SelectPhotoModal />
-      {/* <SignOutAlert /> */}
+      <LogoutModal />
     </>
   );
 };
@@ -566,45 +567,5 @@ const Notification = () => {
           </div> */}
       </div>
     </div>
-  );
-};
-
-const SignOutModalKey = "SignOut";
-
-const SignOutAlert = () => {
-  const { modalKey, modalClose } = useModalStore();
-  const queryClient = useQueryClient();
-
-  const handleSignOut = async () => {
-    toast.promise(logoutToken(), {
-      loading: "Logging out... 🚪",
-      success: "Logged out successfully! 👋",
-      error: "Failed to log out! 😵",
-    });
-    queryClient.clear();
-    modalClose();
-  };
-
-  return (
-    <Modal isOpen={SignOutModalKey === modalKey} onOpenChange={modalClose}>
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">Sign Out</ModalHeader>
-            <ModalBody>
-              <p>Are you sure you want to sign out?</p>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                No
-              </Button>
-              <Button color="primary" onPress={handleSignOut}>
-                Yes
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
   );
 };

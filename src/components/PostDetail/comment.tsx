@@ -80,11 +80,11 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                     </div>
                   </div>
                   <div className="flex h-5 items-center space-x-2.5">
-                    <span className="text-xs text-gray-500">
+                    <Link href={`/p/${comment.post_id}/c/${comment.id}`} className="text-xs text-gray-500">
                       {comment?.created_at
                         ? formatDistanceToNow(comment?.created_at, { addSuffix: true })
                         : "Unknown time"}
-                    </span>
+                    </Link>
                     {isLoggedIn && (
                       <>
                         <button className="text-xs font-semibold text-neutral-500">0 likes</button>

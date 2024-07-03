@@ -1,5 +1,6 @@
 "use client";
 
+import { postKey } from "@/api/post";
 import { userKey } from "@/api/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserSearchDocument } from "@/gql/graphql";
@@ -23,6 +24,7 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
+import { useNotificationsStore } from "@/stores/notification-store";
 import {
   Badge,
   Button,
@@ -34,15 +36,11 @@ import {
   DropdownTrigger,
   Image,
   Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   Skeleton,
   Spinner,
 } from "@nextui-org/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
 import _ from "lodash";
 import NextImage from "next/image";
 import Link from "next/link";
@@ -51,12 +49,9 @@ import React, { useEffect, useRef } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { toast } from "sonner";
 import SideBarInbox from "./Chats/sidebar-inbox";
+import LogoutModal, { LogoutModalKey } from "./LogoutModal";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
 import { SearchHeaderSkeleton } from "./skeletons";
-import { logoutToken } from "@/actions";
-import { useNotificationsStore } from "@/stores/notification-store";
-import { formatDistanceToNow } from "date-fns";
-import LogoutModal, { LogoutModalKey } from "./LogoutModal";
 
 const HeaderMenu = [
   {
@@ -116,6 +111,7 @@ const Header = () => {
   const [activeMenu, setActiveMenu] = React.useState("");
   const [changeMenu, setChangeMenu] = React.useState(false);
   const { total } = useNotificationsStore();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const currentLink = HeaderMenu.find((item, index) =>
@@ -148,9 +144,21 @@ const Header = () => {
                 height={128}
                 src="/logo.webp"
                 alt="Outstagram Logo"
+                onClick={() => {
+                  queryClient.invalidateQueries({
+                    queryKey: [postKey, "home"],
+                  });
+                }}
               />
             ) : (
-              <InstagramIcon className="w-12 h-12" />
+              <InstagramIcon
+                className="w-12 h-12"
+                onClick={() => {
+                  queryClient.invalidateQueries({
+                    queryKey: [postKey, "home"],
+                  });
+                }}
+              />
             )}
           </Link>
           {/* Menu */}
@@ -185,6 +193,16 @@ const Header = () => {
                     });
 
                     switch (item.name) {
+                      case "Home":
+                        queryClient.invalidateQueries({
+                          queryKey: [postKey, "home"],
+                        });
+                        break;
+                      case "Reels":
+                        queryClient.invalidateQueries({
+                          queryKey: [postKey, "reels"],
+                        });
+                        break;
                       case "New":
                         // modalOpen(CreatePostModalKey);
                         modalOpen(SelectPhotoModalKey);

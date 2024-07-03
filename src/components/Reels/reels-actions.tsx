@@ -34,8 +34,8 @@ const ReelsAction = memo(({ reelAction, isLiked, postPage }: ReelsActionProps) =
           ...authData,
         },
       };
-      if (queryClient.getQueryData([postKey, "reels-page"])) {
-        queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
+      if (queryClient.getQueryData([postKey, "reels"])) {
+        queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
           return {
             ...oldData,
             pages: [

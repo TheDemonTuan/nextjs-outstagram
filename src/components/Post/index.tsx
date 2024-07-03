@@ -60,7 +60,7 @@ const Post = () => {
     hasNextPage,
     hasPreviousPage,
   } = useInfiniteQuery({
-    queryKey: [postKey, "home-page"],
+    queryKey: [postKey, "home"],
     queryFn: async ({ pageParam }) => graphQLClient.request(PostHomePageDocument, { page: pageParam }),
     initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {

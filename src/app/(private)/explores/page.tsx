@@ -125,7 +125,7 @@ const ExplorePage = () => {
             <Fragment key={pageIndex}>
               {sortedPosts.map((post, index) => (
                 <Link
-                  href={`/r/${post.id}`}
+                  href={post.type === PostType.DEFAULT ? `/p/${post.id}` : `/r/${post.id}`}
                   key={post.id}
                   id={`PostMain-${post.id}`}
                   className={

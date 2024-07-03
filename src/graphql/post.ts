@@ -316,6 +316,57 @@ export const PostReel = graphql(`
   }
 `);
 
+export const PostExplores = graphql (`
+    query PostExplores($page: Int!) {
+    postExplores(page: $page) {
+        id
+        user_id
+        caption
+        is_hide_like
+        is_hide_comment
+        privacy
+        type
+        active
+        created_at
+        updated_at
+        deleted_at
+        post_files {
+            id
+            url
+            active
+        }
+        user {
+            id
+            username
+            full_name
+            email
+            phone
+            avatar
+            bio
+            birthday
+            gender
+            role
+            active
+            is_private
+        }
+        post_likes {
+            id
+            post_id
+            user_id
+            is_liked
+        }
+        post_comments {
+            id
+            post_id
+            user_id
+            parent_id
+            content
+            active
+        }
+    }
+  }`
+)
+
 
 export const PostSuggestions = graphql(`
   query PostSuggestions($skipPostID: String!, $limit: Int!) {
@@ -352,3 +403,5 @@ export const PostSuggestions = graphql(`
     }
   }
 `);
+
+

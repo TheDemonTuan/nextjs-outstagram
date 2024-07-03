@@ -241,3 +241,17 @@ export function ReelsSkeleton() {
     </div>
   );
 }
+
+export function ExploresSkeleton() {
+  return (
+    <div className="max-w-5xl mx-5 p-8 xl:mx-auto">
+      <div className="grid grid-cols-3 grid-rows-2 gap-1">
+        <Skeleton className="col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group" />{" "}
+        <Skeleton className="col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group" />{" "}
+        <Skeleton className="col-span-1 row-span-2 relative w-full h-[40rem] group cursor-pointer" />{" "}
+        <Skeleton className="col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group" />{" "}
+        <Skeleton className="col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group" />{" "}
+      </div>
+    </div>
+  );
+}

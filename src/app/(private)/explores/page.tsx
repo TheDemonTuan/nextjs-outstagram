@@ -9,8 +9,9 @@ import { Post, PostExploresDocument } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { useInView } from "react-intersection-observer";
 import { useRouter } from "next/navigation";
-import { FaSlack } from "react-icons/fa6";
 import Link from "next/link";
+import { ExploresSkeleton } from "@/components/skeletons";
+import { Spinner } from "@nextui-org/react";
 
 const ExplorePage = () => {
   const { ref, inView } = useInView();
@@ -76,6 +77,10 @@ const ExplorePage = () => {
     }
   }, [postsData]);
 
+  if (postsIsLoading) {
+    return <ExploresSkeleton />;
+  }
+
   const calculateIndex = (index: number) => {
     const lastDigit = index % 10;
     return lastDigit === 2 || lastDigit === 5;
@@ -101,8 +106,8 @@ const ExplorePage = () => {
                 id={`PostMain-${post.id}`}
                 className={
                   calculateIndex(index) == false
-                    ? "col-span-1 row-span-1 relative cursor-pointer w-full max-h-[20rem] group"
-                    : "col-span-1 row-span-2 relative w-full h-[40rem] group cursor-pointer"
+                    ? "col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group"
+                    : "col-span-1 row-span-2 relative w-full h-[calc(40rem+2px)] group cursor-pointer"
                 }
                 onMouseEnter={() => handleMouseEnter(post.id)}
                 onMouseLeave={handleMouseLeave}>
@@ -123,7 +128,7 @@ const ExplorePage = () => {
                     loop
                     muted
                     width={500}
-                    height={500}
+                    height={640}
                   />
                 )}
                 {post.post_files && post?.post_files?.length > 1 && (
@@ -152,6 +157,29 @@ const ExplorePage = () => {
           </Fragment>
         ))}
       </div>
+      {isFetchingNextPage ? (
+        <div className="flex flex-col items-center gap-2">
+          <Spinner size="lg" />
+        </div>
+      ) : hasNextPage ? (
+        <div className="flex flex-col items-center gap-2">
+          <div ref={ref} />
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        authData && (
+          <div className="flex flex-col my-12 justify-center items-center text-center space-y-4">
+            <Image src="/illo-confirm-refresh-light.png" alt="" className="object-cover" width={100} height={100} />
+            <div className="space-y-1">
+              <div className="text-xl">You&apos;ve completely caught up</div>
+              <div className="text-sm text-neutral-500">You&apos;ve seen all new posts from the past 3 days.</div>
+            </div>
+            <Link href="/" className="text-sm font-semibold text-sky-500 cursor-pointer">
+              View older posts
+            </Link>
+          </div>
+        )
+      )}
     </div>
   );
 };

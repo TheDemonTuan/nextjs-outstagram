@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingTopBar } from "@/components/skeletons";
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -38,9 +39,7 @@ const AuthGuard = ({
     }
   }, [authCanUse, authIsStale, queryClient]);
 
-  return (
-    <>{authCanUse ? children : <Spinner label="Loading..." color="secondary" size="lg" className="w-full h-full" />}</>
-  );
+  return <>{authCanUse ? children : <LoadingTopBar />}</>;
 };
 
 export default AuthGuard;

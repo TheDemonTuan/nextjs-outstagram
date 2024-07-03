@@ -16,12 +16,15 @@ import { graphQLClient } from "@/lib/graphql";
 import { Post, PostFile, PostReelDocument } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "@/components/Post/post-more-options";
+import { useAuth } from "@/hooks/useAuth";
+import Image from "next/image";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
   const currentPage = useRef(1);
   const { ref, inView } = useInView();
   const { modalOpen, setModalData } = useModalStore();
+  const { authData } = useAuth();
 
   const {
     status,
@@ -36,7 +39,7 @@ const ReelsPage = () => {
     hasNextPage,
     hasPreviousPage,
   } = useInfiniteQuery({
-    queryKey: [postKey, "post-reel"],
+    queryKey: [postKey, "reels-page"],
     queryFn: async ({ pageParam }) => graphQLClient.request(PostReelDocument, { page: pageParam }),
     initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {
@@ -102,6 +105,8 @@ const ReelsPage = () => {
         {reelsData?.pages.map((page, pageIndex) => (
           <Fragment key={pageIndex}>
             {page.postReel.map((reel) => {
+              const postLikes = reel?.post_likes?.filter((like) => like?.is_liked);
+              const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
               return (
                 <div key={reel.id} id={`PostMain-${reel.id}`} className="py-10 relative">
                   <div className="pl-3 w-full px-4">
@@ -142,7 +147,11 @@ const ReelsPage = () => {
                           </p>
                         </div>
                       </div>
-                      <ReelsAction reelAction={reel as Post} />
+                      <ReelsAction
+                        reelAction={reel as Post}
+                        isLiked={isUserLiked ?? false}
+                        postPage={pageIndex > 0 ? pageIndex : 0}
+                      />
                     </div>
                   </div>
                 </div>
@@ -151,15 +160,30 @@ const ReelsPage = () => {
           </Fragment>
         ))}
         <div ref={ref}></div>
-        {isFetchingNextPage && (
+        {isFetchingNextPage ? (
           <div className="flex justify-center items-center h-full mr-20 mb-5">
             <LoadingDotsReels />
           </div>
-        )}
-        {hasNextPage && (
+        ) : hasNextPage ? (
           <div className="flex justify-center items-center h-full mr-20 mb-5">
             <LoadingDotsReels />
           </div>
+        ) : (
+          authData && (
+            <div>
+              {" "}
+              <div className="flex flex-col my-12 justify-center items-center text-center space-y-4">
+                <Image src="/illo-confirm-refresh-light.png" alt="" className="object-cover" width={100} height={100} />
+                <div className="space-y-1">
+                  <div className="text-xl">You&apos;ve completely caught up</div>
+                  <div className="text-sm text-neutral-500">You&apos;ve seen all new reels from the past 3 days.</div>
+                </div>
+                <Link href="/" className="text-sm font-semibold text-red-500 cursor-pointer">
+                  View older reels
+                </Link>
+              </div>
+            </div>
+          )
         )}
       </div>
       {reelsData && <PostMoreOptions />}

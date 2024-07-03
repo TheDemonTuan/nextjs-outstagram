@@ -5,7 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
-  const { posts, reels, user, username } = userProfile.userProfile;
+  const { posts } = userProfile.userProfile;
 
   if (!posts || !posts.length) {
     return (
@@ -42,11 +42,6 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
                   height={500}
                   loading="lazy"
                 />
-              )}
-              {postFiles.length === 1 && post?.type && (
-                <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
-                  <ClipIcon />
-                </div>
               )}
               {postFiles?.length > 1 && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">

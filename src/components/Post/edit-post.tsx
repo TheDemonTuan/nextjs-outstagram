@@ -28,7 +28,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { PostEditParams, PostPrivacy, PostResponse, postEdit } from "@/api/post";
+import { PostEditParams, PostPrivacy, PostResponse, postEdit, postKey } from "@/api/post";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { FormControl, FormField, FormItem, Form, FormMessage } from "../ui/form";
@@ -37,6 +37,8 @@ import Carousel from "./carousel";
 import TextareaAutosize from "react-textarea-autosize";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { useAuth } from "@/hooks/useAuth";
+import { PostHomePage } from "@/graphql/post";
 
 export const EditPostModalKey = "EditPost";
 const maxLength = 2200;
@@ -51,6 +53,7 @@ const EditPost = () => {
   const { modalClose, modalKey, modalData } = useModalStore();
 
   const queryClient = useQueryClient();
+  const { authData } = useAuth();
 
   const editForm = useForm<EditPostFormValidate>({
     resolver: zodResolver(EditPostFormValidateSchema),
@@ -80,23 +83,82 @@ const EditPost = () => {
     PostEditParams
   >({
     mutationFn: async (data) => await postEdit(data, modalData.id),
-    onSuccess: (res) => {
+    onSuccess: (editPostData) => {
+      const fakeData = {
+        ...editPostData.data,
+        user: {
+          ...authData,
+        },
+      };
+
+      if (!!queryClient.getQueryData([postKey, "home-page"])) {
+        queryClient.setQueryData([postKey, "home-page"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postHomePage: [
+                    ...page.postHomePage.map((post: any) => {
+                      if (post.id === modalData.id) {
+                        return {
+                          ...post,
+                          privacy: fakeData.privacy,
+                          caption: fakeData.caption,
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, "reels-page"])) {
+        queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postReel: [
+                    ...page.postReel.map((post: any) => {
+                      if (post.id === modalData.id) {
+                        return {
+                          ...post,
+                          privacy: fakeData.privacy,
+                          caption: fakeData.caption,
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
+        queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              privacy: fakeData.privacy,
+              caption: fakeData.caption,
+            },
+          };
+        });
+      }
+
       toast.success("Post updated successfully!");
-      // queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-      //   oldData
-      //     ? {
-      //         ...oldData,
-      //         data: {
-      //           user: {
-      //             ...oldData.data.user,
-      //             // ...res.data,
-      //           },
-      //         },
-      //       }
-      //     : oldData
-      // );
       editForm.reset();
-      modalClose();
+      handleCloseModal();
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Post update failed!");

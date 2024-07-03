@@ -59,11 +59,17 @@ html {
 
 @keyframes likeAnimation {
   0% {
-    transform: rotate(var(--random-rotation, 0deg)) scale(0.75);
+    transform: scale(0.5);
     opacity: 0.5;
   }
   100% {
-    transform: rotate(var(--random-rotation, 0deg)) scale(1);
+    transform: scale(1);
     opacity: 1;
   }
 }
+
+
+
+
+
+

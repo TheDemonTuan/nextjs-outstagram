@@ -2,48 +2,57 @@
 import { useModalStore } from "@/stores/modal-store";
 import { Card, Modal, ModalContent } from "@nextui-org/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { AiOutlineClose } from "react-icons/ai";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { TfiMoreAlt } from "react-icons/tfi";
 import ReelsCommentsHeader from "./reels-comment-header";
 import ReelsComments from "./reels-comments";
+import { useQuery } from "@tanstack/react-query";
+import { postKey } from "@/api/post";
+import { PostByPostIdDocument } from "@/gql/graphql";
+import { graphQLClient } from "@/lib/graphql";
+import { ViewPostSkeleton } from "../skeletons";
+import { useEffect, useMemo } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
-interface Reel {
-  id: string;
-  video_url: string;
-  username: string;
-  full_name: string;
-  caption: string;
-}
-
-const reelsByReelID: Reel[] = [
-  {
-    id: "1",
-    video_url: "https://videos.pexels.com/video-files/6423982/6423982-sd_360_640_29fps.mp4",
-    username: "user1",
-    full_name: "User One",
-    caption: "Caption for user1",
-  },
-  {
-    id: "2",
-    video_url: "https://cdn.pixabay.com/video/2019/05/22/23881-337972830_tiny.mp4",
-    username: "user2",
-    full_name: "User Two",
-    caption: "Caption for user2",
-  },
-  {
-    id: "3",
-    video_url: "https://cdn.pixabay.com/video/2021/04/13/70960-536644237_tiny.mp4",
-    username: "user3",
-    full_name: "User Three",
-    caption: "Caption for user3",
-  },
-];
-
-function ReelsView({ id }: { id: string }) {
+const ReelsView = ({ id }: { id: string }) => {
   const { modalOpen, setModalData, modalKey, modalClose } = useModalStore();
   const router = useRouter();
+  const { authData } = useAuth();
+
+  const {
+    data: reelData,
+    error: reelError,
+    isLoading: reelIsLoading,
+  } = useQuery({
+    queryKey: [postKey, { id }],
+    queryFn: () => graphQLClient.request(PostByPostIdDocument, { postID: id }),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const postLikesFilter = useMemo(() => {
+    return reelData?.postByPostId.post_likes?.filter((like) => like?.is_liked);
+  }, [reelData?.postByPostId.post_likes]);
+
+  const isLiked = useMemo(() => {
+    return postLikesFilter?.some((like) => like?.user_id === authData?.id);
+  }, [postLikesFilter, authData]);
+
+  useEffect(() => {
+    if (reelError) {
+      notFound();
+    }
+  }, [reelError]);
+
+  if (reelIsLoading) {
+    return <ViewPostSkeleton />;
+  }
+
+  if (!reelData) {
+    return <div>Post not found</div>;
+  }
 
   const loopThroughPostsUp = () => {
     console.log("loopThroughPostsUp");
@@ -66,7 +75,7 @@ function ReelsView({ id }: { id: string }) {
         }}
         radius="lg">
         <ModalContent>
-          <div className="lg:flex justify-between w-full h-screen bg-black overflow-auto">
+          <div className="lg:flex justify-between w-full h-screen bg-black">
             <div className="lg:w-[calc(100%-540px)] h-full relative">
               <button
                 onClick={() => {
@@ -98,38 +107,43 @@ function ReelsView({ id }: { id: string }) {
               </div>
 
               <div>
-                <video
-                  className="fixed object-cover w-full my-auto z-[0] h-screen"
-                  src="https://cdn.pixabay.com/video/2020/01/18/31377-386628887_tiny.mp4"
-                />
-
-                <div className="bg-black bg-opacity-70 lg:min-w-[480px] z-10 relative">
+                {reelData?.postByPostId?.post_files && reelData?.postByPostId?.post_files.length > 0 && (
                   <video
-                    autoPlay
-                    controls
-                    loop
-                    muted
-                    className="h-screen mx-auto"
-                    src="https://cdn.pixabay.com/video/2020/01/18/31377-386628887_tiny.mp4"
+                    className="fixed object-cover w-full my-auto z-[0] h-screen"
+                    src={reelData.postByPostId.post_files[0]?.url || ""}
                   />
-                </div>
+                )}
+                {reelData?.postByPostId?.post_files && reelData?.postByPostId?.post_files.length > 0 && (
+                  <div className="bg-black bg-opacity-70 lg:min-w-[480px] z-10 relative">
+                    <video
+                      autoPlay
+                      controls
+                      loop
+                      muted
+                      className="h-screen mx-auto"
+                      src={reelData.postByPostId.post_files[0]?.url || ""}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
             <div
               id="InfoSection"
-              className="lg:max-w-[550px] relative w-full h-full bg-white overflow-y-auto scrollbar-hide">
+              className="lg:max-w-[550px] relative w-full h-full bg-white 
+              overflow-y-auto scrollbar-hide
+              ">
               <div className="pt-5 border-b-1">
-                <ReelsCommentsHeader />
+                <ReelsCommentsHeader reelHeaderData={reelData} isLiked={isLiked ?? false} />
               </div>
 
-              <ReelsComments />
+              <ReelsComments reelComments={reelData.postByPostId.post_comments} postId={reelData.postByPostId.id} />
             </div>
           </div>
         </ModalContent>
       </Modal>
     </>
   );
-}
+};
 
 export default ReelsView;

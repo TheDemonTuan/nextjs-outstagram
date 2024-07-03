@@ -94,91 +94,104 @@ const ExplorePage = () => {
     setHoveredVideo("");
   };
 
+  const sortPosts = (posts: Post[]) => {
+    const sortedPosts = [];
+    let reelIndex = 0;
+    let otherIndex = 0;
+
+    // Separate reel posts and other posts
+    const reelPosts = posts.filter((post) => post.type === PostType.REEL);
+    const otherPosts = posts.filter((post) => post.type !== PostType.REEL);
+
+    for (let i = 0; i < posts.length; i++) {
+      if (calculateIndex(i) && reelIndex < reelPosts.length) {
+        sortedPosts.push(reelPosts[reelIndex++]);
+      } else if (otherIndex < otherPosts.length) {
+        sortedPosts.push(otherPosts[otherIndex++]);
+      } else {
+        sortedPosts.push(reelPosts[reelIndex++] || otherPosts[otherIndex++]);
+      }
+    }
+
+    return sortedPosts;
+  };
+
   return (
     <div className="max-w-5xl mx-5 p-8 xl:mx-auto">
       <div className="grid grid-cols-3 grid-rows-2 gap-1">
-        {postsData?.pages.map((page, pageIndex) => (
-          <Fragment key={pageIndex}>
-            {page.postExplores.map((post, index) => (
-              <Link
-                href={`/r/${post.id}`}
-                key={post.id}
-                id={`PostMain-${post.id}`}
-                className={
-                  calculateIndex(index) == false
-                    ? "col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group"
-                    : "col-span-1 row-span-2 relative w-full h-[calc(40rem+2px)] group cursor-pointer"
-                }
-                onMouseEnter={() => handleMouseEnter(post.id)}
-                onMouseLeave={handleMouseLeave}>
-                {post.type === PostType.DEFAULT ? (
-                  <Image
-                    src={(post.post_files && post?.post_files[0]?.url) || ""}
-                    className="w-full h-full object-cover"
-                    width={500}
-                    height={640}
-                    alt={"image" + post.id}
-                  />
-                ) : (
-                  <video
-                    id={`video-${post.id}`}
-                    src={(post.post_files && post?.post_files[0]?.url) || ""}
-                    className="w-full h-full object-cover"
-                    autoPlay={hoveredVideo === post.id}
-                    loop
-                    muted
-                    width={500}
-                    height={640}
-                  />
-                )}
-                {post.post_files && post?.post_files?.length > 1 && (
-                  <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
-                    <MultiFileIcon className="w-6 h-6" />
+        {postsData?.pages.map((page, pageIndex) => {
+          const sortedPosts = sortPosts(page?.postExplores as Post[]);
+          return (
+            <Fragment key={pageIndex}>
+              {sortedPosts.map((post, index) => (
+                <Link
+                  href={`/r/${post.id}`}
+                  key={post.id}
+                  id={`PostMain-${post.id}`}
+                  className={
+                    calculateIndex(index) == false
+                      ? "col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group"
+                      : "col-span-1 row-span-2 relative w-full h-[calc(40rem+2px)] group cursor-pointer"
+                  }
+                  onMouseEnter={() => handleMouseEnter(post.id)}
+                  onMouseLeave={handleMouseLeave}>
+                  {post.type === PostType.DEFAULT ? (
+                    <Image
+                      src={(post.post_files && post?.post_files[0]?.url) || ""}
+                      className="w-full h-full object-cover"
+                      width={500}
+                      height={640}
+                      alt={"image" + post.id}
+                    />
+                  ) : (
+                    <video
+                      id={`video-${post.id}`}
+                      src={(post.post_files && post?.post_files[0]?.url) || ""}
+                      className="w-full h-full object-cover"
+                      autoPlay={hoveredVideo === post.id}
+                      loop
+                      muted
+                      width={500}
+                      height={640}
+                    />
+                  )}
+                  {post.post_files && post?.post_files?.length > 1 && (
+                    <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                      <MultiFileIcon className="w-6 h-6" />
+                    </div>
+                  )}
+                  {post.post_files && post?.type === PostType.REEL && (
+                    <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                      <ClipIcon className="w-8 h-8" />
+                    </div>
+                  )}
+                  <div className="space-x-5 absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
+                    <div className="flex items-center font-bold space-x-2 mx-2">
+                      <LikeHeartIcon className="text-white fill-white" />
+                      <p className="text-white">{post.post_likes?.length}</p>
+                    </div>
+                    <div className="flex items-center font-bold space-x-2 mx-2">
+                      <MessageCircleIcon className="text-white fill-white" />
+                      <p className="text-white">{post.post_comments?.length}</p>
+                    </div>
                   </div>
-                )}
-                {post.post_files && post?.type === PostType.REEL && (
-                  <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
-                    <ClipIcon className="w-8 h-8" />
-                  </div>
-                )}
-
-                <div className="space-x-5 absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
-                  <div className="flex items-center font-bold space-x-2 mx-2">
-                    <LikeHeartIcon className="text-white fill-white" />
-                    <p className="text-white">{post.post_likes?.length}</p>
-                  </div>
-                  <div className="flex items-center font-bold space-x-2 mx-2">
-                    <MessageCircleIcon className="text-white fill-white" />
-                    <p className="text-white">{post.post_comments?.length}</p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </Fragment>
-        ))}
+                </Link>
+              ))}
+            </Fragment>
+          );
+        })}
       </div>
       {isFetchingNextPage ? (
         <div className="flex flex-col items-center gap-2">
-          <Spinner size="lg" />
+          <Spinner size="md" />
         </div>
       ) : hasNextPage ? (
         <div className="flex flex-col items-center gap-2">
           <div ref={ref} />
-          <Spinner size="lg" />
+          <Spinner size="md" />
         </div>
       ) : (
-        authData && (
-          <div className="flex flex-col my-12 justify-center items-center text-center space-y-4">
-            <Image src="/illo-confirm-refresh-light.png" alt="" className="object-cover" width={100} height={100} />
-            <div className="space-y-1">
-              <div className="text-xl">You&apos;ve completely caught up</div>
-              <div className="text-sm text-neutral-500">You&apos;ve seen all new posts from the past 3 days.</div>
-            </div>
-            <Link href="/" className="text-sm font-semibold text-sky-500 cursor-pointer">
-              View older posts
-            </Link>
-          </div>
-        )
+        authData && <ExploresSkeleton />
       )}
     </div>
   );

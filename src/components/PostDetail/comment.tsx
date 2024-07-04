@@ -34,6 +34,21 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
         if (!comment) return null;
         if (comment?.parent_id && comment?.parent_id !== NIL_UUID) return null;
         const replyComments = comments?.filter((c) => c?.parent_id === comment?.id);
+        let totalReplies = 0;
+        const countReplies = (comments: any, parentId: string) => {
+          let replyCount = 0;
+
+          comments.forEach((comment: any) => {
+            if (comment.parent_id === parentId) {
+              replyCount++;
+              replyCount += countReplies(comments, comment.id);
+            }
+          });
+
+          return replyCount;
+        };
+
+        totalReplies = countReplies(comments, comment?.id);
         // const newReplyComments = comments?.filter((c) => c?.parent_id !== comment?.id);
 
         return (
@@ -123,19 +138,17 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                       <button
                         className="text-xs font-semibold text-neutral-500 active:text-neutral-300"
                         onClick={() => {
-                          replyComments?.length &&
+                          if (totalReplies)
                             setShowReplies((prev) => ({
                               ...prev,
                               [comment.id]: !prev[comment.id],
                             }));
                         }}>
-                        {!!replyComments?.length && showReplies[comment.id]
-                          ? "Hide replies"
-                          : `View replies (${replyComments?.length})`}
+                        {!!totalReplies && showReplies[comment.id] ? "Hide replies" : `View replies (${totalReplies})`}
                       </button>
                     </div>
                   </div>
-                  {!!replyComments?.length && showReplies[comment.id] && (
+                  {!!totalReplies && showReplies[comment.id] && (
                     <ReplyBox comments={comments} parentID={comment.id} handleReplyComment={handleReplyComment} />
                   )}
                 </div>

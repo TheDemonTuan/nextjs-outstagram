@@ -3,6 +3,7 @@ import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/ico
 import Image from "next/image";
 import Link from "next/link";
 import { redirectHard } from "@/actions";
+import { PostType } from "@/api/post";
 
 const PostsGrid = ({ postSuggestions }: { postSuggestions: Post[] }) => {
   if (postSuggestions?.length === 0) {
@@ -20,10 +21,12 @@ const PostsGrid = ({ postSuggestions }: { postSuggestions: Post[] }) => {
         const firstFile = postFiles[0];
         return (
           <Link
-            href={`/p/${post.id}`}
+            href={post.type === PostType.REEL ? `/r/${post.id}` : `/p/${post.id}`}
             onClick={(e) => {
-              e.preventDefault();
-              redirectHard(`/p/${post.id}`);
+              if (post.type !== PostType.REEL) {
+                e.preventDefault();
+                redirectHard(`/p/${post.id}`);
+              }
             }}
             key={post.id}
             className="relative flex items-center justify-center h-44 md:h-64 lg:h-80 group col-span-1">
@@ -42,7 +45,7 @@ const PostsGrid = ({ postSuggestions }: { postSuggestions: Post[] }) => {
                 className="object-cover -z-10 transition group-hover:filter group-hover:blur-[2px] group-hover:brightness-90 "
               />
             )}
-            {postFiles.length === 1 && post.type && (
+            {post.type === PostType.REEL && (
               <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                 <ClipIcon />
               </div>

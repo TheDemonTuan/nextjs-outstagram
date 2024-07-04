@@ -7,6 +7,9 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Radio,
   RadioGroup,
   Spinner,
@@ -26,9 +29,8 @@ import { toast } from "sonner";
 import { useCallback, useMemo, useRef, useState } from "react";
 import Carousel from "./carousel";
 import TextareaAutosize from "react-textarea-autosize";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import dynamic from "next/dynamic";
-import { EmojiClickData } from "emoji-picker-react";
+import { EmojiClickData, EmojiStyle } from "emoji-picker-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { SelectPhotoModalKey } from "./select-photo";
@@ -49,7 +51,6 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
   const { modalClose, modalKey, modalData, modalOpen, setModalData } = useModalStore();
   const { authData } = useAuth();
   const queryClient = useQueryClient();
-  // const captionRef = useRef<HTMLTextAreaElement>(null);
   const [caption, setCaption] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [privacy, setPrivacy] = useState("0");
@@ -60,7 +61,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     FormData
   >({
     mutationFn: async (params) => await postCreate(params),
-    onSuccess: (res) => {
+    onSuccess: () => {
       toast.success("Add new post successfully!");
       queryClient.invalidateQueries({
         queryKey: [postKey, "home"],
@@ -107,7 +108,6 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     modalData.selectedFiles.forEach((file: File) => {
       formData.append("files", file);
     });
-    // formData.append("caption", captionRef.current?.value || "");
     formData.append("caption", caption || "");
     formData.append("privacy", privacy);
     createMutate(formData);
@@ -159,8 +159,8 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
 
                     <Divider orientation="vertical" />
 
-                    <div className="flex flex-col">
-                      <div className="flex items-center mx-3 my-4 gap-3">
+                    <div className="flex flex-col w-2/5">
+                      <div className="flex items-center my-4 gap-3 mx-3">
                         <Avatar className="w-7 h-7 cursor-default">
                           <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar || "")} />
                           <AvatarFallback>
@@ -175,26 +175,30 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                       </div>
 
                       <TextareaAutosize
-                        className="shadow-none resize-none bg-white w-72 mx-4 mr-[-7px] max-h-[170px] h-[170px] border-none focus:outline-none text-sm"
+                        className="shadow-none resize-none bg-white w-72 mx-4 max-h-[170px] h-[170px] border-none focus:outline-none text-sm"
                         placeholder="Write a caption..."
                         autoFocus
                         maxLength={MAX_CHAR}
                         value={caption}
-                        // ref={captionRef}
                         maxRows={7}
                         minRows={7}
                         onChange={handleTextareaChange}
                       />
                       <div className="flex items-center justify-between px-4 py-2">
-                        <Popover>
+                        <Popover placement="bottom-start" showArrow>
                           <PopoverTrigger>
-                            <EmojiLookBottomIcon className="text-lg cursor-pointer w-5 h-5" />
+                            <div>
+                              <EmojiLookBottomIcon className="text-lg cursor-pointer w-5 h-5" />
+                            </div>
                           </PopoverTrigger>
-                          <PopoverContent className="relative w-fit h-fit z-50">
+                          <PopoverContent className="p-0">
                             <Picker
-                              className="absolute z-50 top-0 right-0"
                               lazyLoadEmojis
+                              emojiVersion="5.0"
                               onEmojiClick={(e) => handleEmojiClick(e)}
+                              emojiStyle={EmojiStyle.FACEBOOK}
+                              width={350}
+                              height={350}
                             />
                           </PopoverContent>
                         </Popover>
@@ -204,7 +208,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                       </div>
 
                       <Divider />
-                      <div className="h-[250px] overflow-y-auto mr-[-7px]">
+                      <div className="h-[250px] overflow-y-auto">
                         <div className="flex flex-col px-3">
                           <Accordion type="single" collapsible className="w-full ">
                             <AccordionItem value="item1">
@@ -226,16 +230,6 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                                     </div>
                                     <div className="flex justify-between items-center">
                                       <div className="flex space-x-2 items-center">
-                                        <FaLock size={20} />
-                                        <div className="flex flex-col items-start">
-                                          <div className="font-semibold">Private</div>
-                                          <span className="text-xs text-gray-500">Only me</span>
-                                        </div>
-                                      </div>
-                                      <Radio value={PostPrivacy.PRIVATE.toString()} />
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                      <div className="flex space-x-2 items-center">
                                         <FaUserFriends size={20} />
                                         <div className="flex flex-col items-start">
                                           <div className="font-semibold">Friend</div>
@@ -243,6 +237,16 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                                         </div>
                                       </div>
                                       <Radio value={PostPrivacy.FRIEND.toString()} />
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                      <div className="flex space-x-2 items-center">
+                                        <FaLock size={20} />
+                                        <div className="flex flex-col items-start">
+                                          <div className="font-semibold">Private</div>
+                                          <span className="text-xs text-gray-500">Only me</span>
+                                        </div>
+                                      </div>
+                                      <Radio value={PostPrivacy.PRIVATE.toString()} />
                                     </div>
                                   </RadioGroup>
                                 </div>
@@ -297,11 +301,11 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                 {createIsPending &&
                   (isImage ? (
                     <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
-                      <Spinner size="lg" />
+                      <Spinner size="lg" color="danger" />
                     </div>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
-                      <Spinner size="lg" color="danger" />
+                      <Spinner size="lg" />
                     </div>
                   ))}
               </div>

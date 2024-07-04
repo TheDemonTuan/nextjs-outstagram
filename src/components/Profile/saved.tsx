@@ -3,7 +3,7 @@ import React from "react";
 
 const Saved = () => {
   return (
-    <div className="flex mx-28 flex-col my-5 space-y-3">
+    <div className="flex mx-28 flex-col my-5 space-y-3  max-w-screen-xl">
       <span className="text-xs text-[#737373] mb-10">Only you can see what you&apos;ve saved</span>
 
       <div className="flex flex-col items-center space-y-5">

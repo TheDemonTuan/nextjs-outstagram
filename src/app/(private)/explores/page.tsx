@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import Image from "next/image";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -77,14 +77,38 @@ const ExplorePage = () => {
     }
   }, [postsData]);
 
-  if (postsIsLoading) {
-    return <ExploresSkeleton />;
-  }
-
   const calculateIndex = (index: number) => {
     const lastDigit = index % 10;
     return lastDigit === 2 || lastDigit === 5;
   };
+
+  const sortPosts = useMemo(
+    () => (posts: Post[]) => {
+      const sortedPosts = [];
+      let reelIndex = 0;
+      let otherIndex = 0;
+
+      const reelPosts = posts.filter((post) => post.type === PostType.REEL);
+      const otherPosts = posts.filter((post) => post.type !== PostType.REEL);
+
+      for (let i = 0; i < posts.length; i++) {
+        if (calculateIndex(i) && reelIndex < reelPosts.length) {
+          sortedPosts.push(reelPosts[reelIndex++]);
+        } else if (otherIndex < otherPosts.length) {
+          sortedPosts.push(otherPosts[otherIndex++]);
+        } else {
+          sortedPosts.push(reelPosts[reelIndex++] || otherPosts[otherIndex++]);
+        }
+      }
+
+      return sortedPosts;
+    },
+    []
+  );
+
+  if (postsIsLoading) {
+    return <ExploresSkeleton />;
+  }
 
   const handleMouseEnter = (postId: string) => {
     setHoveredVideo(postId.toString());
@@ -92,28 +116,6 @@ const ExplorePage = () => {
 
   const handleMouseLeave = () => {
     setHoveredVideo("");
-  };
-
-  const sortPosts = (posts: Post[]) => {
-    const sortedPosts = [];
-    let reelIndex = 0;
-    let otherIndex = 0;
-
-    // Separate reel posts and other posts
-    const reelPosts = posts.filter((post) => post.type === PostType.REEL);
-    const otherPosts = posts.filter((post) => post.type !== PostType.REEL);
-
-    for (let i = 0; i < posts.length; i++) {
-      if (calculateIndex(i) && reelIndex < reelPosts.length) {
-        sortedPosts.push(reelPosts[reelIndex++]);
-      } else if (otherIndex < otherPosts.length) {
-        sortedPosts.push(otherPosts[otherIndex++]);
-      } else {
-        sortedPosts.push(reelPosts[reelIndex++] || otherPosts[otherIndex++]);
-      }
-    }
-
-    return sortedPosts;
   };
 
   return (
@@ -182,13 +184,13 @@ const ExplorePage = () => {
         })}
       </div>
       {isFetchingNextPage ? (
-        <div className="flex flex-col items-center gap-2">
-          <Spinner size="md" />
+        <div className="flex flex-col items-center gap-2 my-5">
+          <Spinner size="lg" color="default" />
         </div>
       ) : hasNextPage ? (
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 my-5">
           <div ref={ref} />
-          <Spinner size="md" />
+          <Spinner size="lg" color="default" />
         </div>
       ) : (
         authData && <ExploresSkeleton />

@@ -2,6 +2,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "./ui/card";
 import { Divider, Modal, ModalContent } from "@nextui-org/react";
+import { AiOutlineClose } from "react-icons/ai";
+import { TfiMoreAlt } from "react-icons/tfi";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 export function ViewPostSkeleton() {
   return (
@@ -253,5 +256,193 @@ export function ExploresSkeleton() {
         <Skeleton className="col-span-1 row-span-1 w-full h-[20rem] group" />{" "}
       </div>
     </div>
+  );
+}
+
+export function NotificationsSkeleton() {
+  const skeletonItems = Array.from({ length: 20 }).map((_, index) => (
+    <div
+      key={index}
+      className="flex justify-between items-center hover:bg-gray-100 p-2 rounded-md transition-colors duration-200 ease-in-out">
+      <div className="flex items-center gap-2 px-2">
+        <Skeleton className="h-11 w-11 rounded-full" />
+        <Skeleton className="h-4 w-[260px]" />
+      </div>
+      <Skeleton className="h-12 w-12 rounded-lg" />
+    </div>
+  ));
+
+  return (
+    <div className="max-h-[728px]">
+      <div className="flex flex-col gap-2 py-4">
+        <span className="font-bold text-2xl px-4">Notifications</span>
+        <div className="mx-4">
+          <Skeleton className="h-4 w-[100px] rounded-md" />
+        </div>
+        <div className="flex flex-col gap-2">{skeletonItems}</div>
+      </div>
+    </div>
+  );
+}
+
+export function ReelDetailSkeleton() {
+  return (
+    <>
+      <Modal size="full" isOpen={true} defaultOpen={true} hideCloseButton={true} radius="lg">
+        <ModalContent>
+          <div className="lg:flex justify-between w-full h-screen overflow-auto">
+            <Skeleton className="lg:w-[calc(100%-540px)] bg-black h-full relative rounded-none">
+              <Skeleton className="absolute text-white z-20 m-5 rounded-full bg-gray-400 bg-opacity-40 p-1.5 ">
+                <AiOutlineClose size="27" />
+              </Skeleton>
+
+              <Skeleton className="absolute z-20 right-4 top-6  flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40  p-1.5 ">
+                <TfiMoreAlt size="30" color="#FFFFFF" className="p-1" />
+              </Skeleton>
+
+              <div className="absolute z-20 right-4 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-4">
+                <Skeleton className="flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40 p-1.5 ">
+                  <BiChevronUp size="30" color="#FFFFFF" />
+                </Skeleton>
+
+                <Skeleton className="flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40 p-1.5 ">
+                  <BiChevronDown size="30" color="#FFFFFF" />
+                </Skeleton>
+              </div>
+            </Skeleton>
+
+            <div
+              className="lg:max-w-[550px] relative w-full h-full bg-white 
+              overflow-y-auto scrollbar-hide
+              ">
+              <div className="pt-5 border-b-1">
+                <div className="py-5 mx-6 bg-[#F8F8F8] rounded-xl">
+                  <div className="flex items-center justify-between px-4">
+                    <div className="flex items-center">
+                      <Skeleton className="h-11 w-11 rounded-full" />
+
+                      <div className="ml-3 pt-0.5 flex flex-col space-y-2">
+                        <Skeleton className="h-4 w-[150px] rounded-none" />
+                        <Skeleton className="h-3 w-[250px] rounded-none" />
+                      </div>
+                    </div>
+                    <Skeleton className=" px-[21px] py-1 h-9 w-[130px]  rounded-md" />
+                  </div>
+
+                  <p className="px-4 mt-4 space-y-2">
+                    <Skeleton className="h-3 w-[470px] rounded-none" />
+                    <Skeleton className="h-3 w-[470px] rounded-none" />
+                  </p>
+
+                  <p className="flex item-center gap-2 px-4 mt-2 text-sm">
+                    <Skeleton className="h-2 w-[200px] rounded-none" />
+                  </p>
+                </div>
+
+                <div className="flex items-center px-8  my-4 space-x-7 justify-stretch">
+                  <Skeleton className="rounded-full w-9 h-9" />
+
+                  <Skeleton className="rounded-full w-9 h-9" />
+
+                  <Skeleton className="rounded-full w-9 h-9" />
+
+                  <Skeleton className="rounded-full w-9 h-9" />
+                </div>
+
+                <div className="relative flex items-center mt-1 mx-8 border py-1.5 rounded-lg bg-[#F1F1F2]">
+                  <Skeleton className="flex items-center px-3  w-[400px] h-6 border-none outline-0 bg-[#F1F1F2] cursor-text" />
+                </div>
+                <div className="pb-4 mt-5">
+                  <Skeleton className="z-10 top-0 sticky h-4  w-[150px] rounded-none mx-8 " />
+                </div>
+              </div>
+
+              <div className="relative z-0 w-full h-[calc(100%-273px)] overflow-y-auto scrollbar-hide cursor-pointer">
+                <div className="mx-6 mt-5">
+                  {" "}
+                  <div className="group p-3 px-3.5 flex items-start justify-between space-x-2.5 w-full">
+                    <div className="flex items-start">
+                      <Skeleton className="w-8 h-8 rounded-full" />
+
+                      <div className="space-y-1 mx-3">
+                        <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
+                          <Skeleton className="h-3 w-[400px] rounded-none" />
+                        </div>
+                        <div className="flex h-5 items-center space-x-2.5">
+                          <Skeleton className="h-3 w-[200px] rounded-none" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="group p-3 px-3.5 flex items-start justify-between space-x-2.5 w-full">
+                    <div className="flex items-start">
+                      <Skeleton className="w-8 h-8 rounded-full" />
+
+                      <div className="space-y-1 mx-3">
+                        <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
+                          <Skeleton className="h-3 w-[400px] rounded-none" />
+                        </div>
+                        <div className="flex h-5 items-center space-x-2.5">
+                          <Skeleton className="h-3 w-[200px] rounded-none" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="group p-3 px-3.5 flex items-start justify-between space-x-2.5 w-full">
+                    <div className="flex items-start">
+                      <Skeleton className="w-8 h-8 rounded-full" />
+
+                      <div className="space-y-1 mx-3">
+                        <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
+                          <Skeleton className="h-3 w-[400px] rounded-none" />
+                        </div>
+                        <div className="flex h-5 items-center space-x-2.5">
+                          <Skeleton className="h-3 w-[200px] rounded-none" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="group p-3 px-3.5 flex items-start justify-between space-x-2.5 w-full">
+                    <div className="flex items-start">
+                      <Skeleton className="w-8 h-8 rounded-full" />
+
+                      <div className="space-y-1 mx-3">
+                        <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
+                          <Skeleton className="h-3 w-[400px] rounded-none" />
+                        </div>
+                        <div className="flex h-5 items-center space-x-2.5">
+                          <Skeleton className="h-3 w-[200px] rounded-none" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="group p-3 px-3.5 flex items-start justify-between space-x-2.5 w-full">
+                    <div className="flex items-start">
+                      <Skeleton className="w-8 h-8 rounded-full" />
+
+                      <div className="space-y-1 mx-3">
+                        <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
+                          <Skeleton className="h-3 w-[400px] rounded-none" />
+                        </div>
+                        <div className="flex h-5 items-center space-x-2.5">
+                          <Skeleton className="h-3 w-[200px] rounded-none" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center bottom-0 h-[85px] lg:max-w-[550px] w-full py-5 px-8 border-t-1 sticky z-50 mt-auto">
+                <Skeleton
+                  className=" relative flex items-center rounded-lg h-10 w-full lg:max-w-[550px]  mt-auto 
+                    "
+                />
+              </div>
+            </div>
+          </div>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

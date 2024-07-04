@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { postKey } from "@/api/post";
 import { PostByPostIdDocument } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
-import { ViewPostSkeleton } from "../skeletons";
+import { ReelDetailSkeleton } from "../skeletons";
 import { useEffect, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -47,11 +47,11 @@ const ReelsView = ({ id }: { id: string }) => {
   }, [reelError]);
 
   if (reelIsLoading) {
-    return <ViewPostSkeleton />;
+    return <ReelDetailSkeleton />;
   }
 
   if (!reelData) {
-    return <div>Post not found</div>;
+    return <div>Reel not found</div>;
   }
 
   const loopThroughPostsUp = () => {

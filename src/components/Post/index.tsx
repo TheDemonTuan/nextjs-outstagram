@@ -304,15 +304,13 @@ const Post = () => {
           </Fragment>
         ))}
         {isFetchingNextPage ? (
-          <div className="flex flex-col items-center gap-2">
-            <PostsHomeSkeleton />
-            <PostsHomeSkeleton />
+          <div className="flex flex-col items-center gap-2 mt-6">
+            <Spinner size="lg" color="default" />
           </div>
         ) : hasNextPage ? (
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 mt-6">
             <div ref={ref} />
-            <PostsHomeSkeleton />
-            <PostsHomeSkeleton />
+            <Spinner size="lg" color="default" />
           </div>
         ) : (
           authData && (

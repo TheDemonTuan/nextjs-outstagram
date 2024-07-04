@@ -18,6 +18,7 @@ import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "@/components/Post/post-more-options";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -25,6 +26,7 @@ const ReelsPage = () => {
   const { ref, inView } = useInView();
   const { modalOpen, setModalData } = useModalStore();
   const { authData } = useAuth();
+  const router = useRouter();
 
   const {
     status,
@@ -99,6 +101,10 @@ const ReelsPage = () => {
     setHoveredVideo("");
   };
 
+  const handleVideoClick = (reelId: string) => {
+    router.push(`/r/${reelId}`);
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center max-w-screen-2xl mx-auto">
@@ -115,7 +121,9 @@ const ReelsPage = () => {
                         className="relative h-[633px] max-w-[355px] flex items-center rounded-xl bg-black border-white cursor-pointer"
                         onMouseEnter={() => handleMouseEnter(reel.id)}
                         onMouseLeave={handleMouseLeave}>
-                        <Link href={`/r/${reel.id}`} className="h-[633px] max-w-[355px]">
+                        <div
+                          className="h-[633px] max-w-[355px] cursor-pointer"
+                          onClick={() => handleVideoClick(reel.id)}>
                           <video
                             id={`video-${reel.id}`}
                             autoPlay
@@ -125,7 +133,7 @@ const ReelsPage = () => {
                             className="object-cover rounded-xl mx-auto h-full"
                             src={reel.post_files?.[0]?.url ?? ""}
                           />
-                        </Link>
+                        </div>
                         {hoveredVideo === reel.id && (
                           <div
                             className="absolute top-3 right-3 z-10"
@@ -137,7 +145,9 @@ const ReelsPage = () => {
                           </div>
                         )}
                         <div
-                          className={`absolute bottom-2 left-3 text-white ${hoveredVideo === reel.id ? "pb-14" : ""}`}>
+                          className={`absolute left-3 text-white ${
+                            hoveredVideo === reel.id ? "bottom-16" : "bottom-2"
+                          }`}>
                           <div className="font-medium hover:underline cursor-pointer pb-2">{reel.user?.username}</div>
                           <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">{reel.caption}</p>
                           <p className="text-[14px] pb-1 flex items-center text-white">
@@ -172,7 +182,7 @@ const ReelsPage = () => {
           authData && (
             <div>
               {" "}
-              <div className="flex flex-col my-12 justify-center items-center text-center space-y-4">
+              <div className="flex flex-col py-10 justify-center items-center text-center space-y-4 mr-20 border-t-1 w-[550px]">
                 <Image src="/illo-confirm-refresh-light.png" alt="" className="object-cover" width={100} height={100} />
                 <div className="space-y-1">
                   <div className="text-xl">You&apos;ve completely caught up</div>

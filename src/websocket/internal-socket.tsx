@@ -1,4 +1,5 @@
 import { friendKey } from "@/api/friend";
+import { postKey } from "@/api/post";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
@@ -7,7 +8,7 @@ import { usePusherStore } from "@/stores/pusher-store";
 import { Button, Spinner } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import React, { MutableRefObject, RefObject, useEffect } from "react";
+import React, { MutableRefObject, RefObject, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import useSound from "use-sound";
 
@@ -55,6 +56,14 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
                   </div>
                 </div>
               </div>
+              <div className="flex border-l border-gray-200">
+                <Link
+                  href={`/${data.username}`}
+                  onClick={() => toast.dismiss(t.id)}
+                  className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  View
+                </Link>
+              </div>
             </div>
           ));
           queryClient.invalidateQueries({
@@ -83,8 +92,32 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
                   </div>
                 </div>
               </div>
+              <div className="flex border-l border-gray-200">
+                <Link
+                  href={`/${data.postType === "Normal" ? "p" : "r"}/${data.postID}`}
+                  onClick={() => toast.dismiss(t.id)}
+                  className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  View
+                </Link>
+              </div>
             </div>
           ));
+          const fakeLikeData = {
+            ...data.postLike,
+            user: {
+              ...authData,
+            },
+          };
+          queryClient.setQueryData([postKey, { id: data.postID }], (oldData: any) => {
+            const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== data.userID);
+            return {
+              ...oldData,
+              postByPostId: {
+                ...oldData.postByPostId,
+                post_likes: [fakeLikeData, ...newLikes],
+              },
+            };
+          });
           break;
         case "post-comment":
           toast.custom((t) => (
@@ -108,8 +141,38 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
                   </div>
                 </div>
               </div>
+              <div className="flex border-l border-gray-200">
+                <Link
+                  href={`/${data.postType === "Normal" ? "p" : "r"}/${data.postID}`}
+                  onClick={() => toast.dismiss(t.id)}
+                  className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  View
+                </Link>
+              </div>
             </div>
           ));
+          const fakeCommentData = {
+            ...data.postComment,
+            user: {
+              avatar: data.avatar,
+              username: data.username,
+            },
+            parent: {
+              id: data.parentID,
+              user: {
+                username: data.parentUsername,
+              },
+            },
+          };
+          queryClient.setQueryData([postKey, { id: data.postID }], (oldData: any) => {
+            return {
+              ...oldData,
+              postByPostId: {
+                ...oldData.postByPostId,
+                post_comments: [fakeCommentData, ...(oldData.postByPostId.post_comments || [])],
+              },
+            };
+          });
           break;
         default:
           break;

@@ -56,15 +56,6 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
 
       if (!!queryClient.getQueryData([postKey, { id: postID }])) {
         queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
-          if (!oldData.postByPostId.post_likes?.length) {
-            return {
-              ...oldData,
-              postByPostId: {
-                ...oldData.postByPostId,
-                post_likes: [fakeData],
-              },
-            };
-          }
           const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== authData?.id);
           return {
             ...oldData,

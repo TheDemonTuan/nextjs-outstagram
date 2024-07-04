@@ -50,7 +50,7 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
       <NextUIProvider navigate={router.push}>
         <PrimeReactProvider value={{ unstyled: true, pt: Tailwind }}>{children}</PrimeReactProvider>
       </NextUIProvider>
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" />
     </QueryClientProvider>
   );
 };

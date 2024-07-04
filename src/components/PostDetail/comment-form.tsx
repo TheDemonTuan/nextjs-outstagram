@@ -2,14 +2,13 @@ import { PostCommentByPostIDParams, postCommentByPostId, postKey } from "@/api/p
 import { PostComment } from "@/api/post_comment";
 import { PostByPostIdQuery } from "@/gql/graphql";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Popover, PopoverContent, PopoverTrigger, Spinner } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { EmojiClickData } from "emoji-picker-react";
+import { EmojiClickData, EmojiStyle } from "emoji-picker-react";
 import dynamic from "next/dynamic";
 import { BsEmojiAstonished } from "react-icons/bs";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useCommentStore } from "@/stores/comment-store";
@@ -56,21 +55,24 @@ const CommentForm = ({ postId }: { postId: string }) => {
     },
   });
 
-  const fakeData = useCallback((commentPostData: ApiSuccessResponse<PostComment>) => {
-    return {
-      ...commentPostData.data,
-      user: {
-        avatar: getUserAvatarURL(authData?.avatar || ""),
-        username: authData?.username,
-      },
-      parent: {
-        id: parentID,
+  const fakeData = useCallback(
+    (commentPostData: ApiSuccessResponse<PostComment>) => {
+      return {
+        ...commentPostData.data,
         user: {
-          username: replyUsername,
+          avatar: getUserAvatarURL(authData?.avatar || ""),
+          username: authData?.username,
         },
-      },
-    };
-  }, [authData?.avatar, authData?.username, parentID, replyUsername]);
+        parent: {
+          id: parentID,
+          user: {
+            username: replyUsername,
+          },
+        },
+      };
+    },
+    [authData?.avatar, authData?.username, parentID, replyUsername]
+  );
 
   useEffect(() => {
     textareaRef.current?.focus();
@@ -112,12 +114,20 @@ const CommentForm = ({ postId }: { postId: string }) => {
 
   return (
     <div className="flex items-center space-x-2 px-5 p-2">
-      <Popover>
+      <Popover placement="top-start" showArrow={true}>
         <PopoverTrigger>
-          <BsEmojiAstonished className="text-lg cursor-pointer" size={20} />
+          <div className="hover:opacity-50">
+            {" "}
+            <BsEmojiAstonished className="text-lg cursor-pointer" size={20} />
+          </div>
         </PopoverTrigger>
-        <PopoverContent className="relative w-fit h-fit">
-          <Picker className="" lazyLoadEmojis onEmojiClick={(e) => handleEmojiClick(e)} />
+        <PopoverContent className="p-0">
+          <Picker
+            lazyLoadEmojis
+            emojiVersion="5.0"
+            onEmojiClick={(e) => handleEmojiClick(e)}
+            emojiStyle={EmojiStyle.FACEBOOK}
+          />
         </PopoverContent>
       </Popover>
       <TextareaAutosize

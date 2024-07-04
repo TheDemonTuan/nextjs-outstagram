@@ -7,6 +7,9 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Radio,
   RadioGroup,
   Spinner,
@@ -31,7 +34,7 @@ import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { PostEditParams, PostPrivacy, PostResponse, postEdit, postKey } from "@/api/post";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
-import { FormControl, FormField, FormItem, Form, FormMessage } from "../ui/form";
+
 import { ScrollArea } from "../ui/scroll-area";
 import Carousel from "./carousel";
 import TextareaAutosize from "react-textarea-autosize";
@@ -39,6 +42,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useAuth } from "@/hooks/useAuth";
 import { PostHomePage } from "@/graphql/post";
+import { EmojiClickData, EmojiStyle } from "emoji-picker-react";
+import dynamic from "next/dynamic";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 
 export const EditPostModalKey = "EditPost";
 const maxLength = 2200;
@@ -48,6 +54,13 @@ interface PostFile {
   url: string;
   type: string;
 }
+
+const Picker = dynamic(
+  () => {
+    return import("emoji-picker-react");
+  },
+  { ssr: false }
+);
 
 const EditPost = () => {
   const { modalClose, modalKey, modalData } = useModalStore();
@@ -252,15 +265,32 @@ const EditPost = () => {
                                   autoFocus
                                   required
                                 />
-
-                                <div className="flex items-center justify-between px-4 py-2">
-                                  <span className="left-2 bottom-2 text-lg ">
-                                    <EmojiLookBottomIcon className="w-5 h-5 cursor-pointer" />
-                                  </span>
-                                  <span className="bottom-2 right-2 text-xs">{field.value?.length} / 2200</span>
-                                </div>
                               </>
                             </FormControl>
+
+                            <div className="flex items-center justify-between px-4 py-2">
+                              <Popover placement="bottom-end" showArrow>
+                                <PopoverTrigger>
+                                  <div>
+                                    <EmojiLookBottomIcon className="text-lg  w-5 h-5 cursor-pointer" />
+                                  </div>
+                                </PopoverTrigger>
+                                <PopoverContent className="p-0">
+                                  <Picker
+                                    lazyLoadEmojis
+                                    emojiVersion="5.0"
+                                    onEmojiClick={(e) => {
+                                      editForm.setValue("caption", editForm.getValues("caption") + e.emoji);
+                                    }}
+                                    emojiStyle={EmojiStyle.FACEBOOK}
+                                    width={350}
+                                    height={350}
+                                  />
+                                </PopoverContent>
+                              </Popover>
+
+                              <span className="bottom-2 right-2 text-xs">{field.value?.length} / 2200</span>
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}

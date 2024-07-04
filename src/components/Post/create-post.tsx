@@ -159,8 +159,8 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
 
                     <Divider orientation="vertical" />
 
-                    <div className="flex flex-col">
-                      <div className="flex items-center mx-3 my-4 gap-3">
+                    <div className="flex flex-col w-2/5">
+                      <div className="flex items-center my-4 gap-3 mx-3">
                         <Avatar className="w-7 h-7 cursor-default">
                           <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar || "")} />
                           <AvatarFallback>
@@ -175,7 +175,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                       </div>
 
                       <TextareaAutosize
-                        className="shadow-none resize-none bg-white w-72 mx-4 mr-[-7px] max-h-[170px] h-[170px] border-none focus:outline-none text-sm"
+                        className="shadow-none resize-none bg-white w-72 mx-4 max-h-[170px] h-[170px] border-none focus:outline-none text-sm"
                         placeholder="Write a caption..."
                         autoFocus
                         maxLength={MAX_CHAR}
@@ -208,7 +208,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                       </div>
 
                       <Divider />
-                      <div className="h-[250px] overflow-y-auto mr-[-7px]">
+                      <div className="h-[250px] overflow-y-auto">
                         <div className="flex flex-col px-3">
                           <Accordion type="single" collapsible className="w-full ">
                             <AccordionItem value="item1">

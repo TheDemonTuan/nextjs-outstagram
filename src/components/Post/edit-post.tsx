@@ -208,7 +208,7 @@ const EditPost = () => {
       hideCloseButton={true}
       isDismissable={!postEditIsLoading}
       size="3xl">
-      <ModalContent className="h-[545px]">
+      <ModalContent className="h-[545px] scrollbar-hide">
         {(onClose) => (
           <div
             className={`cursor-pointer items-center p-0  ${postEditIsLoading ? "pointer-events-none opacity-50" : ""}`}>
@@ -233,124 +233,122 @@ const EditPost = () => {
 
                 <Divider orientation="vertical" />
                 <Form {...editForm}>
-                  <form onSubmit={editForm.handleSubmit(onSubmit)} id="editFormID">
-                    <div className="flex flex-col">
-                      <div className="flex items-center mx-3 my-4 gap-3">
-                        <Avatar className="w-7 h-7 cursor-default">
-                          <AvatarImage className="object-cover" src={getUserAvatarURL(modalData.user.avatar)} />
-                          <AvatarFallback>
-                            <Spinner size="sm" />
-                          </AvatarFallback>
-                        </Avatar>
+                  <form onSubmit={editForm.handleSubmit(onSubmit)} id="editFormID" className="w-2/5 flex flex-col">
+                    <div className="flex items-center mx-3 my-4 gap-3">
+                      <Avatar className="w-7 h-7 cursor-default">
+                        <AvatarImage className="object-cover" src={getUserAvatarURL(modalData.user.avatar)} />
+                        <AvatarFallback>
+                          <Spinner size="sm" />
+                        </AvatarFallback>
+                      </Avatar>
 
-                        <div className="flex items-center space-x-1 cursor-text">
-                          <span className="font-semibold text-sm">{modalData.user.username}</span>
-                          {modalData.user.role && <VerifiedIcon className="w-3 h-3" />}
-                        </div>
+                      <div className="flex items-center space-x-1 cursor-text">
+                        <span className="font-semibold text-sm">{modalData.user.username}</span>
+                        {modalData.user.role && <VerifiedIcon className="w-3 h-3" />}
                       </div>
-                      <FormField
-                        control={editForm.control}
-                        name="caption"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <>
-                                <TextareaAutosize
-                                  {...field}
-                                  className="shadow-none bg-white w-72 mx-4 mr-[-10px] max-h-[170px] h-[170px] border-none focus:outline-none text-sm resize-none"
-                                  placeholder="Write a caption..."
-                                  maxLength={maxLength}
-                                  minRows={7}
-                                  maxRows={7}
-                                  autoFocus
-                                  required
-                                />
-                              </>
-                            </FormControl>
+                    </div>
+                    <FormField
+                      control={editForm.control}
+                      name="caption"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <>
+                              <TextareaAutosize
+                                {...field}
+                                className="shadow-none bg-white w-72 mx-4 max-h-[170px] h-[170px] border-none focus:outline-none text-sm resize-none"
+                                placeholder="Write a caption..."
+                                maxLength={maxLength}
+                                minRows={7}
+                                maxRows={7}
+                                autoFocus
+                                required
+                              />
+                            </>
+                          </FormControl>
 
-                            <div className="flex items-center justify-between px-4 py-2">
-                              <Popover placement="bottom-end" showArrow>
-                                <PopoverTrigger>
-                                  <div>
-                                    <EmojiLookBottomIcon className="text-lg  w-5 h-5 cursor-pointer" />
-                                  </div>
-                                </PopoverTrigger>
-                                <PopoverContent className="p-0">
-                                  <Picker
-                                    lazyLoadEmojis
-                                    emojiVersion="5.0"
-                                    onEmojiClick={(e) => {
-                                      editForm.setValue("caption", editForm.getValues("caption") + e.emoji);
-                                    }}
-                                    emojiStyle={EmojiStyle.FACEBOOK}
-                                    width={350}
-                                    height={350}
-                                  />
-                                </PopoverContent>
-                              </Popover>
-
-                              <span className="bottom-2 right-2 text-xs">{field.value?.length} / 2200</span>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />{" "}
-                      <Divider />
-                      <div className="h-[250px] overflow-y-auto mr-[-7px]">
-                        <div className="flex flex-col px-3">
-                          <Accordion type="single" collapsible className="w-full ">
-                            <AccordionItem value="item1">
-                              <AccordionTrigger className="font-semibold text-sm">Privacy</AccordionTrigger>
-                              <AccordionContent>
-                                <div className="flex flex-col space-y-3">
-                                  <FormField
-                                    control={editForm.control}
-                                    name="privacy"
-                                    render={({ field }) => (
-                                      <RadioGroup
-                                        {...field}
-                                        defaultValue={field.value}
-                                        onValueChange={(value) => field.onChange(value)}>
-                                        <div className="flex justify-between items-center">
-                                          <div className="flex space-x-2 items-center">
-                                            <MdOutlinePublic size={20} />
-                                            <div className="flex flex-col items-start">
-                                              <div className="font-semibold">Public</div>
-                                              <span className="text-xs text-gray-500">
-                                                No matter who is on or off Outstagram
-                                              </span>
-                                            </div>
-                                          </div>
-                                          <Radio value={PostPrivacy.PUBLIC.toString()} />
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                          <div className="flex space-x-2 items-center">
-                                            <FaLock size={20} />
-                                            <div className="flex flex-col items-start">
-                                              <div className="font-semibold">Private</div>
-                                              <span className="text-xs text-gray-500">Only me</span>
-                                            </div>
-                                          </div>
-                                          <Radio value={PostPrivacy.PRIVATE.toString()} />
-                                        </div>
-                                        <div className="flex justify-between items-center">
-                                          <div className="flex space-x-2 items-center">
-                                            <FaUserFriends size={20} />
-                                            <div className="flex flex-col items-start">
-                                              <div className="font-semibold">Friend</div>
-                                              <span className="text-xs text-gray-500">Your friends on Outstagram</span>
-                                            </div>
-                                          </div>
-                                          <Radio value={PostPrivacy.FRIEND.toString()} />
-                                        </div>
-                                      </RadioGroup>
-                                    )}
-                                  />
+                          <div className="flex items-center justify-between px-4 py-2">
+                            <Popover placement="bottom-end" showArrow>
+                              <PopoverTrigger>
+                                <div>
+                                  <EmojiLookBottomIcon className="text-lg  w-5 h-5 cursor-pointer" />
                                 </div>
-                              </AccordionContent>
-                            </AccordionItem>
-                          </Accordion>
-                        </div>
+                              </PopoverTrigger>
+                              <PopoverContent className="p-0">
+                                <Picker
+                                  lazyLoadEmojis
+                                  emojiVersion="5.0"
+                                  onEmojiClick={(e) => {
+                                    editForm.setValue("caption", editForm.getValues("caption") + e.emoji);
+                                  }}
+                                  emojiStyle={EmojiStyle.FACEBOOK}
+                                  width={350}
+                                  height={350}
+                                />
+                              </PopoverContent>
+                            </Popover>
+
+                            <span className="bottom-2 right-2 text-xs">{field.value?.length} / 2200</span>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />{" "}
+                    <Divider />
+                    <div className="h-[250px] overflow-y-auto">
+                      <div className="flex flex-col px-3">
+                        <Accordion type="single" collapsible className="w-full ">
+                          <AccordionItem value="item1">
+                            <AccordionTrigger className="font-semibold text-sm">Privacy</AccordionTrigger>
+                            <AccordionContent>
+                              <div className="flex flex-col space-y-3">
+                                <FormField
+                                  control={editForm.control}
+                                  name="privacy"
+                                  render={({ field }) => (
+                                    <RadioGroup
+                                      {...field}
+                                      defaultValue={field.value}
+                                      onValueChange={(value) => field.onChange(value)}>
+                                      <div className="flex justify-between items-center">
+                                        <div className="flex space-x-2 items-center">
+                                          <MdOutlinePublic size={20} />
+                                          <div className="flex flex-col items-start">
+                                            <div className="font-semibold">Public</div>
+                                            <span className="text-xs text-gray-500">
+                                              No matter who is on or off Outstagram
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <Radio value={PostPrivacy.PUBLIC.toString()} />
+                                      </div>
+                                      <div className="flex justify-between items-center">
+                                        <div className="flex space-x-2 items-center">
+                                          <FaLock size={20} />
+                                          <div className="flex flex-col items-start">
+                                            <div className="font-semibold">Private</div>
+                                            <span className="text-xs text-gray-500">Only me</span>
+                                          </div>
+                                        </div>
+                                        <Radio value={PostPrivacy.PRIVATE.toString()} />
+                                      </div>
+                                      <div className="flex justify-between items-center">
+                                        <div className="flex space-x-2 items-center">
+                                          <FaUserFriends size={20} />
+                                          <div className="flex flex-col items-start">
+                                            <div className="font-semibold">Friend</div>
+                                            <span className="text-xs text-gray-500">Your friends on Outstagram</span>
+                                          </div>
+                                        </div>
+                                        <Radio value={PostPrivacy.FRIEND.toString()} />
+                                      </div>
+                                    </RadioGroup>
+                                  )}
+                                />
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
                       </div>
                     </div>
                   </form>

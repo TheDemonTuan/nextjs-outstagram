@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BiLoaderCircle } from "react-icons/bi";
-import SingleComment from "./reels-single-comment";
 import TextareaAutosize from "react-textarea-autosize";
 import { BsEmojiAstonished } from "react-icons/bs";
 import { PostByPostIdQuery, PostComment } from "@/gql/graphql";
@@ -16,6 +15,7 @@ import { EmojiClickData } from "emoji-picker-react";
 import { Spinner } from "@nextui-org/react";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import ViewComments from "../PostDetail/comment";
 
 const Picker = dynamic(
   () => {
@@ -125,7 +125,9 @@ const ReelsComments = ({
     <>
       <div className="relative z-0 w-full h-[calc(100%-273px)] overflow-y-auto scrollbar-hide cursor-pointer">
         {reelComments && reelComments?.length > 0 ? (
-          <SingleComment singleComments={reelComments} />
+          <div className="mx-6 mt-5">
+            <ViewComments comments={reelComments} />
+          </div>
         ) : (
           <div className="flex flex-col items-center gap-1.5 h-[250px] justify-center">
             <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>

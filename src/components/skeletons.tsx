@@ -118,7 +118,7 @@ export function SuggestionsSkeleton() {
 
 export function ProfileSkeleton() {
   return (
-    <div className="flex flex-col max-full mt-9 mx-16 mb-40">
+    <div className="flex flex-col mt-9 mx-28 mb-40 max-w-screen-xl">
       <div className="flex flex-row mx-28">
         <div className="mt-2 mx-16">
           <div className="rounded-full w-40 h-40">
@@ -177,7 +177,7 @@ export function ProfileSkeleton() {
       <div className="w-full">
         <hr className="border-gray-300 mt-14 border-t mx-28" />
       </div>
-      <div className="flex justify-center gap-10 mb-1">
+      <div className="flex justify-center mx-28 gap-10 mb-1 max-w-screen-xl">
         <button className="py-4 mx-2 text-sm font-normal flex gap-2">
           <Skeleton className="w-[72px] h-[22px] rounded-md " />
         </button>

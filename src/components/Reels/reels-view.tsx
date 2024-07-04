@@ -75,7 +75,7 @@ const ReelsView = ({ id }: { id: string }) => {
         }}
         radius="lg">
         <ModalContent>
-          <div className="lg:flex justify-between w-full h-screen bg-black">
+          <div className="lg:flex justify-between w-full h-screen bg-black overflow-auto">
             <div className="lg:w-[calc(100%-540px)] h-full relative">
               <button
                 onClick={() => {
@@ -129,7 +129,6 @@ const ReelsView = ({ id }: { id: string }) => {
             </div>
 
             <div
-              id="InfoSection"
               className="lg:max-w-[550px] relative w-full h-full bg-white 
               overflow-y-auto scrollbar-hide
               ">

@@ -5,7 +5,7 @@ import { ImMusic } from "react-icons/im";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import HighlightHashtags from "../highlight-hashtags";
 import { BookMarkReelsCommentIcon, LikeHeartIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
-import { Friend, PostByPostIdQuery } from "@/gql/graphql";
+import { Friend, Post, PostByPostIdQuery } from "@/gql/graphql";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { formatDistanceToNow } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ import { postKey } from "@/api/post";
 import { toast } from "sonner";
 import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
+import ReelReact from "./reel-react";
 
 const hostLocal = "http://localhost:3001";
 interface ReelsHeaderCommentsProps {
@@ -185,39 +186,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
         </p>
       </div>
 
-      <div className="flex items-center px-8 mt-4 space-x-2 justify-stretch">
-        <div className="pb-4 text-center flex items-center">
-          <button className="rounded-full bg-gray-200 p-2 cursor-pointer" onClick={handleLikePost}>
-            {isLiked ? (
-              <LikeHeartIcon className="w-5 h-5 hover:stroke-gray115 cursor-pointer text-red-500" />
-            ) : (
-              <LikeHeartIcon className="w-5 h-5 hover:stroke-gray115 cursor-pointer text-black" />
-            )}
-          </button>
-          <span className=" pl-2 pr-4 text-sm text-gray-800 font-semibold ">{reelData.post_likes?.length}</span>
-        </div>
-
-        <div className="pb-4 text-center flex items-center">
-          <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
-            <MessageCircleIcon width={22} height={22} fill="#00000" />
-          </div>
-          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">{reelData.post_comments?.length}</span>
-        </div>
-
-        <div className="pb-4 text-center flex items-center">
-          <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
-            <BookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
-          </div>
-          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">185</span>
-        </div>
-
-        <div className="pb-4 text-center flex items-center">
-          <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
-            <ShareReelsIcon width={22} height={22} />
-          </div>
-          <span className="text-sm pl-2 text-gray-800 font-semibold">185</span>
-        </div>
-      </div>
+      <ReelReact reelReact={reelHeaderData.postByPostId as Post} isLiked={isLiked ?? false} orientation="horizontal" />
       <div className="relative flex items-center mt-1 mx-8 border py-1.5 rounded-lg bg-[#F1F1F2]">
         <input
           readOnly

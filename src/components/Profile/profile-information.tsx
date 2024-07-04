@@ -26,7 +26,7 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
 
   return (
     <>
-      <div className="flex flex-row mx-28">
+      <div className="flex flex-row mx-28 max-w-screen-xl">
         <div className="mt-2 mx-16">
           <div
             className={`rounded-full w-40 h-40 ${isCurrentUser ? "cursor-pointer" : ""}`}

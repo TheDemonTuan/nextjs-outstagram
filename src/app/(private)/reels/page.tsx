@@ -1,24 +1,26 @@
 "use client";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import { Spinner } from "@nextui-org/react";
+import { Spinner, Tooltip } from "@nextui-org/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import ReelsAction from "@/components/Reels/reels-actions";
 import { useInView } from "react-intersection-observer";
-import { MoreOptionReelsIcon } from "@/icons";
-import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
+import { MoreOptionReelsIcon, PlusReelsIcon } from "@/icons";
+import { AiFillHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PostType, postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
-import { Post, PostFile, PostReelDocument } from "@/gql/graphql";
+import { Friend, Post, PostFile, PostReelDocument } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "@/components/Post/post-more-options";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import SummaryProfile from "@/components/summary-profile";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import ReelReact from "@/components/Reels/reel-react";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -161,11 +163,45 @@ const ReelsPage = () => {
                           </p>
                         </div>
                       </div>
-                      <ReelsAction
-                        reelAction={reel as Post}
-                        isLiked={isUserLiked ?? false}
-                        postPage={pageIndex > 0 ? pageIndex : 0}
-                      />
+                      <div className="relative mr-[75px]">
+                        <div className="absolute bottom-0 pl-5 text-center text-xs text-gray-800 font-semibold">
+                          <Tooltip
+                            delay={1000}
+                            content={
+                              reel && (
+                                <SummaryProfile
+                                  username={reel.user?.username || ""}
+                                  full_name={reel.user?.full_name || ""}
+                                  avatar={reel.user?.avatar || ""}
+                                  role={reel.user?.role || false}
+                                  posts={[]}
+                                  friends={reel.user?.friends as Friend[]}
+                                />
+                              )
+                            }
+                            placement="bottom-start"
+                            className="rounded-md shadow-lg">
+                            <div className="relative mb-8">
+                              <Avatar className=" h-[50px] w-[50px] cursor-pointer">
+                                <AvatarImage src={getUserAvatarURL(reel.user?.avatar || "")} alt="user avatar" />
+                                <AvatarFallback>
+                                  <Spinner size="sm" />
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="absolute bottom-[-5px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
+                                <PlusReelsIcon fill="#FFFFFF" />
+                              </div>
+                            </div>
+                          </Tooltip>
+
+                          <ReelReact
+                            reelReact={reel as Post}
+                            isLiked={isUserLiked ?? false}
+                            postPage={pageIndex > 0 ? pageIndex : 0}
+                            orientation="vertical"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

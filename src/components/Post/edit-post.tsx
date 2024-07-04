@@ -324,16 +324,6 @@ const EditPost = () => {
                                       </div>
                                       <div className="flex justify-between items-center">
                                         <div className="flex space-x-2 items-center">
-                                          <FaLock size={20} />
-                                          <div className="flex flex-col items-start">
-                                            <div className="font-semibold">Private</div>
-                                            <span className="text-xs text-gray-500">Only me</span>
-                                          </div>
-                                        </div>
-                                        <Radio value={PostPrivacy.PRIVATE.toString()} />
-                                      </div>
-                                      <div className="flex justify-between items-center">
-                                        <div className="flex space-x-2 items-center">
                                           <FaUserFriends size={20} />
                                           <div className="flex flex-col items-start">
                                             <div className="font-semibold">Friend</div>
@@ -341,6 +331,16 @@ const EditPost = () => {
                                           </div>
                                         </div>
                                         <Radio value={PostPrivacy.FRIEND.toString()} />
+                                      </div>
+                                      <div className="flex justify-between items-center">
+                                        <div className="flex space-x-2 items-center">
+                                          <FaLock size={20} />
+                                          <div className="flex flex-col items-start">
+                                            <div className="font-semibold">Private</div>
+                                            <span className="text-xs text-gray-500">Only me</span>
+                                          </div>
+                                        </div>
+                                        <Radio value={PostPrivacy.PRIVATE.toString()} />
                                       </div>
                                     </RadioGroup>
                                   )}

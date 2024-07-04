@@ -148,7 +148,11 @@ const ReelsPage = () => {
                           className={`absolute left-3 text-white ${
                             hoveredVideo === reel.id ? "bottom-16" : "bottom-2"
                           }`}>
-                          <div className="font-medium hover:underline cursor-pointer pb-2">{reel.user?.username}</div>
+                          <Link
+                            href={`/${reel.user?.username}`}
+                            className="font-medium hover:underline cursor-pointer pb-2">
+                            {reel.user?.username}
+                          </Link>
                           <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">{reel.caption}</p>
                           <p className="text-[14px] pb-1 flex items-center text-white">
                             <ImMusic size="17" />

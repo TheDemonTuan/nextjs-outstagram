@@ -34,12 +34,11 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
         if (!comment) return null;
         if (comment?.parent_id && comment?.parent_id !== NIL_UUID) return null;
         const replyComments = comments?.filter((c) => c?.parent_id === comment?.id);
-        let totalReplies = 0;
-        const countReplies = (comments: any, parentId: string) => {
+        const countReplies = (comments: PostByPostIdQuery["postByPostId"]["post_comments"], parentId: string) => {
           let replyCount = 0;
 
-          comments.forEach((comment: any) => {
-            if (comment.parent_id === parentId) {
+          comments?.forEach((comment) => {
+            if (comment?.parent_id === parentId) {
               replyCount++;
               replyCount += countReplies(comments, comment.id);
             }
@@ -48,7 +47,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
           return replyCount;
         };
 
-        totalReplies = countReplies(comments, comment?.id);
+        const totalReplies = countReplies(comments, comment?.id);
         // const newReplyComments = comments?.filter((c) => c?.parent_id !== comment?.id);
 
         return (

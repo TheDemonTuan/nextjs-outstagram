@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { AuthVerifyResponse, authKey, authVerify } from "@/api/auth";
 import { UserResponse } from "@/api/user";
+import { getToken } from "@/actions";
 
 export const useAuth = () => {
   const {

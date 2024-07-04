@@ -64,7 +64,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     onSuccess: () => {
       toast.success("Add new post successfully!");
       queryClient.invalidateQueries({
-        queryKey: [postKey, "home-page"],
+        queryKey: [postKey, "home"],
       });
       onResetModalSelectPhoto();
       setModalData([]);

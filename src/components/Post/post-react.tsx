@@ -22,8 +22,8 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
           ...authData,
         },
       }
-      if (!!queryClient.getQueryData([postKey, "home-page"])) {
-        queryClient.setQueryData([postKey, "home-page"], (oldData: any) => {
+      if (!!queryClient.getQueryData([postKey, "home"])) {
+        queryClient.setQueryData([postKey, "home"], (oldData: any) => {
           return {
             ...oldData,
             pages: [

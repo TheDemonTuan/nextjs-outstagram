@@ -14,24 +14,25 @@ const customFetch = async (url: URL | RequestInfo, options?: RequestInit) => {
   options = options || {};
   options.signal = controller.signal;
 
-  const attemptFetch = async (retry: boolean = true) => {
+  const attemptFetch = async () => {
     try {
       const response = await fetch(url, options);
       clearTimeout(timeoutId);
-      if (response.status === 401 && retry) {
+      const data = await response.clone().json();
+      if (!data?.data) {
         const accessToken = await refreshToken();
-        
+
         if (!accessToken) {
           throw new Error("No access token found");
         }
 
         await setToken(process.env.NEXT_PUBLIC_ACCESS_TOKEN_NAME || "access_token", accessToken, new Date(Date.now() + 1000 * 60 * 5));
         options.headers = {
-          ...options.headers,
           Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         };
-        
-        return attemptFetch(false);
+
+        return attemptFetch();
       }
       return response;
     } catch (error: any) {
@@ -54,6 +55,7 @@ const requestMiddleware: RequestMiddleware = async (request) => {
       "Content-Type": "application/json",
     },
     signal: graphqlAbortController.signal,
+    
   };
 };
 

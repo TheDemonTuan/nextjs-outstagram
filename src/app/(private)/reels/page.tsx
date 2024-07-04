@@ -41,7 +41,7 @@ const ReelsPage = () => {
     hasNextPage,
     hasPreviousPage,
   } = useInfiniteQuery({
-    queryKey: [postKey, "reels-page"],
+    queryKey: [postKey, "reels"],
     queryFn: async ({ pageParam }) => graphQLClient.request(PostReelDocument, { page: pageParam }),
     initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {

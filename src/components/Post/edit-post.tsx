@@ -104,8 +104,8 @@ const EditPost = () => {
         },
       };
 
-      if (!!queryClient.getQueryData([postKey, "home-page"])) {
-        queryClient.setQueryData([postKey, "home-page"], (oldData: any) => {
+      if (!!queryClient.getQueryData([postKey, "home"])) {
+        queryClient.setQueryData([postKey, "home"], (oldData: any) => {
           return {
             ...oldData,
             pages: [
@@ -130,8 +130,8 @@ const EditPost = () => {
         });
       }
 
-      if (!!queryClient.getQueryData([postKey, "reels-page"])) {
-        queryClient.setQueryData([postKey, "reels-page"], (oldData: any) => {
+      if (!!queryClient.getQueryData([postKey, "reels"])) {
+        queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
           return {
             ...oldData,
             pages: [

@@ -1,5 +1,6 @@
 "use client";
 
+import { postKey } from "@/api/post";
 import { userKey } from "@/api/user";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserSearchDocument } from "@/gql/graphql";
@@ -23,6 +24,7 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
+import { useNotificationsStore } from "@/stores/notification-store";
 import {
   Badge,
   Button,
@@ -34,15 +36,11 @@ import {
   DropdownTrigger,
   Image,
   Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   Skeleton,
   Spinner,
 } from "@nextui-org/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
 import _ from "lodash";
 import NextImage from "next/image";
 import Link from "next/link";
@@ -51,11 +49,9 @@ import React, { useEffect, useRef } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { toast } from "sonner";
 import SideBarInbox from "./Chats/sidebar-inbox";
+import LogoutModal, { LogoutModalKey } from "./LogoutModal";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
 import { SearchHeaderSkeleton } from "./skeletons";
-import { logoutToken } from "@/actions";
-import { useNotificationsStore } from "@/stores/notification-store";
-import { formatDistanceToNow } from "date-fns";
 
 const HeaderMenu = [
   {
@@ -115,6 +111,7 @@ const Header = () => {
   const [activeMenu, setActiveMenu] = React.useState("");
   const [changeMenu, setChangeMenu] = React.useState(false);
   const { total } = useNotificationsStore();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const currentLink = HeaderMenu.find((item, index) =>
@@ -147,9 +144,21 @@ const Header = () => {
                 height={128}
                 src="/logo.webp"
                 alt="Outstagram Logo"
+                onClick={() => {
+                  queryClient.invalidateQueries({
+                    queryKey: [postKey, "home"],
+                  });
+                }}
               />
             ) : (
-              <InstagramIcon className="w-12 h-12" />
+              <InstagramIcon
+                className="w-12 h-12"
+                onClick={() => {
+                  queryClient.invalidateQueries({
+                    queryKey: [postKey, "home"],
+                  });
+                }}
+              />
             )}
           </Link>
           {/* Menu */}
@@ -184,6 +193,16 @@ const Header = () => {
                     });
 
                     switch (item.name) {
+                      case "Home":
+                        queryClient.invalidateQueries({
+                          queryKey: [postKey, "home"],
+                        });
+                        break;
+                      case "Reels":
+                        queryClient.invalidateQueries({
+                          queryKey: [postKey, "reels"],
+                        });
+                        break;
                       case "New":
                         // modalOpen(CreatePostModalKey);
                         modalOpen(SelectPhotoModalKey);
@@ -289,7 +308,7 @@ const Header = () => {
                     <span className="mx-1">Report a problem</span>
                   </DropdownItem>
                 </DropdownSection>
-                <DropdownItem className="py-4 hover:bg-[#F2F2F2]" onClick={() => modalOpen(SignOutModalKey)}>
+                <DropdownItem className="py-4 hover:bg-[#F2F2F2]" onClick={() => modalOpen(LogoutModalKey)}>
                   <span className="px-2">Log out</span>
                 </DropdownItem>
               </DropdownMenu>
@@ -307,7 +326,7 @@ const Header = () => {
       </div>
       <div className={cn(activeMenu === "Messages" ? "w-[470px]" : "w-[245px]")} />
       <SelectPhotoModal />
-      {/* <SignOutAlert /> */}
+      <LogoutModal />
     </>
   );
 };
@@ -566,45 +585,5 @@ const Notification = () => {
           </div> */}
       </div>
     </div>
-  );
-};
-
-const SignOutModalKey = "SignOut";
-
-const SignOutAlert = () => {
-  const { modalKey, modalClose } = useModalStore();
-  const queryClient = useQueryClient();
-
-  const handleSignOut = async () => {
-    toast.promise(logoutToken(), {
-      loading: "Logging out... 🚪",
-      success: "Logged out successfully! 👋",
-      error: "Failed to log out! 😵",
-    });
-    queryClient.clear();
-    modalClose();
-  };
-
-  return (
-    <Modal isOpen={SignOutModalKey === modalKey} onOpenChange={modalClose}>
-      <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-col gap-1">Sign Out</ModalHeader>
-            <ModalBody>
-              <p>Are you sure you want to sign out?</p>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                No
-              </Button>
-              <Button color="primary" onPress={handleSignOut}>
-                Yes
-              </Button>
-            </ModalFooter>
-          </>
-        )}
-      </ModalContent>
-    </Modal>
   );
 };

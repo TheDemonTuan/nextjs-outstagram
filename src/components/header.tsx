@@ -92,7 +92,7 @@ const HeaderMenu = [
   },
 ];
 
-const DisabledMenuItems = ["Explores", "Reels", "Messages", "Notifications", "New"];
+const DisabledMenuItems = ["Reels", "Messages", "Notifications", "New"];
 
 const MenuItemClass =
   "flex items-center space-x-4 text-gray-900 group hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200 ease-in-out";
@@ -106,7 +106,7 @@ const ShortHeaderSpecialList = ["Messages"];
 const Header = () => {
   const { modalOpen } = useModalStore();
   const pathName = usePathname();
-  const { authData, authIsLoading, authIsError } = useAuth();
+  const { authData, authIsLoading, authIsError,authCanUse,authIsPending } = useAuth();
   const [isShortHeader, setIsShortHeader] = React.useState(false);
   const [activeMenu, setActiveMenu] = React.useState("");
   const [changeMenu, setChangeMenu] = React.useState(false);
@@ -161,8 +161,9 @@ const Header = () => {
               />
             )}
           </Link>
+          {authIsPending && <div>Loading</div>}
           {/* Menu */}
-          <nav className={cn(isShortHeader ? "space-y-3" : "space-y-4")}>
+          <nav className={cn(isShortHeader ? "space-y-3" : "space-y-4", authIsLoading && "hidden")}>
             {HeaderMenu.map((item, index) => {
               const Icon = item.icon;
               const active = activeMenu === item?.name;
@@ -261,7 +262,7 @@ const Header = () => {
               </div>
             )}
           </nav>
-          <div className="h-full flex justify-start items-end py-2">
+          <div className={cn("h-full flex justify-start items-end py-2", !authCanUse && "hidden")}>
             <Dropdown placement="top-start">
               <DropdownTrigger className="active:font-extrabold">
                 <div className={cn(MenuItemClass, "w-full cursor-pointer")}>

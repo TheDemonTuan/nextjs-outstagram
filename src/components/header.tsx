@@ -65,9 +65,9 @@ const HeaderMenu = [
     action: true,
   },
   {
-    name: "Explores",
+    name: "Explore",
     icon: DiscoverIcon,
-    href: "/explores",
+    href: "/explore",
   },
   {
     name: "Reels",

@@ -18,7 +18,6 @@ const ExplorePage = () => {
   const { authData } = useAuth();
   const currentPage = useRef(1);
   const router = useRouter();
-  const [hoveredVideo, setHoveredVideo] = useState("");
 
   const {
     status,
@@ -107,15 +106,6 @@ const ExplorePage = () => {
   if (postsIsLoading) {
     return <ExploresSkeleton />;
   }
-
-  const handleMouseEnter = (postId: string) => {
-    setHoveredVideo(postId.toString());
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredVideo("");
-  };
-
   return (
     <div className="max-w-5xl mx-5 p-8 xl:mx-auto">
       <div className="grid grid-cols-3 grid-rows-2 gap-1">
@@ -132,9 +122,7 @@ const ExplorePage = () => {
                     calculateIndex(index) == false
                       ? "col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group"
                       : "col-span-1 row-span-2 relative w-full h-[calc(40rem+2px)] group cursor-pointer"
-                  }
-                  onMouseEnter={() => handleMouseEnter(post.id)}
-                  onMouseLeave={handleMouseLeave}>
+                  }>
                   {post.type === PostType.DEFAULT ? (
                     <Image
                       src={(post.post_files && post?.post_files[0]?.url) || ""}
@@ -148,7 +136,7 @@ const ExplorePage = () => {
                       id={`video-${post.id}`}
                       src={(post.post_files && post?.post_files[0]?.url) || ""}
                       className="w-full h-full object-cover"
-                      autoPlay={hoveredVideo === post.id}
+                      autoPlay
                       loop
                       muted
                       width={500}

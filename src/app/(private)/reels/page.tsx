@@ -10,7 +10,7 @@ import { AiFillHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { PostType, postKey } from "@/api/post";
+import { PostPrivacy, PostType, postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
 import { Friend, Post, PostFile, PostReelDocument } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
@@ -22,6 +22,7 @@ import SummaryProfile from "@/components/summary-profile";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import ReelReact from "@/components/Reels/reel-react";
 import HighlightHashtags from "@/components/highlight-hashtags";
+import PostPrivacyView from "@/components/privacy-post-view";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -181,6 +182,22 @@ const ReelsPage = () => {
                           className={`absolute left-3 right-3 text-white ${
                             hoveredVideo === reel.id ? "bottom-16" : "bottom-2"
                           }`}>
+                          <div className="flex items-center -ml-1 ">
+                            <PostPrivacyView
+                              privacy={reel.privacy || PostPrivacy.PUBLIC}
+                              size={16}
+                              disabledTooltip={true}
+                              color="#FFFFFF"
+                            />
+                            <span className="pl-1 align-middle text-sm">
+                              {reel.privacy === PostPrivacy.PUBLIC
+                                ? "Public"
+                                : reel.privacy === PostPrivacy.FRIEND
+                                ? "Friend"
+                                : "Private"}
+                            </span>
+                          </div>
+
                           <Link
                             href={`/${reel.user?.username}`}
                             className="font-medium hover:underline cursor-pointer pb-2">

@@ -14,6 +14,8 @@ import SummaryProfile from "../summary-profile";
 import ReelReact from "./reel-react";
 import { useState } from "react";
 import { VerifiedIcon } from "@/icons";
+import PostPrivacyView from "../privacy-post-view";
+import { PostPrivacy } from "@/api/post";
 
 const hostLocal = "http://localhost:3001";
 
@@ -91,7 +93,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                 </Link>
               </Tooltip>
 
-              <div className="relative z-0 text-sm -mt-0">
+              <div className="relative z-0 text-sm -mt-0 flex items-center">
                 {reelData.user?.full_name}
                 <span className="relative -top-[3px] text-sm pl-1 pr-0.5 ">.</span>
                 <span className="text-sm">
@@ -100,6 +102,9 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                     addSuffix: true,
                   })}
                 </span>
+                <span className="relative -top-[3px] text-sm pl-1 ">.</span>
+
+                <PostPrivacyView privacy={reelData.privacy || PostPrivacy.PUBLIC} size={15} />
               </div>
             </div>
           </div>

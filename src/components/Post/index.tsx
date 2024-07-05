@@ -17,7 +17,7 @@ import Carousel from "./carousel";
 import { Friend, Post as PostGraphql, PostHomePageDocument } from "@/gql/graphql";
 import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { PostType, postKey } from "@/api/post";
+import { PostPrivacy, PostType, postKey } from "@/api/post";
 import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import PostLikes, { LikesModalKey } from "./post-likes";
@@ -35,7 +35,7 @@ import { pages } from "next/dist/build/templates/app-page";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import HighlightHashtags from "../highlight-hashtags";
-import PostPrivacy from "../privacy-post";
+import PostPrivacyView from "../privacy-post-view";
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
 const Post = () => {
@@ -180,7 +180,7 @@ const Post = () => {
                                     </Link>
                                     <span className="text-gray-500 ml-1"> • </span>
 
-                                    <PostPrivacy privacy={post?.privacy || 0} />
+                                    <PostPrivacyView privacy={post?.privacy || PostPrivacy.PUBLIC} size={12} />
                                   </div>
                                 </div>
                               </div>

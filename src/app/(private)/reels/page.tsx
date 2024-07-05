@@ -5,7 +5,7 @@ import { Spinner, Tooltip } from "@nextui-org/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import { MoreOptionReelsIcon, PlusReelsIcon } from "@/icons";
+import { AudioMutedIcon, AudioPlayingIcon, MoreOptionReelsIcon, PlusReelsIcon } from "@/icons";
 import { AiFillHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
@@ -22,6 +22,7 @@ import SummaryProfile from "@/components/summary-profile";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import ReelReact from "@/components/Reels/reel-react";
 import HighlightHashtags from "@/components/highlight-hashtags";
+import { BsVolumeMuteFill, BsVolumeUpFill } from "react-icons/bs";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -31,6 +32,7 @@ const ReelsPage = () => {
   const { authData } = useAuth();
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const {
     status,
@@ -113,6 +115,13 @@ const ReelsPage = () => {
     setIsExpanded(!isExpanded);
   };
 
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    document.querySelectorAll("video").forEach((video) => {
+      video.muted = !isMuted;
+    });
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center max-w-screen-2xl mx-auto">
@@ -142,20 +151,28 @@ const ReelsPage = () => {
                             autoPlay
                             controls={hoveredVideo === reel.id}
                             loop
-                            muted
+                            muted={isMuted}
                             className="object-cover rounded-xl mx-auto h-full"
                             src={reel.post_files?.[0]?.url ?? ""}
                           />
                         </div>
                         {hoveredVideo === reel.id && (
-                          <div
-                            className="absolute top-3 right-3 z-10"
-                            onClick={() => {
-                              setModalData(reel);
-                              modalOpen(PostMoreOptionsModalKey);
-                            }}>
-                            <MoreOptionReelsIcon fill="#ffff" />
-                          </div>
+                          <>
+                            <div
+                              className="absolute top-3 right-3 z-10"
+                              onClick={() => {
+                                setModalData(reel);
+                                modalOpen(PostMoreOptionsModalKey);
+                              }}>
+                              <MoreOptionReelsIcon fill="#ffff" />
+                            </div>
+
+                            <div className="absolute top-3 left-3 z-10 bg" onClick={toggleMute}>
+                              <div className="rounded-full p-2 bg-slate-50 bg-opacity-20">
+                                {isMuted ? <AudioMutedIcon /> : <AudioPlayingIcon />}
+                              </div>
+                            </div>
+                          </>
                         )}
                         <div
                           className={`absolute left-3 right-3 text-white ${
@@ -256,6 +273,10 @@ const ReelsPage = () => {
           )
         )}
       </div>
+
+      <button
+        onClick={toggleMute}
+        className="fixed bottom-10 right-10 bg-red-500 text-white p-2 rounded-full z-50"></button>
       {reelsData && <PostMoreOptions />}
     </>
   );

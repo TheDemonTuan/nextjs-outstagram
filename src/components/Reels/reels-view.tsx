@@ -7,7 +7,6 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { TfiMoreAlt } from "react-icons/tfi";
 import ReelsCommentsHeader from "./reels-comment-header";
-import ReelsComments from "./reels-comments";
 import { useQuery } from "@tanstack/react-query";
 import { PostType, postKey } from "@/api/post";
 import { PostByPostIdDocument } from "@/gql/graphql";
@@ -15,11 +14,13 @@ import { graphQLClient } from "@/lib/graphql";
 import { ReelDetailSkeleton } from "../skeletons";
 import { useEffect, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import CommentForm from "../PostDetail/comment-form";
+import ViewComments from "../PostDetail/comment";
 
 const ReelsView = ({ id }: { id: string }) => {
   const { modalOpen, setModalData, modalKey, modalClose } = useModalStore();
   const router = useRouter();
-  const { authData } = useAuth();
+  const { authData, authCanUse } = useAuth();
 
   const {
     data: reelData,
@@ -86,26 +87,25 @@ const ReelsView = ({ id }: { id: string }) => {
                   modalClose();
                   router.back();
                 }}
-                className="absolute text-white z-20 m-5 rounded-full bg-gray-400 bg-opacity-40 p-1.5 hover:bg-gray-800">
+                className="absolute text-white z-20 m-5 rounded-full bg-gray-400 bg-opacity-40 p-1.5 hover:bg-opacity-80">
                 <AiOutlineClose size="27" />
               </button>
-
-              <button
-                onClick={() => loopThroughPostsUp()}
-                className="absolute z-20 right-4 top-6  flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40  p-1.5 hover:bg-gray-800">
-                <TfiMoreAlt size="30" color="#FFFFFF" className="p-1" />
-              </button>
+              {authCanUse && (
+                <button className="absolute z-20 right-4 top-6  flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40  p-1.5 hover:bg-opacity-80">
+                  <TfiMoreAlt size="30" color="#FFFFFF" className="p-1" />
+                </button>
+              )}
 
               <div className="absolute z-20 right-4 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-4">
                 <button
                   onClick={() => loopThroughPostsUp()}
-                  className="flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40 p-1.5 hover:bg-gray-800">
+                  className="flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40 p-1.5 hover:bg-opacity-80">
                   <BiChevronUp size="30" color="#FFFFFF" />
                 </button>
 
                 <button
                   onClick={() => loopThroughPostsDown()}
-                  className="flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40 p-1.5 hover:bg-gray-800">
+                  className="flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40 p-1.5 hover:bg-opacity-80">
                   <BiChevronDown size="30" color="#FFFFFF" />
                 </button>
               </div>
@@ -136,11 +136,40 @@ const ReelsView = ({ id }: { id: string }) => {
               className="lg:max-w-[550px] relative w-full h-full bg-white 
               overflow-y-auto scrollbar-hide
               ">
+              {/* ReelHeader */}
               <div className="pt-5 border-b-1">
                 <ReelsCommentsHeader reelHeaderData={reelData} isLiked={isLiked ?? false} />
               </div>
 
-              <ReelsComments reelComments={reelData.postByPostId.post_comments} postId={reelData.postByPostId.id} />
+              {/* ReelComment */}
+              <div className="relative z-0 w-full h-[calc(100%-273px)] overflow-y-auto scrollbar-hide cursor-pointer">
+                {reelData.postByPostId.post_comments && reelData.postByPostId.post_comments?.length > 0 ? (
+                  <div className="mx-6 mt-5">
+                    <ViewComments comments={reelData.postByPostId.post_comments} />
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-1.5 h-[250px] justify-center">
+                    <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
+                    <p className="text-sm font-medium">Start the conversation.</p>
+                  </div>
+                )}
+                <div className="mb-5" />
+              </div>
+
+              <div className="flex items-center bottom-0 justify-between bg-white lg:max-w-[550px] w-full py-5 px-8 border-t-1 sticky z-50">
+                {authCanUse ? (
+                  <div className="rounded-lg w-full lg:max-w-[500px] border-1 mt-auto">
+                    <CommentForm postId={reelData.postByPostId.id} />
+                  </div>
+                ) : (
+                  <div className="w-full flex items-center  justify-center text-sm font-semibold text-gray-500">
+                    <Link href="/login" className="text-[#F02C56] mr-1">
+                      Log in{" "}
+                    </Link>{" "}
+                    to like or comment on this reel.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </ModalContent>

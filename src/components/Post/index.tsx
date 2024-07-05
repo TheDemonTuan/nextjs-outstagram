@@ -37,7 +37,6 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import HighlightHashtags from "../highlight-hashtags";
 import PostPrivacy from "../privacy-post";
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
-import ShowMoreText from "react-show-more-text";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();

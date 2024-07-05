@@ -22,7 +22,6 @@ import SummaryProfile from "@/components/summary-profile";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import ReelReact from "@/components/Reels/reel-react";
 import HighlightHashtags from "@/components/highlight-hashtags";
-import { BsVolumeMuteFill, BsVolumeUpFill } from "react-icons/bs";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -33,6 +32,7 @@ const ReelsPage = () => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const {
     status,
@@ -117,8 +117,10 @@ const ReelsPage = () => {
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
-    document.querySelectorAll("video").forEach((video) => {
-      video.muted = !isMuted;
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        video.muted = !isMuted;
+      }
     });
   };
 
@@ -156,6 +158,7 @@ const ReelsPage = () => {
                             src={reel.post_files?.[0]?.url ?? ""}
                           />
                         </div>
+
                         {hoveredVideo === reel.id && (
                           <>
                             <div
@@ -273,10 +276,6 @@ const ReelsPage = () => {
           )
         )}
       </div>
-
-      <button
-        onClick={toggleMute}
-        className="fixed bottom-10 right-10 bg-red-500 text-white p-2 rounded-full z-50"></button>
       {reelsData && <PostMoreOptions />}
     </>
   );

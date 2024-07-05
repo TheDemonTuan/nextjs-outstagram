@@ -27,7 +27,7 @@ import Link from "next/link";
 function PostView({ id }: { id: string }) {
   const { modalOpen, setModalData, modalKey } = useModalStore();
   const router = useRouter();
-  const { authData } = useAuth();
+  const { authData, authCanUse } = useAuth();
 
   const {
     data: postData,
@@ -62,7 +62,9 @@ function PostView({ id }: { id: string }) {
     return <div>Post not found</div>;
   }
 
-  const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
+  if (postData.postByPostId.type !== PostType.DEFAULT) {
+    return notFound();
+  }
 
   return (
     <>
@@ -86,7 +88,7 @@ function PostView({ id }: { id: string }) {
                 }
                 placement="bottom-start"
                 className="rounded-md shadow-lg"
-                isDisabled={!isLoggedIn}>
+                isDisabled={!authCanUse}>
                 <div className="flex flex-row items-center gap-3 px-1">
                   <UserProfileInfo
                     username={postData?.postByPostId.user?.username || ""}
@@ -98,7 +100,7 @@ function PostView({ id }: { id: string }) {
                   />
                 </div>
               </Tooltip>
-              {isLoggedIn && (
+              {authCanUse && (
                 <span
                   onClick={() => {
                     setModalData(postData.postByPostId);
@@ -117,7 +119,7 @@ function PostView({ id }: { id: string }) {
             </div>
 
             <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
-              {isLoggedIn ? (
+              {authCanUse ? (
                 <>
                   <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
 
@@ -147,7 +149,7 @@ function PostView({ id }: { id: string }) {
                 </p>
               )}
             </div>
-            {isLoggedIn && <CommentForm postId={postData.postByPostId.id} />}
+            {authCanUse && <CommentForm postId={postData.postByPostId.id} />}
           </Card>
           <Card className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-3xl w-full flex justify-center items-center bg-black rounded-none">
             {postData.postByPostId?.post_files?.length ? (

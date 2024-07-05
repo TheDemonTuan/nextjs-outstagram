@@ -9,7 +9,7 @@ import { TfiMoreAlt } from "react-icons/tfi";
 import ReelsCommentsHeader from "./reels-comment-header";
 import ReelsComments from "./reels-comments";
 import { useQuery } from "@tanstack/react-query";
-import { postKey } from "@/api/post";
+import { PostType, postKey } from "@/api/post";
 import { PostByPostIdDocument } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
 import { ReelDetailSkeleton } from "../skeletons";
@@ -52,6 +52,10 @@ const ReelsView = ({ id }: { id: string }) => {
 
   if (!reelData) {
     return <div>Reel not found</div>;
+  }
+
+  if (reelData.postByPostId.type !== PostType.REEL) {
+    return notFound();
   }
 
   const loopThroughPostsUp = () => {

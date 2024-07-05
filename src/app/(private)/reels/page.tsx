@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import SummaryProfile from "@/components/summary-profile";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import ReelReact from "@/components/Reels/reel-react";
+import HighlightHashtags from "@/components/highlight-hashtags";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -29,6 +30,7 @@ const ReelsPage = () => {
   const { modalOpen, setModalData } = useModalStore();
   const { authData } = useAuth();
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const {
     status,
@@ -107,6 +109,10 @@ const ReelsPage = () => {
     router.push(`/r/${reelId}`);
   };
 
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center max-w-screen-2xl mx-auto">
@@ -115,6 +121,11 @@ const ReelsPage = () => {
             {page.postReel.map((reel) => {
               const postLikes = reel?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
+              const displayedCaption = isExpanded
+                ? reel.caption
+                : reel.caption && reel.caption.length > 100
+                ? `${reel.caption.substring(0, 40)}...`
+                : reel.caption;
               return (
                 <div key={reel.id} id={`PostMain-${reel.id}`} className="py-10 relative">
                   <div className="pl-3 w-full px-4">
@@ -147,7 +158,7 @@ const ReelsPage = () => {
                           </div>
                         )}
                         <div
-                          className={`absolute left-3 text-white ${
+                          className={`absolute left-3 right-3 text-white ${
                             hoveredVideo === reel.id ? "bottom-16" : "bottom-2"
                           }`}>
                           <Link
@@ -155,7 +166,16 @@ const ReelsPage = () => {
                             className="font-medium hover:underline cursor-pointer pb-2">
                             {reel.user?.username}
                           </Link>
-                          <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">{reel.caption}</p>
+
+                          <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">
+                            <HighlightHashtags text={displayedCaption || ""} className="text-white" />
+                            {reel.caption && reel.caption.length > 100 && (
+                              <span className="cursor-pointer ml-4 font-semibold" onClick={toggleExpand}>
+                                {isExpanded ? "less" : "more"}
+                              </span>
+                            )}
+                          </p>
+
                           <p className="text-[14px] pb-1 flex items-center text-white">
                             <ImMusic size="17" />
                             <span className="px-1">original sound - AWESOME</span>

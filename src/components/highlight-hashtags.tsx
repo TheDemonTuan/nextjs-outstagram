@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-const HighlightHashtags = ({ text }: { text: string }) => {
+const HighlightHashtags = ({ text, className }: { text: string; className: string }) => {
   const highlightHashtags = (text: string) => {
     const hashtagAndMentionRegex = /(#\w+)|(@\w+)/g;
 
@@ -12,14 +13,14 @@ const HighlightHashtags = ({ text }: { text: string }) => {
       if (part.startsWith("#")) {
         return (
           <Link key={index} href={`/explore/tags/${part.slice(1)}`} passHref>
-            <span className="text-[#00376b]">{part}</span>
+            <span className={cn(className)}>{part}</span>
           </Link>
         );
       }
       if (part.startsWith("@")) {
         return (
           <Link key={index} href={`/${part.slice(1)}`} passHref>
-            <span className="text-[#00376b]">{part}</span>
+            <span className={cn(className)}>{part}</span>
           </Link>
         );
       }

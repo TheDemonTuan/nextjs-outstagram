@@ -247,7 +247,7 @@ const Post = () => {
                                 <VerifiedIcon className="w-3 h-3 ml-1 mb-[0.4px] inline-block items-center" />
                               )}
                               <span className="font-normal ml-1 text-center">
-                                <HighlightHashtags text={post?.caption || ""} />
+                                <HighlightHashtags text={post?.caption || ""} className="text-[#00376b]" />
                               </span>
                             </p>
 
@@ -255,7 +255,7 @@ const Post = () => {
                               <button
                                 onClick={toggleExpand}
                                 className="text-neutral-500 focus:outline-none inline-block">
-                                {isExpanded ? "less" : "more"}
+                                {isExpanded ? "...less" : "...more"}
                               </button>
                             )}
                           </div>

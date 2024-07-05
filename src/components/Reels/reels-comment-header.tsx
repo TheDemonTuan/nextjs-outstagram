@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
 import ReelReact from "./reel-react";
+import { useState } from "react";
 
 const hostLocal = "http://localhost:3001";
 interface ReelsHeaderCommentsProps {
@@ -27,6 +28,7 @@ interface ReelsHeaderCommentsProps {
 export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHeaderCommentsProps) {
   const reelData = reelHeaderData.postByPostId;
   const linkReels = `${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`;
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const queryClient = useQueryClient();
   const { authData } = useAuth();
@@ -99,13 +101,13 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
     },
   });
 
-  const handleLikePost = async () => {
-    postLikeMutate(reelData.id);
-  };
-
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`${hostLocal}/r/${reelData?.id}?utm_source=og_web_copy_link`);
     toast.success("Link copied to clipboard");
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
   };
 
   return (
@@ -175,10 +177,16 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
             Add Friend
           </button>
         </div>
-
-        <p className="px-4 mt-4 text-md">
-          <HighlightHashtags text={reelData?.caption || ""} />
-        </p>
+        <div className="my-0 text-md px-4 mt-4">
+          <p className={`${!isExpanded ? "line-clamp-[2]" : ""}`}>
+            <HighlightHashtags text={reelData?.caption || ""} className="text-[#008DEA]" />
+          </p>
+          {(reelData.caption?.split("\n").length ?? 0) > 1 && (
+            <button onClick={toggleExpand} className="font-semibold focus:outline-none inline-block">
+              {isExpanded ? "...less" : "...more"}
+            </button>
+          )}
+        </div>
 
         <p className="flex item-center gap-2 px-4 mt-2 text-sm">
           <ImMusic size="17" />
@@ -201,7 +209,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
         </button>
       </div>
 
-      <div className="z-10 top-0 sticky mt-5 mx-8 font-bold border-b-2 pb-4 border-black">
+      <div className="z-10 top-0 sticky mt-5 mx-8 font-bold pb-4 ">
         Comments <span>({reelData.post_comments?.length})</span>
       </div>
     </>

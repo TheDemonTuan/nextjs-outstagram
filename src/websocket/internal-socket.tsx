@@ -102,22 +102,24 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
               </div>
             </div>
           ));
-          const fakeLikeData = {
-            ...data.postLike,
-            user: {
-              ...authData,
-            },
-          };
-          queryClient.setQueryData([postKey, { id: data.postID }], (oldData: any) => {
-            const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== data.userID);
-            return {
-              ...oldData,
-              postByPostId: {
-                ...oldData.postByPostId,
-                post_likes: [fakeLikeData, ...newLikes],
+          if (!!queryClient.getQueryData([postKey, { id: data.postID }])) {
+            const fakeLikeData = {
+              ...data.postLike,
+              user: {
+                ...authData,
               },
             };
-          });
+            queryClient.setQueryData([postKey, { id: data.postID }], (oldData: any) => {
+              const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== data.userID);
+              return {
+                ...oldData,
+                postByPostId: {
+                  ...oldData.postByPostId,
+                  post_likes: [fakeLikeData, ...newLikes],
+                },
+              };
+            });
+          }
           break;
         case "post-comment":
           toast.custom((t) => (
@@ -151,28 +153,30 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
               </div>
             </div>
           ));
-          const fakeCommentData = {
-            ...data.postComment,
-            user: {
-              avatar: data.avatar,
-              username: data.username,
-            },
-            parent: {
-              id: data.parentID,
+          if (!!queryClient.getQueryData([postKey, { id: data.postID }])) {
+            const fakeCommentData = {
+              ...data.postComment,
               user: {
-                username: data.parentUsername,
+                avatar: data.avatar,
+                username: data.username,
               },
-            },
-          };
-          queryClient.setQueryData([postKey, { id: data.postID }], (oldData: any) => {
-            return {
-              ...oldData,
-              postByPostId: {
-                ...oldData.postByPostId,
-                post_comments: [fakeCommentData, ...(oldData.postByPostId.post_comments || [])],
+              parent: {
+                id: data.parentID,
+                user: {
+                  username: data.parentUsername,
+                },
               },
             };
-          });
+            queryClient.setQueryData([postKey, { id: data.postID }], (oldData: any) => {
+              return {
+                ...oldData,
+                postByPostId: {
+                  ...oldData.postByPostId,
+                  post_comments: [fakeCommentData, ...(oldData.postByPostId.post_comments || [])],
+                },
+              };
+            });
+          }
           break;
         default:
           break;

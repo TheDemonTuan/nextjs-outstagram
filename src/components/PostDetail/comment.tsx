@@ -9,7 +9,6 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useCommentStore } from "@/stores/comment-store";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import SummaryProfile from "../summary-profile";
-import { UserResponse } from "@/api/user";
 import { NIL as NIL_UUID } from "uuid";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -48,7 +47,6 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
         };
 
         const totalReplies = countReplies(comments, comment?.id);
-        // const newReplyComments = comments?.filter((c) => c?.parent_id !== comment?.id);
 
         return (
           <div key={comment?.id}>
@@ -180,10 +178,6 @@ const ReplyBox = memo(
     const replyComments = useMemo(() => {
       return comments?.filter((c) => c?.parent_id === parentID);
     }, [comments, parentID]);
-
-    // const newReplyComments = useMemo(() => {
-    //   return comments?.filter((c) => c?.parent_id !== parentID);
-    // }, [comments, parentID]);
 
     if (!replyComments?.length) {
       return null;

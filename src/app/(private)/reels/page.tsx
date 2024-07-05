@@ -5,7 +5,7 @@ import { Spinner, Tooltip } from "@nextui-org/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import { AudioMutedIcon, AudioPlayingIcon, MoreOptionReelsIcon, PlusReelsIcon } from "@/icons";
+import { AudioMutedIcon, AudioPlayingIcon, MoreOptionReelsIcon, PlusReelsIcon, VerifiedIcon } from "@/icons";
 import { AiFillHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
@@ -185,6 +185,10 @@ const ReelsPage = () => {
                             href={`/${reel.user?.username}`}
                             className="font-medium hover:underline cursor-pointer pb-2">
                             {reel.user?.username}
+
+                            {reel?.user?.role && (
+                              <VerifiedIcon className="w-4 h-4 mx-1 mb-[1px] items-center inline-block" />
+                            )}
                           </Link>
 
                           <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">

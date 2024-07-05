@@ -13,6 +13,7 @@ import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
 import ReelReact from "./reel-react";
 import { useState } from "react";
+import { VerifiedIcon } from "@/icons";
 
 const hostLocal = "http://localhost:3001";
 
@@ -86,6 +87,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                   href={`/${reelData.user?.username}`}
                   className="relative z-10 text-[18px] leading-6 text-lg text font-bold hover:underline">
                   {reelData.user?.username}
+                  {reelData?.user?.role && <VerifiedIcon className="w-4 h-4 mx-1 mb-[1px] items-center inline-block" />}
                 </Link>
               </Tooltip>
 

@@ -5,7 +5,7 @@ import { ImMusic } from "react-icons/im";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import HighlightHashtags from "../highlight-hashtags";
 import { BookMarkReelsCommentIcon, LikeHeartIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
-import { Friend, PostByPostIdQuery } from "@/gql/graphql";
+import { Friend, Post, PostByPostIdQuery } from "@/gql/graphql";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { formatDistanceToNow } from "date-fns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -16,6 +16,8 @@ import { postKey } from "@/api/post";
 import { toast } from "sonner";
 import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
+import ReelReact from "./reel-react";
+import { useState } from "react";
 
 const hostLocal = "http://localhost:3001";
 interface ReelsHeaderCommentsProps {
@@ -26,6 +28,7 @@ interface ReelsHeaderCommentsProps {
 export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHeaderCommentsProps) {
   const reelData = reelHeaderData.postByPostId;
   const linkReels = `${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`;
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const queryClient = useQueryClient();
   const { authData } = useAuth();
@@ -98,13 +101,13 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
     },
   });
 
-  const handleLikePost = async () => {
-    postLikeMutate(reelData.id);
-  };
-
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`${hostLocal}/r/${reelData?.id}?utm_source=og_web_copy_link`);
     toast.success("Link copied to clipboard");
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
   };
 
   return (
@@ -174,10 +177,16 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
             Add Friend
           </button>
         </div>
-
-        <p className="px-4 mt-4 text-md">
-          <HighlightHashtags text={reelData?.caption || ""} />
-        </p>
+        <div className="my-0 text-md px-4 mt-4">
+          <p className={`${!isExpanded ? "line-clamp-[2]" : ""}`}>
+            <HighlightHashtags text={reelData?.caption || ""} className="text-[#008DEA]" />
+          </p>
+          {(reelData.caption?.split("\n").length ?? 0) > 1 && (
+            <button onClick={toggleExpand} className="font-semibold focus:outline-none inline-block">
+              {isExpanded ? "...less" : "...more"}
+            </button>
+          )}
+        </div>
 
         <p className="flex item-center gap-2 px-4 mt-2 text-sm">
           <ImMusic size="17" />
@@ -185,39 +194,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
         </p>
       </div>
 
-      <div className="flex items-center px-8 mt-4 space-x-2 justify-stretch">
-        <div className="pb-4 text-center flex items-center">
-          <button className="rounded-full bg-gray-200 p-2 cursor-pointer" onClick={handleLikePost}>
-            {isLiked ? (
-              <LikeHeartIcon className="w-5 h-5 hover:stroke-gray115 cursor-pointer text-red-500" />
-            ) : (
-              <LikeHeartIcon className="w-5 h-5 hover:stroke-gray115 cursor-pointer text-black" />
-            )}
-          </button>
-          <span className=" pl-2 pr-4 text-sm text-gray-800 font-semibold ">{reelData.post_likes?.length}</span>
-        </div>
-
-        <div className="pb-4 text-center flex items-center">
-          <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
-            <MessageCircleIcon width={22} height={22} fill="#00000" />
-          </div>
-          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">{reelData.post_comments?.length}</span>
-        </div>
-
-        <div className="pb-4 text-center flex items-center">
-          <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
-            <BookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
-          </div>
-          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">185</span>
-        </div>
-
-        <div className="pb-4 text-center flex items-center">
-          <div className="rounded-full bg-gray-200 p-2 cursor-pointer">
-            <ShareReelsIcon width={22} height={22} />
-          </div>
-          <span className="text-sm pl-2 text-gray-800 font-semibold">185</span>
-        </div>
-      </div>
+      <ReelReact reelReact={reelHeaderData.postByPostId as Post} isLiked={isLiked ?? false} orientation="horizontal" />
       <div className="relative flex items-center mt-1 mx-8 border py-1.5 rounded-lg bg-[#F1F1F2]">
         <input
           readOnly
@@ -232,7 +209,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
         </button>
       </div>
 
-      <div className="z-10 top-0 sticky mt-5 mx-8 font-bold border-b-2 pb-4 border-black">
+      <div className="z-10 top-0 sticky mt-5 mx-8 font-bold pb-4 ">
         Comments <span>({reelData.post_comments?.length})</span>
       </div>
     </>

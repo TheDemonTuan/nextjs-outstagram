@@ -1,11 +1,11 @@
 "use client";
 
-import { ViewPostSkeleton } from "@/components/skeletons";
+import { ReelDetailSkeleton } from "@/components/skeletons";
 import dynamic from "next/dynamic";
 import React from "react";
 
 const ReelsView = dynamic(() => import("@/components/Reels/reels-view"), {
-  loading: () => <ViewPostSkeleton />,
+  loading: () => <ReelDetailSkeleton />,
   ssr: false,
 });
 

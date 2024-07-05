@@ -14,12 +14,10 @@ import PostPrivacy from "../privacy-post";
 import { useAuth } from "@/hooks/useAuth";
 
 const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
-  const { authData } = useAuth();
+  const { authData, authCanUse } = useAuth();
 
   const username = post.user?.username;
   const href = `/${username}`;
-
-  const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
 
   const isEdited = post.created_at !== post.updated_at;
 
@@ -42,7 +40,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
           }
           placement="bottom-start"
           className="rounded-md shadow-lg"
-          isDisabled={!isLoggedIn}>
+          isDisabled={!authCanUse}>
           <Avatar className="w-8 h-8">
             <AvatarImage src={getUserAvatarURL(post?.user?.avatar) || ""} />
             <AvatarFallback>
@@ -71,13 +69,13 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
               }
               placement="bottom-start"
               className="rounded-md shadow-lg"
-              isDisabled={!isLoggedIn}>
+              isDisabled={!authCanUse}>
               <Link href={href} className="font-semibold">
                 {username}
               </Link>
             </Tooltip>{" "}
             <span className="font-normal text-black">
-              <HighlightHashtags text={post?.caption || ""} />
+              <HighlightHashtags text={post?.caption || ""} className="text-[#00376b]" />
             </span>
           </div>
         </div>

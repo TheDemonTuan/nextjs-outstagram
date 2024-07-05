@@ -6,19 +6,19 @@ import { AccountHistoryIcon, InteractionsIcon, RecentlyDeletedIcon, VideoPhotoAc
 
 const menuItems = [
   {
-    href: "/your_activity/interactions",
+    href: "/your-activity/interactions",
     icon: <InteractionsIcon fill="#000000" stroke="#000000" />,
     title: "Interactions",
     description: ["Review and delete likes,", "comments and your other", "interactions."],
   },
   {
-    href: "/your_activity/photos_and_videos",
+    href: "/your-activity/photos-and-videos",
     icon: <VideoPhotoActivityIcon fill="#000000" stroke="#000000" />,
     title: "Photo and Videos",
     description: ["View, archive or delete", "photos and videos you've", "shared."],
   },
   {
-    href: "/your_activity/recently_deleted",
+    href: "/your-activity/recently-deleted",
     icon: <RecentlyDeletedIcon fill="#000000" stroke="#000000" />,
     title: "Recently deleted",
     description: [
@@ -27,7 +27,7 @@ const menuItems = [
     ],
   },
   {
-    href: "/your_activity/account_history",
+    href: "/your-activity/account-history",
     icon: <AccountHistoryIcon fill="#000000" stroke="#000000" />,
     title: "Account History",
     description: ["Review changes that you've", "made to your account since", "you created it."],

@@ -37,6 +37,7 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import HighlightHashtags from "../highlight-hashtags";
 import PostPrivacy from "../privacy-post";
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
+import ShowMoreText from "react-show-more-text";
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
@@ -240,18 +241,21 @@ const Post = () => {
                           />
 
                           <div className="py-0 text-sm">
-                            <p className={`font-bold ${!isExpanded ? "line-clamp-2" : ""}`}>
+                            <p className={`font-bold ${!isExpanded ? "line-clamp-[2]" : ""}`}>
                               {post.user?.username}
                               {post.user?.role && (
                                 <VerifiedIcon className="w-3 h-3 ml-1 mb-[0.4px] inline-block items-center" />
                               )}
                               <span className="font-normal ml-1 text-center">
-                                <HighlightHashtags text={post?.caption || ""} />
+                                <HighlightHashtags text={post?.caption || ""} className="text-[#00376b]" />
                               </span>
                             </p>
+
                             {(post.caption?.split("\n").length ?? 0) > 2 && (
-                              <button onClick={toggleExpand} className="text-neutral-500 focus:outline-none">
-                                {isExpanded ? "less" : "more"}
+                              <button
+                                onClick={toggleExpand}
+                                className="text-neutral-500 focus:outline-none inline-block">
+                                {isExpanded ? "...less" : "...more"}
                               </button>
                             )}
                           </div>

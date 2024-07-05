@@ -14,11 +14,11 @@ import { NIL as NIL_UUID } from "uuid";
 import { useAuth } from "@/hooks/useAuth";
 
 const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"]["post_comments"] }) => {
-  const { authData } = useAuth();
+  const { authData, authCanUse } = useAuth();
   const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null);
   const { setParentID, setContent, setReplyUsername } = useCommentStore();
   const [showReplies, setShowReplies] = useState<{ [key: string]: boolean }>({});
-  const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
+
   const handleReplyComment = useCallback(
     (id: string, username: string) => {
       setContent(`@${username} `);
@@ -73,7 +73,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                   }
                   placement="bottom-start"
                   className="rounded-md shadow-lg"
-                  isDisabled={!isLoggedIn}>
+                  isDisabled={!authCanUse}>
                   <Link href={`/${comment?.user?.username}`}>
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={getUserAvatarURL(comment?.user?.avatar)} />
@@ -99,7 +99,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                         ? formatDistanceToNow(comment?.created_at, { addSuffix: true })
                         : "Unknown time"}
                     </Link>
-                    {isLoggedIn && (
+                    {authCanUse && (
                       <>
                         <button className="text-xs font-semibold text-neutral-500">0 likes</button>
                         <button
@@ -122,7 +122,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                   </div>
                 </div>
               </div>
-              {isLoggedIn && (
+              {authCanUse && (
                 <div className="items-center mt-3">
                   <FaRegHeart size={12} />
                 </div>
@@ -173,9 +173,8 @@ const ReplyBox = memo(
     parentID: string;
     handleReplyComment: (id: string, username: string) => void;
   }) => {
-    const { authData } = useAuth();
+    const { authData, authCanUse } = useAuth();
     const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null);
-    const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
 
     const replyComments = useMemo(() => {
       return comments?.filter((c) => c?.parent_id === parentID);
@@ -214,7 +213,7 @@ const ReplyBox = memo(
                   }
                   placement="bottom-start"
                   className="rounded-md shadow-lg"
-                  isDisabled={!isLoggedIn}>
+                  isDisabled={!authCanUse}>
                   <Link href={`/${reply?.user?.username}`} className="hover:text-neutral-300">
                     <Avatar className="w-8 h-8">
                       <AvatarImage src={getUserAvatarURL(reply?.user?.avatar)} />
@@ -244,7 +243,7 @@ const ReplyBox = memo(
                         addSuffix: true,
                       })}
                     </span>
-                    {isLoggedIn && (
+                    {authCanUse && (
                       <>
                         <button className="text-xs font-semibold text-neutral-500">0 likes</button>
                         <button
@@ -263,7 +262,7 @@ const ReplyBox = memo(
                   </div>
                 </div>
               </div>
-              {isLoggedIn && (
+              {authCanUse && (
                 <div className="items-center mt-3">
                   <FaRegHeart size={12} />
                 </div>

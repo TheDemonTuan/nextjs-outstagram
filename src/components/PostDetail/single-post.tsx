@@ -28,7 +28,7 @@ import { Card } from "../ui/card";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
-  const { authData } = useAuth();
+  const { authData, authCanUse } = useAuth();
   const {
     data: postData,
     error: postError,
@@ -60,7 +60,10 @@ const SinglePost = ({ id }: { id: string }) => {
   if (!postData) {
     return <div>User not found</div>;
   }
-  const isLoggedIn = authData !== undefined && authData !== null && Object.keys(authData).length > 0;
+
+  if (postData.postByPostId.type !== PostType.DEFAULT) {
+    return notFound();
+  }
 
   return (
     <>
@@ -98,7 +101,7 @@ const SinglePost = ({ id }: { id: string }) => {
               }
               placement="bottom-start"
               className="rounded-md shadow-lg"
-              isDisabled={!isLoggedIn}>
+              isDisabled={!authCanUse}>
               <div className="flex flex-row items-center gap-3 font-semibold text-[13px] leading-[18px]">
                 <UserProfileInfo
                   username={postData.postByPostId.user?.username || ""}
@@ -110,7 +113,7 @@ const SinglePost = ({ id }: { id: string }) => {
                 />
               </div>
             </Tooltip>
-            {isLoggedIn && (
+            {authCanUse && (
               <span
                 onClick={() => {
                   setModalData(postData.postByPostId);
@@ -135,7 +138,7 @@ const SinglePost = ({ id }: { id: string }) => {
           </div>
 
           <div className="px-5 py-4 hidden md:block mt-auto border-b border-t p-2.5 space-y-3 sticky z-20">
-            {isLoggedIn ? (
+            {authCanUse ? (
               <>
                 <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
                 <div className="flex flex-col">
@@ -162,7 +165,7 @@ const SinglePost = ({ id }: { id: string }) => {
               </p>
             )}
           </div>
-          {isLoggedIn && <CommentForm postId={id} />}
+          {authCanUse && <CommentForm postId={id} />}
         </div>
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}

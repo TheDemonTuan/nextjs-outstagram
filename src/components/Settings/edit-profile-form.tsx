@@ -239,7 +239,6 @@ const EditProfileForm = () => {
                     defaultValue={parseDate(new Date(authData?.birthday || "").toISOString().split("T")[0])}
                   />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />

@@ -51,7 +51,7 @@ import { toast } from "sonner";
 import SideBarInbox from "./Chats/sidebar-inbox";
 import LogoutModal, { LogoutModalKey } from "./LogoutModal";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
-import { SearchHeaderSkeleton } from "./skeletons";
+import { NotificationsSkeleton, SearchHeaderSkeleton } from "./skeletons";
 
 const HeaderMenu = [
   {
@@ -204,7 +204,6 @@ const Header = () => {
                         });
                         break;
                       case "New":
-                        // modalOpen(CreatePostModalKey);
                         modalOpen(SelectPhotoModalKey);
                         break;
                       default:
@@ -270,38 +269,33 @@ const Header = () => {
                   {!isShortHeader && <span className="text-lg">More</span>}
                 </div>
               </DropdownTrigger>
-              <DropdownMenu
-                className="w-64"
-                variant="flat"
-                // selectionMode="single"
-                // closeOnSelect={false}
-              >
+              <DropdownMenu className="w-64" variant="flat">
                 <DropdownSection showDivider={true}>
                   <DropdownItem
                     className="py-4 hover:bg-[#F2F2F2]"
+                    href="/accounts/edit/"
                     startContent={<SettingIcon className="w-5 h-5 ml-2" />}>
                     <span className="mx-1">Settings</span>
                   </DropdownItem>
                   <DropdownItem
                     className="py-4 pl-4 hover:bg-[#F2F2F2]"
-                    href="/your_activity/interactions"
+                    href="/your-activity/interactions"
                     startContent={<YourActivityIcon className="w-5 h-5 ml-2" />}>
-                    Your Activity
+                    <span className="mx-1">Your Activity</span>
                   </DropdownItem>
                   <DropdownItem
                     className="py-4 hover:bg-[#F2F2F2]"
+                    href={`/${authData?.username}?tab=SAVED`}
                     startContent={<BookmarkIcon className="w-5 h-5 ml-2" stroke="#000000" />}>
                     {" "}
-                    <Link href={`/${authData?.username}?tab=SAVED`} className="mx-1">
-                      Saved
-                    </Link>
+                    <span className="mx-1">Saved</span>
                   </DropdownItem>
-                  <DropdownItem
+                  {/* <DropdownItem
                     className="py-4 pl-4 hover:bg-[#F2F2F2]"
                     startContent={<SwitchAppearance className="w-5 h-5 ml-2" />}>
                     {" "}
                     <span className="mx-1">Switch appearance</span>
-                  </DropdownItem>
+                  </DropdownItem> */}
                   <DropdownItem
                     className="py-4 pl-4 hover:bg-[#F2F2F2]"
                     startContent={<ReportAProblemIcon className="w-5 h-5 pl-2" />}>
@@ -469,6 +463,7 @@ const Notification = () => {
               {/* <NextImage src={notification.image} alt="" width={44} height={44} className="w-12 h-12 rounded-lg" /> */}
             </Link>
           ))}
+
           {/* <div className="flex justify-between items-center">
                 <div className="flex items-center">
                   <Avatar className="w-11 h-11">

@@ -9,10 +9,10 @@ import { TfiMoreAlt } from "react-icons/tfi";
 import ReelsCommentsHeader from "./reels-comment-header";
 import ReelsComments from "./reels-comments";
 import { useQuery } from "@tanstack/react-query";
-import { postKey } from "@/api/post";
+import { PostType, postKey } from "@/api/post";
 import { PostByPostIdDocument } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
-import { ViewPostSkeleton } from "../skeletons";
+import { ReelDetailSkeleton } from "../skeletons";
 import { useEffect, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -47,11 +47,15 @@ const ReelsView = ({ id }: { id: string }) => {
   }, [reelError]);
 
   if (reelIsLoading) {
-    return <ViewPostSkeleton />;
+    return <ReelDetailSkeleton />;
   }
 
   if (!reelData) {
-    return <div>Post not found</div>;
+    return <div>Reel not found</div>;
+  }
+
+  if (reelData.postByPostId.type !== PostType.REEL) {
+    return notFound();
   }
 
   const loopThroughPostsUp = () => {
@@ -75,7 +79,7 @@ const ReelsView = ({ id }: { id: string }) => {
         }}
         radius="lg">
         <ModalContent>
-          <div className="lg:flex justify-between w-full h-screen bg-black">
+          <div className="lg:flex justify-between w-full h-screen bg-black overflow-auto">
             <div className="lg:w-[calc(100%-540px)] h-full relative">
               <button
                 onClick={() => {
@@ -129,7 +133,6 @@ const ReelsView = ({ id }: { id: string }) => {
             </div>
 
             <div
-              id="InfoSection"
               className="lg:max-w-[550px] relative w-full h-full bg-white 
               overflow-y-auto scrollbar-hide
               ">

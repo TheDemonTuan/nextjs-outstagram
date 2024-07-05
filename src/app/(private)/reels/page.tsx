@@ -1,24 +1,28 @@
 "use client";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import { Spinner } from "@nextui-org/react";
+import { Spinner, Tooltip } from "@nextui-org/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import ReelsAction from "@/components/Reels/reels-actions";
 import { useInView } from "react-intersection-observer";
-import { MoreOptionReelsIcon } from "@/icons";
-import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
+import { AudioMutedIcon, AudioPlayingIcon, MoreOptionReelsIcon, PlusReelsIcon } from "@/icons";
+import { AiFillHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PostType, postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
-import { Post, PostFile, PostReelDocument } from "@/gql/graphql";
+import { Friend, Post, PostFile, PostReelDocument } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "@/components/Post/post-more-options";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import SummaryProfile from "@/components/summary-profile";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import ReelReact from "@/components/Reels/reel-react";
+import HighlightHashtags from "@/components/highlight-hashtags";
+import { BsVolumeMuteFill, BsVolumeUpFill } from "react-icons/bs";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -27,6 +31,8 @@ const ReelsPage = () => {
   const { modalOpen, setModalData } = useModalStore();
   const { authData } = useAuth();
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   const {
     status,
@@ -105,6 +111,17 @@ const ReelsPage = () => {
     router.push(`/r/${reelId}`);
   };
 
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    document.querySelectorAll("video").forEach((video) => {
+      video.muted = !isMuted;
+    });
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center max-w-screen-2xl mx-auto">
@@ -113,6 +130,11 @@ const ReelsPage = () => {
             {page.postReel.map((reel) => {
               const postLikes = reel?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
+              const displayedCaption = isExpanded
+                ? reel.caption
+                : reel.caption && reel.caption.length > 100
+                ? `${reel.caption.substring(0, 40)}...`
+                : reel.caption;
               return (
                 <div key={reel.id} id={`PostMain-${reel.id}`} className="py-10 relative">
                   <div className="pl-3 w-full px-4">
@@ -129,23 +151,31 @@ const ReelsPage = () => {
                             autoPlay
                             controls={hoveredVideo === reel.id}
                             loop
-                            muted
+                            muted={isMuted}
                             className="object-cover rounded-xl mx-auto h-full"
                             src={reel.post_files?.[0]?.url ?? ""}
                           />
                         </div>
                         {hoveredVideo === reel.id && (
-                          <div
-                            className="absolute top-3 right-3 z-10"
-                            onClick={() => {
-                              setModalData(reel);
-                              modalOpen(PostMoreOptionsModalKey);
-                            }}>
-                            <MoreOptionReelsIcon fill="#ffff" />
-                          </div>
+                          <>
+                            <div
+                              className="absolute top-3 right-3 z-10"
+                              onClick={() => {
+                                setModalData(reel);
+                                modalOpen(PostMoreOptionsModalKey);
+                              }}>
+                              <MoreOptionReelsIcon fill="#ffff" />
+                            </div>
+
+                            <div className="absolute top-3 left-3 z-10 bg" onClick={toggleMute}>
+                              <div className="rounded-full p-2 bg-slate-50 bg-opacity-20">
+                                {isMuted ? <AudioMutedIcon /> : <AudioPlayingIcon />}
+                              </div>
+                            </div>
+                          </>
                         )}
                         <div
-                          className={`absolute left-3 text-white ${
+                          className={`absolute left-3 right-3 text-white ${
                             hoveredVideo === reel.id ? "bottom-16" : "bottom-2"
                           }`}>
                           <Link
@@ -153,7 +183,16 @@ const ReelsPage = () => {
                             className="font-medium hover:underline cursor-pointer pb-2">
                             {reel.user?.username}
                           </Link>
-                          <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">{reel.caption}</p>
+
+                          <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">
+                            <HighlightHashtags text={displayedCaption || ""} className="text-white" />
+                            {reel.caption && reel.caption.length > 100 && (
+                              <span className="cursor-pointer ml-4 font-semibold" onClick={toggleExpand}>
+                                {isExpanded ? "less" : "more"}
+                              </span>
+                            )}
+                          </p>
+
                           <p className="text-[14px] pb-1 flex items-center text-white">
                             <ImMusic size="17" />
                             <span className="px-1">original sound - AWESOME</span>
@@ -161,11 +200,45 @@ const ReelsPage = () => {
                           </p>
                         </div>
                       </div>
-                      <ReelsAction
-                        reelAction={reel as Post}
-                        isLiked={isUserLiked ?? false}
-                        postPage={pageIndex > 0 ? pageIndex : 0}
-                      />
+                      <div className="relative mr-[75px]">
+                        <div className="absolute bottom-0 pl-5 text-center text-xs text-gray-800 font-semibold">
+                          <Tooltip
+                            delay={1000}
+                            content={
+                              reel && (
+                                <SummaryProfile
+                                  username={reel.user?.username || ""}
+                                  full_name={reel.user?.full_name || ""}
+                                  avatar={reel.user?.avatar || ""}
+                                  role={reel.user?.role || false}
+                                  posts={[]}
+                                  friends={reel.user?.friends as Friend[]}
+                                />
+                              )
+                            }
+                            placement="bottom-start"
+                            className="rounded-md shadow-lg">
+                            <div className="relative mb-8">
+                              <Avatar className=" h-[50px] w-[50px] cursor-pointer">
+                                <AvatarImage src={getUserAvatarURL(reel.user?.avatar || "")} alt="user avatar" />
+                                <AvatarFallback>
+                                  <Spinner size="sm" />
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="absolute bottom-[-5px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
+                                <PlusReelsIcon fill="#FFFFFF" />
+                              </div>
+                            </div>
+                          </Tooltip>
+
+                          <ReelReact
+                            reelReact={reel as Post}
+                            isLiked={isUserLiked ?? false}
+                            postPage={pageIndex > 0 ? pageIndex : 0}
+                            orientation="vertical"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -200,6 +273,10 @@ const ReelsPage = () => {
           )
         )}
       </div>
+
+      <button
+        onClick={toggleMute}
+        className="fixed bottom-10 right-10 bg-red-500 text-white p-2 rounded-full z-50"></button>
       {reelsData && <PostMoreOptions />}
     </>
   );

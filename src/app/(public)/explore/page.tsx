@@ -95,9 +95,7 @@ const ExplorePage = () => {
         if (calculateIndex(i) && reelIndex < reelPosts.length) {
           sortedPosts.push(reelPosts[reelIndex++]);
         } else if (otherIndex < otherPosts.length) {
-          sortedPosts.push(otherPosts[otherIndex++]);
-        } else {
-          sortedPosts.push(reelPosts[reelIndex++] || otherPosts[otherIndex++]);
+          sortedPosts.push(otherPosts[otherIndex++]) || otherPosts[otherIndex++];
         }
       }
 

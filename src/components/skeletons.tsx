@@ -225,7 +225,7 @@ export function LoadingTopBar() {
   return (
     <>
       <div className="fixed top-0 left-0 right-0 z-50">
-        <div className="h-1 bg-custom-gradient bg-[length:500%] w-full animate-[LoadingBarProgress_2s_linear_infinite,LoadingBarEnter_.5s_ease-out] transform-origin-left"></div>
+        <div className="custom-color-top-bar"></div>
       </div>
     </>
   );

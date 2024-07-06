@@ -5,7 +5,6 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
 import { useInboxStore } from "@/stores/inbox-store";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, useEffect, useRef } from "react";
 import { animateScroll } from "react-scroll";

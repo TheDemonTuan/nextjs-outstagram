@@ -494,3 +494,27 @@ export function HeaderSkeleton() {
     </>
   );
 }
+
+export function PeopleSuggestionsSkeleton() {
+  return (
+    <div className="max-w-xl h-full mx-auto my-[76px]">
+      <span className="text-lg font-semibold">Suggested</span>
+      <div className="flex flex-col mx-1 space-y-4 my-5">
+        {Array.from({ length: 30 }).map((_, index) => (
+          <div key={index} className="flex items-center justify-between">
+            <div className="flex flex-row gap-3 items-center">
+              <Skeleton className="rounded-full w-12 h-12" />
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center space-x-1">
+                  <Skeleton className="h-3 w-[250px]" />
+                </div>
+                <Skeleton className="h-3 w-[200px]" />
+              </div>
+            </div>
+            <Skeleton className="w-24 h-9" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

@@ -51,7 +51,7 @@ import { toast } from "sonner";
 import SideBarInbox from "./Chats/sidebar-inbox";
 import LogoutModal, { LogoutModalKey } from "./LogoutModal";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
-import { NotificationsSkeleton, SearchHeaderSkeleton } from "./skeletons";
+import { HeaderSkeleton, NotificationsSkeleton, SearchHeaderSkeleton } from "./skeletons";
 
 const HeaderMenu = [
   {
@@ -106,7 +106,7 @@ const ShortHeaderSpecialList = ["Messages"];
 const Header = () => {
   const { modalOpen } = useModalStore();
   const pathName = usePathname();
-  const { authData, authIsLoading, authIsError,authCanUse,authIsPending } = useAuth();
+  const { authData, authIsLoading, authIsError, authCanUse, authIsPending } = useAuth();
   const [isShortHeader, setIsShortHeader] = React.useState(false);
   const [activeMenu, setActiveMenu] = React.useState("");
   const [changeMenu, setChangeMenu] = React.useState(false);
@@ -161,7 +161,7 @@ const Header = () => {
               />
             )}
           </Link>
-          {authIsPending && <div>Loading</div>}
+          {authIsPending && <HeaderSkeleton />}
           {/* Menu */}
           <nav className={cn(isShortHeader ? "space-y-3" : "space-y-4", authIsLoading && "hidden")}>
             {HeaderMenu.map((item, index) => {

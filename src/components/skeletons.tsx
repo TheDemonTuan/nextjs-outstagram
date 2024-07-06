@@ -446,3 +446,50 @@ export function ReelDetailSkeleton() {
     </>
   );
 }
+
+export function HeaderSkeleton() {
+  return (
+    <>
+      <div className="space-y-5">
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[100px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[130px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[150px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[100px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-full" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+      </div>
+      <div className="h-full flex justify-start items-end py-2">
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-5 w-[90px] rounded-md" />
+        </div>
+      </div>
+    </>
+  );
+}

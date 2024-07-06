@@ -116,9 +116,22 @@ const Post = () => {
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
 
-              const userComments = post?.post_comments
+              const getRandomCount = () => Math.floor(Math.random() * 3);
+
+              const filteredComments = post?.post_comments
+                ?.filter((comment) => !comment?.parent_id)
+                ?.sort(() => Math.random() - 0.5);
+
+              const userComments = filteredComments
                 ?.filter((comment) => comment?.user_id === authData?.id)
-                .slice(0, 2);
+                ?.slice(0, getRandomCount());
+
+              const commentsToShow =
+                userComments && userComments?.length > 0
+                  ? userComments
+                  : filteredComments
+                      ?.filter((comment) => comment?.user_id !== authData?.id)
+                      ?.slice(0, getRandomCount());
 
               return (
                 <Card
@@ -271,7 +284,7 @@ const Post = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="grid gap-1 px-2 py-1">
-                    {userComments?.map((comment) => (
+                    {commentsToShow?.map((comment) => (
                       <div key={comment?.id} className="text-sm flex items-center justify-between">
                         <div>
                           <span className="font-bold">{comment?.user?.username}</span>

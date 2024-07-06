@@ -1,7 +1,7 @@
 "use client";
 
+import { LoadingTopBar } from "@/components/skeletons";
 import { useAuth } from "@/hooks/useAuth";
-import { Spinner } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
@@ -10,7 +10,7 @@ const GuestGuard = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const { authIsSuccess, authIsLoading,authIsError } = useAuth();
+  const { authIsSuccess, authIsLoading, authIsError } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,14 +26,10 @@ const GuestGuard = ({
   }, [authIsSuccess, router]);
 
   if (authIsLoading) {
-    return <Spinner className="flex justify-center" size="lg" label="Loading..." color="secondary" />;
+    return <LoadingTopBar />;
   }
 
-  return (
-    <>
-      {authIsError && children}
-    </>
-  );
+  return <>{authIsError && children}</>;
 };
 
 export default GuestGuard;

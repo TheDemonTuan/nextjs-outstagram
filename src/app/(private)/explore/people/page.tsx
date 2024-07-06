@@ -1,9 +1,9 @@
-import React from 'react'
+"use client";
+import { LoadingTopBar } from "@/components/skeletons";
+import React from "react";
 
 const PeoplePage = () => {
-  return (
-    <div>PeoplePage</div>
-  )
-}
+  return <LoadingTopBar />;
+};
 
-export default PeoplePage
+export default PeoplePage;

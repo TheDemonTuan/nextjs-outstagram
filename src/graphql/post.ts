@@ -254,8 +254,21 @@ export const PostHomePage = graphql(`
         id
         user_id
         content
+        parent_id
         user {
           username
+          role
+          full_name
+          avatar
+          friends {
+            id
+            from_user_id
+            to_user_id
+            status
+            created_at
+            updated_at
+            deleted_at
+          }
         }
       }
       created_at

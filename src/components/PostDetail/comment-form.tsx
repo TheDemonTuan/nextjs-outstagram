@@ -81,28 +81,31 @@ const CommentForm = ({ postId }: { postId: string }) => {
     }
   }, [content, setParentID]);
 
-  const handlePostComment = useCallback((content: string, parentID: string) => {
-    if (parentID) {
-      const regex = /@(\w+)/g;
-      const match = regex.exec(content);
-      if (match) {
-        const username = match[1];
-        if (replyUsername !== username) {
-          parentID = "";
+  const handlePostComment = useCallback(
+    (content: string, parentID: string) => {
+      if (parentID) {
+        const regex = /@(\w+)/g;
+        const match = regex.exec(content);
+        if (match) {
+          const username = match[1];
+          if (replyUsername !== username) {
+            parentID = "";
+          } else {
+            content = content.replace(regex, "");
+          }
         } else {
-          content = content.replace(regex, "");
+          parentID = "";
         }
-      } else {
-        parentID = "";
       }
-    }
 
-    postCommentMutate({
-      postID: postId,
-      content,
-      parentID,
-    });
-  }, [postCommentMutate, postId, replyUsername]);
+      postCommentMutate({
+        postID: postId,
+        content,
+        parentID,
+      });
+    },
+    [postCommentMutate, postId, replyUsername]
+  );
 
   const handleEmojiClick = (e: EmojiClickData) => {
     setContent(content + e.emoji);
@@ -113,7 +116,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
   };
 
   return (
-    <div className="flex items-center space-x-2 px-5 p-2">
+    <div className="flex items-center space-x-2 px-5 p-2 w-full">
       <Popover placement="top-start" showArrow={true}>
         <PopoverTrigger>
           <div className="hover:opacity-50">

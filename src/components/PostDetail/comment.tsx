@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import SummaryProfile from "../summary-profile";
 import { NIL as NIL_UUID } from "uuid";
 import { useAuth } from "@/hooks/useAuth";
+import { VerifiedIcon } from "@/icons";
 
 const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"]["post_comments"] }) => {
   const { authData, authCanUse } = useAuth();
@@ -84,9 +85,12 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
 
                 <div className="space-y-1 mx-3">
                   <div className="flex items-center space-x-1 text-[13px] leading-[18px]">
-                    <div>
+                    <div className="">
                       <Link href={`/${comment?.user?.username}`} className="font-semibold hover:text-neutral-300">
-                        {comment?.user?.username}
+                        {comment?.user?.username}{" "}
+                        {comment?.user?.role && (
+                          <VerifiedIcon className="w-3 h-3 mb-[0.4px] inline-block items-center" />
+                        )}
                       </Link>{" "}
                       <span className="font-normal text-black">{comment?.content}</span>
                     </div>
@@ -222,6 +226,9 @@ const ReplyBox = memo(
                     <div>
                       <Link href={`/${reply?.user?.username}`} className="font-semibold hover:text-neutral-300">
                         {reply?.user?.username}{" "}
+                        {reply?.user?.role && (
+                          <VerifiedIcon className="w-3 h-3 mr-1 mb-[0.5px] inline-block items-center" />
+                        )}
                       </Link>
                       <span className="font-normal text-black space-x-1">
                         <Link href={`/${reply?.user?.username}`} className="text-sky-600">

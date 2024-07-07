@@ -41,29 +41,16 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        LoadingBarProgress: {
-          '0%': { backgroundPosition: '0% 0' },
-          '100%': { backgroundPosition: '125% 0' },
-        },
-        LoadingBarEnter: {
-          '0%': { transform: 'scaleX(0)' },
-          '100%': { transform: 'scaleX(1)' },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        LoadingBarProgress: 'LoadingBarProgress 2s linear infinite',
-        LoadingBarEnter: 'LoadingBarEnter .5s ease-out',
       },
       backgroundSize: {
         '500%': '500%',
       },
       transformOrigin: {
         'left': 'left',
-      },
-      backgroundImage: {
-        'custom-gradient': 'linear-gradient(to right, #27c4f5, #a307ba, #fd8d32, #70c050, #27c4f5)',
       },
     },
   },

@@ -5,12 +5,12 @@ import { Spinner, Tooltip } from "@nextui-org/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import { AudioMutedIcon, AudioPlayingIcon, MoreOptionReelsIcon, PlusReelsIcon } from "@/icons";
+import { AudioMutedIcon, AudioPlayingIcon, MoreOptionReelsIcon, PlusReelsIcon, VerifiedIcon } from "@/icons";
 import { AiFillHeart } from "react-icons/ai";
 import { ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { PostType, postKey } from "@/api/post";
+import { PostPrivacy, PostType, postKey } from "@/api/post";
 import { graphQLClient } from "@/lib/graphql";
 import { Friend, Post, PostFile, PostReelDocument } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
@@ -22,7 +22,7 @@ import SummaryProfile from "@/components/summary-profile";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import ReelReact from "@/components/Reels/reel-react";
 import HighlightHashtags from "@/components/highlight-hashtags";
-import { BsVolumeMuteFill, BsVolumeUpFill } from "react-icons/bs";
+import PostPrivacyView from "@/components/privacy-post-view";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -33,6 +33,7 @@ const ReelsPage = () => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   const {
     status,
@@ -117,8 +118,10 @@ const ReelsPage = () => {
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
-    document.querySelectorAll("video").forEach((video) => {
-      video.muted = !isMuted;
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        video.muted = !isMuted;
+      }
     });
   };
 
@@ -156,6 +159,7 @@ const ReelsPage = () => {
                             src={reel.post_files?.[0]?.url ?? ""}
                           />
                         </div>
+
                         {hoveredVideo === reel.id && (
                           <>
                             <div
@@ -178,10 +182,30 @@ const ReelsPage = () => {
                           className={`absolute left-3 right-3 text-white ${
                             hoveredVideo === reel.id ? "bottom-16" : "bottom-2"
                           }`}>
+                          <div className="flex items-center -ml-1 ">
+                            <PostPrivacyView
+                              privacy={reel.privacy || PostPrivacy.PUBLIC}
+                              size={16}
+                              disabledTooltip={true}
+                              color="#FFFFFF"
+                            />
+                            <span className="pl-1 align-middle text-sm">
+                              {reel.privacy === PostPrivacy.PUBLIC
+                                ? "Public"
+                                : reel.privacy === PostPrivacy.FRIEND
+                                ? "Friend"
+                                : "Private"}
+                            </span>
+                          </div>
+
                           <Link
                             href={`/${reel.user?.username}`}
                             className="font-medium hover:underline cursor-pointer pb-2">
                             {reel.user?.username}
+
+                            {reel?.user?.role && (
+                              <VerifiedIcon className="w-4 h-4 mx-1 mb-[1px] items-center inline-block" />
+                            )}
                           </Link>
 
                           <p className="text-[15px] pb-1 break-words md:max-w-[400px] max-w-[300px]">
@@ -273,10 +297,6 @@ const ReelsPage = () => {
           )
         )}
       </div>
-
-      <button
-        onClick={toggleMute}
-        className="fixed bottom-10 right-10 bg-red-500 text-white p-2 rounded-full z-50"></button>
       {reelsData && <PostMoreOptions />}
     </>
   );

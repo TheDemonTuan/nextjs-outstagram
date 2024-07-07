@@ -3,7 +3,7 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { Spinner, Tooltip } from "@nextui-org/react";
+import { Popover, PopoverContent, PopoverTrigger, Spinner, Tooltip } from "@nextui-org/react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { formatDistanceToNow } from "date-fns";
@@ -15,9 +15,8 @@ import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
 import { Friend, Post as PostGraphql, PostHomePageDocument } from "@/gql/graphql";
-import { UserResponse } from "@/api/user";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { PostType, postKey } from "@/api/post";
+import { PostPrivacy, PostType, postKey } from "@/api/post";
 import { graphQLClient, graphqlAbortController } from "@/lib/graphql";
 import { PostsHomeSkeleton } from "../skeletons";
 import PostLikes, { LikesModalKey } from "./post-likes";
@@ -35,9 +34,17 @@ import { pages } from "next/dist/build/templates/app-page";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import HighlightHashtags from "../highlight-hashtags";
-import PostPrivacy from "../privacy-post";
+import PostPrivacyView from "../privacy-post-view";
+import TextareaAutosize from "react-textarea-autosize";
+import { EmojiStyle } from "emoji-picker-react";
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
-import ShowMoreText from "react-show-more-text";
+
+const Picker = dynamic(
+  () => {
+    return import("emoji-picker-react");
+  },
+  { ssr: false }
+);
 
 const Post = () => {
   const { modalOpen, setModalData } = useModalStore();
@@ -117,9 +124,22 @@ const Post = () => {
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
 
-              const userComments = post?.post_comments
+              const getRandomCount = () => Math.floor(Math.random() * 3);
+
+              const filteredComments = post?.post_comments
+                ?.filter((comment) => !comment?.parent_id)
+                ?.sort(() => Math.random() - 0.5);
+
+              const userComments = filteredComments
                 ?.filter((comment) => comment?.user_id === authData?.id)
-                .slice(0, 2);
+                ?.slice(0, getRandomCount());
+
+              const commentsToShow =
+                userComments && userComments?.length > 0
+                  ? userComments
+                  : filteredComments
+                      ?.filter((comment) => comment?.user_id !== authData?.id)
+                      ?.slice(0, getRandomCount());
 
               return (
                 <Card
@@ -181,7 +201,7 @@ const Post = () => {
                                     </Link>
                                     <span className="text-gray-500 ml-1"> • </span>
 
-                                    <PostPrivacy privacy={post?.privacy || 0} />
+                                    <PostPrivacyView privacy={post?.privacy || PostPrivacy.PUBLIC} size={12} />
                                   </div>
                                 </div>
                               </div>
@@ -272,22 +292,44 @@ const Post = () => {
                     </div>
                   </CardContent>
                   <CardFooter className="grid gap-1 px-2 py-1">
-                    {userComments?.map((comment) => (
-                      <div key={comment?.id} className="text-sm flex items-center justify-between">
+                    {commentsToShow?.map((comment) => (
+                      <div key={comment?.id} className="text-sm flex items-center justify-between space-x-2">
                         <div>
-                          <span className="font-bold">{comment?.user?.username}</span>
+                          <Tooltip
+                            delay={1000}
+                            content={
+                              comment?.user && (
+                                <SummaryProfile
+                                  username={comment?.user.username || ""}
+                                  full_name={comment?.user.full_name || ""}
+                                  avatar={comment?.user.avatar || ""}
+                                  role={comment.user.role || false}
+                                  posts={[]}
+                                  friends={comment?.user.friends as Friend[]}
+                                />
+                              )
+                            }
+                            placement="bottom-start"
+                            className="rounded-md shadow-lg">
+                            <Link href={`/${comment?.user?.username}`} className="font-bold">
+                              {comment?.user?.username}
+                            </Link>
+                          </Tooltip>
+                          {comment?.user?.role && <VerifiedIcon className="w-3 h-3 inline-block ml-1" />}
                           <span className="ml-1">{comment?.content}</span>
                         </div>
-                        <FaRegHeart size={12} />
+                        <div>
+                          <FaRegHeart size={12} className="ml-2 cursor-pointer" />
+                        </div>
                       </div>
                     ))}
                   </CardFooter>
                   <CardFooter className="p-2">
                     <div className="flex gap-2 justify-between w-full items-center">
-                      <input
-                        type="text"
-                        name="body"
-                        className="bg-transparent text-sm border-none focus:outline-none flex-1 dark:text-neutral-400 placeholder-neutral-400 font-normal disabled:opacity-30"
+                      <TextareaAutosize
+                        maxRows={4}
+                        cacheMeasurements
+                        className="bg-transparent text-sm border-none focus:outline-none flex-1 dark:text-neutral-400 placeholder-neutral-400 font-normal disabled:opacity-30 resize-none"
                         placeholder="Add a comment..."
                       />
                     </div>
@@ -298,7 +340,23 @@ const Post = () => {
                         className="text-sky-500 text-base font-semibold hover:text-sky-700 dark:hover:text-white disabled:cursor-not-allowed  dark:disabled:text-slate-500 disabled:text-sky-500/40 disabled:hover:text-sky-500/40 dark:disabled:hover:text-slate-500">
                         Post
                       </button>
-                      <EmojiLookBottomIcon className="w-4 h-4" />
+
+                      <Popover placement="top-start" showArrow={true}>
+                        <PopoverTrigger>
+                          <div className="hover:opacity-50 cursor-pointer">
+                            {" "}
+                            <EmojiLookBottomIcon className="w-4 h-4" />
+                          </div>
+                        </PopoverTrigger>
+                        <PopoverContent className="p-0">
+                          <Picker
+                            lazyLoadEmojis
+                            emojiVersion="5.0"
+                            // onEmojiClick={(e) => handleEmojiClick(e)}
+                            emojiStyle={EmojiStyle.FACEBOOK}
+                          />
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   </CardFooter>
                   <hr className="border-gray-300 w-full mt-2" />

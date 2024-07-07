@@ -10,8 +10,9 @@ import { Spinner } from "@nextui-org/spinner";
 import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
 import HighlightHashtags from "../highlight-hashtags";
-import PostPrivacy from "../privacy-post";
 import { useAuth } from "@/hooks/useAuth";
+import PostPrivacyView from "../privacy-post-view";
+import { PostType } from "@/api/post";
 
 const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
   const { authData, authCanUse } = useAuth();
@@ -91,7 +92,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
           )}
           <span className="text-xs text-gray-500">·</span>
 
-          <PostPrivacy privacy={post?.privacy || 0} />
+          <PostPrivacyView privacy={post?.privacy || PostType.DEFAULT} size={12} />
         </div>
       </div>
     </div>

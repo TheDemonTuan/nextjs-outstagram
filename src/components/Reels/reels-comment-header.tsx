@@ -4,22 +4,21 @@ import Link from "next/link";
 import { ImMusic } from "react-icons/im";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import HighlightHashtags from "../highlight-hashtags";
-import { BookMarkReelsCommentIcon, LikeHeartIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
 import { Friend, Post, PostByPostIdQuery } from "@/gql/graphql";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { formatDistanceToNow } from "date-fns";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { PostLikeResponse, postLike } from "@/api/post_like";
-import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { postKey } from "@/api/post";
 import { toast } from "sonner";
 import { Tooltip } from "@nextui-org/react";
 import SummaryProfile from "../summary-profile";
 import ReelReact from "./reel-react";
 import { useState } from "react";
+import { VerifiedIcon } from "@/icons";
+import PostPrivacyView from "../privacy-post-view";
+import { PostPrivacy } from "@/api/post";
 
 const hostLocal = "http://localhost:3001";
+
 interface ReelsHeaderCommentsProps {
   reelHeaderData: PostByPostIdQuery;
   isLiked: boolean;
@@ -29,77 +28,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
   const reelData = reelHeaderData.postByPostId;
   const linkReels = `${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`;
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const queryClient = useQueryClient();
-  const { authData } = useAuth();
-
-  const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
-    mutationFn: async (params) => await postLike(params),
-    onSuccess: (likePostData) => {
-      const fakeData = {
-        ...likePostData.data,
-        user: {
-          ...authData,
-        },
-      };
-      if (!!queryClient.getQueryData([postKey, "reels"])) {
-        queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
-          return {
-            ...oldData,
-            pages: [
-              ...oldData.pages.map((page: any, index: any) => {
-                return {
-                  postReel: [
-                    ...page.postReel.map((reel: any) => {
-                      if (reel.id === reelData.id) {
-                        if (!reel.post_likes?.length) {
-                          return {
-                            ...reel,
-                            post_likes: [fakeData],
-                          };
-                        }
-                        const newLikes = reel.post_likes.filter((like: any) => like.user_id !== authData?.id);
-                        return {
-                          ...reel,
-                          post_likes: [fakeData, ...newLikes],
-                        };
-                      }
-                      return reel;
-                    }),
-                  ],
-                };
-              }),
-            ],
-          };
-        });
-      }
-
-      if (!!queryClient.getQueryData([postKey, { id: reelData.id }])) {
-        queryClient.setQueryData([postKey, { id: reelData.id }], (oldData: any) => {
-          if (!oldData.postByPostId.post_likes?.length) {
-            return {
-              ...oldData,
-              postByPostId: {
-                ...oldData.postByPostId,
-                post_likes: [fakeData],
-              },
-            };
-          }
-          const newLikes = oldData.postByPostId.post_likes.filter((like: any) => like.user_id !== authData?.id);
-          return {
-            ...oldData,
-            postByPostId: {
-              ...oldData.postByPostId,
-              post_likes: [fakeData, ...newLikes],
-            },
-          };
-        });
-      }
-    },
-    onError: (error) => {
-      toast.error(error?.response?.data?.message || "Like post failed!");
-    },
-  });
+  const { authCanUse } = useAuth();
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`${hostLocal}/r/${reelData?.id}?utm_source=og_web_copy_link`);
@@ -130,7 +59,8 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                 )
               }
               placement="bottom-start"
-              className="rounded-md shadow-lg">
+              className="rounded-md shadow-lg"
+              isDisabled={!authCanUse}>
               <Link href={`/${reelData.user?.username}`}>
                 <Avatar className="w-11 h-11">
                   <AvatarImage src={getUserAvatarURL(reelData.user?.avatar) || ""} />
@@ -153,15 +83,17 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                   )
                 }
                 placement="bottom-start"
-                className="rounded-md shadow-lg">
+                className="rounded-md shadow-lg"
+                isDisabled={!authCanUse}>
                 <Link
                   href={`/${reelData.user?.username}`}
                   className="relative z-10 text-[18px] leading-6 text-lg text font-bold hover:underline">
                   {reelData.user?.username}
+                  {reelData?.user?.role && <VerifiedIcon className="w-4 h-4 mx-1 mb-[1px] items-center inline-block" />}
                 </Link>
               </Tooltip>
 
-              <div className="relative z-0 text-sm -mt-0">
+              <div className="relative z-0 text-sm -mt-0 flex items-center">
                 {reelData.user?.full_name}
                 <span className="relative -top-[3px] text-sm pl-1 pr-0.5 ">.</span>
                 <span className="text-sm">
@@ -170,10 +102,17 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                     addSuffix: true,
                   })}
                 </span>
+                <span className="relative -top-[3px] text-sm pl-1 ">.</span>
+
+                <PostPrivacyView privacy={reelData.privacy || PostPrivacy.PUBLIC} size={15} />
               </div>
             </div>
           </div>
-          <button className="border text-[15px] px-[21px] py-1 border-[#F02C56] text-white bg-[#F02C56]  hover:bg-opacity-85 font-semibold rounded-md">
+          <button
+            disabled={!authCanUse}
+            className={`border text-[15px] px-[21px] py-1 border-[#F02C56] text-white bg-[#F02C56] ${
+              !authCanUse ? "" : "hover:bg-opacity-85"
+            }   font-semibold rounded-md `}>
             Add Friend
           </button>
         </div>
@@ -195,6 +134,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
       </div>
 
       <ReelReact reelReact={reelHeaderData.postByPostId as Post} isLiked={isLiked ?? false} orientation="horizontal" />
+
       <div className="relative flex items-center mt-1 mx-8 border py-1.5 rounded-lg bg-[#F1F1F2]">
         <input
           readOnly
@@ -203,8 +143,11 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
           disabled
         />
         <button
+          disabled={!authCanUse}
           onClick={handleCopyLink}
-          className="absolute right-0 border font-bold text-base py-1.5 px-4 border-none hover:bg-white rounded-r-lg">
+          className={`absolute right-0 border font-bold text-base py-1.5 px-4 border-none  rounded-r-lg ${
+            !authCanUse ? "" : "hover:bg-white"
+          }`}>
           Copy link
         </button>
       </div>

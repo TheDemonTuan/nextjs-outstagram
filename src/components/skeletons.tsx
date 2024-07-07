@@ -224,8 +224,9 @@ export function LoadingDotsReels() {
 export function LoadingTopBar() {
   return (
     <>
-      <div className="h-1 bg-custom-gradient bg-[length:500%] animate-[LoadingBarProgress_2s_linear_infinite,LoadingBarEnter_.5s_ease-out] transform-origin-left w-full"></div>
-      <div className="fixed left-0 right-0 top-0 z-12"></div>
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <div className="custom-color-top-bar"></div>
+      </div>
     </>
   );
 }
@@ -444,5 +445,76 @@ export function ReelDetailSkeleton() {
         </ModalContent>
       </Modal>
     </>
+  );
+}
+
+export function HeaderSkeleton() {
+  return (
+    <>
+      <div className="space-y-5">
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[100px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[130px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[150px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-4 w-[100px] rounded-md" />
+        </div>
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-full" />
+          <Skeleton className="h-4 w-[120px] rounded-md" />
+        </div>
+      </div>
+      <div className="h-full flex justify-start items-end py-2">
+        <div className="flex items-center space-x-4">
+          <Skeleton className="h-8 w-8 rounded-sm" />
+          <Skeleton className="h-5 w-[90px] rounded-md" />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function PeopleSuggestionsSkeleton() {
+  return (
+    <div className="max-w-xl h-full mx-auto my-[76px]">
+      <span className="text-lg font-semibold">Suggested</span>
+      <div className="flex flex-col mx-1 space-y-4 my-5">
+        {Array.from({ length: 30 }).map((_, index) => (
+          <div key={index} className="flex items-center justify-between">
+            <div className="flex flex-row gap-3 items-center">
+              <Skeleton className="rounded-full w-12 h-12" />
+              <div className="flex-1 space-y-2">
+                <div className="flex items-center space-x-1">
+                  <Skeleton className="h-3 w-[250px]" />
+                </div>
+                <Skeleton className="h-3 w-[200px]" />
+              </div>
+            </div>
+            <Skeleton className="w-24 h-9" />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

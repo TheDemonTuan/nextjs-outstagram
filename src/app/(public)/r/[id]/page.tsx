@@ -6,7 +6,6 @@ import React from "react";
 
 const ReelsView = dynamic(() => import("@/components/Reels/reels-view"), {
   loading: () => <ReelDetailSkeleton />,
-  ssr: false,
 });
 
 type Props = {

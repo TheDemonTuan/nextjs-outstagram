@@ -1,17 +1,16 @@
 import { inboxKey } from "@/api/inbox";
-import { InboxGetByUsernameDocument } from "@/gql/graphql";
+import { InboxGetByUsernameDocument, UserByUsernameDocument } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
-import { useInboxStore } from "@/stores/inbox-store";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React, { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect } from "react";
 import { animateScroll } from "react-scroll";
 import { Avatar, AvatarImage } from "../ui/avatar";
 
 const ChatInbox = ({ username }: { username: string }) => {
-  const { user } = useInboxStore();
+  // const { user,username } = useInboxStore();
   const { authData } = useAuth();
 
   const {
@@ -25,6 +24,16 @@ const ChatInbox = ({ username }: { username: string }) => {
     staleTime: 1000 * 60 * 5,
   });
 
+  const {
+    data: userProfileData,
+    error: userProfileError,
+    isLoading: userProfileIsLoading,
+  } = useQuery({
+    queryKey: [inboxKey, "profile", { username }],
+    queryFn: () => graphQLClient.request(UserByUsernameDocument, { username }),
+    enabled: !!username,
+  });
+
   useEffect(() => {
     if (inboxIsLoading || !inboxData) return;
 
@@ -35,7 +44,9 @@ const ChatInbox = ({ username }: { username: string }) => {
     });
   }, [inboxData, inboxIsLoading]);
 
-  if (inboxIsLoading) return <div>Loading...</div>;
+  const user = userProfileData?.userByUsername;
+
+  if (inboxIsLoading || userProfileIsLoading) return <div>Loading...</div>;
 
   if (!inboxData) return <div>No inbox data</div>;
 

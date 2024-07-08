@@ -35,12 +35,12 @@ function SideBarInbox() {
     }
   }, [inboxALlError]);
 
-  useEffect(() => {
-    if (username) {
-      const user = inboxAllData?.inboxGetAllBubble.find((inbox) => inbox.username === username);
-      user && setUser(user);
-    }
-  }, [username, setUser, inboxAllData?.inboxGetAllBubble]);
+  // useEffect(() => {
+  //   if (username) {
+  //     const user = inboxAllData?.inboxGetAllBubble.find((inbox) => inbox.username === username);
+  //     user && setUser(user);
+  //   }
+  // }, [username, setUser, inboxAllData?.inboxGetAllBubble]);
 
   useEffect(() => {
     inboxAllData?.inboxGetAllBubble.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -72,7 +72,7 @@ function SideBarInbox() {
       </div>
       <div className="flex items-center justify-between p-2 px-6">
         <div className="text-base font-bold text-black-700">Messages</div>
-        <Link href="/direct/requests/" className="text-sm font-semibold text-gray-500 cursor-pointer">
+        <Link href="/direct/inbox/requests" className="text-sm font-semibold text-gray-500 cursor-pointer">
           Requests
         </Link>
       </div>

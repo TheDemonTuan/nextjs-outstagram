@@ -5,10 +5,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useNotificationsStore } from "@/stores/notification-store";
 import { usePusherStore } from "@/stores/pusher-store";
-import { Button, Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import React, { MutableRefObject, RefObject, useCallback, useEffect } from "react";
+import { MutableRefObject, useEffect } from "react";
 import toast from "react-hot-toast";
 import useSound from "use-sound";
 
@@ -16,7 +16,7 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
   const { pusherClient } = usePusherStore();
   const { authCanUse, authData } = useAuth();
   const queryClient = useQueryClient();
-  const [playSound] = useSound("sounds/notification.mp3");
+  const [playSound] = useSound(`/sounds/notification.mp3`);
   const { addNotification } = useNotificationsStore();
 
   useEffect(() => {

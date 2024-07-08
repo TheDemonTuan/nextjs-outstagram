@@ -30,6 +30,9 @@ const FormInbox = () => {
       queryClient.setQueryData([inboxKey, "all"], (data: InboxGetAllBubbleQuery) => {
         const findUserNamePosition = data.inboxGetAllBubble.findIndex((inbox) => inbox.username === username);
         const cloneData = [...data.inboxGetAllBubble];
+
+        if(findUserNamePosition === -1) return data;
+
         cloneData[findUserNamePosition].last_message = inbox.data.message;
         cloneData[findUserNamePosition].created_at = inbox.data.created_at;
         cloneData[findUserNamePosition].is_read = false;
@@ -53,6 +56,8 @@ const FormInbox = () => {
       });
     },
     onError: (error) => {
+      console.log("error",error);
+      
       toast.error(error?.response?.data?.message || "Send inbox failed!");
     },
   });

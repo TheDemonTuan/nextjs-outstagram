@@ -56,7 +56,7 @@ const ReelsView = ({ id }: { id: string }) => {
   }
 
   if (reelData.postByPostId.type !== PostType.REEL) {
-    return notFound();
+    notFound();
   }
 
   const loopThroughPostsUp = () => {

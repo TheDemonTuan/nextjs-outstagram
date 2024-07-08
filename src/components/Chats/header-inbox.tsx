@@ -5,9 +5,25 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { useInboxStore } from "@/stores/inbox-store";
 import React from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { inboxKey } from "@/api/inbox";
+import { useQuery } from "@tanstack/react-query";
+import { graphQLClient } from "@/lib/graphql";
+import { UserByUsernameDocument } from "@/gql/graphql";
 
 const HeaderInbox = () => {
-  const { user } = useInboxStore();
+  const { username } = useInboxStore();
+
+  const {
+    data: userProfileData,
+    error: userProfileError,
+    isLoading: userProfileIsLoading,
+  } = useQuery({
+    queryKey: [inboxKey, "profile", { username }],
+    queryFn: () => graphQLClient.request(UserByUsernameDocument, { username }),
+    enabled: !!username,
+  });
+
+  const user = userProfileData?.userByUsername;
 
   return (
     <div className="bg-white w-full flex border-b-[1px] sm:px-4 py-[3px] px-4 lg:px-6 justify-between items-center shadow-sm sticky top-0 z-20">

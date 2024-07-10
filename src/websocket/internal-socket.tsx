@@ -1,4 +1,5 @@
 import { friendKey } from "@/api/friend";
+import { inboxKey } from "@/api/inbox";
 import { postKey } from "@/api/post";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
@@ -34,6 +35,12 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
         createdAt: new Date().toISOString(),
       });
       switch (data.type) {
+        case "inbox-action":
+          console.log(data.toUserName);
+          queryClient.invalidateQueries({
+            queryKey: [inboxKey, { username: data.username }],
+          });
+          break;
         case "friend-action":
           toast.custom((t) => (
             <div

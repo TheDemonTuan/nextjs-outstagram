@@ -1,13 +1,15 @@
 "use client";
 
 import { InboxResponse, InboxResponseParams, inboxKey, inboxSendMessages } from "@/api/inbox";
-import { InboxGetAllBubbleQuery, InboxGetByUsernameQuery } from "@/gql/graphql";
+import { InboxGetAllBubbleQuery, InboxGetByUsernameQuery, UserByUsernameDocument } from "@/gql/graphql";
 import { EmojiLookBottomIcon, ImgBoxIcon, MicIcon, UnLikeHeartIcon } from "@/icons";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { graphQLClient } from "@/lib/graphql";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { moveElementToFront } from "@/lib/utils";
 import { useInboxStore } from "@/stores/inbox-store";
 import { Input, Spinner } from "@nextui-org/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { toast } from "sonner";
 
@@ -15,6 +17,16 @@ const FormInbox = () => {
   const [value, setValue] = React.useState("");
   const { username } = useInboxStore();
   const queryClient = useQueryClient();
+
+  const {
+    data: userProfileData,
+    error: userProfileError,
+    isLoading: userProfileIsLoading,
+  } = useQuery({
+    queryKey: [inboxKey, "profile", { username }],
+    queryFn: () => graphQLClient.request(UserByUsernameDocument, { username }),
+    enabled: !!username,
+  });
 
   const { mutate: inboxSendMutate, isPending: inboxSendIsPending } = useMutation<
     ApiSuccessResponse<InboxResponse>,
@@ -28,15 +40,25 @@ const FormInbox = () => {
       });
 
       queryClient.setQueryData([inboxKey, "all"], (data: InboxGetAllBubbleQuery) => {
-        const findUserNamePosition = data.inboxGetAllBubble.findIndex((inbox) => inbox.username === username);
-        const cloneData = [...data.inboxGetAllBubble];
+        let findUserNamePosition = data.inboxGetAllBubble.findIndex((inbox) => inbox.username === username);
+        let cloneData = [...data.inboxGetAllBubble];
 
-        if(findUserNamePosition === -1) return data;
-
-        cloneData[findUserNamePosition].last_message = inbox.data.message;
-        cloneData[findUserNamePosition].created_at = inbox.data.created_at;
-        cloneData[findUserNamePosition].is_read = false;
-        findUserNamePosition > 0 && moveElementToFront(cloneData, findUserNamePosition);
+        if (findUserNamePosition === -1) {
+          findUserNamePosition = 0;
+          cloneData[findUserNamePosition] = {
+            username: username,
+            last_message: inbox.data.message,
+            created_at: inbox.data.created_at,
+            is_read: false,
+            avatar: getUserAvatarURL(userProfileData?.userByUsername?.avatar),
+            full_name: userProfileData?.userByUsername?.full_name || "",
+          };
+        } else {
+          cloneData[findUserNamePosition].last_message = inbox.data.message;
+          cloneData[findUserNamePosition].created_at = inbox.data.created_at;
+          cloneData[findUserNamePosition].is_read = false;
+        }
+        findUserNamePosition >= 0 && moveElementToFront(cloneData, findUserNamePosition);
         if (!findUserNamePosition) {
           data.inboxGetAllBubble.shift();
           return {
@@ -56,8 +78,8 @@ const FormInbox = () => {
       });
     },
     onError: (error) => {
-      console.log("error",error);
-      
+      console.log("error", error);
+
       toast.error(error?.response?.data?.message || "Send inbox failed!");
     },
   });

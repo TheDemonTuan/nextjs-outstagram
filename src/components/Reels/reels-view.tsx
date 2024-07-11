@@ -16,6 +16,7 @@ import { useEffect, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import CommentForm from "../PostDetail/comment-form";
 import ViewComments from "../PostDetail/comment";
+import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 
 const ReelsView = ({ id }: { id: string }) => {
   const { modalOpen, setModalData, modalKey, modalClose } = useModalStore();
@@ -91,7 +92,12 @@ const ReelsView = ({ id }: { id: string }) => {
                 <AiOutlineClose size="27" />
               </button>
               {authCanUse && (
-                <button className="absolute z-20 right-4 top-6  flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40  p-1.5 hover:bg-opacity-80">
+                <button
+                  onClick={() => {
+                    setModalData(reelData.postByPostId);
+                    modalOpen(PostMoreOptionsModalKey);
+                  }}
+                  className="absolute z-20 right-4 top-6  flex items-center justify-center rounded-full bg-gray-400 bg-opacity-40  p-1.5 hover:bg-opacity-80">
                   <TfiMoreAlt size="30" color="#FFFFFF" className="p-1" />
                 </button>
               )}
@@ -174,6 +180,8 @@ const ReelsView = ({ id }: { id: string }) => {
           </div>
         </ModalContent>
       </Modal>
+
+      <PostMoreOptions isGoToPost={true} />
     </>
   );
 };

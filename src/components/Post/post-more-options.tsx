@@ -74,7 +74,7 @@ const UserMoreOptions = [
   },
 ];
 
-const PostMoreOptions = () => {
+const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: boolean; isPostDetail?: boolean }) => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const { authData } = useAuth();
 
@@ -93,6 +93,9 @@ const PostMoreOptions = () => {
               <>
                 <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
                   {listOptionItem.map((optionItem, index) => {
+                    if (optionItem.title === "Go to post" && isGoToPost) {
+                      return null;
+                    }
                     return (
                       <Fragment key={index}>
                         <div
@@ -109,8 +112,14 @@ const PostMoreOptions = () => {
                                   modalOpen(ConfirmDeletePostModalKey);
                                   break;
                                 case "Go to post":
-                                  modalClose();
-                                  redirectHard(`/p/${modalData?.id}`);
+                                  if (!isPostDetail) {
+                                    modalClose();
+                                    redirectHard(`/p/${modalData?.id}`);
+                                  } else {
+                                    modalClose();
+                                    window.location.reload();
+                                  }
+
                                   break;
                                 case "Copy link":
                                   handleCopyLink();

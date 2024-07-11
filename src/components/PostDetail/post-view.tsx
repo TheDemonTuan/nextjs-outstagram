@@ -171,7 +171,7 @@ function PostView({ id }: { id: string }) {
           </Card>
         </ModalContent>
       </Modal>
-      <PostMoreOptions />
+      <PostMoreOptions isPostDetail={true} />
       <PostLikes />
     </>
   );

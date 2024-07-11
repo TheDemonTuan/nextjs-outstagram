@@ -302,7 +302,7 @@ const ReelsPage = () => {
           )
         )}
       </div>
-      {reelsData && <PostMoreOptions />}
+      {reelsData && <PostMoreOptions isGoToPost={true} />}
     </>
   );
 };

@@ -173,7 +173,7 @@ const SinglePost = ({ id }: { id: string }) => {
         </div>
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}
-      <PostMoreOptions />
+      <PostMoreOptions isGoToPost={true} />
       <PostLikes />
     </>
   );

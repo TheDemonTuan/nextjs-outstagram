@@ -219,7 +219,7 @@ const ReelsPage = () => {
 
                           <p className="text-[14px] pb-1 flex items-center text-white">
                             <ImMusic size="17" />
-                            <span className="px-1">original sound - AWESOME</span>
+                            <span className="px-1">original sound - {reel.user?.full_name}</span>
                             <AiFillHeart size="20" />
                           </p>
                         </div>

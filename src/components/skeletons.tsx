@@ -518,3 +518,41 @@ export function PeopleSuggestionsSkeleton() {
     </div>
   );
 }
+
+export function SidebarInboxSkeleton() {
+  return (
+    <div className="flex-auto">
+      <div className="flex flex-col">
+        <div className="flex items-center justify-between p-4">
+          <Skeleton className="h-4 w-[300px]" />
+          <Skeleton className="h-7 w-7 rounded-full mt-1" />
+        </div>
+        <div className="flex flex-col px-6 space-y-4">
+          {Array.from({ length: 9 }).map((_, index) => (
+            <div key={index} className="flex items-center space-x-4">
+              <Skeleton className="h-14 w-14 rounded-full" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function FrameInboxSkeleton() {
+  return (
+    <div className="flex flex-col h-screen items-center justify-center">
+      <Skeleton className="mb-5 rounded-full w-24 h-24" />
+
+      <div className="flex flex-col items-center space-y-4">
+        <Skeleton className="h-7 w-[250px] rounded-xl" />
+        <Skeleton className="h-3 w-[400px]" />
+        <Skeleton className="h-4 w-[200px] rounded-sm" />
+      </div>
+    </div>
+  );
+}

@@ -121,7 +121,11 @@ function PostView({ id }: { id: string }) {
             <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
               {authCanUse ? (
                 <>
-                  <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
+                  <PostReact
+                    postID={postData.postByPostId.id}
+                    userID={postData.postByPostId.user_id}
+                    isLiked={isLiked ?? false}
+                  />
 
                   <div className="flex flex-col space-y-1">
                     <LikesView

@@ -1,3 +1,4 @@
+"use client";
 import { inboxKey } from "@/api/inbox";
 import { InboxGetByUsernameDocument, UserByUsernameDocument } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,6 +9,7 @@ import Link from "next/link";
 import { Fragment, useEffect } from "react";
 import { animateScroll } from "react-scroll";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { FrameInboxSkeleton } from "../skeletons";
 
 const ChatInbox = ({ username }: { username: string }) => {
   // const { user,username } = useInboxStore();
@@ -46,7 +48,7 @@ const ChatInbox = ({ username }: { username: string }) => {
 
   const user = userProfileData?.userByUsername;
 
-  if (inboxIsLoading || userProfileIsLoading) return <div>Loading...</div>;
+  if (inboxIsLoading || userProfileIsLoading) return <FrameInboxSkeleton />;
 
   if (!inboxData) return <div>No inbox data</div>;
 

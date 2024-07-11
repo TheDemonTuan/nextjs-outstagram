@@ -9,7 +9,17 @@ import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
 
-const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boolean; postPage?: number }) => {
+const PostReact = ({
+  postID,
+  isLiked,
+  userID,
+  postPage,
+}: {
+  postID: string;
+  isLiked: boolean;
+  userID: string;
+  postPage?: number;
+}) => {
   const queryClient = useQueryClient();
   const { authData } = useAuth();
 
@@ -91,10 +101,12 @@ const PostReact = ({ postID, isLiked, postPage }: { postID: string; isLiked: boo
           <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
           <span className="sr-only">Comment</span>
         </Link>
-        <div>
-          <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-          <span className="sr-only">Share</span>
-        </div>
+        {userID !== authData?.id && (
+          <div>
+            <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+            <span className="sr-only">Share</span>
+          </div>
+        )}
       </div>
       <div className="ml-auto">
         <BookmarkIcon className="w-6 h-6  hover:stroke-gray115 cursor-pointer" stroke="#262626" />

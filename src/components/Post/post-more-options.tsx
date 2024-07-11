@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import EditPost, { EditPostModalKey } from "./edit-post";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "./confirm-delete-post";
 import { redirectHard } from "@/actions";
+import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
 const hostLocal = "http://localhost:3001";
@@ -32,6 +33,7 @@ const UserMeMoreOptions = [
   },
   {
     title: "About this account",
+    action: true,
   },
   {
     title: "Cancel",
@@ -67,6 +69,7 @@ const UserMoreOptions = [
   },
   {
     title: "About this account",
+    action: true,
   },
   {
     title: "Cancel",
@@ -119,7 +122,10 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
                                     modalClose();
                                     window.location.reload();
                                   }
-
+                                  break;
+                                case "About this account":
+                                  setModalData(modalData);
+                                  modalOpen(AboutThisAccountModalKey);
                                   break;
                                 case "Copy link":
                                   handleCopyLink();
@@ -146,6 +152,7 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
       </Modal>
       <EditPost />
       <ConfirmDeletePost />
+      <AboutThisAccount />
     </>
   );
 };

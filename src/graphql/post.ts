@@ -80,6 +80,8 @@ export const PostByPostID = graphql(`
             deleted_at
           }
         }
+        created_at
+        updated_at
       }
       created_at
       updated_at
@@ -209,6 +211,8 @@ export const PostHomePage = graphql(`
             is_private
           }
         }
+        created_at
+        updated_at
       }
       post_files {
         id
@@ -306,6 +310,8 @@ export const PostReel = graphql(`
                 to_user_id
                 status
             }
+          created_at
+          updated_at
         }
         post_files {
             id

@@ -244,12 +244,14 @@ const ReelsPage = () => {
                             placement="bottom-start"
                             className="rounded-md shadow-lg">
                             <div className="relative mb-8">
-                              <Avatar className=" h-[50px] w-[50px] cursor-pointer">
-                                <AvatarImage src={getUserAvatarURL(reel.user?.avatar || "")} alt="user avatar" />
-                                <AvatarFallback>
-                                  <Spinner size="sm" />
-                                </AvatarFallback>
-                              </Avatar>
+                              <Link href={`/${reel.user?.username}`}>
+                                <Avatar className=" h-[50px] w-[50px] cursor-pointer">
+                                  <AvatarImage src={getUserAvatarURL(reel.user?.avatar || "")} alt="user avatar" />
+                                  <AvatarFallback>
+                                    <Spinner size="sm" />
+                                  </AvatarFallback>
+                                </Avatar>
+                              </Link>
                               <button
                                 disabled
                                 className="absolute bottom-[-8px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">

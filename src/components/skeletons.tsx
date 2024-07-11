@@ -256,6 +256,13 @@ export function ExploresSkeleton() {
         <Skeleton className="col-span-1 row-span-1 w-full h-[20rem] group" />{" "}
         <Skeleton className="col-span-1 row-span-1 w-full h-[20rem] group" />{" "}
       </div>
+      <div className="grid grid-cols-3 grid-rows-2 gap-1 mt-1">
+        <Skeleton className="col-span-1 row-span-2 w-full h-[40rem] group" />{" "}
+        <Skeleton className="col-span-1 row-span-1 w-full h-[20rem] group" />{" "}
+        <Skeleton className="col-span-1 row-span-1 w-full h-[20rem] group" />{" "}
+        <Skeleton className="col-span-1 row-span-1 w-full h-[20rem] group" />{" "}
+        <Skeleton className="col-span-1 row-span-1 w-full h-[20rem] group" />{" "}
+      </div>
     </div>
   );
 }

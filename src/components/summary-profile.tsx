@@ -130,7 +130,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
         ) : isFriend ? (
           <>
             <Button className="w-1/2 mx-1 h-9 text-white font-semibold bg-primary-400 rounded-lg">
-              <Link href="/direct/inbox" className="flex items-center space-x-2">
+              <Link href={`/direct/inbox/${props.username}`} className="flex items-center space-x-2">
                 <MessagesSummaryProfileIcon stroke="#FFFFFF" className="w-5 h-5" />
                 <span>Message</span>
               </Link>

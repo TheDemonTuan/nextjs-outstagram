@@ -23,6 +23,7 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import ReelReact from "@/components/Reels/reel-react";
 import HighlightHashtags from "@/components/highlight-hashtags";
 import PostPrivacyView from "@/components/privacy-post-view";
+import { SiVerizon } from "react-icons/si";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -249,9 +250,11 @@ const ReelsPage = () => {
                                   <Spinner size="sm" />
                                 </AvatarFallback>
                               </Avatar>
-                              <div className="absolute bottom-[-5px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
-                                <PlusReelsIcon fill="#FFFFFF" />
-                              </div>
+                              <button
+                                disabled
+                                className="absolute bottom-[-8px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
+                                <SiVerizon color="#FFFFFF" />
+                              </button>
                             </div>
                           </Tooltip>
 

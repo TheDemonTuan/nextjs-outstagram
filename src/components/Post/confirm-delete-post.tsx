@@ -34,19 +34,6 @@ const ConfirmDeletePost = () => {
     mutationFn: async () => await postDelete(modalData?.id),
     onSuccess: () => {
       toast.success("Delete post successfully!");
-      // queryClient.setQueryData([authKey], (oldData: ApiSuccessResponse<AuthVerifyResponse>) =>
-      //   oldData
-      //     ? {
-      //         ...oldData,
-      //         data: {
-      //           user: {
-      //             ...oldData.data.user,
-      //             post: "",
-      //           },
-      //         },
-      //       }
-      //     : oldData
-      // );
 
       queryClient.setQueryData([postKey, "home"], (oldData: any) => {
         if (!oldData) return oldData;

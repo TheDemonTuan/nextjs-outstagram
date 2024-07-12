@@ -65,9 +65,6 @@ const UserMoreOptions = [
     action: true,
   },
   {
-    title: "Embed",
-  },
-  {
     title: "About this account",
     action: true,
   },

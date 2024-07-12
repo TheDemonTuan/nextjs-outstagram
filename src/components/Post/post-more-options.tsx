@@ -7,6 +7,8 @@ import EditPost, { EditPostModalKey } from "./edit-post";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "./confirm-delete-post";
 import { redirectHard } from "@/actions";
 import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
+import { toast } from "sonner";
+import ShareModal, { ShareModalKey } from "./share-modal";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
 const hostLocal = "http://localhost:3001";
@@ -59,6 +61,7 @@ const UserMoreOptions = [
   },
   {
     title: "Share to ...",
+    action: true,
   },
   {
     title: "Copy link",
@@ -80,6 +83,7 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`${hostLocal}/p/${modalData?.id}?utm_source=og_web_copy_link`);
+    toast.success("Link copied to clipboard!");
     modalClose();
   };
 
@@ -127,6 +131,9 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
                                 case "Copy link":
                                   handleCopyLink();
                                   break;
+                                case "Share to ...":
+                                  modalOpen(ShareModalKey);
+                                  break;
                                 case "Cancel":
                                   modalClose();
                                   break;
@@ -150,6 +157,7 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
       <EditPost />
       <ConfirmDeletePost />
       <AboutThisAccount />
+      <ShareModal />
     </>
   );
 };

@@ -49,7 +49,7 @@ import React, { useEffect, useRef } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { toast } from "sonner";
 import SideBarInbox from "./Chats/sidebar-inbox";
-import LogoutModal, { LogoutModalKey } from "./LogoutModal";
+import LogoutModal, { LogoutModalKey } from "./logout-modal";
 import SelectPhotoModal, { SelectPhotoModalKey } from "./Post/select-photo";
 import { HeaderSkeleton, NotificationsSkeleton, SearchHeaderSkeleton } from "./skeletons";
 

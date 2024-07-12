@@ -4,7 +4,7 @@ import { Link } from "@nextui-org/react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { Fragment } from "react";
-import LogoutModal, { LogoutModalKey } from "../LogoutModal";
+import LogoutModal, { LogoutModalKey } from "../logout-modal";
 
 export const ProfileSettingModalKey = "ProfileSettings";
 

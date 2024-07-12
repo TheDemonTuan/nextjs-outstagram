@@ -9,9 +9,8 @@ import { redirectHard } from "@/actions";
 import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
 import { toast } from "sonner";
 import ShareModal, { ShareModalKey } from "./share-modal";
+import { PostType } from "@/api/post";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
-
-const hostLocal = "http://localhost:3001";
 
 const UserMeMoreOptions = [
   {
@@ -82,7 +81,11 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
   const { authData } = useAuth();
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`${hostLocal}/p/${modalData?.id}?utm_source=og_web_copy_link`);
+    navigator.clipboard.writeText(
+      modalData.type === PostType.DEFAULT
+        ? `${process.env.NEXT_PUBLIC_CLIENT_HOST}/p/${modalData?.id}?utm_source=og_web_copy_link`
+        : `${process.env.NEXT_PUBLIC_CLIENT_HOST}/r/${modalData?.id}?utm_source=og_web_copy_link`
+    );
     toast.success("Link copied to clipboard!");
     modalClose();
   };
@@ -132,6 +135,7 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
                                   handleCopyLink();
                                   break;
                                 case "Share to ...":
+                                  setModalData(modalData);
                                   modalOpen(ShareModalKey);
                                   break;
                                 case "Cancel":

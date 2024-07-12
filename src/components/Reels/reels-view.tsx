@@ -17,6 +17,7 @@ import { useAuth } from "@/hooks/useAuth";
 import CommentForm from "../PostDetail/comment-form";
 import ViewComments from "../PostDetail/comment";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
+import ShareModal from "../Post/share-modal";
 
 const ReelsView = ({ id }: { id: string }) => {
   const { modalOpen, setModalData, modalKey, modalClose } = useModalStore();
@@ -182,6 +183,7 @@ const ReelsView = ({ id }: { id: string }) => {
       </Modal>
 
       <PostMoreOptions isGoToPost={true} />
+      <ShareModal />
     </>
   );
 };

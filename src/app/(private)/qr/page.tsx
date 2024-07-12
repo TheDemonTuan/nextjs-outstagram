@@ -3,8 +3,6 @@ import { useAuth } from "@/hooks/useAuth";
 import React, { useState } from "react";
 import { QRCode } from "react-qrcode-logo";
 
-const hostLocal = "http://localhost:3001";
-
 const svgLogo = (fgColor: string) => `
 <svg viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" stroke="#000000">
   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -28,7 +26,7 @@ const svgLogo = (fgColor: string) => `
 const QRCodePage = () => {
   const { authData } = useAuth();
 
-  const createQR = `${hostLocal}/${authData?.username}?utm_source=og_web_qr`;
+  const createQR = `${process.env.NEXT_PUBLIC_CLIENT_HOST}/${authData?.username}?utm_source=og_web_qr`;
 
   const [bgColor, setBgColor] = useState("bg-gradient-to-bl from-[#AF18A9] to-[#F4803F]");
   const [fgColor, setFgColor] = useState("#AF18A9");

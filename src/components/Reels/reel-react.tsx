@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { Post } from "@/gql/graphql";
 import Link from "next/link";
 import { memo, useMemo } from "react";
+import { useModalStore } from "@/stores/modal-store";
+import { ShareModalKey } from "../Post/share-modal";
 
 interface ReelReactProps {
   reelReact: Post;
@@ -19,6 +21,7 @@ interface ReelReactProps {
 const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizontal" }: ReelReactProps) => {
   const queryClient = useQueryClient();
   const { authData, authCanUse } = useAuth();
+  const { modalOpen, setModalData } = useModalStore();
 
   const { mutate: postLikeMutate } = useMutation<ApiSuccessResponse<PostLikeResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postLike(params),
@@ -169,17 +172,24 @@ const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizonta
           <div className="pb-4 text-center flex items-center">
             <button
               className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-              disabled={!authCanUse}>
+              disabled={!authCanUse}
+              onClick={() => {
+                setModalData(reelReact);
+                modalOpen(ShareModalKey);
+              }}>
               <ShareReelsIcon width={22} height={22} />
             </button>
-            <span className="text-sm pl-2 text-gray-800 font-semibold">185</span>
           </div>
         ) : (
           <div>
-            <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
+            <button
+              className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300"
+              onClick={() => {
+                setModalData(reelReact);
+                modalOpen(ShareModalKey);
+              }}>
               <ShareReelsIcon width={22} height={22} />
             </button>
-            <span className="">55</span>
           </div>
         ))}
     </div>

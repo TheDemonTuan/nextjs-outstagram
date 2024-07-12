@@ -17,8 +17,6 @@ import { VerifiedIcon } from "@/icons";
 import PostPrivacyView from "../privacy-post-view";
 import { PostPrivacy } from "@/api/post";
 
-const hostLocal = "http://localhost:3001";
-
 interface ReelsHeaderCommentsProps {
   reelHeaderData: PostByPostIdQuery;
   isLiked: boolean;
@@ -26,12 +24,12 @@ interface ReelsHeaderCommentsProps {
 
 export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHeaderCommentsProps) {
   const reelData = reelHeaderData.postByPostId;
-  const linkReels = `${hostLocal}/p/${reelData?.id}?utm_source=og_web_copy_link`;
+  const linkReels = `${process.env.NEXT_PUBLIC_CLIENT_HOST}/r/${reelData?.id}?utm_source=og_web_copy_link`;
   const [isExpanded, setIsExpanded] = useState(false);
   const { authCanUse } = useAuth();
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`${hostLocal}/r/${reelData?.id}?utm_source=og_web_copy_link`);
+    navigator.clipboard.writeText(linkReels);
     toast.success("Link copied to clipboard");
   };
 

@@ -10,7 +10,6 @@ import { formatDistanceToNow } from "date-fns";
 import { useModalStore } from "@/stores/modal-store";
 import { PostMoreOptionsModalKey } from "./post-more-options";
 import PostReact from "./post-react";
-import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
@@ -216,7 +215,7 @@ const Post = () => {
                             <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
                           </span>
                         </CardHeader>
-                        <Share />
+
                         <CardContent className="p-2">
                           {post?.post_files?.length ? (
                             <div className="relative">

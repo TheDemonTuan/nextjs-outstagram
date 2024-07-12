@@ -1,6 +1,5 @@
 "use client";
 
-import ModalLoading from "@/components/modal-loading";
 import { ViewPostSkeleton } from "@/components/skeletons";
 import dynamic from "next/dynamic";
 import React from "react";

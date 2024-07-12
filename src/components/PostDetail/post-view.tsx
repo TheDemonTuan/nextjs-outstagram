@@ -1,5 +1,4 @@
 import { PostType, postKey } from "@/api/post";
-import { UserResponse } from "@/api/user";
 import { Friend, Post, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
@@ -59,11 +58,11 @@ function PostView({ id }: { id: string }) {
   }
 
   if (!postData) {
-    return <div>Post not found</div>;
+    notFound();
   }
 
   if (postData.postByPostId.type !== PostType.DEFAULT) {
-    return notFound();
+    notFound();
   }
 
   return (

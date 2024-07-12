@@ -5,7 +5,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import React, { Fragment } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { PostResponse, postDelete } from "@/api/post";
+import { PostResponse, postDelete, postKey } from "@/api/post";
 import { toast } from "sonner";
 import { AuthVerifyResponse, authKey } from "@/api/auth";
 
@@ -47,6 +47,38 @@ const ConfirmDeletePost = () => {
       //       }
       //     : oldData
       // );
+
+      queryClient.setQueryData([postKey, "home"], (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => {
+            return {
+              ...page,
+              postHomePage: page.postHomePage.filter((post: any) => post.id !== modalData.id),
+            };
+          }),
+        };
+      });
+
+      queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => {
+            return {
+              ...page,
+              postReel: page.postReel.filter((post: any) => post.id !== modalData.id),
+            };
+          }),
+        };
+      });
+
+      if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
+        queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
+          return null;
+        });
+      }
       modalClose();
     },
     onError: (error) => {

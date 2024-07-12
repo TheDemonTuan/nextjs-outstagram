@@ -14,8 +14,6 @@ export const AboutThisAccountModalKey = "AboutThisAccount";
 const AboutThisAccount = () => {
   const { modalOpen, setModalData, modalClose, modalKey, modalData } = useModalStore();
 
-  console.log(modalData);
-
   return (
     <>
       <Modal size="sm" isOpen={modalKey === AboutThisAccountModalKey} onOpenChange={modalClose} hideCloseButton={true}>

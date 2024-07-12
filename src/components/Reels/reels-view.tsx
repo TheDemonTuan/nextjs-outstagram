@@ -53,7 +53,7 @@ const ReelsView = ({ id }: { id: string }) => {
   }
 
   if (!reelData) {
-    return <div>Reel not found</div>;
+    notFound();
   }
 
   if (reelData.postByPostId.type !== PostType.REEL) {

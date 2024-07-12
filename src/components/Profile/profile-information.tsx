@@ -32,7 +32,10 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
             className={`rounded-full w-40 h-40 ${isCurrentUser ? "cursor-pointer" : ""}`}
             onClick={handleAvatarClick}>
             <Avatar className="w-40 h-40 text text-large">
-              <AvatarImage src={getUserAvatarURL(user?.avatar)} alt="User Avatar" />
+              <AvatarImage
+                src={!isCurrentUser ? getUserAvatarURL(user?.avatar) : getUserAvatarURL(authData?.avatar)}
+                alt="User Avatar"
+              />
               <AvatarFallback>
                 <Spinner size="md" />
               </AvatarFallback>

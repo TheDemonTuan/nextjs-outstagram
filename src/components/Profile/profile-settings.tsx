@@ -2,32 +2,30 @@ import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
 import { Link } from "@nextui-org/react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import React, { Fragment } from "react";
+import LogoutModal, { LogoutModalKey } from "../logout-modal";
 
 export const ProfileSettingModalKey = "ProfileSettings";
 
 const ListProfileSetting = [
   {
-    title: "Apps and websites",
-  },
-  {
     title: "QR code",
+    href: "/qr",
+    action: true,
   },
   {
     title: "Notifications",
   },
   {
     title: "Settings and privacy",
-  },
-  {
-    title: "Meta Verified",
-  },
-  {
-    title: "Supervision",
+    href: "/accounts/privacy-setting",
+    action: true,
   },
   {
     title: "Logout",
     className: "text-red-500",
+    action: true,
   },
   {
     title: "Cancel",
@@ -36,7 +34,8 @@ const ListProfileSetting = [
 ];
 
 const ProfileSettings = () => {
-  const { modalClose, modalKey } = useModalStore();
+  const router = useRouter();
+  const { modalClose, modalKey, modalOpen } = useModalStore();
   return (
     <>
       <Modal isOpen={modalKey === ProfileSettingModalKey} onOpenChange={modalClose} hideCloseButton={true}>
@@ -54,6 +53,18 @@ const ProfileSettings = () => {
                           onClick={() => {
                             if (optionItem?.action) {
                               switch (optionItem.title) {
+                                case "QR code":
+                                  if (optionItem.href) {
+                                    router.push(optionItem.href);
+                                  }
+                                  break;
+                                case "Settings and privacy":
+                                  if (optionItem.href) {
+                                    router.push(optionItem.href);
+                                  }
+                                case "Logout":
+                                  modalOpen(LogoutModalKey);
+                                  break;
                                 case "Cancel":
                                   modalClose();
                                   break;
@@ -74,6 +85,7 @@ const ProfileSettings = () => {
           }}
         </ModalContent>
       </Modal>
+      <LogoutModal />
     </>
   );
 };

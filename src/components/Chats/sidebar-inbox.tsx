@@ -16,6 +16,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { usePathname } from "next/navigation";
 import { useModalStore } from "@/stores/modal-store";
 import NewMessage, { NewMessageModalKey } from "./new-message";
+import { SidebarInboxSkeleton } from "../skeletons";
 
 function SideBarInbox() {
   const { authData } = useAuth();
@@ -57,7 +58,7 @@ function SideBarInbox() {
   //   });
   // }, []);
 
-  if (inboxALlIsLoading) return <div>Loading...</div>;
+  if (inboxALlIsLoading) return <SidebarInboxSkeleton />;
 
   if (!inboxAllData) return <div>No inbox data</div>;
 

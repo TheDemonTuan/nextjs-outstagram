@@ -70,7 +70,7 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                             }
                             placement="bottom-start"
                             className="rounded-md shadow-lg">
-                            <Link href={`/${friendInfo?.username}`}>
+                            <Link href={`/${friendInfo?.username}`} onClick={modalClose}>
                               <Avatar className="w-11 h-11">
                                 <AvatarImage src={getUserAvatarURL(friendInfo?.avatar)} alt="User Avatar" />
                                 <AvatarFallback>
@@ -98,7 +98,10 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                                 }
                                 placement="bottom-start"
                                 className="rounded-md shadow-lg">
-                                <Link href={`/${friendInfo?.username}`} className="text-sm font-bold">
+                                <Link
+                                  href={`/${friendInfo?.username}`}
+                                  className="text-sm font-bold"
+                                  onClick={modalClose}>
                                   {friendInfo?.username}
                                 </Link>
                               </Tooltip>

@@ -1,5 +1,4 @@
 import { PostType, postKey } from "@/api/post";
-import { UserResponse } from "@/api/user";
 import { Friend, Post, PostByPostIdDocument, PostLike } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
@@ -59,11 +58,11 @@ function PostView({ id }: { id: string }) {
   }
 
   if (!postData) {
-    return <div>Post not found</div>;
+    notFound();
   }
 
   if (postData.postByPostId.type !== PostType.DEFAULT) {
-    return notFound();
+    notFound();
   }
 
   return (
@@ -121,7 +120,11 @@ function PostView({ id }: { id: string }) {
             <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
               {authCanUse ? (
                 <>
-                  <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
+                  <PostReact
+                    postID={postData.postByPostId.id}
+                    userID={postData.postByPostId.user_id}
+                    isLiked={isLiked ?? false}
+                  />
 
                   <div className="flex flex-col space-y-1">
                     <LikesView
@@ -167,7 +170,7 @@ function PostView({ id }: { id: string }) {
           </Card>
         </ModalContent>
       </Modal>
-      <PostMoreOptions />
+      <PostMoreOptions isPostDetail={true} />
       <PostLikes />
     </>
   );

@@ -140,7 +140,11 @@ const SinglePost = ({ id }: { id: string }) => {
           <div className="px-5 py-4 hidden md:block mt-auto border-b border-t p-2.5 space-y-3 sticky z-20">
             {authCanUse ? (
               <>
-                <PostReact postID={postData.postByPostId.id} isLiked={isLiked ?? false} />
+                <PostReact
+                  postID={postData.postByPostId.id}
+                  userID={postData.postByPostId.user_id}
+                  isLiked={isLiked ?? false}
+                />
                 <div className="flex flex-col">
                   <LikesView
                     post={postData.postByPostId as Post}
@@ -169,7 +173,7 @@ const SinglePost = ({ id }: { id: string }) => {
         </div>
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}
-      <PostMoreOptions />
+      <PostMoreOptions isGoToPost={true} />
       <PostLikes />
     </>
   );

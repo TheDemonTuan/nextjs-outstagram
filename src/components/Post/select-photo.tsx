@@ -77,7 +77,9 @@ const SelectPhotoModal = ({ defaultTab = "photos" }: { defaultTab?: "photos" | "
           {() => (
             <>
               {filesWithType.length <= 0 ? (
-                <ModalHeader className="flex gap-1 items-center justify-center p-3">Create new post</ModalHeader>
+                <ModalHeader className="flex gap-1 items-center justify-center p-3">
+                  {selectedTab === "photos" ? "Create new post" : "Create new reel"}
+                </ModalHeader>
               ) : (
                 <ModalHeader className="flex justify-between items-center my-[-5px]">
                   <button onClick={resetFilesWithType} className="cursor-pointe font-normal text-sm ">

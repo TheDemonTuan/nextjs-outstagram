@@ -1557,3 +1557,208 @@ export const AudioMutedIcon = (props: SVGProps<SVGAElement>) => {
     </svg>
   );
 };
+
+//Share
+export const FacebookShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Share to Facebook"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Share to Facebook</title>
+      <circle
+        cx="12"
+        cy="12"
+        fill="none"
+        r="11.25"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"></circle>
+      <path
+        d="M16.671 15.469 17.203 12h-3.328V9.749a1.734 1.734 0 0 1 1.956-1.874h1.513V4.922a18.452 18.452 0 0 0-2.686-.234c-2.741 0-4.533 1.66-4.533 4.668V12H7.078v3.469h3.047v7.885a12.125 12.125 0 0 0 3.75 0V15.47Z"
+        fillRule="evenodd"></path>
+    </svg>
+  );
+};
+
+export const MessageFacebookShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Share in Messenger"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Share in Messenger</title>
+      <path
+        d="M12.003 2.001a9.705 9.705 0 1 1 0 19.4 10.876 10.876 0 0 1-2.895-.384.798.798 0 0 0-.533.04l-1.984.876a.801.801 0 0 1-1.123-.708l-.054-1.78a.806.806 0 0 0-.27-.569 9.49 9.49 0 0 1-3.14-7.175 9.65 9.65 0 0 1 10-9.7Z"
+        fill="none"
+        stroke="currentColor"
+        strokeMiterlimit="10"
+        strokeWidth="1.739"></path>
+      <path
+        d="M17.79 10.132a.659.659 0 0 0-.962-.873l-2.556 2.05a.63.63 0 0 1-.758.002L11.06 9.47a1.576 1.576 0 0 0-2.277.42l-2.567 3.98a.659.659 0 0 0 .961.875l2.556-2.049a.63.63 0 0 1 .759-.002l2.452 1.84a1.576 1.576 0 0 0 2.278-.42Z"
+        fillRule="evenodd"></path>
+    </svg>
+  );
+};
+
+export const XShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Share to Twitter"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Share to Twitter</title>
+      <path d="M16.04 3.5a4.304 4.304 0 0 1 3.145 1.362 8.645 8.645 0 0 0 2.736-1.046 4.324 4.324 0 0 1-1.895 2.383 8.618 8.618 0 0 0 2.475-.678 8.766 8.766 0 0 1-2.15 2.23c.01.185.013.37.013.557A12.175 12.175 0 0 1 8.105 20.567a12.2 12.2 0 0 1-6.604-1.935 8.792 8.792 0 0 0 1.027.06 8.647 8.647 0 0 0 5.351-1.845 4.314 4.314 0 0 1-4.024-2.992 4.313 4.313 0 0 0 1.945-.074 4.31 4.31 0 0 1-3.457-4.224c0-.02 0-.038.002-.055a4.267 4.267 0 0 0 1.951.538 4.312 4.312 0 0 1-1.334-5.75 12.233 12.233 0 0 0 8.881 4.502A4.315 4.315 0 0 1 16.04 3.5m6.46 2.02h.006M16.04 2a5.817 5.817 0 0 0-5.763 5.08 10.783 10.783 0 0 1-6.152-3.74 1.5 1.5 0 0 0-1.163-.552c-.039 0-.078.001-.117.004a1.5 1.5 0 0 0-1.18.742 5.821 5.821 0 0 0-.422 4.949 1.5 1.5 0 0 0-.394.904 2.26 2.26 0 0 0-.006.169 5.81 5.81 0 0 0 1.553 3.948 1.5 1.5 0 0 0 .03.808 5.796 5.796 0 0 0 1.801 2.679 7.233 7.233 0 0 1-1.699.2 7.338 7.338 0 0 1-.852-.05 1.5 1.5 0 0 0-.984 2.753 13.718 13.718 0 0 0 7.413 2.172 13.405 13.405 0 0 0 10.226-4.503 14.213 14.213 0 0 0 3.532-9.093 10.204 10.204 0 0 0 1.846-2.06 1.5 1.5 0 0 0-.362-2.132l.002-.006a1.5 1.5 0 0 0-2.193-1.748 7.15 7.15 0 0 1-1.56.69A5.838 5.838 0 0 0 16.04 2Z"></path>
+    </svg>
+  );
+};
+
+export const EmailShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Share via Email"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Share via Email</title>
+      <rect
+        fill="none"
+        height="17.273"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        width="20"
+        x="2"
+        y="3.364"></rect>
+      <polyline
+        fill="none"
+        points="2 7.155 12.002 13.81 22 7.157"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"></polyline>
+    </svg>
+  );
+};
+
+export const QRShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="QR code"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>QR code</title>
+      <path
+        d="M.75 16.097v3.568a3.585 3.585 0 0 0 3.585 3.585h3.568m0-22.5H4.335A3.585 3.585 0 0 0 .75 4.335v3.568m22.5 0V4.335A3.585 3.585 0 0 0 19.665.75h-3.568m0 22.5h3.568a3.585 3.585 0 0 0 3.585-3.585v-3.568"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"></path>
+      <path d="M19 17.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5ZM17.5 16a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5Zm1.5-2.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5Zm-4 4h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5Zm-1-2h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5ZM18 4h-3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm.5 5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V6a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5ZM9 4H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm.5 5a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5V6a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5ZM8 6.5H7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V7a.5.5 0 0 0-.5-.5Zm0 9H7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5Zm9-9h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V7a.5.5 0 0 0-.5-.5ZM9 13H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2Zm.5 5a.5.5 0 0 1-.5.5H6a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5Z"></path>
+    </svg>
+  );
+};
+
+export const CPShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="Copy Link"
+      className="x1lliihq x1n2onr6 x5n08af"
+      fill="currentColor"
+      height="24"
+      role="img"
+      viewBox="0 0 24 24"
+      width="24">
+      <title>Copy Link</title>
+      <path
+        d="m9.726 5.123 1.228-1.228a6.47 6.47 0 0 1 9.15 9.152l-1.227 1.227m-4.603 4.603-1.228 1.228a6.47 6.47 0 0 1-9.15-9.152l1.227-1.227"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"></path>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        x1="8.471"
+        x2="15.529"
+        y1="15.529"
+        y2="8.471"></line>
+    </svg>
+  );
+};
+
+export const PinterestShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg width="24px" height="24px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+
+      <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+
+      <g id="SVGRepo_iconCarrier">
+        {" "}
+        <path
+          d="M4.5 13.5L7.5 6.5M4.26389 9.5C3.78885 8.96924 3.5 8.26835 3.5 7.5V7C3.5 5.067 5.067 3.5 7 3.5H8C9.933 3.5 11.5 5.067 11.5 7V7.5C11.5 9.15685 10.1569 10.5 8.5 10.5C7.60421 10.5 6.80893 9.92679 6.52566 9.07697L6.5 9M7.5 14.5C3.63401 14.5 0.5 11.366 0.5 7.5C0.5 3.63401 3.63401 0.5 7.5 0.5C11.366 0.5 14.5 3.63401 14.5 7.5C14.5 11.366 11.366 14.5 7.5 14.5Z"
+          stroke="#000000"
+        />{" "}
+      </g>
+    </svg>
+  );
+};
+
+export const LinkedinShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg width="24px" height="24px" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+
+      <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+
+      <g id="SVGRepo_iconCarrier">
+        {" "}
+        <path
+          d="M4.5 6V11M10.5 11V8.5C10.5 7.39543 9.60457 6.5 8.5 6.5C7.39543 6.5 6.5 7.39543 6.5 8.5V11V6M4 4.5H5M1.5 0.5H13.5C14.0523 0.5 14.5 0.947715 14.5 1.5V13.5C14.5 14.0523 14.0523 14.5 13.5 14.5H1.5C0.947716 14.5 0.5 14.0523 0.5 13.5V1.5C0.5 0.947716 0.947715 0.5 1.5 0.5Z"
+          stroke="#000000"
+        />{" "}
+      </g>
+    </svg>
+  );
+};
+
+export const TelegramShareIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg fill="#000000" width="24px" height="24px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+
+      <g id="SVGRepo_iconCarrier">
+        <path d="M 26.070313 3.996094 C 25.734375 4.011719 25.417969 4.109375 25.136719 4.21875 L 25.132813 4.21875 C 24.847656 4.332031 23.492188 4.902344 21.433594 5.765625 C 19.375 6.632813 16.703125 7.757813 14.050781 8.875 C 8.753906 11.105469 3.546875 13.300781 3.546875 13.300781 L 3.609375 13.277344 C 3.609375 13.277344 3.25 13.394531 2.875 13.652344 C 2.683594 13.777344 2.472656 13.949219 2.289063 14.21875 C 2.105469 14.488281 1.957031 14.902344 2.011719 15.328125 C 2.101563 16.050781 2.570313 16.484375 2.90625 16.722656 C 3.246094 16.964844 3.570313 17.078125 3.570313 17.078125 L 3.578125 17.078125 L 8.460938 18.722656 C 8.679688 19.425781 9.949219 23.597656 10.253906 24.558594 C 10.433594 25.132813 10.609375 25.492188 10.828125 25.765625 C 10.933594 25.90625 11.058594 26.023438 11.207031 26.117188 C 11.265625 26.152344 11.328125 26.179688 11.390625 26.203125 C 11.410156 26.214844 11.429688 26.21875 11.453125 26.222656 L 11.402344 26.210938 C 11.417969 26.214844 11.429688 26.226563 11.441406 26.230469 C 11.480469 26.242188 11.507813 26.246094 11.558594 26.253906 C 12.332031 26.488281 12.953125 26.007813 12.953125 26.007813 L 12.988281 25.980469 L 15.871094 23.355469 L 20.703125 27.0625 L 20.8125 27.109375 C 21.820313 27.550781 22.839844 27.304688 23.378906 26.871094 C 23.921875 26.433594 24.132813 25.875 24.132813 25.875 L 24.167969 25.785156 L 27.902344 6.65625 C 28.007813 6.183594 28.035156 5.742188 27.917969 5.3125 C 27.800781 4.882813 27.5 4.480469 27.136719 4.265625 C 26.769531 4.046875 26.40625 3.980469 26.070313 3.996094 Z M 25.96875 6.046875 C 25.964844 6.109375 25.976563 6.101563 25.949219 6.222656 L 25.949219 6.234375 L 22.25 25.164063 C 22.234375 25.191406 22.207031 25.25 22.132813 25.308594 C 22.054688 25.371094 21.992188 25.410156 21.667969 25.28125 L 15.757813 20.75 L 12.1875 24.003906 L 12.9375 19.214844 C 12.9375 19.214844 22.195313 10.585938 22.59375 10.214844 C 22.992188 9.84375 22.859375 9.765625 22.859375 9.765625 C 22.886719 9.3125 22.257813 9.632813 22.257813 9.632813 L 10.082031 17.175781 L 10.078125 17.15625 L 4.242188 15.191406 L 4.242188 15.1875 C 4.238281 15.1875 4.230469 15.183594 4.226563 15.183594 C 4.230469 15.183594 4.257813 15.171875 4.257813 15.171875 L 4.289063 15.15625 L 4.320313 15.144531 C 4.320313 15.144531 9.53125 12.949219 14.828125 10.71875 C 17.480469 9.601563 20.152344 8.476563 22.207031 7.609375 C 24.261719 6.746094 25.78125 6.113281 25.867188 6.078125 C 25.949219 6.046875 25.910156 6.046875 25.96875 6.046875 Z" />
+      </g>
+    </svg>
+  );
+};

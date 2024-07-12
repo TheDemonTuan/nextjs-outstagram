@@ -23,6 +23,7 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import ReelReact from "@/components/Reels/reel-react";
 import HighlightHashtags from "@/components/highlight-hashtags";
 import PostPrivacyView from "@/components/privacy-post-view";
+import { SiVerizon } from "react-icons/si";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -219,7 +220,7 @@ const ReelsPage = () => {
 
                           <p className="text-[14px] pb-1 flex items-center text-white">
                             <ImMusic size="17" />
-                            <span className="px-1">original sound - AWESOME</span>
+                            <span className="px-1">original sound - {reel.user?.full_name}</span>
                             <AiFillHeart size="20" />
                           </p>
                         </div>
@@ -243,15 +244,19 @@ const ReelsPage = () => {
                             placement="bottom-start"
                             className="rounded-md shadow-lg">
                             <div className="relative mb-8">
-                              <Avatar className=" h-[50px] w-[50px] cursor-pointer">
-                                <AvatarImage src={getUserAvatarURL(reel.user?.avatar || "")} alt="user avatar" />
-                                <AvatarFallback>
-                                  <Spinner size="sm" />
-                                </AvatarFallback>
-                              </Avatar>
-                              <div className="absolute bottom-[-5px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
-                                <PlusReelsIcon fill="#FFFFFF" />
-                              </div>
+                              <Link href={`/${reel.user?.username}`}>
+                                <Avatar className=" h-[50px] w-[50px] cursor-pointer">
+                                  <AvatarImage src={getUserAvatarURL(reel.user?.avatar || "")} alt="user avatar" />
+                                  <AvatarFallback>
+                                    <Spinner size="sm" />
+                                  </AvatarFallback>
+                                </Avatar>
+                              </Link>
+                              <button
+                                disabled
+                                className="absolute bottom-[-8px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
+                                <SiVerizon color="#FFFFFF" />
+                              </button>
                             </div>
                           </Tooltip>
 
@@ -297,7 +302,7 @@ const ReelsPage = () => {
           )
         )}
       </div>
-      {reelsData && <PostMoreOptions />}
+      {reelsData && <PostMoreOptions isGoToPost={true} />}
     </>
   );
 };

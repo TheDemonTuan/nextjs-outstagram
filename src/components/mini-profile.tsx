@@ -12,7 +12,7 @@ import { logoutToken } from "@/actions";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { VerifiedIcon } from "@/icons";
-import LogoutModal, { LogoutModalKey } from "./LogoutModal";
+import LogoutModal, { LogoutModalKey } from "./logout-modal";
 
 const MiniProfile = () => {
   const { authData } = useAuth();

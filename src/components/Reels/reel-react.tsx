@@ -164,24 +164,24 @@ const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizonta
           <span className="">55</span>
         </div>
       )}
-
-      {orientation === "horizontal" ? (
-        <div className="pb-4 text-center flex items-center">
-          <button
-            className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-            disabled={!authCanUse}>
-            <ShareReelsIcon width={22} height={22} />
-          </button>
-          <span className="text-sm pl-2 text-gray-800 font-semibold">185</span>
-        </div>
-      ) : (
-        <div>
-          <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
-            <ShareReelsIcon width={22} height={22} />
-          </button>
-          <span className="">55</span>
-        </div>
-      )}
+      {reelReact.user_id !== authData?.id &&
+        (orientation === "horizontal" ? (
+          <div className="pb-4 text-center flex items-center">
+            <button
+              className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
+              disabled={!authCanUse}>
+              <ShareReelsIcon width={22} height={22} />
+            </button>
+            <span className="text-sm pl-2 text-gray-800 font-semibold">185</span>
+          </div>
+        ) : (
+          <div>
+            <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
+              <ShareReelsIcon width={22} height={22} />
+            </button>
+            <span className="">55</span>
+          </div>
+        ))}
     </div>
   );
 });

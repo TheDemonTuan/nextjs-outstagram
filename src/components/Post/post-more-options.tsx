@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils";
 import EditPost, { EditPostModalKey } from "./edit-post";
 import ConfirmDeletePost, { ConfirmDeletePostModalKey } from "./confirm-delete-post";
 import { redirectHard } from "@/actions";
+import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
+import { toast } from "sonner";
+import ShareModal, { ShareModalKey } from "./share-modal";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
 const hostLocal = "http://localhost:3001";
@@ -32,6 +35,7 @@ const UserMeMoreOptions = [
   },
   {
     title: "About this account",
+    action: true,
   },
   {
     title: "Cancel",
@@ -57,16 +61,15 @@ const UserMoreOptions = [
   },
   {
     title: "Share to ...",
+    action: true,
   },
   {
     title: "Copy link",
     action: true,
   },
   {
-    title: "Embed",
-  },
-  {
     title: "About this account",
+    action: true,
   },
   {
     title: "Cancel",
@@ -74,12 +77,13 @@ const UserMoreOptions = [
   },
 ];
 
-const PostMoreOptions = () => {
+const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: boolean; isPostDetail?: boolean }) => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const { authData } = useAuth();
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(`${hostLocal}/p/${modalData?.id}?utm_source=og_web_copy_link`);
+    toast.success("Link copied to clipboard!");
     modalClose();
   };
 
@@ -93,6 +97,9 @@ const PostMoreOptions = () => {
               <>
                 <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
                   {listOptionItem.map((optionItem, index) => {
+                    if (optionItem.title === "Go to post" && isGoToPost) {
+                      return null;
+                    }
                     return (
                       <Fragment key={index}>
                         <div
@@ -109,11 +116,23 @@ const PostMoreOptions = () => {
                                   modalOpen(ConfirmDeletePostModalKey);
                                   break;
                                 case "Go to post":
-                                  modalClose();
-                                  redirectHard(`/p/${modalData?.id}`);
+                                  if (!isPostDetail) {
+                                    modalClose();
+                                    redirectHard(`/p/${modalData?.id}`);
+                                  } else {
+                                    modalClose();
+                                    window.location.reload();
+                                  }
+                                  break;
+                                case "About this account":
+                                  setModalData(modalData);
+                                  modalOpen(AboutThisAccountModalKey);
                                   break;
                                 case "Copy link":
                                   handleCopyLink();
+                                  break;
+                                case "Share to ...":
+                                  modalOpen(ShareModalKey);
                                   break;
                                 case "Cancel":
                                   modalClose();
@@ -137,6 +156,8 @@ const PostMoreOptions = () => {
       </Modal>
       <EditPost />
       <ConfirmDeletePost />
+      <AboutThisAccount />
+      <ShareModal />
     </>
   );
 };

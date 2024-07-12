@@ -151,7 +151,7 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
   );
 
   const btnRemoveFriend = (
-    <Dropdown>
+    <Dropdown placement="bottom-start" radius="sm">
       <DropdownTrigger>
         <Button
           size="sm"
@@ -160,8 +160,8 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
           <BsFillPersonCheckFill /> Friend
         </Button>
       </DropdownTrigger>
-      <DropdownMenu className="my-2 mx-2 space-y-2">
-        <DropdownItem key="unfollow">
+      <DropdownMenu className="my-1 mx-2 space-y-2" variant="faded" aria-label="Dropdown Variants">
+        <DropdownItem key="unfollow" showDivider className="rounded-md">
           <span className="font-semibold text-center text-danger">Unfollow</span>
         </DropdownItem>
         <DropdownItem key="unfriend" onClick={handleRejectRequest}>
@@ -178,7 +178,7 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
   );
 
   const btnAcceptRequest = (
-    <Dropdown>
+    <Dropdown placement="bottom-start" radius="sm">
       <DropdownTrigger>
         <Button
           size="sm"
@@ -188,11 +188,11 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
           Feedback
         </Button>
       </DropdownTrigger>
-      <DropdownMenu className="my-2 mx-2 space-y-2">
-        <DropdownItem key="confirm" onClick={handleAcceptRequest}>
+      <DropdownMenu className="my-1 mx-2 space-y-2" variant="faded" aria-label="Dropdown Variants">
+        <DropdownItem key="confirm" onClick={handleAcceptRequest} showDivider className="rounded-md">
           <span className="font-semibold text-primary">Confirm</span>
         </DropdownItem>
-        <DropdownItem key="delete invitation" onClick={handleRejectRequest}>
+        <DropdownItem key="delete invitation" onClick={handleRejectRequest} className="rounded-md">
           <span className="font-semibold text-danger">Delete invitation</span>
         </DropdownItem>
       </DropdownMenu>

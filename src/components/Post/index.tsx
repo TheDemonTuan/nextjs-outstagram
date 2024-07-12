@@ -250,6 +250,7 @@ const Post = () => {
                         <CardFooter className="p-2 grid gap-2">
                           <PostReact
                             postID={post.id}
+                            userID={post.user_id}
                             isLiked={isUserLiked ?? false}
                             postPage={pageIndex > 0 ? pageIndex : 0}
                           />

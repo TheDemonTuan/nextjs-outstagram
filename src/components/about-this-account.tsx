@@ -11,8 +11,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { GoUnverified } from "react-icons/go";
 
 export const AboutThisAccountModalKey = "AboutThisAccount";
-const AboutThisAccount = () => {
-  const { modalOpen, setModalData, modalClose, modalKey, modalData } = useModalStore();
+const AboutThisAccount = ({ isProfile = false }: { isProfile?: boolean }) => {
+  const { modalClose, modalKey, modalData } = useModalStore();
+
+  const dataUser = isProfile === false ? modalData.user : modalData;
 
   return (
     <>
@@ -27,15 +29,15 @@ const AboutThisAccount = () => {
               <ModalBody className="my-2">
                 <div className="flex flex-col items-center justify-center space-y-4 ">
                   <Avatar className="w-20 h-20">
-                    <AvatarImage src={getUserAvatarURL(modalData.user.avatar)} />
+                    <AvatarImage src={getUserAvatarURL(dataUser.avatar)} />
                     <AvatarFallback>
                       <Spinner size="md" />
                     </AvatarFallback>
                   </Avatar>
 
                   <div className="font-bold text-base flex items-center space-x-1">
-                    <span>{modalData.user.username}</span>
-                    {modalData.user.role && <VerifiedIcon className="w-3 h-3" />}
+                    <span>{dataUser.username}</span>
+                    {dataUser.role && <VerifiedIcon className="w-3 h-3" />}
                   </div>
                   <p className="text-xs text-[#737373] text-center">
                     To help keep our community authentic, we&apos;re showing <br /> information about accounts on
@@ -48,7 +50,7 @@ const AboutThisAccount = () => {
                     <div className="flex flex-col -space-y-1">
                       <span>Date joined</span>
                       <span className="text-sm text-[#737373]">
-                        {new Date(modalData.user.created_at).toLocaleString("en-us", {
+                        {new Date(dataUser.created_at).toLocaleString("en-us", {
                           year: "numeric",
                           month: "short",
                           day: "2-digit",
@@ -65,13 +67,13 @@ const AboutThisAccount = () => {
                     </div>
                   </div>
 
-                  {modalData.user.role ? (
+                  {dataUser.role ? (
                     <div className="flex items-center space-x-3">
                       <MdOutlineVerified size={25} />
                       <div className="flex flex-col -space-y-1">
                         <span>Verified admin</span>
                         <span className="text-sm text-[#737373]">
-                          {new Date(modalData.user.created_at).toLocaleString("en-us", {
+                          {new Date(dataUser.created_at).toLocaleString("en-us", {
                             year: "numeric",
                             month: "short",
                           })}
@@ -86,14 +88,14 @@ const AboutThisAccount = () => {
                       </div>
                     </div>
                   )}
-                  {modalData.user.updated_at !== modalData.user.created_at && (
+                  {dataUser.updated_at !== dataUser.created_at && (
                     <div className="flex items-center space-x-3">
                       <FaRegUserCircle size={25} />
                       <div className="flex flex-col -space-y-1">
                         <span>Last updated</span>
                         <span className="text-sm text-[#737373]">
                           {" "}
-                          {new Date(modalData.user.updated_at).toLocaleString("en-us", {
+                          {new Date(dataUser.updated_at).toLocaleString("en-us", {
                             year: "numeric",
                             month: "short",
                           })}

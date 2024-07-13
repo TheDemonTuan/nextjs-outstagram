@@ -18,6 +18,7 @@ import { ProfileSkeleton } from "@/components/skeletons";
 import { ReelsIcon, ReelsProfileIcon, VideoAddIcon } from "@/icons";
 import Reel from "@/components/Profile/reel";
 import Saved from "@/components/Profile/saved";
+import { useAuth } from "@/hooks/useAuth";
 
 const renderActiveTabContent = (activeTab: string, userProfile: UserProfileQuery) => {
   switch (activeTab) {
@@ -36,6 +37,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") || "POSTS";
   const [activeTab, setActiveTab] = useState<string>(initialTab);
+  const { authData } = useAuth();
 
   const {
     data: userProfileData,
@@ -70,9 +72,9 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   }
 
   return (
-    <div className="flex flex-col max-w-screen-xl mt-9 mx-28 mb-40 ">
+    <div className="flex flex-col max-w-screen-lg mt-9 mx-28 mb-40">
       <ProfileInformation userProfile={userProfileData} />
-      <ProfileStories />
+      {/* <ProfileStories /> */}
       <div className="w-full">
         <hr className="border-gray-300 mt-14 border-t mx-28" />
       </div>
@@ -85,10 +87,12 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
           <ReelsProfileIcon width={19} height={19} />
           REELS
         </button>
-        <button className={getClassNames("SAVED")} onClick={() => setActiveTab("SAVED")}>
-          <FiBookmark size={19} />
-          SAVED
-        </button>
+        {authData?.username === userProfileData.userProfile.username && (
+          <button className={getClassNames("SAVED")} onClick={() => setActiveTab("SAVED")}>
+            <FiBookmark size={19} />
+            SAVED
+          </button>
+        )}
       </div>
       {renderActiveTabContent(activeTab, userProfileData)}
     </div>

@@ -62,7 +62,7 @@ const ProfileAction = (props: ProfileActionProps) => {
 export default ProfileAction;
 
 const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["user"] }) => {
-  const { modalOpen } = useModalStore();
+  const { modalOpen, setModalData } = useModalStore();
   const queryClient = useQueryClient();
 
   const {
@@ -222,18 +222,23 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
         <div className="flex flex-row">{renderButton && renderButton()}</div>
         <div>
           <Link href={`/direct/inbox/${user?.username}`} className={btnClass}>
-            Inbox
+            Message
           </Link>
         </div>
-        <div>
+        {/* <div>
           <Button
             size="sm"
             className="cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-3 rounded-md mr-2 bg-gray-200/70 hover:bg-gray-300">
             <FiUserPlus size={18} />
           </Button>
-        </div>
+        </div> */}
         <div className="ml-2 cursor-pointer">
-          <TfiMoreAlt size={20} onClick={() => modalOpen(ProfileMoreOptionsModalKey)} />
+          <TfiMoreAlt
+            size={20}
+            onClick={() => {
+              setModalData(user), modalOpen(ProfileMoreOptionsModalKey);
+            }}
+          />
         </div>
       </div>
       <ProfileMoreOptions />

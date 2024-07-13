@@ -25,6 +25,7 @@ import Carousel from "../Post/carousel";
 import LikesView from "../likes-view";
 import { useAuth } from "@/hooks/useAuth";
 import { Card } from "../ui/card";
+import ShareModal from "../Post/share-modal";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -171,6 +172,7 @@ const SinglePost = ({ id }: { id: string }) => {
       {/* <div className="md:hidden"><Post post={post} /></div> */}
       <PostMoreOptions isGoToPost={true} />
       <PostLikes />
+      <ShareModal />
     </>
   );
 };

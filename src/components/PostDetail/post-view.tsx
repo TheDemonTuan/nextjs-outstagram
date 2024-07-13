@@ -22,6 +22,7 @@ import Comment from "./comment";
 import CommentForm from "./comment-form";
 import MiniPost from "./mini-post";
 import Link from "next/link";
+import ShareModal from "../Post/share-modal";
 
 function PostView({ id }: { id: string }) {
   const { modalOpen, setModalData, modalKey } = useModalStore();
@@ -168,6 +169,7 @@ function PostView({ id }: { id: string }) {
       </Modal>
       <PostMoreOptions isPostDetail={true} />
       <PostLikes />
+      <ShareModal />
     </>
   );
 }

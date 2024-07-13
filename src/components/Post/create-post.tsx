@@ -54,6 +54,8 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
   const [caption, setCaption] = useState("");
   const [charCount, setCharCount] = useState(0);
   const [privacy, setPrivacy] = useState("0");
+  const [isHiddenLike, setIsHiddenLike] = useState(false);
+  const [isHiddenComment, setIsHiddenComment] = useState(false);
 
   const { mutate: createMutate, isPending: createIsPending } = useMutation<
     ApiSuccessResponse<PostResponse>,
@@ -110,6 +112,8 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     });
     formData.append("caption", caption || "");
     formData.append("privacy", privacy);
+    formData.append("is_hide_comment", isHiddenComment.toString());
+    formData.append("is_hide_like", isHiddenLike.toString());
     createMutate(formData);
   };
 
@@ -264,7 +268,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                                       Hide like and view counts on
                                       <br /> this post
                                     </div>
-                                    <Switch defaultSelected size="sm" />
+                                    <Switch isSelected={isHiddenLike} onValueChange={setIsHiddenLike} size="sm" />
                                   </div>
                                   <span className="text-xs text-neutral-500 my-2">
                                     Only you will see the total number of likes and views <br /> on this post. You can
@@ -276,7 +280,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                                   </span>
                                   <div className="flex items-center justify-between mt-3">
                                     <div className="text-base">Turn off commenting</div>
-                                    <Switch defaultSelected size="sm" />
+                                    <Switch isSelected={isHiddenComment} onValueChange={setIsHiddenComment} size="sm" />
                                   </div>
                                   <span className="text-xs text-neutral-500 my-2">
                                     You can change this later by going to the ··· menu at <br /> the top of your post.
@@ -285,7 +289,7 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
                               </AccordionContent>
                             </AccordionItem>
 
-                            {isImage ? (
+                            {isImage === PostType.DEFAULT ? (
                               <span></span>
                             ) : (
                               <span className="text-xs text-neutral-500 my-3 flex">

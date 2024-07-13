@@ -9,38 +9,10 @@ import { redirectHard } from "@/actions";
 import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
 import { toast } from "sonner";
 import ShareModal, { ShareModalKey } from "./share-modal";
-import { PostType } from "@/api/post";
+import { PostEditHiddenComment, PostEditHiddenCountLike, PostType } from "@/api/post";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { useMutation } from "@tanstack/react-query";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
-
-const UserMeMoreOptions = [
-  {
-    title: "Delete",
-    className: "text-red-500 font-semibold",
-    action: true,
-  },
-  {
-    title: "Edit",
-    action: true,
-  },
-  {
-    title: "Hide number of reacts",
-  },
-  {
-    title: "Turn off comments",
-  },
-  {
-    title: "Go to post",
-    action: true,
-  },
-  {
-    title: "About this account",
-    action: true,
-  },
-  {
-    title: "Cancel",
-    action: true,
-  },
-];
 
 const UserMoreOptions = [
   {
@@ -50,9 +22,6 @@ const UserMoreOptions = [
   {
     title: "Unfollow",
     className: "text-red-500 font-semibold",
-  },
-  {
-    title: "Add to favorites",
   },
   {
     title: "Go to post",
@@ -79,6 +48,76 @@ const UserMoreOptions = [
 const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: boolean; isPostDetail?: boolean }) => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const { authData } = useAuth();
+
+  console.log(modalData);
+
+  const UserMeMoreOptions = [
+    {
+      title: "Delete",
+      className: "text-red-500 font-semibold",
+      action: true,
+    },
+    {
+      title: "Edit",
+      action: true,
+    },
+    {
+      title: modalData.is_hide_like === true ? "Unhide like count to others" : "Hide like count to others",
+      action: true,
+    },
+    {
+      title: modalData.is_hide_comment === true ? "Turn on commenting" : "Turn off commenting",
+      action: true,
+    },
+    {
+      title: "Go to post",
+      action: true,
+    },
+    {
+      title: "About this account",
+      action: true,
+    },
+    {
+      title: "Cancel",
+      action: true,
+    },
+  ];
+
+  const { mutate: postEditHiddenCommentMutate, isPending: postEditHiddenCommentIsLoading } = useMutation<
+    ApiSuccessResponse<boolean>,
+    ApiErrorResponse
+  >({
+    mutationFn: async () => await PostEditHiddenComment(modalData.id),
+    onSuccess: (res) => {
+      toast.success("Update hidden comment successfully!");
+      modalClose();
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "update hidden comment failed!");
+    },
+  });
+
+  const { mutate: postEditHiddenCountLikeMutate, isPending: postEditHiddenCountLikeIsLoading } = useMutation<
+    ApiSuccessResponse<boolean>,
+    ApiErrorResponse
+  >({
+    mutationFn: async () => await PostEditHiddenCountLike(modalData.id),
+    onSuccess: (res) => {
+      toast.success("Update hidden count like successfully!");
+      modalClose();
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "update hidden count like failed!");
+    },
+  });
+
+  const handlePostEditHiddenComment = () => {
+    postEditHiddenCommentMutate();
+  };
+
+  const handlePostEditHiddenCountLike = () => {
+    postEditHiddenCountLikeMutate();
+  };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(
@@ -138,6 +177,13 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
                                   setModalData(modalData);
                                   modalOpen(ShareModalKey);
                                   break;
+                                case "Turn off commenting":
+                                  handlePostEditHiddenComment();
+                                  break;
+                                case "Hide like count to others":
+                                  handlePostEditHiddenCountLike();
+                                  break;
+
                                 case "Cancel":
                                   modalClose();
                                   break;

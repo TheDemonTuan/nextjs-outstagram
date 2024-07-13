@@ -53,6 +53,12 @@ export interface PostEditParams extends Pick<PostResponse, "caption" | "privacy"
 export const postEdit = async (params: PostEditParams, postID: string) =>
   http.put<ApiSuccessResponse<PostResponse>>(`posts/me/${postID}`, params).then((res) => res.data);
 
+export const PostEditHiddenComment = async (postID: string) =>
+  http.patch<ApiSuccessResponse<boolean>>(`posts/me/isHiddenComment/${postID}`).then((res) => res.data);
+
+export const PostEditHiddenCountLike = async (postID: string) =>
+  http.patch<ApiSuccessResponse<boolean>>(`posts/me/isHiddenLike/${postID}`).then((res) => res.data);
+
 export const postDelete = async (postID: string) =>
   http.delete<ApiSuccessResponse<string>>(`posts/me/${postID}`).then((res) => res.data);
 

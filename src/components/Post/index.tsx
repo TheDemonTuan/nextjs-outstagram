@@ -10,7 +10,6 @@ import { formatDistanceToNow } from "date-fns";
 import { useModalStore } from "@/stores/modal-store";
 import { PostMoreOptionsModalKey } from "./post-more-options";
 import PostReact from "./post-react";
-import Share from "./share";
 import { useAuth } from "@/hooks/useAuth";
 import SummaryProfile from "../summary-profile";
 import Carousel from "./carousel";
@@ -37,6 +36,7 @@ import HighlightHashtags from "../highlight-hashtags";
 import PostPrivacyView from "../privacy-post-view";
 import TextareaAutosize from "react-textarea-autosize";
 import { EmojiStyle } from "emoji-picker-react";
+import ShareModal from "./share-modal";
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
 const Picker = dynamic(
@@ -216,7 +216,6 @@ const Post = () => {
                             <PiDotsThreeBold className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
                           </span>
                         </CardHeader>
-                        <Share />
                         <CardContent className="p-2">
                           {post?.post_files?.length ? (
                             <div className="relative">
@@ -249,8 +248,7 @@ const Post = () => {
                         </CardContent>
                         <CardFooter className="p-2 grid gap-2">
                           <PostReact
-                            postID={post.id}
-                            userID={post.user_id}
+                            postReact={post as PostGraphql}
                             isLiked={isUserLiked ?? false}
                             postPage={pageIndex > 0 ? pageIndex : 0}
                           />
@@ -392,6 +390,7 @@ const Post = () => {
       </div>
       {postsData && <PostMoreOptions />}
       <PostLikes />
+      <ShareModal />
     </>
   );
 };

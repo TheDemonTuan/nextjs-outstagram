@@ -17,6 +17,13 @@ const Saved = () => {
     queryFn: async () => await getSaved(),
   });
 
+  if (savedIsLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
   if (!savedData || !savedData.data.length) {
     return (
       <div className="flex mx-28 flex-col my-5 space-y-3  max-w-screen-xl">
@@ -34,14 +41,6 @@ const Saved = () => {
     );
   }
 
-  if (savedIsLoading) {
-    return (
-      <div className="flex items-center justify-center">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
-
   return (
     <div className="grid grid-cols-3 gap-1 mx-28 max-w-screen-xl">
       {savedData.data?.map((post) => {
@@ -49,7 +48,10 @@ const Saved = () => {
         const firstFile = postFiles[0];
 
         return (
-          <Link key={post?.id} href={`/p/${post?.id}`} className="relative group cursor-pointer">
+          <Link
+            key={post?.id}
+            href={post.type === PostType.REEL ? `r/${post?.id}` : `/p/${post?.id}`}
+            className="relative group cursor-pointer">
             <div className="w-full h-[300px]">
               {post?.type === PostType.REEL && firstFile?.url ? (
                 <video

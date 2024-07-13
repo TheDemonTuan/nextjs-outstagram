@@ -5,6 +5,7 @@ import { useModalStore } from "@/stores/modal-store";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
+import ShareModal, { ShareModalKey } from "../Post/share-modal";
 
 export const ProfileMoreOptionsModalKey = "ProfileMoreOptions";
 
@@ -40,6 +41,7 @@ const UserNotMeMoreOptions = [
   },
   {
     title: "Share to ...",
+    action: true,
   },
   {
     title: "About this account",
@@ -79,6 +81,10 @@ const ProfileMoreOptions = () => {
                                   setModalData(modalData);
                                   modalOpen(AboutThisAccountModalKey);
                                   break;
+                                case "Share to ...":
+                                  setModalData(modalData);
+                                  modalOpen(ShareModalKey);
+                                  break;
                                 case "Cancel":
                                   modalClose();
                                   break;
@@ -100,6 +106,7 @@ const ProfileMoreOptions = () => {
         </ModalContent>
       </Modal>
       <AboutThisAccount isProfile={true} />
+      <ShareModal isProfile={true} />
     </>
   );
 };

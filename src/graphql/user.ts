@@ -21,6 +21,7 @@ export const UserSuggestion = graphql(`
       avatar
       active
       role
+      is_private
       posts {
         id
         privacy

@@ -120,9 +120,8 @@ const FormInbox = () => {
       value={value}
       onChange={(e) => {
         setValue(e.target.value);
-        inputRef.current?.focus();
       }}
-      isDisabled={inboxSendIsPending}
+      // isDisabled={inboxSendIsPending}
       onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
     />
   );

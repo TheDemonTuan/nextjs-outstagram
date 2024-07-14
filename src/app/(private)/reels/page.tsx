@@ -25,6 +25,7 @@ import HighlightHashtags from "@/components/highlight-hashtags";
 import PostPrivacyView from "@/components/privacy-post-view";
 import { SiVerizon } from "react-icons/si";
 import ShareModal from "@/components/Post/share-modal";
+import PostLikes from "@/components/Post/post-likes";
 
 const ReelsPage = () => {
   const [hoveredVideo, setHoveredVideo] = useState("");
@@ -305,6 +306,7 @@ const ReelsPage = () => {
       </div>
       {reelsData && <PostMoreOptions isGoToPost={true} />}
       <ShareModal />
+      <PostLikes />
     </>
   );
 };

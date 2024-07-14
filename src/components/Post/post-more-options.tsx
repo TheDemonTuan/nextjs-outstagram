@@ -9,9 +9,9 @@ import { redirectHard } from "@/actions";
 import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
 import { toast } from "sonner";
 import ShareModal, { ShareModalKey } from "./share-modal";
-import { PostEditHiddenComment, PostEditHiddenCountLike, PostType } from "@/api/post";
+import { PostEditHiddenComment, PostEditHiddenCountLike, PostType, postKey } from "@/api/post";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
 const UserMoreOptions = [
@@ -48,8 +48,7 @@ const UserMoreOptions = [
 const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: boolean; isPostDetail?: boolean }) => {
   const { modalOpen, modalClose, modalKey, modalData, setModalData } = useModalStore();
   const { authData } = useAuth();
-
-  console.log(modalData);
+  const queryClient = useQueryClient();
 
   const UserMeMoreOptions = [
     {
@@ -88,7 +87,68 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
     ApiErrorResponse
   >({
     mutationFn: async () => await PostEditHiddenComment(modalData.id),
-    onSuccess: (res) => {
+    onSuccess: (hiddenCommentData) => {
+      if (!!queryClient.getQueryData([postKey, "home"])) {
+        queryClient.setQueryData([postKey, "home"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postHomePage: [
+                    ...page.postHomePage.map((post: any) => {
+                      if (post.id === modalData.id) {
+                        return {
+                          ...post,
+                          is_hide_comment: hiddenCommentData.data,
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, "reels"])) {
+        queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postReel: [
+                    ...page.postReel.map((post: any) => {
+                      if (post.id === modalData.id) {
+                        return {
+                          ...post,
+                          is_hide_comment: hiddenCommentData.data,
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
+        queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              is_hide_comment: hiddenCommentData.data,
+            },
+          };
+        });
+      }
       toast.success("Update hidden comment successfully!");
       modalClose();
     },
@@ -102,7 +162,69 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
     ApiErrorResponse
   >({
     mutationFn: async () => await PostEditHiddenCountLike(modalData.id),
-    onSuccess: (res) => {
+    onSuccess: (hiddenCountLikeData) => {
+      if (!!queryClient.getQueryData([postKey, "home"])) {
+        queryClient.setQueryData([postKey, "home"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postHomePage: [
+                    ...page.postHomePage.map((post: any) => {
+                      if (post.id === modalData.id) {
+                        return {
+                          ...post,
+                          is_hide_like: hiddenCountLikeData.data,
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, "reels"])) {
+        queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postReel: [
+                    ...page.postReel.map((post: any) => {
+                      if (post.id === modalData.id) {
+                        return {
+                          ...post,
+                          is_hide_like: hiddenCountLikeData.data,
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
+        queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              is_hide_like: hiddenCountLikeData.data,
+            },
+          };
+        });
+      }
+
       toast.success("Update hidden count like successfully!");
       modalClose();
     },
@@ -179,11 +301,20 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
                                   break;
                                 case "Turn off commenting":
                                   handlePostEditHiddenComment();
+
                                   break;
                                 case "Hide like count to others":
                                   handlePostEditHiddenCountLike();
-                                  break;
 
+                                  break;
+                                case "Turn on commenting":
+                                  handlePostEditHiddenComment();
+
+                                  break;
+                                case "Unhide like count to others":
+                                  handlePostEditHiddenCountLike();
+
+                                  break;
                                 case "Cancel":
                                   modalClose();
                                   break;

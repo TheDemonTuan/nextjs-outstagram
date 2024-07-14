@@ -4,9 +4,11 @@ import { useModalStore } from "@/stores/modal-store";
 import Link from "next/link";
 import React from "react";
 import SelectPhotoModal, { SelectPhotoModalKey } from "../Post/select-photo";
+import { useAuth } from "@/hooks/useAuth";
 
 const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
+  const { authData } = useAuth();
   const { reels } = userProfile.userProfile;
 
   if (!reels || !reels.length) {
@@ -14,11 +16,13 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
       <>
         <div className="flex flex-col items-center justify-start my-5 space-y-3">
           <span className="font-black text-2xl">Share a moment with the world</span>
-          <span
-            onClick={() => modalOpen(SelectPhotoModalKey)}
-            className="font-medium text-sky-500 cursor-pointer hover:opacity-80">
-            Create your first reel
-          </span>
+          {authData?.username === userProfile.userProfile.username && (
+            <span
+              onClick={() => modalOpen(SelectPhotoModalKey)}
+              className="font-medium text-sky-500 cursor-pointer hover:opacity-80">
+              Create your first reel
+            </span>
+          )}
         </div>
         <SelectPhotoModal defaultTab="reels" />
       </>

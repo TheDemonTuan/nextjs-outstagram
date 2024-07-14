@@ -279,7 +279,7 @@ const Post = () => {
                             )}
                           </div>
 
-                          {post.post_comments && post.post_comments?.length > 0 && (
+                          {post.post_comments && post.post_comments?.length > 0 && post.is_hide_comment === false && (
                             <Link className="text-neutral-500 text-sm" href={`/p/${post.id}`} passHref>
                               {`View all ${post.post_comments.length} comment${
                                 post.post_comments.length > 1 ? "s" : ""
@@ -290,74 +290,79 @@ const Post = () => {
                       </Card>
                     </div>
                   </CardContent>
-                  <CardFooter className="grid gap-1 px-2 py-1">
-                    {commentsToShow?.map((comment) => (
-                      <div key={comment?.id} className="text-sm flex items-center justify-between space-x-2">
-                        <div>
-                          <Tooltip
-                            delay={1000}
-                            content={
-                              comment?.user && (
-                                <SummaryProfile
-                                  username={comment?.user.username || ""}
-                                  full_name={comment?.user.full_name || ""}
-                                  avatar={comment?.user.avatar || ""}
-                                  role={comment.user.role || false}
-                                  posts={[]}
-                                  friends={comment?.user.friends as Friend[]}
-                                />
-                              )
-                            }
-                            placement="bottom-start"
-                            className="rounded-md shadow-lg">
-                            <Link href={`/${comment?.user?.username}`} className="font-bold">
-                              {comment?.user?.username}
-                            </Link>
-                          </Tooltip>
-                          {comment?.user?.role && <VerifiedIcon className="w-3 h-3 inline-block ml-1" />}
-                          <span className="ml-1">{comment?.content}</span>
-                        </div>
-                        <div>
-                          <FaRegHeart size={12} className="ml-2 cursor-pointer" />
-                        </div>
-                      </div>
-                    ))}
-                  </CardFooter>
-                  <CardFooter className="p-2">
-                    <div className="flex gap-2 justify-between w-full items-center">
-                      <TextareaAutosize
-                        maxRows={4}
-                        cacheMeasurements
-                        className="bg-transparent text-sm border-none focus:outline-none flex-1 dark:text-neutral-400 placeholder-neutral-400 font-normal disabled:opacity-30 resize-none"
-                        placeholder="Add a comment..."
-                      />
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <button
-                        hidden
-                        type="submit"
-                        className="text-sky-500 text-base font-semibold hover:text-sky-700 dark:hover:text-white disabled:cursor-not-allowed  dark:disabled:text-slate-500 disabled:text-sky-500/40 disabled:hover:text-sky-500/40 dark:disabled:hover:text-slate-500">
-                        Post
-                      </button>
-
-                      <Popover placement="top-start" showArrow={true}>
-                        <PopoverTrigger>
-                          <div className="hover:opacity-50 cursor-pointer">
-                            {" "}
-                            <EmojiLookBottomIcon className="w-4 h-4" />
+                  {post.is_hide_comment === false && (
+                    <>
+                      <CardFooter className="grid gap-1 px-2 py-1">
+                        {commentsToShow?.map((comment) => (
+                          <div key={comment?.id} className="text-sm flex items-center justify-between space-x-2">
+                            <div>
+                              <Tooltip
+                                delay={1000}
+                                content={
+                                  comment?.user && (
+                                    <SummaryProfile
+                                      username={comment?.user.username || ""}
+                                      full_name={comment?.user.full_name || ""}
+                                      avatar={comment?.user.avatar || ""}
+                                      role={comment.user.role || false}
+                                      posts={[]}
+                                      friends={comment?.user.friends as Friend[]}
+                                    />
+                                  )
+                                }
+                                placement="bottom-start"
+                                className="rounded-md shadow-lg">
+                                <Link href={`/${comment?.user?.username}`} className="font-bold">
+                                  {comment?.user?.username}
+                                </Link>
+                              </Tooltip>
+                              {comment?.user?.role && <VerifiedIcon className="w-3 h-3 inline-block ml-1" />}
+                              <span className="ml-1">{comment?.content}</span>
+                            </div>
+                            <div>
+                              <FaRegHeart size={12} className="ml-2 cursor-pointer" />
+                            </div>
                           </div>
-                        </PopoverTrigger>
-                        <PopoverContent className="p-0">
-                          <Picker
-                            lazyLoadEmojis
-                            emojiVersion="5.0"
-                            // onEmojiClick={(e) => handleEmojiClick(e)}
-                            emojiStyle={EmojiStyle.FACEBOOK}
+                        ))}
+                      </CardFooter>
+                      <CardFooter className="p-2">
+                        <div className="flex gap-2 justify-between w-full items-center">
+                          <TextareaAutosize
+                            maxRows={4}
+                            cacheMeasurements
+                            className="bg-transparent text-sm border-none focus:outline-none flex-1 dark:text-neutral-400 placeholder-neutral-400 font-normal disabled:opacity-30 resize-none"
+                            placeholder="Add a comment..."
                           />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                  </CardFooter>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <button
+                            hidden
+                            type="submit"
+                            className="text-sky-500 text-base font-semibold hover:text-sky-700 dark:hover:text-white disabled:cursor-not-allowed  dark:disabled:text-slate-500 disabled:text-sky-500/40 disabled:hover:text-sky-500/40 dark:disabled:hover:text-slate-500">
+                            Post
+                          </button>
+
+                          <Popover placement="top-start" showArrow={true}>
+                            <PopoverTrigger>
+                              <div className="hover:opacity-50 cursor-pointer">
+                                {" "}
+                                <EmojiLookBottomIcon className="w-4 h-4" />
+                              </div>
+                            </PopoverTrigger>
+                            <PopoverContent className="p-0">
+                              <Picker
+                                lazyLoadEmojis
+                                emojiVersion="5.0"
+                                // onEmojiClick={(e) => handleEmojiClick(e)}
+                                emojiStyle={EmojiStyle.FACEBOOK}
+                              />
+                            </PopoverContent>
+                          </Popover>
+                        </div>
+                      </CardFooter>
+                    </>
+                  )}
+
                   <hr className="border-gray-300 w-full mt-2" />
                 </Card>
               );

@@ -17,7 +17,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-1 mx-28 max-w-screen-xl">
+    <div className="grid grid-cols-3 gap-1 mx-28">
       {posts?.map((post) => {
         const postFiles = post?.post_files || [];
         const firstFile = postFiles[0];
@@ -25,24 +25,16 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
         return (
           <Link key={post?.id} href={`/p/${post?.id}`} className="relative group cursor-pointer">
             <div className="w-full h-[300px]">
-              {post?.type && firstFile?.url ? (
-                <video
-                  key={"video" + firstFile.id}
-                  src={firstFile?.url || "/camera-b.png"}
-                  controls={false}
-                  className="object-cover w-full h-full rounded-md"
-                />
-              ) : (
-                <Image
-                  key={"image" + firstFile?.id}
-                  className="object-cover w-full h-full rounded-md"
-                  src={firstFile?.url || "/camera-b.png"}
-                  alt={"image " + post?.id}
-                  width={500}
-                  height={500}
-                  loading="lazy"
-                />
-              )}
+              <Image
+                key={"image" + firstFile?.id}
+                className="object-cover w-full h-full rounded-md"
+                src={firstFile?.url || "/camera-b.png"}
+                alt={"image " + post?.id}
+                width={500}
+                height={500}
+                loading="lazy"
+              />
+
               {postFiles?.length > 1 && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                   <MultiFileIcon />

@@ -151,7 +151,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
       </div>
 
       <div className="z-10 top-0 sticky mt-5 mx-8 font-bold pb-4 ">
-        Comments <span>({reelData.post_comments?.length})</span>
+        Comments <span>({reelData.is_hide_comment === false ? reelData.post_comments?.length : "0"})</span>
       </div>
     </>
   );

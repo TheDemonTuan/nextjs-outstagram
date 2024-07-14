@@ -10,6 +10,7 @@ import React from "react";
 import { toast } from "sonner";
 import { ShareModalKey } from "./share-modal";
 import { Post } from "@/gql/graphql";
+import { PostSaveResponse, postSave, savedKey } from "@/api/post_save";
 
 const PostReact = ({ isLiked, postReact, postPage }: { isLiked: boolean; postReact: Post; postPage?: number }) => {
   const queryClient = useQueryClient();
@@ -75,8 +76,25 @@ const PostReact = ({ isLiked, postReact, postPage }: { isLiked: boolean; postRea
     },
   });
 
+  const { mutate: postSaveMutate } = useMutation<ApiSuccessResponse<PostSaveResponse>, ApiErrorResponse, string>({
+    mutationFn: async (params) => await postSave(params),
+    onSuccess: (savePostData) => {
+      if (!!queryClient.getQueryData([savedKey, "profile"])) {
+        queryClient.setQueryData([savedKey, "profile"], (oldData: any) => {});
+      }
+      toast.success("success save");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Saved post failed!");
+    },
+  });
+
   const handleLikePost = async () => {
     postLikeMutate(postReact.id);
+  };
+
+  const handleSavePost = async () => {
+    postSaveMutate(postReact.id);
   };
 
   return (
@@ -90,25 +108,28 @@ const PostReact = ({ isLiked, postReact, postPage }: { isLiked: boolean; postRea
           )}
           <span className="sr-only">Like</span>
         </div>
-        <Link href={`/p/${postReact.id}`} passHref>
-          <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-          <span className="sr-only">Comment</span>
-        </Link>
-        {postReact.user_id !== authData?.id && (
-          <div
-            onClick={() => {
-              setModalData(postReact);
-              modalOpen(ShareModalKey);
-            }}>
-            <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-            <span className="sr-only">Share</span>
-          </div>
+        {postReact.is_hide_comment === false && (
+          <Link href={`/p/${postReact.id}`} passHref>
+            <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+            <span className="sr-only">Comment</span>
+          </Link>
         )}
+
+        <div
+          onClick={() => {
+            setModalData(postReact);
+            modalOpen(ShareModalKey);
+          }}>
+          <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+          <span className="sr-only">Share</span>
+        </div>
       </div>
-      <div className="ml-auto">
-        <BookmarkIcon className="w-6 h-6  hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-        <span className="sr-only">BookmarkIcon</span>
-      </div>
+      {postReact.user_id !== authData?.id && (
+        <div className="ml-auto" onClick={handleSavePost}>
+          <BookmarkIcon className="w-6 h-6  hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+          <span className="sr-only">BookmarkIcon</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -6,12 +6,11 @@ import {
   MessageFacebookShareIcon,
   PinterestShareIcon,
   QRShareIcon,
-  TelegramShareIcon,
   XShareIcon,
 } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
 import { Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   EmailShareButton,
   FacebookMessengerShareButton,
@@ -48,7 +47,7 @@ const svgLogo = (fgColor: string) => `
 </svg>
 `;
 
-const ShareModal = () => {
+const ShareModal = ({ isProfile = false }: { isProfile?: boolean }) => {
   const { modalClose, modalKey, modalData } = useModalStore();
   const [mode, setMode] = useState("share");
 
@@ -56,13 +55,20 @@ const ShareModal = () => {
   const [fgColor, setFgColor] = useState("#AF18A9");
 
   const hostClient =
-    modalData.type === PostType.DEFAULT
-      ? `${process.env.NEXT_PUBLIC_CLIENT_HOST}/p/${modalData?.id}?utm_source=og_web_copy_link`
-      : `${process.env.NEXT_PUBLIC_CLIENT_HOST}/r/${modalData?.id}?utm_source=og_web_copy_link`;
+    isProfile === false
+      ? modalData.type === PostType.DEFAULT
+        ? `${process.env.NEXT_PUBLIC_CLIENT_HOST}/p/${modalData?.id}?utm_source=og_web_button_share_sheet`
+        : `${process.env.NEXT_PUBLIC_CLIENT_HOST}/r/${modalData?.id}?utm_source=og_web_button_share_sheet`
+      : `${process.env.NEXT_PUBLIC_CLIENT_HOST}/${modalData?.username}?utm_source=og_web_button_share_sheet`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(hostClient);
     toast.success("Link copied to clipboard!");
+    modalClose();
+  };
+
+  const handleCloseModal = () => {
+    setMode("share");
     modalClose();
   };
 
@@ -72,13 +78,16 @@ const ShareModal = () => {
       const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
       let downloadLink = document.createElement("a");
       downloadLink.href = pngUrl;
-      downloadLink.download = `${modalData.type === PostType.DEFAULT ? "Post" : "Reel"} shared on ${new Date(
-        modalData.created_at
-      ).toLocaleString("en-us", {
-        year: "numeric",
-        month: "short",
-        day: "2-digit",
-      })} _qr.png`;
+      downloadLink.download =
+        isProfile === false
+          ? `${modalData.type === PostType.DEFAULT ? "Post" : "Reel"} shared on ${new Date(
+              modalData.created_at
+            ).toLocaleString("en-us", {
+              year: "numeric",
+              month: "short",
+              day: "2-digit",
+            })} _qr.png`
+          : `${modalData?.username}_qr.png`;
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -86,49 +95,102 @@ const ShareModal = () => {
   };
 
   const renderShareOptions = () => (
-    <div className="space-y-7">
-      <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
-        <FacebookShareButton url={hostClient} hashtag="Outstagram">
-          <FacebookShareIcon />
-        </FacebookShareButton>
+    <div className="space-y-7 my-2">
+      <FacebookShareButton
+        url={hostClient}
+        title={`See ${
+          isProfile === false
+            ? modalData.type === PostType.REEL
+              ? `this Outstagram video by @${modalData.user.username}`
+              : `this Outstagram image by @${modalData.user.username}`
+            : `@${modalData.username}'s profile on Outstagram `
+        } `}
+        hashtag="Outstagram"
+        className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
+        <FacebookShareIcon />
         <div>Share to Facebook</div>
-      </div>
-      <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
-        <FacebookMessengerShareButton url={hostClient} appId="1217981644879628">
-          <MessageFacebookShareIcon />
-        </FacebookMessengerShareButton>
+      </FacebookShareButton>
+
+      <FacebookMessengerShareButton
+        title={`See ${
+          isProfile === false
+            ? modalData.type === PostType.REEL
+              ? `this Outstagram video by @${modalData.user.username}`
+              : `this Outstagram image by @${modalData.user.username}`
+            : `@${modalData.username}'s profile on Outstagram `
+        } `}
+        url={hostClient}
+        appId="1217981644879628"
+        className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
+        <MessageFacebookShareIcon />
         <div>Share in Message</div>
-      </div>
-      <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
-        <TwitterShareButton url={hostClient} title="Shared from Outstagram" hashtags={[`Outstagram`]}>
-          <XShareIcon />
-        </TwitterShareButton>
+      </FacebookMessengerShareButton>
+
+      <TwitterShareButton
+        url={hostClient}
+        title={`See ${
+          isProfile === false
+            ? modalData.type === PostType.REEL
+              ? `this Outstagram video by @${modalData.user.username}`
+              : `this Outstagram image by @${modalData.user.username}`
+            : `@${modalData.username}'s profile on Outstagram `
+        } `}
+        hashtags={[`Outstagram`]}
+        className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
+        <XShareIcon />
         <div>Share to Twitter</div>
-      </div>
-      <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
-        <TelegramShareButton url={hostClient} title="Shared from Outstagram">
-          <LiaTelegramPlane size={27} />
-        </TelegramShareButton>
+      </TwitterShareButton>
+
+      <TelegramShareButton
+        url={hostClient}
+        title={`See ${
+          isProfile === false
+            ? modalData.type === PostType.REEL
+              ? `this Outstagram video by @${modalData.user.username}`
+              : `this Outstagram image by @${modalData.user.username}`
+            : `@${modalData.username}'s profile on Outstagram `
+        } `}
+        className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
+        <LiaTelegramPlane size={27} />
         <div>Share in Telegram</div>
-      </div>
-      <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
-        <LinkedinShareButton url={hostClient} title="Shared from Outstagram">
-          <LinkedinShareIcon />
-        </LinkedinShareButton>
+      </TelegramShareButton>
+
+      <LinkedinShareButton
+        url={hostClient}
+        title={`See ${
+          isProfile === false
+            ? modalData.type === PostType.REEL
+              ? `this Outstagram video by @${modalData.user.username}`
+              : `this Outstagram image by @${modalData.user.username}`
+            : `@${modalData.username}'s profile on Outstagram `
+        } `}
+        className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
+        <LinkedinShareIcon />
         <div>Share to Linkedin</div>
-      </div>
-      <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
-        <PinterestShareButton url={hostClient} media={modalData?.post_files[0].url} description={modalData.caption}>
-          <PinterestShareIcon />
-        </PinterestShareButton>
-        <div>Share to Pinterest</div>
-      </div>
-      <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
-        <EmailShareButton url={hostClient} title="Shared from Outstagram">
-          <EmailShareIcon />
-        </EmailShareButton>
+      </LinkedinShareButton>
+      {isProfile === false && (
+        <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
+          <PinterestShareButton url={hostClient} media={modalData?.post_files[0].url} description={modalData.caption}>
+            <PinterestShareIcon />
+          </PinterestShareButton>
+          <div>Share to Pinterest</div>
+        </div>
+      )}
+
+      <EmailShareButton
+        url={hostClient}
+        title={`See ${
+          isProfile === false
+            ? modalData.type === PostType.REEL
+              ? `this Outstagram video by @${modalData.user.username}`
+              : `this Outstagram image by @${modalData.user.username}`
+            : `@${modalData.username}'s profile on Outstagram `
+        } `}
+        className="flex items-center space-x-4 cursor-pointer hover:text-gray-400">
+        <EmailShareIcon />
         <div>Share via Email</div>
-      </div>
+      </EmailShareButton>
+
       <div className="flex items-center space-x-4 cursor-pointer hover:text-gray-400" onClick={() => setMode("qr")}>
         <QRShareIcon />
         <div>QR code</div>
@@ -161,16 +223,22 @@ const ShareModal = () => {
             id={"QR"}
           />
 
-          <span className={`text-xl font-semibold text-transparent bg-clip-text ${bgColor}`}>
-            {modalData.type === PostType.DEFAULT ? "POST" : "REEL"} SHARED ON{" "}
-            {new Date(modalData.created_at)
-              .toLocaleString("en-us", {
-                year: "numeric",
-                month: "short",
-                day: "2-digit",
-              })
-              .toUpperCase()}
-            <br /> BY {modalData.user?.username.toUpperCase()}
+          <span className={`text-2xl font-semibold text-transparent bg-clip-text ${bgColor}`}>
+            {isProfile === false ? (
+              <>
+                {modalData.type === PostType.DEFAULT ? "POST" : "REEL"} SHARED ON{" "}
+                {new Date(modalData.created_at)
+                  .toLocaleString("en-us", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                  })
+                  .toUpperCase()}
+                <br /> BY {modalData.user?.username?.toUpperCase()}
+              </>
+            ) : (
+              modalData.username.toUpperCase()
+            )}
           </span>
         </div>
         <div className="space-x-3">
@@ -210,7 +278,8 @@ const ShareModal = () => {
             }}
           />
           <button
-            className="rounded-full border p-3 bg-gradient-to-bl from-[#AF18A9] to-[#F4803F] focus:border-2 focus:border-black"
+            autoFocus={true}
+            className="rounded-full border p-3 bg-gradient-to-bl from-[#AF18A9] to-[#F4803F] focus:border-2  focus:border-black"
             onClick={() => {
               setBgColor("bg-gradient-to-bl from-[#AF18A9] to-[#F4803F]");
               setFgColor("#AF18A9");
@@ -219,7 +288,8 @@ const ShareModal = () => {
         </div>
         <p className="text-sm text-[#737373] pt-3">
           People can scan this QR code with their smartphone&apos;s <br />
-          camera to see this {modalData.type === PostType.DEFAULT ? "post" : "reel"}.
+          camera to see this {isProfile === false ? (modalData.type === PostType.DEFAULT ? "post" : "reel") : "profile"}
+          .
         </p>
       </div>
     </>
@@ -229,7 +299,7 @@ const ShareModal = () => {
     <Modal
       size="md"
       isOpen={modalKey === ShareModalKey}
-      onOpenChange={modalClose}
+      onOpenChange={handleCloseModal}
       hideCloseButton={mode === "share" ? false : true}
       backdrop="opaque"
       scrollBehavior="inside">

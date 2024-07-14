@@ -26,7 +26,8 @@ export interface PostResponse {
   active: boolean;
   post_files: PostFileResponse[];
   post_likes: PostLikeResponse[];
-  type: PostType
+  post_comments: PostComment[];
+  type: PostType;
   privacy: PostPrivacy;
   created_at: Date;
   updated_at: Date;
@@ -47,6 +48,10 @@ export const postCreate = async (data: FormData) =>
 
 export const postGetByPostId = async (postID: string) =>
   http.get<ApiSuccessResponse<PostResponse>>(`posts/${postID}`).then((res) => res.data);
+
+export const getSaved = async () =>
+  http.get<ApiSuccessResponse<PostResponse[]>>(`posts/me/saved`).then((res) => res.data);
+
 
 export interface PostEditParams extends Pick<PostResponse, "caption" | "privacy"> {}
 

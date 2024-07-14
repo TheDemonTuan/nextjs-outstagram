@@ -10,6 +10,7 @@ import Link from "next/link";
 import { memo, useMemo } from "react";
 import { useModalStore } from "@/stores/modal-store";
 import { ShareModalKey } from "../Post/share-modal";
+import PostLikes, { LikesModalKey } from "../Post/post-likes";
 
 interface ReelReactProps {
   reelReact: Post;
@@ -101,74 +102,89 @@ const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizonta
   };
 
   return (
-    <div
-      className={`flex ${
-        orientation === "horizontal" ? " px-8 mt-4 space-x-2 justify-stretch" : "flex-col space-y-3"
-      } items-center`}>
-      <div className={`${orientation === "horizontal" ? "pb-4 text-center flex items-center" : ""}`}>
-        <button
-          disabled={!authCanUse}
-          className={`rounded-full ${!authCanUse ? "" : "cursor-pointer"} bg-gray-200 ${
-            orientation === "horizontal" ? " p-2.5 " : "p-3 mb-1"
-          }`}
-          onClick={handleLikePost}>
-          {isLiked ? (
-            <LikeHeartIcon
-              className={`hover:stroke-gray115 cursor-pointer  text-red-500 ${
-                orientation === "horizontal" ? "w-[22px] h-[22px]" : "w-6 h-6"
+    <>
+      <div
+        className={`flex ${
+          orientation === "horizontal" ? " px-8 mt-4 space-x-2 justify-stretch" : "flex-col space-y-3"
+        } items-center`}>
+        <div className={`${orientation === "horizontal" ? "pb-4 text-center flex items-center" : ""}`}>
+          <button
+            disabled={!authCanUse}
+            className={`rounded-full ${!authCanUse ? "" : "cursor-pointer"} bg-gray-200 ${
+              orientation === "horizontal" ? " p-2.5 " : "p-3 mb-1"
+            }`}
+            onClick={handleLikePost}>
+            {isLiked ? (
+              <LikeHeartIcon
+                className={`hover:stroke-gray115 cursor-pointer  text-red-500 ${
+                  orientation === "horizontal" ? "w-[22px] h-[22px]" : "w-6 h-6"
+                }`}
+              />
+            ) : (
+              <LikeHeartIcon
+                className={`hover:stroke-gray115 ${!authCanUse ? "" : "cursor-pointer"} text-black ${
+                  orientation === "horizontal" ? "w-[22px] h-[22px]" : "w-6 h-6"
+                }`}
+              />
+            )}
+          </button>
+          {reelReact.is_hide_like === false ? (
+            <div
+              className={`${
+                orientation === "horizontal"
+                  ? "text-sm pl-2 pr-4 text-gray-800 font-semibold cursor-pointer"
+                  : "cursor-pointer"
               }`}
-            />
+              onClick={() => {
+                setModalData(reelReact);
+                modalOpen(LikesModalKey);
+              }}>
+              {totalLiked}
+            </div>
           ) : (
-            <LikeHeartIcon
-              className={`hover:stroke-gray115 ${!authCanUse ? "" : "cursor-pointer"} text-black ${
-                orientation === "horizontal" ? "w-[22px] h-[22px]" : "w-6 h-6"
-              }`}
-            />
+            <div className="mx-3 my-3"></div>
           )}
-        </button>
+        </div>
 
-        <div className={`${orientation === "horizontal" ? "text-sm pl-2 pr-4 text-gray-800 font-semibold" : ""} `}>
-          {totalLiked}
-        </div>
-      </div>
+        {reelReact.is_hide_comment === false &&
+          (orientation === "horizontal" ? (
+            <div className="pb-4 text-center flex items-center">
+              <button
+                className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
+                disabled={!authCanUse}>
+                <MessageCircleIcon width={22} height={22} fill="#00000" />
+              </button>
+              <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">{reelReact.post_comments?.length}</span>
+            </div>
+          ) : (
+            <Link href={`/r/${reelReact.id}`}>
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300 border-none">
+                <MessageCircleIcon width={23} height={23} fill="#00000" />
+              </button>
+              <span>{reelReact.post_comments?.length}</span>
+            </Link>
+          ))}
 
-      {orientation === "horizontal" ? (
-        <div className="pb-4 text-center flex items-center">
-          <button
-            className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-            disabled={!authCanUse}>
-            <MessageCircleIcon width={22} height={22} fill="#00000" />
-          </button>
-          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">{reelReact.post_comments?.length}</span>
-        </div>
-      ) : (
-        <Link href={`/r/${reelReact.id}`}>
-          <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300 border-none">
-            <MessageCircleIcon width={23} height={23} fill="#00000" />
-          </button>
-          <span>{reelReact.post_comments?.length}</span>
-        </Link>
-      )}
+        {reelReact.user_id !== authData?.id &&
+          (orientation === "horizontal" ? (
+            <div className="pb-4 text-center flex items-center">
+              <button
+                className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
+                disabled={!authCanUse}>
+                <BookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
+              </button>
+              <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">185</span>
+            </div>
+          ) : (
+            <div>
+              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
+                <BookMarkReelsIcon width={22} height={22} className="" fill="#00000" />
+              </button>
+              <span className="">55</span>
+            </div>
+          ))}
 
-      {orientation === "horizontal" ? (
-        <div className="pb-4 text-center flex items-center">
-          <button
-            className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-            disabled={!authCanUse}>
-            <BookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
-          </button>
-          <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">185</span>
-        </div>
-      ) : (
-        <div>
-          <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
-            <BookMarkReelsIcon width={22} height={22} className="" fill="#00000" />
-          </button>
-          <span className="">55</span>
-        </div>
-      )}
-      {reelReact.user_id !== authData?.id &&
-        (orientation === "horizontal" ? (
+        {orientation === "horizontal" ? (
           <div className="pb-4 text-center flex items-center">
             <button
               className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
@@ -191,8 +207,9 @@ const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizonta
               <ShareReelsIcon width={22} height={22} />
             </button>
           </div>
-        ))}
-    </div>
+        )}
+      </div>
+    </>
   );
 });
 

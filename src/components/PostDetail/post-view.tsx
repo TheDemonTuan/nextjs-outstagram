@@ -111,11 +111,21 @@ function PostView({ id }: { id: string }) {
               )}
             </div>
 
-            <div className="hidden md:inline border-b py-1.5 px-1  overflow-y-auto h-[500px]">
+            <div
+              className={`hidden md:inline border-b py-1.5 px-1  overflow-y-auto ${
+                authCanUse && postData.postByPostId.is_hide_comment === false ? " h-[500px]" : "h-[600px]"
+              }`}>
               <MiniPost post={postData.postByPostId} />
-              <div className="flex flex-col">
-                <Comment comments={postData?.postByPostId.post_comments} />
-              </div>
+              {authCanUse && postData.postByPostId.is_hide_comment === false ? (
+                <div className="flex flex-col">
+                  <Comment comments={postData?.postByPostId.post_comments} />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-1.5 h-[400px] justify-center">
+                  <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
+                  <p className="text-sm font-medium">Start the conversation.</p>
+                </div>
+              )}
             </div>
 
             <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
@@ -141,7 +151,7 @@ function PostView({ id }: { id: string }) {
                   </div>
                 </>
               ) : (
-                <p className="flex items-center justify-center mb-10 text-sm font-semibold text-gray-500">
+                <p className="flex items-center justify-center my-5 text-sm font-semibold text-gray-500">
                   <Link href="/login" className="text-[#0497F6] mr-1">
                     Log in{" "}
                   </Link>{" "}
@@ -149,7 +159,9 @@ function PostView({ id }: { id: string }) {
                 </p>
               )}
             </div>
-            {authCanUse && <CommentForm postId={postData.postByPostId.id} />}
+            {authCanUse && postData.postByPostId.is_hide_comment === false && (
+              <CommentForm postId={postData.postByPostId.id} />
+            )}
           </Card>
           <Card className="relative h-full max-h-[300px] lg:max-h-[500px] xl:max-h-[700px] max-w-3xl w-full flex justify-center items-center bg-black rounded-none">
             {postData.postByPostId?.post_files?.length ? (

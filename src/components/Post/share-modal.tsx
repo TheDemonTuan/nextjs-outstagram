@@ -54,8 +54,6 @@ const ShareModal = ({ isProfile = false }: { isProfile?: boolean }) => {
   const [bgColor, setBgColor] = useState("bg-gradient-to-bl from-[#AF18A9] to-[#F4803F]");
   const [fgColor, setFgColor] = useState("#AF18A9");
 
-  console.log(modalData);
-
   const hostClient =
     isProfile === false
       ? modalData.type === PostType.DEFAULT

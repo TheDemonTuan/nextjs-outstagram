@@ -18,6 +18,7 @@ import CommentForm from "../PostDetail/comment-form";
 import ViewComments from "../PostDetail/comment";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import ShareModal from "../Post/share-modal";
+import PostLikes from "../Post/post-likes";
 
 const ReelsView = ({ id }: { id: string }) => {
   const { modalOpen, setModalData, modalKey, modalClose } = useModalStore();
@@ -150,7 +151,9 @@ const ReelsView = ({ id }: { id: string }) => {
 
               {/* ReelComment */}
               <div className="relative z-0 w-full h-[calc(100%-273px)] overflow-y-auto scrollbar-hide cursor-pointer">
-                {reelData.postByPostId.post_comments && reelData.postByPostId.post_comments?.length > 0 ? (
+                {reelData.postByPostId.post_comments &&
+                reelData.postByPostId.post_comments?.length > 0 &&
+                reelData.postByPostId.is_hide_comment === false ? (
                   <div className="mx-6 mt-5">
                     <ViewComments comments={reelData.postByPostId.post_comments} />
                   </div>
@@ -162,21 +165,24 @@ const ReelsView = ({ id }: { id: string }) => {
                 )}
                 <div className="mb-5" />
               </div>
-
-              <div className="flex items-center bottom-0 justify-between bg-white lg:max-w-[550px] w-full py-5 px-8 border-t-1 sticky z-50">
-                {authCanUse ? (
-                  <div className="rounded-lg w-full lg:max-w-[500px] border-1 mt-auto">
-                    <CommentForm postId={reelData.postByPostId.id} />
+              {authCanUse ? (
+                reelData.postByPostId.is_hide_comment === false && (
+                  <div className="flex items-center bottom-0 justify-between bg-white lg:max-w-[550px] w-full py-5 px-8 border-t-1 sticky z-50">
+                    <div className="rounded-lg w-full lg:max-w-[500px] border-1 mt-auto">
+                      <CommentForm postId={reelData.postByPostId.id} />
+                    </div>
                   </div>
-                ) : (
-                  <div className="w-full flex items-center  justify-center text-sm font-semibold text-gray-500">
+                )
+              ) : (
+                <div className="flex items-center bottom-0 justify-between bg-white lg:max-w-[550px] w-full py-5 px-8 border-t-1 sticky z-50">
+                  <div className="w-full flex items-center justify-center text-sm font-semibold text-gray-500">
                     <Link href="/login" className="text-[#F02C56] mr-1">
                       Log in{" "}
-                    </Link>{" "}
+                    </Link>
                     to like or comment on this reel.
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </ModalContent>
@@ -184,6 +190,7 @@ const ReelsView = ({ id }: { id: string }) => {
 
       <PostMoreOptions isGoToPost={true} />
       <ShareModal />
+      <PostLikes />
     </>
   );
 };

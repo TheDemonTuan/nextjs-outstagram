@@ -126,7 +126,8 @@ const SinglePost = ({ id }: { id: string }) => {
           </div>
           <div className="hidden md:inline py-1.5 overflow-y-auto max-h-[360px]">
             <MiniPost post={postData.postByPostId} />
-            {postData.postByPostId.post_comments && postData.postByPostId.post_comments?.length <= 0 ? (
+            {(postData.postByPostId.post_comments && postData.postByPostId.post_comments?.length <= 0) ||
+            postData.postByPostId.is_hide_comment === true ? (
               <div className="flex flex-col items-center gap-1.5 h-[250px] justify-center">
                 <p className="text-xl lg:text-2xl font-extrabold">No comments yet.</p>
                 <p className="text-sm font-medium">Start the conversation.</p>
@@ -166,7 +167,7 @@ const SinglePost = ({ id }: { id: string }) => {
               </p>
             )}
           </div>
-          {authCanUse && <CommentForm postId={id} />}
+          {authCanUse && postData.postByPostId.is_hide_comment === false && <CommentForm postId={id} />}
         </div>
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}

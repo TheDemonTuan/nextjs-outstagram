@@ -108,20 +108,21 @@ const PostReact = ({ isLiked, postReact, postPage }: { isLiked: boolean; postRea
           )}
           <span className="sr-only">Like</span>
         </div>
-        <Link href={`/p/${postReact.id}`} passHref>
-          <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-          <span className="sr-only">Comment</span>
-        </Link>
-        {postReact.user_id !== authData?.id && (
-          <div
-            onClick={() => {
-              setModalData(postReact);
-              modalOpen(ShareModalKey);
-            }}>
-            <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-            <span className="sr-only">Share</span>
-          </div>
+        {postReact.is_hide_comment === false && (
+          <Link href={`/p/${postReact.id}`} passHref>
+            <MessageCircleIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+            <span className="sr-only">Comment</span>
+          </Link>
         )}
+
+        <div
+          onClick={() => {
+            setModalData(postReact);
+            modalOpen(ShareModalKey);
+          }}>
+          <SendIcon className="w-6 h-6 hover:stroke-gray115 cursor-pointer" stroke="#262626" />
+          <span className="sr-only">Share</span>
+        </div>
       </div>
       {postReact.user_id !== authData?.id && (
         <div className="ml-auto" onClick={handleSavePost}>

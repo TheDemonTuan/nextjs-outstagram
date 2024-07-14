@@ -10,7 +10,7 @@ import { moveElementToFront } from "@/lib/utils";
 import { useInboxStore } from "@/stores/inbox-store";
 import { Input, Spinner } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import React, { useCallback } from "react";
 import { toast } from "sonner";
 
 const FormInbox = () => {
@@ -79,18 +79,16 @@ const FormInbox = () => {
       });
     },
     onError: (error) => {
-      console.log("error", error);
-
       toast.error(error?.response?.data?.message || "Send inbox failed!");
     },
   });
 
-  const handleSubmit = () => {
-    if (!value) return;
+  const handleSubmit = useCallback(() => {
+    if (!value || inboxSendIsPending) return;
     inboxSendMutate({ username, message: value });
     setValue("");
     inputRef.current?.focus();
-  };
+  }, [value, inboxSendIsPending, inboxSendMutate, username]);
 
   return (
     <Input

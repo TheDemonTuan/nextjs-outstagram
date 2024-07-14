@@ -1,9 +1,11 @@
 import { friendKey } from "@/api/friend";
-import { inboxKey } from "@/api/inbox";
+import { inboxKey, InboxResponse } from "@/api/inbox";
 import { postKey } from "@/api/post";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { InboxGetAllBubbleQuery, InboxGetByUsernameQuery } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { moveElementToFront } from "@/lib/utils";
 import { useNotificationsStore } from "@/stores/notification-store";
 import { usePusherStore } from "@/stores/pusher-store";
 import { Spinner } from "@nextui-org/react";
@@ -36,9 +38,55 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
       });
       switch (data.type) {
         case "inbox-action":
-          console.log(data.toUserName);
-          queryClient.invalidateQueries({
-            queryKey: [inboxKey, { username: data.username }],
+          // queryClient.invalidateQueries({
+          //   queryKey: [inboxKey, { username: data.username }],
+          // // });
+          const fakeData = {
+            id: data.messageID,
+            from_user_id: data.fromUserID,
+            to_user_id: data.toUserID,
+            message: data.lastMessage,
+            created_at: new Date().toISOString(),
+          };
+          queryClient.setQueryData([inboxKey, { username: data.username }], (data: InboxGetByUsernameQuery) => {
+            return { ...data, inboxGetByUsername: [...data.inboxGetByUsername, fakeData] };
+          });
+          queryClient.setQueryData([inboxKey, "all"], (oldData: InboxGetAllBubbleQuery) => {
+            let findUserNamePosition = oldData.inboxGetAllBubble.findIndex((inbox) => inbox.username === data.username);
+            let cloneData = [...oldData.inboxGetAllBubble];
+
+            if (findUserNamePosition === -1) {
+              findUserNamePosition = 0;
+              cloneData[findUserNamePosition] = {
+                username: data.username,
+                last_message: data.lastMessage,
+                created_at: new Date().toISOString(),
+                is_read: false,
+                avatar: getUserAvatarURL(data.avatar),
+                full_name: data.full_name || "",
+              };
+            } else {
+              cloneData[findUserNamePosition].last_message = data.lastMessage;
+              cloneData[findUserNamePosition].created_at = data.created_at;
+              cloneData[findUserNamePosition].is_read = false;
+            }
+            findUserNamePosition >= 0 && moveElementToFront(cloneData, findUserNamePosition);
+            if (!findUserNamePosition) {
+              oldData.inboxGetAllBubble.shift();
+              return {
+                ...oldData,
+                inboxGetAllBubble: [
+                  {
+                    ...cloneData[findUserNamePosition],
+                  },
+                  ...oldData.inboxGetAllBubble,
+                ],
+              };
+            }
+            return {
+              ...oldData,
+              inboxGetAllBubble: [...cloneData],
+            };
           });
           break;
         case "friend-action":
@@ -65,7 +113,7 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
               </div>
               <div className="flex border-l border-gray-200">
                 <Link
-                  href={`/${data.username}`}
+                  href={`/direct/inbox/${data.fromUserID}`}
                   onClick={() => toast.dismiss(t.id)}
                   className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                   View

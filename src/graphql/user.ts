@@ -22,6 +22,7 @@ export const UserSuggestion = graphql(`
       active
       role
       is_private
+      created_at
       posts {
         id
         privacy

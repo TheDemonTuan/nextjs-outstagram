@@ -131,7 +131,7 @@ export default ChatInbox;
 const meMessage = (message: string) => {
   return (
     <div className="flex justify-end">
-      <span className="flex flex-col items-end gap-1 text-sm w-fit bg-primary text-white py-2 px-4 font-medium rounded-full">
+      <span className="flex flex-col items-end gap-1 text-sm bg-primary text-white py-2 px-3 font-medium rounded-xl max-w-96 break-words">
         {message}
       </span>
     </div>
@@ -145,7 +145,7 @@ const youMessage = (message: string, avatar: string) => {
         <AvatarImage src={getUserAvatarURL(avatar)} alt="User Avatar" />
       </Avatar>
 
-      <div className="text-sm w-fit overflow-hidden bg-[#EFEFEF] text-black rounded-full py-2 px-4">{message}</div>
+      <div className="text-sm overflow-hidden bg-[#EFEFEF] text-black rounded-xl py-2 px-3 max-w-96 break-words">{message}</div>
     </div>
   );
 };

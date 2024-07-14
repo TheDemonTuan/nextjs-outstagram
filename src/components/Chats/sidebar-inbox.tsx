@@ -48,7 +48,7 @@ function SideBarInbox() {
 
   useEffect(() => {
     inboxAllData?.inboxGetAllBubble.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }, [inboxAllData?.inboxGetAllBubble]);
+  }, [inboxAllData]);
 
   // useEffect(() => {
   //   animateScroll.scrollToBottom({

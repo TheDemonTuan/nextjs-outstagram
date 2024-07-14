@@ -17,6 +17,7 @@ const FormInbox = () => {
   const [value, setValue] = React.useState("");
   const { username } = useInboxStore();
   const queryClient = useQueryClient();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const {
     data: userProfileData,
@@ -88,6 +89,7 @@ const FormInbox = () => {
     if (!value) return;
     inboxSendMutate({ username, message: value });
     setValue("");
+    inputRef.current?.focus();
   };
 
   return (
@@ -96,6 +98,7 @@ const FormInbox = () => {
       variant="bordered"
       radius="full"
       size="lg"
+      ref={inputRef}
       startContent={<EmojiLookBottomIcon className="w-7 h-7" />}
       endContent={
         inboxSendIsPending ? (
@@ -115,7 +118,10 @@ const FormInbox = () => {
         )
       }
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => {
+        setValue(e.target.value);
+        inputRef.current?.focus();
+      }}
       isDisabled={inboxSendIsPending}
       onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
     />

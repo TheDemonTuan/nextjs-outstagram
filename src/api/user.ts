@@ -69,3 +69,6 @@ export const userEditPassword = async (current_password: string, new_password: s
 export const userDeleteAvatar = async () =>
   http.delete<ApiSuccessResponse<string>>("users/me/avatar").then((res) => res.data);
 
+export const adminBanUserByUserID = async (userID: string) => 
+  http.post<ApiSuccessResponse<boolean>>(`admin/ban/users/${userID}`).then((res) => res.data)
+

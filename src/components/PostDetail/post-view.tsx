@@ -23,6 +23,7 @@ import CommentForm from "./comment-form";
 import MiniPost from "./mini-post";
 import Link from "next/link";
 import ShareModal from "../Post/share-modal";
+import CommentMoreOptions from "./comment-more-options";
 
 function PostView({ id }: { id: string }) {
   const { modalOpen, setModalData, modalKey } = useModalStore();
@@ -183,6 +184,7 @@ function PostView({ id }: { id: string }) {
       <PostMoreOptions isPostDetail={true} />
       <PostLikes />
       <ShareModal />
+      <CommentMoreOptions userId={postData.postByPostId.user_id} />
     </>
   );
 }

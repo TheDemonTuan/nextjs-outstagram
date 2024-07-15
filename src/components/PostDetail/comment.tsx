@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react";
-import { Divider, Spinner, Tooltip } from "@nextui-org/react";
+import { Divider, Spinner, Tooltip, useModal } from "@nextui-org/react";
 import Link from "next/link";
 import { PiDotsThreeBold } from "react-icons/pi";
 import { FaRegHeart } from "react-icons/fa";
@@ -12,12 +12,15 @@ import SummaryProfile from "../summary-profile";
 import { NIL as NIL_UUID } from "uuid";
 import { useAuth } from "@/hooks/useAuth";
 import { VerifiedIcon } from "@/icons";
+import { useModalStore } from "@/stores/modal-store";
+import { CommentMoreOptionsModalKey } from "./comment-more-options";
 
 const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"]["post_comments"] }) => {
   const { authData, authCanUse } = useAuth();
   const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null);
   const { setParentID, setContent, setReplyUsername } = useCommentStore();
   const [showReplies, setShowReplies] = useState<{ [key: string]: boolean }>({});
+  const { modalOpen, setModalData } = useModalStore();
 
   const handleReplyComment = useCallback(
     (id: string, username: string) => {
@@ -118,6 +121,9 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                           <PiDotsThreeBold
                             className="w-6 h-6 hover:stroke-gray115 cursor-pointer items-end"
                             stroke="#858585"
+                            onClick={() => {
+                              setModalData(comment), modalOpen(CommentMoreOptionsModalKey);
+                            }}
                           />
                         )}
                       </>
@@ -178,6 +184,7 @@ const ReplyBox = memo(
   }) => {
     const { authData, authCanUse } = useAuth();
     const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null);
+    const { modalOpen, setModalData } = useModalStore();
 
     const replyComments = useMemo(() => {
       return comments?.filter((c) => c?.parent_id === parentID);
@@ -258,6 +265,9 @@ const ReplyBox = memo(
                           <PiDotsThreeBold
                             className="w-6 h-6 hover:stroke-gray115 cursor-pointer items-end"
                             stroke="#858585"
+                            onClick={() => {
+                              setModalData(reply), modalOpen(CommentMoreOptionsModalKey);
+                            }}
                           />
                         )}
                       </>

@@ -72,3 +72,5 @@ export const userDeleteAvatar = async () =>
 export const adminBanUserByUserID = async (userID: string) => 
   http.post<ApiSuccessResponse<boolean>>(`admin/ban/users/${userID}`).then((res) => res.data)
 
+
+

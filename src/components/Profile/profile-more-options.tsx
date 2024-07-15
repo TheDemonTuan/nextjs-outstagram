@@ -10,34 +10,6 @@ import ConfirmBanAccount, { ConfirmBanAccountModalKey } from "./confirm-ban-acco
 
 export const ProfileMoreOptionsModalKey = "ProfileMoreOptions";
 
-const UserAdminMoreOptions = [
-  {
-    title: "Ban account",
-    className: "text-red-500 font-semibold",
-    action: true,
-  },
-  {
-    title: "Block",
-    className: "text-red-500 font-semibold",
-  },
-  {
-    title: "Report",
-    className: "text-red-500 font-semibold",
-  },
-  {
-    title: "Share to ...",
-    action: true,
-  },
-  {
-    title: "About this account",
-    action: true,
-  },
-  {
-    title: "Cancel",
-    action: true,
-  },
-];
-
 const UserNotMeMoreOptions = [
   {
     title: "Block",
@@ -64,6 +36,34 @@ const UserNotMeMoreOptions = [
 const ProfileMoreOptions = () => {
   const { modalClose, modalKey, modalData, setModalData, modalOpen } = useModalStore();
   const { authData } = useAuth();
+
+  const UserAdminMoreOptions = [
+    {
+      title: modalData.active === true ? "Ban account" : "Unban account",
+      className: "text-red-500 font-semibold",
+      action: true,
+    },
+    {
+      title: "Block",
+      className: "text-red-500 font-semibold",
+    },
+    {
+      title: "Report",
+      className: "text-red-500 font-semibold",
+    },
+    {
+      title: "Share to ...",
+      action: true,
+    },
+    {
+      title: "About this account",
+      action: true,
+    },
+    {
+      title: "Cancel",
+      action: true,
+    },
+  ];
 
   return (
     <>

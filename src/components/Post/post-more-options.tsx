@@ -12,6 +12,7 @@ import ShareModal, { ShareModalKey } from "./share-modal";
 import { PostEditHiddenComment, PostEditHiddenCountLike, PostType, postKey } from "@/api/post";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ConfirmBlockPost, { ConfirmBlockPostModalKey } from "./confirm-block-post";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
 const UserMoreOptions = [
@@ -70,6 +71,43 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
     },
     {
       title: "Go to post",
+      action: true,
+    },
+    {
+      title: "Cancel",
+      action: true,
+    },
+  ];
+
+  const AdminMoreOptions = [
+    {
+      title: "Delete",
+      className: "text-red-500 font-semibold",
+      action: true,
+    },
+    {
+      title: modalData.active === true ? "Block" : "Unblock",
+      className: "text-red-500 font-semibold",
+      action: true,
+    },
+    {
+      title: "Report",
+      className: "text-red-500 font-semibold",
+    },
+    {
+      title: "Unfollow",
+      className: "text-red-500 font-semibold",
+    },
+    {
+      title: "Go to post",
+      action: true,
+    },
+    {
+      title: "Share to ...",
+      action: true,
+    },
+    {
+      title: "Copy link",
       action: true,
     },
     {
@@ -256,7 +294,12 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
       <Modal isOpen={modalKey === PostMoreOptionsModalKey} onOpenChange={modalClose} hideCloseButton={true}>
         <ModalContent>
           {(onClose) => {
-            const listOptionItem = authData?.id === modalData?.user_id ? UserMeMoreOptions : UserMoreOptions;
+            const listOptionItem =
+              authData?.role === true && authData.id !== modalData.user_id
+                ? AdminMoreOptions
+                : authData?.id === modalData?.user_id
+                ? UserMeMoreOptions
+                : UserMoreOptions;
             return (
               <>
                 <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
@@ -301,19 +344,23 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
                                   break;
                                 case "Turn off commenting":
                                   handlePostEditHiddenComment();
-
                                   break;
                                 case "Hide like count to others":
                                   handlePostEditHiddenCountLike();
-
                                   break;
                                 case "Turn on commenting":
                                   handlePostEditHiddenComment();
-
                                   break;
                                 case "Unhide like count to others":
                                   handlePostEditHiddenCountLike();
-
+                                  break;
+                                case "Block":
+                                  setModalData(modalData);
+                                  modalOpen(ConfirmBlockPostModalKey);
+                                  break;
+                                case "Unblock":
+                                  setModalData(modalData);
+                                  modalOpen(ConfirmBlockPostModalKey);
                                   break;
                                 case "Cancel":
                                   modalClose();
@@ -339,6 +386,7 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
       <ConfirmDeletePost />
       <AboutThisAccount />
       <ShareModal />
+      <ConfirmBlockPost />
     </>
   );
 };

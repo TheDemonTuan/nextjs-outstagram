@@ -2,7 +2,7 @@ import { adminBanUserByUserID } from "@/api/user";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
 import React, { Fragment } from "react";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ const ConfirmBanAccount = () => {
 
   const ListConfirmBanAccount = [
     {
-      title: modalData.active === true ? "Unban" : "Ban",
+      title: modalData.active === true ? "Ban" : "Unban",
       className: "text-sm font-bold text-red-500",
       action: true,
     },
@@ -25,7 +25,7 @@ const ConfirmBanAccount = () => {
     },
   ];
 
-  const { mutate: adminBanUserCommentMutate, isPending: adminBanUserCommentIsLoading } = useMutation<
+  const { mutate: adminBanUserMutate, isPending: adminBanUserIsLoading } = useMutation<
     ApiSuccessResponse<boolean>,
     ApiErrorResponse
   >({
@@ -39,8 +39,8 @@ const ConfirmBanAccount = () => {
     },
   });
 
-  const handlePostEditHiddenComment = () => {
-    adminBanUserCommentMutate();
+  const handleAdminBanUser = () => {
+    adminBanUserMutate();
   };
 
   return (
@@ -57,10 +57,10 @@ const ConfirmBanAccount = () => {
               <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0 ">
                 <div className="my-3 space-y-1 text-center">
                   <p className="text-black text-xl">
-                    {modalData.active === true ? "Unban" : "Ban"} {modalData.username}{" "}
+                    {modalData.active === true ? "Ban" : "Unban"} {modalData.username}{" "}
                   </p>
                   <p className="text-[#737373] text-sm">
-                    {modalData.active ? (
+                    {!modalData.active ? (
                       <>
                         They will be able to use any of the features <br /> on Outstagram. Outstagram will notify them
                         that <br /> they have been unbanned.
@@ -83,10 +83,10 @@ const ConfirmBanAccount = () => {
                           if (optionItem?.action) {
                             switch (optionItem.title) {
                               case "Ban":
-                                handlePostEditHiddenComment();
+                                handleAdminBanUser();
                                 break;
                               case "Unban":
-                                handlePostEditHiddenComment();
+                                handleAdminBanUser();
                                 break;
                               case "Cancel":
                                 modalClose();

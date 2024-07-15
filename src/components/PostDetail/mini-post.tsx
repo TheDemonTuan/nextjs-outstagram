@@ -36,6 +36,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
                 role={post.user?.role || false}
                 posts={[]}
                 friends={post.user?.friends as Friend[]}
+                is_private={post.user?.is_private || false}
               />
             )
           }
@@ -65,6 +66,7 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
                     role={post.user?.role || false}
                     posts={[]}
                     friends={post.user?.friends as Friend[]}
+                    is_private={post.user?.is_private || false}
                   />
                 )
               }

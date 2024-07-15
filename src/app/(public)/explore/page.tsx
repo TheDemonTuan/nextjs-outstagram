@@ -15,7 +15,7 @@ import { Spinner } from "@nextui-org/react";
 
 const ExplorePage = () => {
   const { ref, inView } = useInView();
-  const { authData } = useAuth();
+  const { authData, authCanUse } = useAuth();
   const currentPage = useRef(1);
   const router = useRouter();
 
@@ -119,7 +119,7 @@ const ExplorePage = () => {
                   key={post.id}
                   id={`PostMain-${post.id}`}
                   className={
-                    calculateIndex(index) == false
+                    calculateIndex(index) === false
                       ? "col-span-1 row-span-1 relative cursor-pointer w-full h-[20rem] group"
                       : "col-span-1 row-span-2 relative w-full h-[calc(40rem+2px)] group cursor-pointer"
                   }>

@@ -15,9 +15,6 @@ const ListProfileSetting = [
     action: true,
   },
   {
-    title: "Notifications",
-  },
-  {
     title: "Settings and privacy",
     href: "/accounts/privacy-setting",
     action: true,

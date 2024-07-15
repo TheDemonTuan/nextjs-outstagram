@@ -6,33 +6,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
 import ShareModal, { ShareModalKey } from "../Post/share-modal";
+import ConfirmBanAccount, { ConfirmBanAccountModalKey } from "./confirm-ban-account";
 
 export const ProfileMoreOptionsModalKey = "ProfileMoreOptions";
-
-const UserAdminMoreOptions = [
-  {
-    title: "Ban account",
-    className: "text-red-500 font-semibold",
-    action: true,
-  },
-  {
-    title: "Delete account",
-    className: "text-red-500 font-semibold",
-    action: true,
-  },
-  {
-    title: "Cancel",
-    action: true,
-  },
-];
 
 const UserNotMeMoreOptions = [
   {
     title: "Block",
-    className: "text-red-500 font-semibold",
-  },
-  {
-    title: "Restrict",
     className: "text-red-500 font-semibold",
   },
   {
@@ -57,13 +37,39 @@ const ProfileMoreOptions = () => {
   const { modalClose, modalKey, modalData, setModalData, modalOpen } = useModalStore();
   const { authData } = useAuth();
 
-  console.log(modalData);
+  const UserAdminMoreOptions = [
+    {
+      title: modalData.active === true ? "Ban account" : "Unban account",
+      className: "text-red-500 font-semibold",
+      action: true,
+    },
+    {
+      title: "Block",
+      className: "text-red-500 font-semibold",
+    },
+    {
+      title: "Report",
+      className: "text-red-500 font-semibold",
+    },
+    {
+      title: "Share to ...",
+      action: true,
+    },
+    {
+      title: "About this account",
+      action: true,
+    },
+    {
+      title: "Cancel",
+      action: true,
+    },
+  ];
 
   return (
     <>
       <Modal isOpen={modalKey === ProfileMoreOptionsModalKey} onOpenChange={modalClose} hideCloseButton={true}>
         <ModalContent>
-          {(onClose) => {
+          {() => {
             const listOptionItem = authData?.role === true ? UserAdminMoreOptions : UserNotMeMoreOptions;
             return (
               <>
@@ -77,6 +83,10 @@ const ProfileMoreOptions = () => {
                           onClick={() => {
                             if (optionItem?.action) {
                               switch (optionItem.title) {
+                                case "Ban account":
+                                  setModalData(modalData);
+                                  modalOpen(ConfirmBanAccountModalKey);
+                                  break;
                                 case "About this account":
                                   setModalData(modalData);
                                   modalOpen(AboutThisAccountModalKey);
@@ -107,6 +117,7 @@ const ProfileMoreOptions = () => {
       </Modal>
       <AboutThisAccount isProfile={true} />
       <ShareModal isProfile={true} />
+      <ConfirmBanAccount />
     </>
   );
 };

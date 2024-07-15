@@ -12,6 +12,12 @@ import UserProfileInfo from "./user-profile-info";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
 
+const getDifferenceInDays = (date1: Date, date2: Date) => {
+  const timeDifference = date2.getTime() - date1.getTime();
+  const daysDifference = timeDifference / (1000 * 3600 * 24);
+  return daysDifference;
+};
+
 const Suggestions = () => {
   const { authData } = useAuth();
   const {
@@ -80,40 +86,44 @@ const Suggestions = () => {
           </Button>
         </div>
       ) : (
-        userSuggestionData?.userSuggestion.map((user) => (
-          <div key={user.username} className="flex items-center justify-between gap-3">
-            <Tooltip
-              delay={1000}
-              content={
-                user && (
-                  <SummaryProfile
-                    username={user.username || ""}
-                    full_name={user.full_name || ""}
-                    avatar={user.avatar || ""}
-                    role={user.role || false}
-                    posts={user?.posts as Post[]}
-                    friends={user.friends as Friend[]}
-                  />
-                )
-              }
-              placement="bottom-start"
-              className="rounded-md shadow-lg">
-              <div className="flex items-center gap-2 text-sm font-medium">
-                <div className="flex flex-row gap-3 items-center">
-                  <UserProfileInfo
-                    username={user.username || ""}
-                    full_name="Suggested for you"
-                    isShowFullName={true}
-                    className="w-11 h-11"
-                    avatar={user.avatar || ""}
-                    is_admin={user.role || false}
-                  />
+        userSuggestionData?.userSuggestion.map((user) => {
+          const isNewUser = user.created_at && getDifferenceInDays(new Date(user.created_at), new Date()) <= 7;
+          return (
+            <div key={user.username} className="flex items-center justify-between gap-3">
+              <Tooltip
+                delay={1000}
+                content={
+                  user && (
+                    <SummaryProfile
+                      username={user.username || ""}
+                      full_name={user.full_name || ""}
+                      avatar={user.avatar || ""}
+                      role={user.role || false}
+                      posts={user?.posts as Post[]}
+                      friends={user.friends as Friend[]}
+                      is_private={user?.is_private || false}
+                    />
+                  )
+                }
+                placement="bottom-start"
+                className="rounded-md shadow-lg">
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <div className="flex flex-row gap-3 items-center">
+                    <UserProfileInfo
+                      username={user.username || ""}
+                      full_name={isNewUser ? "New to Outstagram" : "Suggested for you"}
+                      isShowFullName={true}
+                      className="w-11 h-11"
+                      avatar={user.avatar || ""}
+                      is_admin={user.role || false}
+                    />
+                  </div>
                 </div>
-              </div>
-            </Tooltip>
-            <button className="text-blue-400 text-xs font-bold">Add friends</button>
-          </div>
-        ))
+              </Tooltip>
+              <button className="text-blue-400 text-xs font-bold">Add friends</button>
+            </div>
+          );
+        })
       )}
     </div>
   );

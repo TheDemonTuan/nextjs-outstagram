@@ -114,6 +114,7 @@ export const PostByPostID = graphql(`
           username
           full_name
           role
+          is_private
           friends {
             id
             from_user_id
@@ -264,6 +265,7 @@ export const PostHomePage = graphql(`
           role
           full_name
           avatar
+          is_private
           friends {
             id
             from_user_id

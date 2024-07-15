@@ -16,7 +16,7 @@ interface SummaryProfileProps {
   full_name: string;
   avatar: string;
   role: boolean;
-  is_private?: boolean;
+  is_private: boolean;
   friends: Friend[];
   posts: Post[];
 }
@@ -30,11 +30,7 @@ const SummaryProfile = (props: SummaryProfileProps) => {
 
   const isCurrentUser = authData?.username === props.username;
 
-  const isViewerFriendOrOwner =
-    authData?.username === props.username ||
-    props.friends?.some(
-      (friend) => friend?.to_user_info?.id === authData?.id || friend?.from_user_info?.id === authData?.id
-    );
+  const isViewerFriendOrOwner = isCurrentUser || isFriend;
 
   const canViewPrivateProfile = props.is_private === false || isViewerFriendOrOwner;
 
@@ -74,14 +70,16 @@ const SummaryProfile = (props: SummaryProfileProps) => {
       </div>
 
       {props.is_private === true && !canViewPrivateProfile ? (
-        <div className="flex flex-col w-full h-32 justify-center items-center my-3">
-          <Divider className="my-4" />
-          <Image src="/padlock.png" alt="Private Account" width={500} height={500} className="my-2 w-12 h-12" />
-          <div className="font-bold text-base">The account is private</div>
-          <div className="text-sm text-gray-400 mx-2 text-center">
-            Follow this account to see their photos and videos
+        <div className="flex flex-row items-center space-x-1 mx-[-18px]">
+          <div className="flex flex-col w-full h-32 justify-center items-center my-3">
+            <Divider className="my-4" />
+            <Image src="/padlock.png" alt="Private Account" width={500} height={500} className="my-2 w-12 h-12" />
+            <div className="font-bold text-base">The account is private</div>
+            <div className="text-sm text-gray-400 mx-2 text-center">
+              Follow this account to see their photos and videos
+            </div>
+            <Divider className="my-4" />
           </div>
-          <Divider className="my-4" />
         </div>
       ) : (
         <div className="flex flex-row items-center space-x-1 mx-[-18px]">

@@ -161,6 +161,7 @@ const Post = () => {
                                     role={post.user?.role || false}
                                     posts={[]}
                                     friends={post.user?.friends as Friend[]}
+                                    is_private={post.user?.is_private || false}
                                   />
                                 )
                               }
@@ -307,6 +308,7 @@ const Post = () => {
                                       role={comment.user.role || false}
                                       posts={[]}
                                       friends={comment?.user.friends as Friend[]}
+                                      is_private={comment?.user.is_private || false}
                                     />
                                   )
                                 }

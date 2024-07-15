@@ -67,6 +67,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                         role={comment?.user?.role || false}
                         posts={[]}
                         friends={comment?.user?.friends as Friend[]}
+                        is_private={comment.user?.is_private || false}
                       />
                     )
                   }
@@ -206,6 +207,7 @@ const ReplyBox = memo(
                         role={reply?.user?.role || false}
                         posts={[]}
                         friends={reply?.user?.friends as Friend[]}
+                        is_private={reply.user?.is_private || false}
                       />
                     )
                   }

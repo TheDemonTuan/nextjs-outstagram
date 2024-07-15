@@ -8,7 +8,6 @@ import Gallery from "@/components/Profile/gallery";
 import { toast } from "sonner";
 import { notFound, useSearchParams } from "next/navigation";
 import { FiBookmark } from "react-icons/fi";
-import ProfileStories from "@/components/Profile/profile-stories";
 import { Friend, UserProfileDocument, UserProfileQuery } from "@/gql/graphql";
 import { graphQLClient } from "@/lib/graphql";
 import { useQuery } from "@tanstack/react-query";
@@ -82,7 +81,6 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   return (
     <div className="flex flex-col max-w-screen-lg mt-9 mx-28 mb-40">
       <ProfileInformation userProfile={userProfileData} />
-      {/* <ProfileStories /> */}
       <div className="w-full">
         <hr className="border-gray-300 mt-14 border-t mx-28" />
       </div>

@@ -14,6 +14,12 @@ import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import SummaryProfile from "@/components/summary-profile";
 import { PeopleSuggestionsSkeleton } from "@/components/skeletons";
 
+const getDifferenceInDays = (date1: Date, date2: Date) => {
+  const timeDifference = date2.getTime() - date1.getTime();
+  const daysDifference = timeDifference / (1000 * 3600 * 24);
+  return daysDifference;
+};
+
 const PeoplePage = () => {
   const {
     data: userSuggestionData,
@@ -70,67 +76,74 @@ const PeoplePage = () => {
               <p className="my-3">Currently, there are no suggestions. Find more people to add as friends!</p>
             </div>
           ) : (
-            userSuggestionData?.userSuggestion?.map((user) => (
-              <div key={user.id} className="flex items-center justify-between">
-                <div className="flex flex-row gap-3 items-center">
-                  <Tooltip
-                    delay={1000}
-                    content={
-                      user && (
-                        <SummaryProfile
-                          username={user.username || ""}
-                          full_name={user.full_name || ""}
-                          avatar={user.avatar || ""}
-                          role={user.role || false}
-                          posts={user?.posts as Post[]}
-                          friends={user.friends as Friend[]}
-                        />
-                      )
-                    }
-                    placement="bottom-start"
-                    className="rounded-md shadow-lg">
-                    <Link href={`/${user.username}`}>
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage className="object-cover" src={getUserAvatarURL(user.avatar)} />
-                        <AvatarFallback>
-                          <Spinner size="sm" />
-                        </AvatarFallback>
-                      </Avatar>
-                    </Link>
-                  </Tooltip>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-1">
-                      <Tooltip
-                        delay={1000}
-                        content={
-                          user && (
-                            <SummaryProfile
-                              username={user.username || ""}
-                              full_name={user.full_name || ""}
-                              avatar={user.avatar || ""}
-                              role={user.role || false}
-                              posts={user?.posts as Post[]}
-                              friends={user.friends as Friend[]}
-                            />
-                          )
-                        }
-                        placement="bottom-start"
-                        className="rounded-md shadow-lg">
-                        <Link href={`/${user.username}`} className="font-bold text-[14px] leading-[18px]">
-                          {user.username}
-                        </Link>
-                      </Tooltip>
-                      {user.role && <VerifiedIcon className="w-3 h-3" />}
+            userSuggestionData?.userSuggestion?.map((user) => {
+              const isNewUser = user.created_at && getDifferenceInDays(new Date(user.created_at), new Date()) <= 7;
+              return (
+                <div key={user.id} className="flex items-center justify-between">
+                  <div className="flex flex-row gap-3 items-center">
+                    <Tooltip
+                      delay={1000}
+                      content={
+                        user && (
+                          <SummaryProfile
+                            username={user.username || ""}
+                            full_name={user.full_name || ""}
+                            avatar={user.avatar || ""}
+                            role={user.role || false}
+                            posts={user?.posts as Post[]}
+                            friends={user.friends as Friend[]}
+                            is_private={user.is_private || false}
+                          />
+                        )
+                      }
+                      placement="bottom-start"
+                      className="rounded-md shadow-lg">
+                      <Link href={`/${user.username}`}>
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage className="object-cover" src={getUserAvatarURL(user.avatar)} />
+                          <AvatarFallback>
+                            <Spinner size="sm" />
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
+                    </Tooltip>
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-1">
+                        <Tooltip
+                          delay={1000}
+                          content={
+                            user && (
+                              <SummaryProfile
+                                username={user.username || ""}
+                                full_name={user.full_name || ""}
+                                avatar={user.avatar || ""}
+                                role={user.role || false}
+                                posts={user?.posts as Post[]}
+                                friends={user.friends as Friend[]}
+                                is_private={user.is_private || false}
+                              />
+                            )
+                          }
+                          placement="bottom-start"
+                          className="rounded-md shadow-lg">
+                          <Link href={`/${user.username}`} className="font-bold text-[14px] leading-[18px]">
+                            {user.username}
+                          </Link>
+                        </Tooltip>
+                        {user.role && <VerifiedIcon className="w-3 h-3" />}
+                      </div>
+                      <h3 className="text-[14px] leading-[18px] text-[#737373]">{user.full_name}</h3>
+                      <h3 className="text-[12px] leading-[16px] text-[#737373]">
+                        {isNewUser ? "New to Outstagram" : "Suggested for you"}
+                      </h3>
                     </div>
-                    <h3 className="text-[14px] leading-[18px] text-[#737373]">{user.full_name}</h3>
-                    <h3 className="text-[12px] leading-[16px] text-[#737373]">Suggested for you</h3>
                   </div>
+                  <button className="bg-[#0095F6] hover:bg-[#1877F2] rounded-md  px-4 py-1.5 text-sm font-medium text-white">
+                    Add Friend
+                  </button>
                 </div>
-                <button className="bg-[#0095F6] hover:bg-[#1877F2] rounded-md  px-4 py-1.5 text-sm font-medium text-white">
-                  Add Friend
-                </button>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>

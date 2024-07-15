@@ -5,9 +5,9 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDi
 import React, { Fragment } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
-import { PostResponse, postDelete, postKey } from "@/api/post";
+import { PostResponse, adminPostDelete, postDelete, postKey } from "@/api/post";
 import { toast } from "sonner";
-import { AuthVerifyResponse, authKey } from "@/api/auth";
+import { useAuth } from "@/hooks/useAuth";
 
 export const ConfirmDeletePostModalKey = "ConfirmDeletePost";
 
@@ -27,6 +27,8 @@ const ListConfirmDeletePost = [
 const ConfirmDeletePost = () => {
   const { modalClose, modalKey, modalData } = useModalStore();
   const queryClient = useQueryClient();
+  const { authData } = useAuth();
+
   const { mutate: postDeleteMutate, isPending: postDeleteIsLoading } = useMutation<
     ApiSuccessResponse<string>,
     ApiErrorResponse
@@ -73,16 +75,68 @@ const ConfirmDeletePost = () => {
     },
   });
 
+  const { mutate: adminPostDeleteMutate, isPending: adminPostDeleteIsLoading } = useMutation<
+    ApiSuccessResponse<string>,
+    ApiErrorResponse
+  >({
+    mutationFn: async () => await adminPostDelete(modalData?.id, modalData.user_id),
+    onSuccess: () => {
+      toast.success("Delete post successfully!");
+
+      // queryClient.setQueryData([postKey, "home"], (oldData: any) => {
+      //   if (!oldData) return oldData;
+      //   return {
+      //     ...oldData,
+      //     pages: oldData.pages.map((page: any) => {
+      //       return {
+      //         ...page,
+      //         postHomePage: page.postHomePage.filter((post: any) => post.id !== modalData.id),
+      //       };
+      //     }),
+      //   };
+      // });
+
+      // queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
+      //   if (!oldData) return oldData;
+      //   return {
+      //     ...oldData,
+      //     pages: oldData.pages.map((page: any) => {
+      //       return {
+      //         ...page,
+      //         postReel: page.postReel.filter((post: any) => post.id !== modalData.id),
+      //       };
+      //     }),
+      //   };
+      // });
+
+      // if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
+      //   queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
+      //     return null;
+      //   });
+      // }
+      modalClose();
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Delete post failed!");
+    },
+  });
+
   const handlePostDelete = () => {
     if (!modalData?.id) return;
     postDeleteMutate();
   };
+
+  const handleAdminPostDelete = () => {
+    if (!modalData?.id) return;
+    adminPostDeleteMutate();
+  };
+
   return (
     <Modal
       isOpen={modalKey === ConfirmDeletePostModalKey}
       onOpenChange={modalClose}
       hideCloseButton={true}
-      isDismissable={!postDeleteIsLoading}
+      isDismissable={!postDeleteIsLoading || !adminPostDeleteIsLoading}
       size="sm">
       <ModalContent>
         {(onClose) => {
@@ -90,10 +144,13 @@ const ConfirmDeletePost = () => {
             <>
               <ModalBody
                 className={`mt-3 mb-3 cursor-pointer items-center p-0 ${
-                  postDeleteIsLoading ? "pointer-events-none opacity-50" : ""
+                  postDeleteIsLoading || adminPostDeleteIsLoading ? "pointer-events-none opacity-50" : ""
                 }`}>
                 <div className="my-5 text-center">
-                  <p className="text-black text-xl">Delete post?</p>
+                  <p className="text-black text-xl">
+                    {" "}
+                    {authData?.role === true ? `Delete post by ${modalData.user.username}` : `Delete post`}?
+                  </p>
                   <p>Are you sure you want to delete this post?</p>
                 </div>
                 <hr className="w-full border-gray-300" />
@@ -106,7 +163,7 @@ const ConfirmDeletePost = () => {
                           if (optionItem?.action) {
                             switch (optionItem.title) {
                               case "Delete":
-                                handlePostDelete();
+                                authData?.role === false ? handlePostDelete() : handleAdminPostDelete();
                                 break;
                               case "Cancel":
                                 modalClose();
@@ -122,11 +179,12 @@ const ConfirmDeletePost = () => {
                     </Fragment>
                   );
                 })}
-                {postDeleteIsLoading && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
-                    <Spinner size="md" />
-                  </div>
-                )}
+                {postDeleteIsLoading ||
+                  (adminPostDeleteIsLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+                      <Spinner size="md" />
+                    </div>
+                  ))}
               </ModalBody>
             </>
           );

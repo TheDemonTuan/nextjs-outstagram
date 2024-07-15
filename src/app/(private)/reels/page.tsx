@@ -240,6 +240,7 @@ const ReelsPage = () => {
                                   role={reel.user?.role || false}
                                   posts={[]}
                                   friends={reel.user?.friends as Friend[]}
+                                  is_private={reel.user?.is_private || false}
                                 />
                               )
                             }

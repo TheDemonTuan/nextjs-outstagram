@@ -53,6 +53,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                     role={reelData.user?.role || false}
                     posts={[]}
                     friends={reelData.user?.friends as Friend[]}
+                    is_private={reelData.user?.is_private || false}
                   />
                 )
               }
@@ -77,6 +78,7 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
                       role={reelData.user?.role || false}
                       posts={[]}
                       friends={reelData.user?.friends as Friend[]}
+                      is_private={reelData.user?.is_private || false}
                     />
                   )
                 }

@@ -83,6 +83,7 @@ function PostView({ id }: { id: string }) {
                       role={postData.postByPostId.user?.role || false}
                       posts={[]}
                       friends={postData.postByPostId.user?.friends as Friend[]}
+                      is_private={postData.postByPostId.user?.is_private || false}
                     />
                   )
                 }

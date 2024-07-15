@@ -24,7 +24,7 @@ const UserBox = ({ inbox }: { inbox: InboxGetAllBubbleQuery["inboxGetAllBubble"]
         <p className="text-base font-medium text-black">{inbox.full_name}</p>
         <div className="flex items-center gap-2">
           <p className="text-sm font-normal text-gray-500 overflow-ellipsis break-normal">
-            {truncateString(inbox.last_message, 30)}
+            {truncateString(inbox.last_message, 20)}
           </p>
           <p className="text-xs font-normal text-gray-500">
             •{" "}

@@ -37,14 +37,12 @@ const ChatInbox = ({ username }: { username: string }) => {
   });
 
   useEffect(() => {
-    if (inboxIsLoading || !inboxData) return;
-
     animateScroll.scrollToBottom({
       containerId: "chat-inbox",
       duration: 500,
       smooth: true,
     });
-  }, [inboxData, inboxIsLoading]);
+  }, [inboxData?.inboxGetByUsername]);
 
   const user = userProfileData?.userByUsername;
 

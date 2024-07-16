@@ -19,6 +19,7 @@ import ViewComments from "../PostDetail/comment";
 import PostMoreOptions, { PostMoreOptionsModalKey } from "../Post/post-more-options";
 import ShareModal from "../Post/share-modal";
 import PostLikes from "../Post/post-likes";
+import CommentMoreOptions from "../PostDetail/comment-more-options";
 
 const ReelsView = ({ id }: { id: string }) => {
   const { modalOpen, setModalData, modalKey, modalClose } = useModalStore();
@@ -191,6 +192,7 @@ const ReelsView = ({ id }: { id: string }) => {
       <PostMoreOptions isGoToPost={true} />
       <ShareModal />
       <PostLikes />
+      <CommentMoreOptions userId={reelData.postByPostId.user_id} />
     </>
   );
 };

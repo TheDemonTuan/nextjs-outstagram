@@ -26,6 +26,7 @@ import LikesView from "../likes-view";
 import { useAuth } from "@/hooks/useAuth";
 import { Card } from "../ui/card";
 import ShareModal from "../Post/share-modal";
+import CommentMoreOptions from "./comment-more-options";
 
 const SinglePost = ({ id }: { id: string }) => {
   const { modalOpen, setModalData } = useModalStore();
@@ -175,6 +176,7 @@ const SinglePost = ({ id }: { id: string }) => {
       <PostMoreOptions isGoToPost={true} />
       <PostLikes />
       <ShareModal />
+      <CommentMoreOptions userId={postData.postByPostId.user_id} />
     </>
   );
 };

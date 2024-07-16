@@ -86,3 +86,15 @@ export const adminPostDelete = async (postID: string, userID: string) =>
 
 export const adminBlockPostByPostId = async (PostID: string) => 
   http.post<ApiSuccessResponse<boolean>>(`admin/block/posts/${PostID}`).then((res) => res.data)
+
+export interface DeleteCommentArgs  {
+  postID: string;
+  commentID: string;
+  userID?: string;
+};
+
+export const postDeleteCommentOnPostByCommentId = async (params: DeleteCommentArgs) =>
+  http.delete<ApiSuccessResponse<string>>(`posts/comment/${params.commentID}/${params.postID}${params.userID ? `?userID=${params.userID}` : ""}`).then((res)=>res.data);
+
+export const adminDeleteCommentOnPostByCommentId = async (params: DeleteCommentArgs) =>
+  http.delete<ApiSuccessResponse<string>>(`admin/comments/${params.commentID}/${params.postID}/${params.userID}`).then((res)=>res.data);

@@ -110,6 +110,7 @@ export const PostByPostID = graphql(`
         parent_id
         created_at
         user {
+          id
           avatar
           username
           full_name

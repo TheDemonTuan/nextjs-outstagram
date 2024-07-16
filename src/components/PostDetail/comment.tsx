@@ -14,6 +14,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { VerifiedIcon } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
 import { CommentMoreOptionsModalKey } from "./comment-more-options";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { CommentLikeResponse, commentLike } from "@/api/comment_like";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"]["post_comments"] }) => {
   const { authData, authCanUse } = useAuth();
@@ -21,6 +25,16 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
   const { setParentID, setContent, setReplyUsername } = useCommentStore();
   const [showReplies, setShowReplies] = useState<{ [key: string]: boolean }>({});
   const { modalOpen, setModalData } = useModalStore();
+
+  const { mutate: commentLikeMutate } = useMutation<ApiSuccessResponse<CommentLikeResponse>, ApiErrorResponse, string>({
+    mutationFn: async (params) => await commentLike(params),
+    onSuccess: (likeCommentData) => {
+      toast.error("Like comment successfully!");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Like comment failed!");
+    },
+  });
 
   const handleReplyComment = useCallback(
     (id: string, username: string) => {
@@ -132,7 +146,7 @@ const ViewComments = ({ comments }: { comments: PostByPostIdQuery["postByPostId"
                 </div>
               </div>
               {authCanUse && (
-                <div className="items-center mt-3">
+                <div className="items-center mt-3 cursor-pointer" onClick={() => commentLikeMutate(comment.id)}>
                   <FaRegHeart size={12} />
                 </div>
               )}
@@ -189,6 +203,20 @@ const ReplyBox = memo(
     const replyComments = useMemo(() => {
       return comments?.filter((c) => c?.parent_id === parentID);
     }, [comments, parentID]);
+
+    const { mutate: commentLikeMutate } = useMutation<
+      ApiSuccessResponse<CommentLikeResponse>,
+      ApiErrorResponse,
+      string
+    >({
+      mutationFn: async (params) => await commentLike(params),
+      onSuccess: (likeCommentData) => {
+        toast.error("Like comment successfully!");
+      },
+      onError: (error) => {
+        toast.error(error?.response?.data?.message || "Like comment failed!");
+      },
+    });
 
     if (!replyComments?.length) {
       return null;
@@ -276,7 +304,7 @@ const ReplyBox = memo(
                 </div>
               </div>
               {authCanUse && (
-                <div className="items-center mt-3">
+                <div className="items-center mt-3 cursor-pointer" onClick={() => commentLikeMutate(reply?.id || "")}>
                   <FaRegHeart size={12} />
                 </div>
               )}

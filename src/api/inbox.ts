@@ -23,3 +23,6 @@ export const inboxSendMessages = (params: InboxResponseParams) =>
   http
     .post<ApiSuccessResponse<InboxResponse>>(`inbox/${params.username}`, { message: params.message })
     .then((res) => res.data);
+
+export const inboxDeleteById = (id: string) =>
+  http.delete<ApiSuccessResponse<string>>(`inbox/${id}`).then((res) => res.data);

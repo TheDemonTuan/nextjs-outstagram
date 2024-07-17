@@ -1,19 +1,24 @@
 "use client";
-import { inboxKey } from "@/api/inbox";
-import { InboxGetByUsernameDocument, UserByUsernameDocument } from "@/gql/graphql";
+import { inboxDeleteById, inboxKey, InboxResponse } from "@/api/inbox";
+import { InboxGetByUsernameDocument, InboxGetByUsernameQuery, UserByUsernameDocument } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { graphQLClient } from "@/lib/graphql";
-import { useQuery } from "@tanstack/react-query";
+import { UseMutateFunction, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { Fragment, useEffect } from "react";
 import { animateScroll } from "react-scroll";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { FrameInboxSkeleton } from "../skeletons";
+import { BsThreeDots } from "react-icons/bs";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { toast } from "sonner";
 
 const ChatInbox = ({ username }: { username: string }) => {
   // const { user,username } = useInboxStore();
   const { authData } = useAuth();
+  const queryClient = useQueryClient();
 
   const {
     data: inboxData,
@@ -34,6 +39,24 @@ const ChatInbox = ({ username }: { username: string }) => {
     queryKey: [inboxKey, "profile", { username }],
     queryFn: () => graphQLClient.request(UserByUsernameDocument, { username }),
     enabled: !!username,
+  });
+
+  const { mutate: inboxDeleteMutate, isPending: inboxDeleteIsPending } = useMutation<
+    ApiSuccessResponse<string>,
+    ApiErrorResponse,
+    string
+  >({
+    mutationFn: async (params) => await inboxDeleteById(params),
+    onSuccess: (res) => {
+      // toast.success("Login successfully!");
+      // queryClient.setQueryData(["auth"], res);
+      queryClient.setQueryData([inboxKey, { username }], (data: InboxGetByUsernameQuery) => {
+        return { ...data, inboxGetByUsername: data.inboxGetByUsername.filter((inbox) => inbox.id !== res.data) };
+      });
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Delete inbox failed!");
+    },
   });
 
   useEffect(() => {
@@ -72,7 +95,7 @@ const ChatInbox = ({ username }: { username: string }) => {
             <Fragment key={inbox.id}>
               {inbox.message &&
                 (inbox.from_user_id === authData?.id
-                  ? meMessage(inbox.message)
+                  ? meMessage(inbox.id, inbox.message, inboxDeleteMutate, inboxDeleteIsPending)
                   : youMessage(inbox.message, user?.avatar ?? ""))}
             </Fragment>
           );
@@ -126,9 +149,36 @@ const ChatInbox = ({ username }: { username: string }) => {
 
 export default ChatInbox;
 
-const meMessage = (message: string) => {
+const meMessage = (
+  id: string,
+  message: string,
+  inboxDeleteMutate: UseMutateFunction<ApiSuccessResponse<string>, ApiErrorResponse, string, unknown>,
+  inboxDeleteIsPending: boolean
+) => {
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end items-center group gap-2">
+      <Dropdown>
+        <DropdownTrigger>
+          <div className="hidden group-hover:flex items-center gap-1">
+            <BsThreeDots className="cursor-pointer" />
+          </div>
+        </DropdownTrigger>
+        <DropdownMenu aria-label="Static Actions">
+          <DropdownItem key="edit" className="text-primary-500" color="primary">
+            Edit
+          </DropdownItem>
+          <DropdownItem
+            key="delete"
+            className="text-danger-500"
+            color="danger"
+            isReadOnly={inboxDeleteIsPending}
+            onClick={() => {
+              inboxDeleteMutate(id);
+            }}>
+            Delete
+          </DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
       <span className="flex flex-col items-end gap-1 text-sm bg-primary text-white py-2 px-3 font-medium rounded-xl max-w-96 break-words">
         {message}
       </span>
@@ -138,12 +188,14 @@ const meMessage = (message: string) => {
 
 const youMessage = (message: string, avatar: string) => {
   return (
-    <div className="flex gap-2 justify-start">
+    <div className="flex gap-2 justify-start items-center group">
       <Avatar className="w-8 h-8">
         <AvatarImage src={getUserAvatarURL(avatar)} alt="User Avatar" />
       </Avatar>
 
-      <div className="text-sm overflow-hidden bg-[#EFEFEF] text-black rounded-xl py-2 px-3 max-w-96 break-words">{message}</div>
+      <div className="text-sm overflow-hidden bg-[#EFEFEF] text-black rounded-xl py-2 px-3 max-w-96 break-words">
+        {message}
+      </div>
     </div>
   );
 };

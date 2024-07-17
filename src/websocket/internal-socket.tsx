@@ -29,65 +29,100 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
 
     pusherClient.bind("internal-socket", (data: any) => {
       playSound();
-      addNotification({
-        type: data.type,
-        username: data.username,
-        avatar: data.avatar,
-        message: data.message,
-        createdAt: new Date().toISOString(),
-      });
+      if (!data.isNotNotification) {
+        addNotification({
+          type: data.type,
+          username: data.username,
+          avatar: data.avatar,
+          message: data.message,
+          createdAt: new Date().toISOString(),
+        });
+      }
       switch (data.type) {
         case "inbox-action":
-          // queryClient.invalidateQueries({
-          //   queryKey: [inboxKey, { username: data.username }],
-          // // });
-          const fakeData = {
-            id: data.messageID,
-            from_user_id: data.fromUserID,
-            to_user_id: data.toUserID,
-            message: data.lastMessage,
-            created_at: new Date().toISOString(),
-          };
-          queryClient.setQueryData([inboxKey, { username: data.username }], (data: InboxGetByUsernameQuery) => {
-            return { ...data, inboxGetByUsername: [...data.inboxGetByUsername, fakeData] };
-          });
-          queryClient.setQueryData([inboxKey, "all"], (oldData: InboxGetAllBubbleQuery) => {
-            let findUserNamePosition = oldData.inboxGetAllBubble.findIndex((inbox) => inbox.username === data.username);
-            let cloneData = [...oldData.inboxGetAllBubble];
+          switch (data.action) {
+            case "delete":
+              queryClient.setQueryData(
+                [inboxKey, { username: data.fromUserName }],
+                (oldData: InboxGetByUsernameQuery) => {
+                  return {
+                    ...oldData,
+                    inboxGetByUsername: oldData.inboxGetByUsername.filter((inbox) => inbox.id !== data.messageID),
+                  };
+                }
+              );
 
-            if (findUserNamePosition === -1) {
-              findUserNamePosition = 0;
-              cloneData[findUserNamePosition] = {
-                username: data.username,
-                last_message: data.lastMessage,
+              queryClient.setQueryData([inboxKey, "all"], (oldData: InboxGetAllBubbleQuery) => {
+                const findUserNamePosition = oldData.inboxGetAllBubble.findIndex(
+                  (inbox) => inbox.username === data.fromUserName
+                );
+                if (findUserNamePosition >= 0) {
+                  oldData.inboxGetAllBubble[findUserNamePosition].last_message = data.lastMessage;
+                  oldData.inboxGetAllBubble[findUserNamePosition].created_at = data.created_at;
+                  oldData.inboxGetAllBubble[findUserNamePosition].is_read = false;
+                  moveElementToFront(oldData.inboxGetAllBubble, findUserNamePosition);
+                }
+                return {
+                  ...oldData,
+                  inboxGetAllBubble: [...oldData.inboxGetAllBubble],
+                };
+              });
+
+              break;
+            case "send":
+              const fakeData = {
+                id: data.messageID,
+                from_user_id: data.fromUserID,
+                to_user_id: data.toUserID,
+                message: data.lastMessage,
                 created_at: new Date().toISOString(),
-                is_read: false,
-                avatar: getUserAvatarURL(data.avatar),
-                full_name: data.full_name || "",
               };
-            } else {
-              cloneData[findUserNamePosition].last_message = data.lastMessage;
-              cloneData[findUserNamePosition].created_at = data.created_at;
-              cloneData[findUserNamePosition].is_read = false;
-            }
-            findUserNamePosition >= 0 && moveElementToFront(cloneData, findUserNamePosition);
-            if (!findUserNamePosition) {
-              oldData.inboxGetAllBubble.shift();
-              return {
-                ...oldData,
-                inboxGetAllBubble: [
-                  {
-                    ...cloneData[findUserNamePosition],
-                  },
-                  ...oldData.inboxGetAllBubble,
-                ],
-              };
-            }
-            return {
-              ...oldData,
-              inboxGetAllBubble: [...cloneData],
-            };
-          });
+              queryClient.setQueryData([inboxKey, { username: data.username }], (data: InboxGetByUsernameQuery) => {
+                return { ...data, inboxGetByUsername: [...data.inboxGetByUsername, fakeData] };
+              });
+              queryClient.setQueryData([inboxKey, "all"], (oldData: InboxGetAllBubbleQuery) => {
+                let findUserNamePosition = oldData.inboxGetAllBubble.findIndex(
+                  (inbox) => inbox.username === data.username
+                );
+                let cloneData = [...oldData.inboxGetAllBubble];
+
+                if (findUserNamePosition === -1) {
+                  findUserNamePosition = 0;
+                  cloneData[findUserNamePosition] = {
+                    username: data.username,
+                    last_message: data.lastMessage,
+                    created_at: new Date().toISOString(),
+                    is_read: false,
+                    avatar: getUserAvatarURL(data.avatar),
+                    full_name: data.full_name || "",
+                  };
+                } else {
+                  cloneData[findUserNamePosition].last_message = data.lastMessage;
+                  cloneData[findUserNamePosition].created_at = data.created_at;
+                  cloneData[findUserNamePosition].is_read = false;
+                }
+                findUserNamePosition >= 0 && moveElementToFront(cloneData, findUserNamePosition);
+                if (!findUserNamePosition) {
+                  oldData.inboxGetAllBubble.shift();
+                  return {
+                    ...oldData,
+                    inboxGetAllBubble: [
+                      {
+                        ...cloneData[findUserNamePosition],
+                      },
+                      ...oldData.inboxGetAllBubble,
+                    ],
+                  };
+                }
+                return {
+                  ...oldData,
+                  inboxGetAllBubble: [...cloneData],
+                };
+              });
+              break;
+            default:
+              break;
+          }
           break;
         case "friend-action":
           toast.custom((t) => (

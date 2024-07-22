@@ -71,6 +71,7 @@ const PostLikes = () => {
                                 role={like?.user?.role || false}
                                 posts={[]}
                                 friends={like?.user?.friends as Friend[]}
+                                is_private={like?.user?.is_private || false}
                               />
                             )
                           }
@@ -98,6 +99,7 @@ const PostLikes = () => {
                                     role={like?.user?.role || false}
                                     posts={[]}
                                     friends={like?.user?.friends as Friend[]}
+                                    is_private={like?.user?.is_private || false}
                                   />
                                 )
                               }

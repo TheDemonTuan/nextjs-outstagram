@@ -33,7 +33,7 @@ const LikesView = memo(({ post, current_userID, likesModalKey }: LikesViewProps)
 
     const likedByCurrentUser = postLikes.find((like) => like?.user?.id === current_userID);
 
-    if (isCurrentUserPost) {
+    if (isCurrentUserPost === true) {
       const othersCount = postLikes.length - 1;
       const otherText = othersCount === 1 ? "other" : "others";
       const likedByUser = likedByCurrentUser ? likedByCurrentUser : postLikes[0];
@@ -60,7 +60,9 @@ const LikesView = memo(({ post, current_userID, likesModalKey }: LikesViewProps)
         return (
           <span className="text-sm cursor-pointer" onClick={handleLikesClick}>
             {postLikes.length === 1 ? (
-              <span className="font-semibold">1 like</span>
+              <span>
+                Liked by <span className="font-semibold">{postLikes[0]?.user?.username}</span>
+              </span>
             ) : (
               <>
                 Liked by{" "}

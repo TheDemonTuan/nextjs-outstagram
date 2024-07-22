@@ -20,10 +20,10 @@ const UserMoreOptions = [
     title: "Report",
     className: "text-red-500 font-semibold",
   },
-  {
-    title: "Unfollow",
-    className: "text-red-500 font-semibold",
-  },
+  // {
+  //   title: "Unfollow",
+  //   className: "text-red-500 font-semibold",
+  // },
   {
     title: "Go to post",
     action: true,
@@ -94,10 +94,10 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
       title: "Report",
       className: "text-red-500 font-semibold",
     },
-    {
-      title: "Unfollow",
-      className: "text-red-500 font-semibold",
-    },
+    // {
+    //   title: "Unfollow",
+    //   className: "text-red-500 font-semibold",
+    // },
     {
       title: "Go to post",
       action: true,

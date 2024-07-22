@@ -255,11 +255,13 @@ const ReelsPage = () => {
                                   </AvatarFallback>
                                 </Avatar>
                               </Link>
-                              <button
-                                disabled
-                                className="absolute bottom-[-8px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
-                                <SiVerizon color="#FFFFFF" />
-                              </button>
+                              {reel.user_id !== authData?.id && (
+                                <button
+                                  disabled
+                                  className="absolute bottom-[-8px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
+                                  <SiVerizon color="#FFFFFF" />
+                                </button>
+                              )}
                             </div>
                           </Tooltip>
 

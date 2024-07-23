@@ -1,4 +1,12 @@
-import { BookMarkReelsCommentIcon, BookMarkReelsIcon, LikeHeartIcon, MessageCircleIcon, ShareReelsIcon } from "@/icons";
+import {
+  BookMarkReelsCommentIcon,
+  BookMarkReelsIcon,
+  LikeHeartIcon,
+  MessageCircleIcon,
+  SavedBookMarkReelsCommentIcon,
+  SavedBookMarkReelsIcon,
+  ShareReelsIcon,
+} from "@/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
@@ -11,15 +19,17 @@ import { memo, useMemo } from "react";
 import { useModalStore } from "@/stores/modal-store";
 import { ShareModalKey } from "../Post/share-modal";
 import PostLikes, { LikesModalKey } from "../Post/post-likes";
+import { PostSaveResponse, postSave } from "@/api/post_save";
 
 interface ReelReactProps {
   reelReact: Post;
   isLiked: boolean;
+  isSaved: boolean;
   postPage?: number;
   orientation?: "horizontal" | "vertical";
 }
 // eslint-disable-next-line react/display-name
-const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizontal" }: ReelReactProps) => {
+const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "horizontal" }: ReelReactProps) => {
   const queryClient = useQueryClient();
   const { authData, authCanUse } = useAuth();
   const { modalOpen, setModalData } = useModalStore();
@@ -92,6 +102,16 @@ const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizonta
     },
   });
 
+  const { mutate: reelSaveMutate } = useMutation<ApiSuccessResponse<PostSaveResponse>, ApiErrorResponse, string>({
+    mutationFn: async (params) => await postSave(params),
+    onSuccess: (savePostData) => {
+      toast.success("success save");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Saved post failed!");
+    },
+  });
+
   const totalLiked = useMemo(
     () => reelReact.post_likes?.filter((like) => like?.is_liked)?.length,
     [reelReact.post_likes]
@@ -99,6 +119,10 @@ const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizonta
 
   const handleLikePost = async () => {
     postLikeMutate(reelReact.id);
+  };
+
+  const handleSavePost = async () => {
+    reelSaveMutate(reelReact.id);
   };
 
   return (
@@ -170,15 +194,26 @@ const ReelReact = memo(({ reelReact, isLiked, postPage, orientation = "horizonta
             <div className="pb-4 text-center flex items-center">
               <button
                 className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-                disabled={!authCanUse}>
-                <BookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
+                disabled={!authCanUse}
+                onClick={handleSavePost}>
+                {isSaved ? (
+                  <SavedBookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
+                ) : (
+                  <BookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
+                )}
               </button>
               <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">185</span>
             </div>
           ) : (
             <div>
-              <button className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300">
-                <BookMarkReelsIcon width={22} height={22} className="" fill="#00000" />
+              <button
+                className="rounded-full bg-gray-200 p-3 cursor-pointer mb-1 active:bg-gray-300"
+                onClick={handleSavePost}>
+                {isSaved ? (
+                  <SavedBookMarkReelsIcon width={22} height={22} fill="#00000" />
+                ) : (
+                  <BookMarkReelsIcon width={22} height={22} fill="#00000" />
+                )}
               </button>
               <span className="">55</span>
             </div>

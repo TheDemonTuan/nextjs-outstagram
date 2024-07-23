@@ -136,6 +136,9 @@ const ReelsPage = () => {
             {page.postReel.map((reel) => {
               const postLikes = reel?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
+
+              const isSaved = reel?.post_saves?.some((save) => save?.user_id === authData?.id);
+
               const displayedCaption = isExpanded
                 ? reel.caption
                 : reel.caption && reel.caption.length > 100
@@ -268,6 +271,7 @@ const ReelsPage = () => {
                           <ReelReact
                             reelReact={reel as Post}
                             isLiked={isUserLiked ?? false}
+                            isSaved={isSaved ?? false}
                             postPage={pageIndex > 0 ? pageIndex : 0}
                             orientation="vertical"
                           />

@@ -20,9 +20,10 @@ import { PostPrivacy } from "@/api/post";
 interface ReelsHeaderCommentsProps {
   reelHeaderData: PostByPostIdQuery;
   isLiked: boolean;
+  isSaved: boolean;
 }
 
-export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHeaderCommentsProps) {
+export default function ReelsCommentsHeader({ reelHeaderData, isLiked, isSaved }: ReelsHeaderCommentsProps) {
   const reelData = reelHeaderData.postByPostId;
   const linkReels = `${process.env.NEXT_PUBLIC_CLIENT_HOST}/r/${reelData?.id}?utm_source=og_web_copy_link`;
   const [isExpanded, setIsExpanded] = useState(false);
@@ -133,7 +134,12 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked }: ReelsHe
         </p>
       </div>
 
-      <ReelReact reelReact={reelHeaderData.postByPostId as Post} isLiked={isLiked ?? false} orientation="horizontal" />
+      <ReelReact
+        reelReact={reelHeaderData.postByPostId as Post}
+        isLiked={isLiked ?? false}
+        isSaved={isSaved ?? false}
+        orientation="horizontal"
+      />
 
       <div className="relative flex items-center mt-1 mx-8 border py-1.5 rounded-lg bg-[#F1F1F2]">
         <input

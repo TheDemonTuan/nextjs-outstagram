@@ -45,6 +45,10 @@ const ReelsView = ({ id }: { id: string }) => {
     return postLikesFilter?.some((like) => like?.user_id === authData?.id);
   }, [postLikesFilter, authData]);
 
+  const isSaved = useMemo(() => {
+    return reelData?.postByPostId.post_saves?.some((save) => save?.user_id === authData?.id);
+  }, [authData?.id, reelData?.postByPostId?.post_saves]);
+
   useEffect(() => {
     if (reelError) {
       notFound();
@@ -147,7 +151,7 @@ const ReelsView = ({ id }: { id: string }) => {
               ">
               {/* ReelHeader */}
               <div className="pt-5 border-b-1">
-                <ReelsCommentsHeader reelHeaderData={reelData} isLiked={isLiked ?? false} />
+                <ReelsCommentsHeader reelHeaderData={reelData} isLiked={isLiked ?? false} isSaved={isSaved ?? false} />
               </div>
 
               {/* ReelComment */}

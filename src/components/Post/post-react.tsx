@@ -89,7 +89,56 @@ const PostReact = ({
   const { mutate: postSaveMutate } = useMutation<ApiSuccessResponse<PostSaveResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postSave(params),
     onSuccess: (savePostData) => {
-      toast.success("success save");
+      const fakeData = {
+        ...savePostData.data,
+        user: {
+          ...authData,
+        },
+      };
+      if (!!queryClient.getQueryData([postKey, "home"])) {
+        queryClient.setQueryData([postKey, "home"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postHomePage: [
+                    ...page.postHomePage.map((post: any) => {
+                      if (post.id === postReact.id) {
+                        if (!post.post_saves?.length) {
+                          return {
+                            ...post,
+                            post_saves: [fakeData],
+                          };
+                        }
+                        const newSaves = post.post_saves.filter((save: any) => save.user_id !== authData?.id);
+                        return {
+                          ...post,
+                          post_saves: [fakeData, ...newSaves],
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, { id: postReact.id }])) {
+        queryClient.setQueryData([postKey, { id: postReact.id }], (oldData: any) => {
+          const newSaves = oldData.postByPostId.post_saves.filter((save: any) => save.user_id !== authData?.id);
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              post_saves: [fakeData, ...newSaves],
+            },
+          };
+        });
+      }
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Saved post failed!");

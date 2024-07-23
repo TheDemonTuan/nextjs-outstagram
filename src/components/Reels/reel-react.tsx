@@ -105,7 +105,65 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
   const { mutate: reelSaveMutate } = useMutation<ApiSuccessResponse<PostSaveResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postSave(params),
     onSuccess: (savePostData) => {
-      toast.success("success save");
+      const fakeData = {
+        ...savePostData.data,
+        user: {
+          ...authData,
+        },
+      };
+      if (queryClient.getQueryData([postKey, "reels"])) {
+        queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postReel: [
+                    ...page.postReel.map((reel: any) => {
+                      if (reel.id === reelReact.id) {
+                        if (!reel.post_saves?.length) {
+                          return {
+                            ...reel,
+                            post_saves: [fakeData],
+                          };
+                        }
+                        const newSaves = reel.post_saves.filter((save: any) => save.user_id !== authData?.id);
+                        return {
+                          ...reel,
+                          post_saves: [fakeData, ...newSaves],
+                        };
+                      }
+                      return reel;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (queryClient.getQueryData([postKey, { id: reelReact.id }])) {
+        queryClient.setQueryData([postKey, { id: reelReact.id }], (oldData: any) => {
+          if (!oldData.postByPostId.post_saves?.length) {
+            return {
+              ...oldData,
+              postByPostId: {
+                ...oldData.postByPostId,
+                post_saves: [fakeData],
+              },
+            };
+          }
+          const newSaves = oldData.postByPostId.post_saves.filter((save: any) => save.user_id !== authData?.id);
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              post_saves: [fakeData, ...newSaves],
+            },
+          };
+        });
+      }
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Saved post failed!");
@@ -115,6 +173,11 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
   const totalLiked = useMemo(
     () => reelReact.post_likes?.filter((like) => like?.is_liked)?.length,
     [reelReact.post_likes]
+  );
+
+  const totalSaved = useMemo(
+    () => reelReact.post_saves?.filter((save) => save?.post_id)?.length,
+    [reelReact.post_saves]
   );
 
   const handleLikePost = async () => {
@@ -202,7 +265,7 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
                   <BookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
                 )}
               </button>
-              <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">185</span>
+              <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">{totalSaved}</span>
             </div>
           ) : (
             <div>
@@ -215,7 +278,7 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
                   <BookMarkReelsIcon width={22} height={22} fill="#00000" />
                 )}
               </button>
-              <span className="">55</span>
+              <span className="">{totalSaved}</span>
             </div>
           ))}
 

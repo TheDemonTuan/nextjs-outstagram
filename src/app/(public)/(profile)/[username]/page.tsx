@@ -36,7 +36,7 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") || "POSTS";
   const [activeTab, setActiveTab] = useState<string>(initialTab);
-  const { authData } = useAuth();
+  const { authData, authCanUse } = useAuth();
 
   const {
     data: userProfileData,
@@ -112,9 +112,11 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
               <span className="text-sm text-[#737373]"> Follow to see their photos and videos.</span>
             </div>
           </div>
-          <Button className="bg-[#0095F6] hover:bg-[#1877F2] text-sm text-white font-semibold px-5 py-3" radius="sm">
-            Add Friend
-          </Button>
+          {authCanUse && (
+            <Button className="bg-[#0095F6] hover:bg-[#1877F2] text-sm text-white font-semibold px-5 py-3" radius="sm">
+              Add Friend
+            </Button>
+          )}
         </div>
       )}
       {canViewPrivateProfile && renderActiveTabContent(activeTab, userProfileData)}

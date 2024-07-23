@@ -1,10 +1,16 @@
-import { DeleteCommentArgs, adminDeleteCommentOnPostByCommentId, postDeleteCommentOnPostByCommentId } from "@/api/post";
+import {
+  DeleteCommentArgs,
+  adminDeleteCommentOnPostByCommentId,
+  postDeleteCommentOnPostByCommentId,
+  postKey,
+} from "@/api/post";
+import { PostComment } from "@/gql/graphql";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
 import { Modal, ModalBody, ModalContent } from "@nextui-org/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { toast } from "sonner";
 
@@ -57,12 +63,22 @@ const PostNotMeCommentedMoreOptions = [
 const CommentMoreOptions = ({ userId }: { userId: string }) => {
   const { modalData, modalClose, modalKey } = useModalStore();
   const { authData } = useAuth();
+  const queryClient = useQueryClient();
 
   const { mutate: postDeleteCommentOnPostByCommentIdMutate, isPending: postDeleteCommentOnPostByCommentIdIsPending } =
     useMutation<ApiSuccessResponse<string>, ApiErrorResponse, DeleteCommentArgs>({
       mutationFn: (params) => postDeleteCommentOnPostByCommentId(params),
       onSuccess: () => {
         toast.success("Delete comment successfully!");
+        if (!!queryClient.getQueryData([postKey, { id: modalData?.post_id }])) {
+          queryClient.setQueryData([postKey, { id: modalData?.post_id }], (oldData: any) => {
+            if (!oldData) return oldData;
+            return {
+              ...oldData,
+              post_comments: oldData.post_comments.filter((comment: any) => comment.id !== modalData?.id),
+            };
+          });
+        }
         modalClose();
       },
       onError: (error) => {
@@ -75,6 +91,16 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
       mutationFn: (params) => adminDeleteCommentOnPostByCommentId(params),
       onSuccess: () => {
         toast.success("Delete comment successfully!");
+        if (!!queryClient.getQueryData([postKey, { id: modalData?.post_id }])) {
+          queryClient.setQueryData([postKey, { id: modalData?.post_id }], (oldData: any) => {
+            if (!oldData) return oldData;
+            return {
+              ...oldData,
+              post_comments: oldData.post_comments.filter((comment: PostComment) => comment.id !== modalData?.id),
+            };
+          });
+        }
+
         modalClose();
       },
       onError: (error) => {
@@ -149,7 +175,9 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
                                 case "Report":
                                   break;
                                 case "Delete":
-                                  authData?.role === true ? handleAdminDeleteComment() : handleDeleteComment();
+                                  authData?.role === true && authData?.id !== userId && !hasCommented
+                                    ? handleAdminDeleteComment()
+                                    : handleDeleteComment();
                                   break;
                                 case "Cancel":
                                   modalClose();

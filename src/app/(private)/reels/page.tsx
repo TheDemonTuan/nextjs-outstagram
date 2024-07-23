@@ -136,6 +136,9 @@ const ReelsPage = () => {
             {page.postReel.map((reel) => {
               const postLikes = reel?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
+
+              const isSaved = reel?.post_saves?.some((save) => save?.user_id === authData?.id);
+
               const displayedCaption = isExpanded
                 ? reel.caption
                 : reel.caption && reel.caption.length > 100
@@ -255,17 +258,20 @@ const ReelsPage = () => {
                                   </AvatarFallback>
                                 </Avatar>
                               </Link>
-                              <button
-                                disabled
-                                className="absolute bottom-[-8px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
-                                <SiVerizon color="#FFFFFF" />
-                              </button>
+                              {reel.user_id !== authData?.id && (
+                                <button
+                                  disabled
+                                  className="absolute bottom-[-8px] left-4 bg-red-500 rounded-full p-1 hover:bg-red-600 cursor-pointer">
+                                  <SiVerizon color="#FFFFFF" />
+                                </button>
+                              )}
                             </div>
                           </Tooltip>
 
                           <ReelReact
                             reelReact={reel as Post}
                             isLiked={isUserLiked ?? false}
+                            isSaved={isSaved ?? false}
                             postPage={pageIndex > 0 ? pageIndex : 0}
                             orientation="vertical"
                           />

@@ -52,6 +52,8 @@ export const postGetByPostId = async (postID: string) =>
 export const getSaved = async () =>
   http.get<ApiSuccessResponse<PostResponse[]>>(`posts/me/saved`).then((res) => res.data);
 
+export const postGetDeleted = async () => 
+  http.get<ApiSuccessResponse<PostResponse[]>>(`posts/me/deleted`).then((res) => res.data);
 
 export interface PostEditParams extends Pick<PostResponse, "caption" | "privacy"> {}
 
@@ -98,3 +100,10 @@ export const postDeleteCommentOnPostByCommentId = async (params: DeleteCommentAr
 
 export const adminDeleteCommentOnPostByCommentId = async (params: DeleteCommentArgs) =>
   http.delete<ApiSuccessResponse<string>>(`admin/comments/${params.commentID}/${params.postID}/${params.userID}`).then((res)=>res.data);
+
+export interface RestorePostsParams {
+  post_ids: string[];
+}
+
+export const postMeRestore = async (params: RestorePostsParams) => 
+  http.patch<ApiSuccessResponse<PostResponse[]>>(`posts/me/restore`, params).then((res) => res.data);

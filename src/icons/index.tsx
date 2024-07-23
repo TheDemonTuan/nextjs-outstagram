@@ -175,6 +175,28 @@ export const BookmarkIcon = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
+export const SavedBookmarkIcon = (props: SVGProps<SVGSVGElement>) => {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <g clipPath="url(#clip0_1_80)">
+        <path
+          d="M20 21L12 13.44L4 21V3H20V21Z"
+          stroke=""
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="#000000"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1_80">
+          <rect width="24" height="24" fill="black" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
 export const FileWarningIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -868,6 +890,14 @@ export const BookMarkReelsIcon = (props: SVGProps<SVGAElement>) => {
   );
 };
 
+export const SavedBookMarkReelsIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg fill="#F8CC15" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12,17,4,22V4A2,2,0,0,1,6,2H18a2,2,0,0,1,2,2V22Z" />
+    </svg>
+  );
+};
+
 export const MoreOptionReelsIcon = (props: SVGProps<SVGAElement>) => {
   return (
     <svg width="24px" height="24px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
@@ -1518,6 +1548,14 @@ export const InstagramFakeIcon = (props: SVGProps<SVGAElement>) => {
 export const BookMarkReelsCommentIcon = (props: SVGProps<SVGAElement>) => {
   return (
     <svg fill="#000000" width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12,17,4,22V4A2,2,0,0,1,6,2H18a2,2,0,0,1,2,2V22Z" />
+    </svg>
+  );
+};
+
+export const SavedBookMarkReelsCommentIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg fill="#F8CC15" width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M12,17,4,22V4A2,2,0,0,1,6,2H18a2,2,0,0,1,2,2V22Z" />
     </svg>
   );

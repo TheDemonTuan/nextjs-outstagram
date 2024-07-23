@@ -49,6 +49,10 @@ function PostView({ id }: { id: string }) {
     return postLikesFilter?.some((like) => like?.user_id === authData?.id);
   }, [postLikesFilter, authData]);
 
+  const isSaved = useMemo(() => {
+    return postData?.postByPostId.post_saves?.some((save) => save?.user_id === authData?.id);
+  }, [authData?.id, postData?.postByPostId?.post_saves]);
+
   useEffect(() => {
     if (postError) {
       notFound();
@@ -133,7 +137,11 @@ function PostView({ id }: { id: string }) {
             <div className="px-5 py-4 hidden md:block mt-auto border-b p-2.5 space-y-3">
               {authCanUse ? (
                 <>
-                  <PostReact postReact={postData.postByPostId as Post} isLiked={isLiked ?? false} />
+                  <PostReact
+                    postReact={postData.postByPostId as Post}
+                    isLiked={isLiked ?? false}
+                    isSaved={isSaved ?? false}
+                  />
 
                   <div className="flex flex-col space-y-1">
                     <LikesView

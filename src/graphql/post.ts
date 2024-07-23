@@ -169,6 +169,13 @@ export const PostByPostID = graphql(`
           }
         }
       }
+      post_saves {
+        id
+        user_id
+        post_id
+        created_at
+        updated_at
+      }
     }
   }
 `);
@@ -278,6 +285,14 @@ export const PostHomePage = graphql(`
           }
         }
       }
+      post_saves {
+        id
+        user_id
+        post_id
+        created_at
+        updated_at
+      }
+      
       created_at
     }
   }
@@ -334,6 +349,13 @@ export const PostReel = graphql(`
             parent_id
             content
             active
+        }
+        post_saves {
+            id
+            user_id
+            post_id
+            created_at
+            updated_at
         }
     }
   }

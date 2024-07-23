@@ -59,6 +59,7 @@ const ProfileSettings = () => {
                                   if (optionItem.href) {
                                     router.push(optionItem.href);
                                   }
+                                  break;
                                 case "Logout":
                                   modalOpen(LogoutModalKey);
                                   break;

@@ -83,37 +83,37 @@ const ConfirmDeletePost = () => {
     onSuccess: () => {
       toast.success("Delete post successfully!");
 
-      // queryClient.setQueryData([postKey, "home"], (oldData: any) => {
-      //   if (!oldData) return oldData;
-      //   return {
-      //     ...oldData,
-      //     pages: oldData.pages.map((page: any) => {
-      //       return {
-      //         ...page,
-      //         postHomePage: page.postHomePage.filter((post: any) => post.id !== modalData.id),
-      //       };
-      //     }),
-      //   };
-      // });
+      queryClient.setQueryData([postKey, "home"], (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => {
+            return {
+              ...page,
+              postHomePage: page.postHomePage.filter((post: any) => post.id !== modalData.id),
+            };
+          }),
+        };
+      });
 
-      // queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
-      //   if (!oldData) return oldData;
-      //   return {
-      //     ...oldData,
-      //     pages: oldData.pages.map((page: any) => {
-      //       return {
-      //         ...page,
-      //         postReel: page.postReel.filter((post: any) => post.id !== modalData.id),
-      //       };
-      //     }),
-      //   };
-      // });
+      queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page: any) => {
+            return {
+              ...page,
+              postReel: page.postReel.filter((post: any) => post.id !== modalData.id),
+            };
+          }),
+        };
+      });
 
-      // if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
-      //   queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
-      //     return null;
-      //   });
-      // }
+      if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
+        queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
+          return null;
+        });
+      }
       modalClose();
     },
     onError: (error) => {

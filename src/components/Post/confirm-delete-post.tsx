@@ -149,7 +149,10 @@ const ConfirmDeletePost = () => {
                 <div className="my-5 text-center">
                   <p className="text-black text-xl">
                     {" "}
-                    {authData?.role === true ? `Delete post by ${modalData.user.username}` : `Delete post`}?
+                    {authData?.role === true && authData?.id !== modalData.user_id
+                      ? `Delete post by ${modalData.user.username}`
+                      : `Delete post`}
+                    ?
                   </p>
                   <p>Are you sure you want to delete this post?</p>
                 </div>
@@ -163,7 +166,9 @@ const ConfirmDeletePost = () => {
                           if (optionItem?.action) {
                             switch (optionItem.title) {
                               case "Delete":
-                                authData?.role === false ? handlePostDelete() : handleAdminPostDelete();
+                                authData?.role === true && authData?.id !== modalData.user_id
+                                  ? handleAdminPostDelete()
+                                  : handlePostDelete();
                                 break;
                               case "Cancel":
                                 modalClose();

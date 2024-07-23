@@ -34,7 +34,69 @@ const ConfirmBlockPost = () => {
     ApiErrorResponse
   >({
     mutationFn: async () => await adminBlockPostByPostId(modalData.id),
-    onSuccess: () => {
+    onSuccess: (activeData) => {
+      if (!!queryClient.getQueryData([postKey, "home"])) {
+        queryClient.setQueryData([postKey, "home"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postHomePage: [
+                    ...page.postHomePage.map((post: any) => {
+                      if (post.id === modalData.id) {
+                        return {
+                          ...post,
+                          active: activeData.data,
+                        };
+                      }
+                      return post;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (queryClient.getQueryData([postKey, "reels"])) {
+        queryClient.setQueryData([postKey, "reels"], (oldData: any) => {
+          return {
+            ...oldData,
+            pages: [
+              ...oldData.pages.map((page: any, index: any) => {
+                return {
+                  postReel: [
+                    ...page.postReel.map((reel: any) => {
+                      if (reel.id === modalData.id) {
+                        return {
+                          ...reel,
+                          active: activeData.data,
+                        };
+                      }
+                      return reel;
+                    }),
+                  ],
+                };
+              }),
+            ],
+          };
+        });
+      }
+
+      if (!!queryClient.getQueryData([postKey, { id: modalData.id }])) {
+        queryClient.setQueryData([postKey, { id: modalData.id }], (oldData: any) => {
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              active: activeData.data,
+            },
+          };
+        });
+      }
+
       toast.success("Blocked post successfully!");
       modalClose();
     },

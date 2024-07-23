@@ -124,9 +124,7 @@ const Post = () => {
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
 
-              const postSaved = post.post_saves?.filter((save) => save?.post_id === post?.id);
-
-              const isSaved = postSaved?.some((save) => save?.user_id === authData?.id);
+              const isSaved = post?.post_saves?.some((save) => save?.user_id === authData?.id);
 
               const getRandomCount = () => Math.floor(Math.random() * 3);
 

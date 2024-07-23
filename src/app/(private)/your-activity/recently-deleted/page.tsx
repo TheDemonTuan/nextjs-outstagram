@@ -3,7 +3,7 @@ import { PostResponse, PostType, RestorePostsParams, postGetDeleted, postKey, po
 import { MultiFileIcon, PlayReelIcon, PostsPhotosAndVideosIcon, ReelsPhotosAndVideosIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { Checkbox, Spinner } from "@nextui-org/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ const RecentlyDeletedPage = () => {
   const [selected, setSelected] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const queryClient = useQueryClient();
   const {
     data: deletedData,
     error: deletedError,
@@ -36,6 +37,10 @@ const RecentlyDeletedPage = () => {
   >({
     mutationFn: async (data) => await postMeRestore(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [postKey, "recently-deleted"],
+      });
+
       toast.success("Restore post successfully!");
       setSelectedItems([]);
       setSelected(false);
@@ -58,7 +63,7 @@ const RecentlyDeletedPage = () => {
 
   if (deletedIsLoading)
     return (
-      <div>
+      <div className="flex items-center justify-center h-[564px]">
         {" "}
         <Spinner size="md" />
       </div>
@@ -69,11 +74,14 @@ const RecentlyDeletedPage = () => {
   const reels = deletedData?.data.filter((item) => item.type === PostType.REEL);
 
   const handleRestore = () => {
-    restorePostsMutate({ postIDs: selectedItems });
+    restorePostsMutate({ post_ids: selectedItems });
   };
 
-  console.log(selectedItems);
-
+  const handleTabChange = (tabName: string) => {
+    setActiveTab(tabName);
+    setSelectedItems([]);
+    setSelected(false);
+  };
   return (
     <div className="flex flex-col mx-6">
       <div className="w-full flex items-center justify-evenly text-sm border-b mt-1">
@@ -83,53 +91,72 @@ const RecentlyDeletedPage = () => {
             className={`flex items-center space-x-2 cursor-pointer py-4 ${
               activeTab === tab.name ? "text-black border-b-1 border-black" : "text-[#737373]"
             }`}
-            onClick={() => setActiveTab(tab.name)}>
+            onClick={() => handleTabChange(tab.name)}>
             {tab.icon}
             <span>{tab.label}</span>
           </div>
         ))}
       </div>
-
       <span className="text-center mt-4 mb-2 text-xs text-[#737373]">
         Only you can see these {activeTab === "posts" ? "posts" : "reels"}. They will be permanently
         <br /> deleted after the number of days shown. After that, you won&apos;t be able to restore them.
       </span>
-      <button onClick={() => setSelected(!selected)} className="flex items-center justify-between mb-2 text-base">
-        <div className="text-[#737373]">{selectedItems.length} selected</div>
-        <div className="flex items-center space-x-3">
-          {" "}
-          {selected === true && (
-            <span onClick={handleRestore} className="font-bold text-[#ed4956]">
-              Restore
-            </span>
-          )}{" "}
-          <div>
-            {selected === true ? (
-              <span className="text-[#737373]"> Cancel</span>
-            ) : (
-              <span className="text-[#0095f6]">Select</span>
+
+      {restorePostsIsLoading ? (
+        <div className="flex items-center justify-center h-[450px]">
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <>
+          {((activeTab === "posts" && posts && posts?.length > 0) ||
+            (activeTab === "reels" && reels && reels?.length > 0)) && (
+            <button
+              onClick={() => {
+                setSelectedItems([]);
+                setSelected(!selected);
+              }}
+              className="flex items-center justify-between mb-2 text-base"
+              disabled={restorePostsIsLoading}>
+              <div className={`text-[#737373] ${selected === false ? "text-transparent" : ""}`}>
+                {selectedItems.length} selected
+              </div>
+              <div className="flex items-center space-x-3">
+                {selected === true && (
+                  <span onClick={handleRestore} className="font-bold text-[#ed4956]">
+                    Restore
+                  </span>
+                )}
+                <div>
+                  {selected === true ? (
+                    <span className="text-[#737373]"> Cancel</span>
+                  ) : (
+                    <span className="text-[#0095f6]">Select</span>
+                  )}
+                </div>
+              </div>
+            </button>
+          )}
+
+          <div className="overflow-y-auto max-h-[442px] scrollbar-hide">
+            {activeTab === "posts" && posts && (
+              <PostsComponent
+                data={posts}
+                isSelected={selected}
+                selectedItems={selectedItems}
+                onSelectionChange={handleSelectionChange}
+              />
+            )}
+            {activeTab === "reels" && reels && (
+              <ReelsComponent
+                data={reels}
+                isSelected={selected}
+                selectedItems={selectedItems}
+                onSelectionChange={handleSelectionChange}
+              />
             )}
           </div>
-        </div>
-      </button>
-      <div className="overflow-y-auto max-h-[442px] scrollbar-hide">
-        {activeTab === "posts" && posts && (
-          <PostsComponent
-            data={posts}
-            isSelected={selected}
-            selectedItems={selectedItems}
-            onSelectionChange={handleSelectionChange}
-          />
-        )}
-        {activeTab === "reels" && reels && (
-          <ReelsComponent
-            data={reels}
-            isSelected={selected}
-            selectedItems={selectedItems}
-            onSelectionChange={handleSelectionChange}
-          />
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 };

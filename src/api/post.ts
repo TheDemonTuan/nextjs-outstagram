@@ -102,7 +102,7 @@ export const adminDeleteCommentOnPostByCommentId = async (params: DeleteCommentA
   http.delete<ApiSuccessResponse<string>>(`admin/comments/${params.commentID}/${params.postID}/${params.userID}`).then((res)=>res.data);
 
 export interface RestorePostsParams {
-  postIDs: string[];
+  post_ids: string[];
 }
 
 export const postMeRestore = async (params: RestorePostsParams) => 

@@ -1,7 +1,7 @@
 import { postKey } from "@/api/post";
 import { PostLikeResponse, postLike } from "@/api/post_like";
 import { useAuth } from "@/hooks/useAuth";
-import { BookmarkIcon, LikeHeartIcon, MessageCircleIcon, SendIcon, UnLikeHeartIcon } from "@/icons";
+import { BookmarkIcon, LikeHeartIcon, MessageCircleIcon, SavedBookmarkIcon, SendIcon, UnLikeHeartIcon } from "@/icons";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { useModalStore } from "@/stores/modal-store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,7 +12,17 @@ import { ShareModalKey } from "./share-modal";
 import { Post } from "@/gql/graphql";
 import { PostSaveResponse, postSave, savedKey } from "@/api/post_save";
 
-const PostReact = ({ isLiked, postReact, postPage }: { isLiked: boolean; postReact: Post; postPage?: number }) => {
+const PostReact = ({
+  isLiked,
+  isSaved,
+  postReact,
+  postPage,
+}: {
+  isLiked: boolean;
+  isSaved: boolean;
+  postReact: Post;
+  postPage?: number;
+}) => {
   const queryClient = useQueryClient();
   const { authData } = useAuth();
   const { setModalData, modalOpen } = useModalStore();
@@ -79,9 +89,6 @@ const PostReact = ({ isLiked, postReact, postPage }: { isLiked: boolean; postRea
   const { mutate: postSaveMutate } = useMutation<ApiSuccessResponse<PostSaveResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await postSave(params),
     onSuccess: (savePostData) => {
-      if (!!queryClient.getQueryData([savedKey, "profile"])) {
-        queryClient.setQueryData([savedKey, "profile"], (oldData: any) => {});
-      }
       toast.success("success save");
     },
     onError: (error) => {
@@ -126,8 +133,12 @@ const PostReact = ({ isLiked, postReact, postPage }: { isLiked: boolean; postRea
       </div>
       {postReact.user_id !== authData?.id && (
         <div className="ml-auto" onClick={handleSavePost}>
-          <BookmarkIcon className="w-6 h-6  hover:stroke-gray115 cursor-pointer" stroke="#262626" />
-          <span className="sr-only">BookmarkIcon</span>
+          {isSaved ? (
+            <SavedBookmarkIcon className="w-6 h-6 hover:stroke-gray115  cursor-pointer" stroke="#262626" />
+          ) : (
+            <BookmarkIcon className="w-6 h-6 hover:stroke-gray115  cursor-pointer" stroke="#262626" />
+          )}
+          <span className="sr-only">Save</span>
         </div>
       )}
     </div>

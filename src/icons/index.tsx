@@ -175,6 +175,28 @@ export const BookmarkIcon = (props: SVGProps<SVGSVGElement>) => {
   );
 };
 
+export const SavedBookmarkIcon = (props: SVGProps<SVGSVGElement>) => {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <g clipPath="url(#clip0_1_80)">
+        <path
+          d="M20 21L12 13.44L4 21V3H20V21Z"
+          stroke=""
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="#000000"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1_80">
+          <rect width="24" height="24" fill="black" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
 export const FileWarningIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg

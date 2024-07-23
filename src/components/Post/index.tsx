@@ -124,6 +124,10 @@ const Post = () => {
               const postLikes = post?.post_likes?.filter((like) => like?.is_liked);
               const isUserLiked = postLikes?.some((like) => like?.user_id === authData?.id);
 
+              const postSaved = post.post_saves?.filter((save) => save?.post_id === post?.id);
+
+              const isSaved = postSaved?.some((save) => save?.user_id === authData?.id);
+
               const getRandomCount = () => Math.floor(Math.random() * 3);
 
               const filteredComments = post?.post_comments
@@ -251,6 +255,7 @@ const Post = () => {
                           <PostReact
                             postReact={post as PostGraphql}
                             isLiked={isUserLiked ?? false}
+                            isSaved={isSaved ?? false}
                             postPage={pageIndex > 0 ? pageIndex : 0}
                           />
 

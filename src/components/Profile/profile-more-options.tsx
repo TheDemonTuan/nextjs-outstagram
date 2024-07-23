@@ -87,6 +87,10 @@ const ProfileMoreOptions = () => {
                                   setModalData(modalData);
                                   modalOpen(ConfirmBanAccountModalKey);
                                   break;
+                                case "Unban account":
+                                  setModalData(modalData);
+                                  modalOpen(ConfirmBanAccountModalKey);
+                                  break;
                                 case "About this account":
                                   setModalData(modalData);
                                   modalOpen(AboutThisAccountModalKey);

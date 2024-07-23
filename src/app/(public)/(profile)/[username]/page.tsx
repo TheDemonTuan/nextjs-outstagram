@@ -103,23 +103,30 @@ const ProfilePage = ({ params }: { params: { username: string } }) => {
         </div>
       )}
 
-      {!canViewPrivateProfile && (
-        <div className="flex flex-col items-center justify-center gap-5 mb-1 my-6">
-          <div className="flex items-center space-x-3">
-            <PrivateAccountIcon />
-            <div className="flex flex-col">
-              <span className="text-base font-semibold ">This account is private</span>
-              <span className="text-sm text-[#737373]"> Follow to see their photos and videos.</span>
+      {userProfileData.userProfile.user?.active && (
+        <>
+          {!canViewPrivateProfile ? (
+            <div className="flex flex-col items-center justify-center gap-5 mb-1 my-6">
+              <div className="flex items-center space-x-3">
+                <PrivateAccountIcon />
+                <div className="flex flex-col">
+                  <span className="text-base font-semibold">This account is private</span>
+                  <span className="text-sm text-[#737373]">Follow to see their photos and videos.</span>
+                </div>
+              </div>
+              {authCanUse && (
+                <Button
+                  className="bg-[#0095F6] hover:bg-[#1877F2] text-sm text-white font-semibold px-5 py-3"
+                  radius="sm">
+                  Add Friend
+                </Button>
+              )}
             </div>
-          </div>
-          {authCanUse && (
-            <Button className="bg-[#0095F6] hover:bg-[#1877F2] text-sm text-white font-semibold px-5 py-3" radius="sm">
-              Add Friend
-            </Button>
+          ) : (
+            renderActiveTabContent(activeTab, userProfileData)
           )}
-        </div>
+        </>
       )}
-      {canViewPrivateProfile && renderActiveTabContent(activeTab, userProfileData)}
     </div>
   );
 };

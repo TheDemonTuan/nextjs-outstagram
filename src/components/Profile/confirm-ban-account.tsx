@@ -1,9 +1,9 @@
-import { adminBanUserByUserID } from "@/api/user";
+import { adminBanUserByUserID, userKey } from "@/api/user";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import { Modal, ModalContent, ModalBody } from "@nextui-org/react";
-import { useMutation } from "@tanstack/react-query";
+import { Modal, ModalContent, ModalBody, Spinner } from "@nextui-org/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { Fragment } from "react";
 import { toast } from "sonner";
 
@@ -11,6 +11,7 @@ export const ConfirmBanAccountModalKey = "ConfirmBanAccount";
 
 const ConfirmBanAccount = () => {
   const { modalData, modalClose, modalKey, modalOpen } = useModalStore();
+  const queryClient = useQueryClient();
 
   const ListConfirmBanAccount = [
     {
@@ -30,7 +31,21 @@ const ConfirmBanAccount = () => {
     ApiErrorResponse
   >({
     mutationFn: async () => await adminBanUserByUserID(modalData.id),
-    onSuccess: () => {
+    onSuccess: (activeData) => {
+      if (!!queryClient.getQueryData([userKey, "profile", { username: modalData.username }])) {
+        queryClient.setQueryData([userKey, "profile", { username: modalData.username }], (oldData: any) => {
+          return {
+            ...oldData,
+            userProfile: {
+              ...oldData.userProfile,
+              user: {
+                ...oldData.userProfile.user,
+                active: activeData.data,
+              },
+            },
+          };
+        });
+      }
       toast.success("Banned account successfully!");
       modalClose();
     },
@@ -48,13 +63,16 @@ const ConfirmBanAccount = () => {
       isOpen={modalKey === ConfirmBanAccountModalKey}
       onOpenChange={modalClose}
       hideCloseButton={true}
-      isDismissable={false}
+      isDismissable={!adminBanUserIsLoading}
       size="sm">
       <ModalContent>
         {() => {
           return (
             <>
-              <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0 ">
+              <ModalBody
+                className={`mt-3 mb-3 cursor-pointer items-center p-0 ${
+                  adminBanUserIsLoading ? "pointer-events-none opacity-50" : ""
+                } `}>
                 <div className="my-3 space-y-1 text-center">
                   <p className="text-black text-xl">
                     {modalData.active === true ? "Ban" : "Unban"} {modalData.username}{" "}
@@ -102,6 +120,11 @@ const ConfirmBanAccount = () => {
                     </Fragment>
                   );
                 })}
+                {adminBanUserIsLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+                    <Spinner size="md" />
+                  </div>
+                )}
               </ModalBody>
             </>
           );

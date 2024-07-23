@@ -23,6 +23,8 @@ import { toast } from "sonner";
 import { UserByUsernameQuery, UserProfileQuery } from "@/gql/graphql";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 import { SiVerizon } from "react-icons/si";
+import { useAuth } from "@/hooks/useAuth";
+import { ConfirmBanAccountModalKey } from "./confirm-ban-account";
 
 interface ProfileActionProps {
   isMe: boolean;
@@ -35,6 +37,7 @@ const btnClass =
 const ProfileAction = (props: ProfileActionProps) => {
   const { modalOpen } = useModalStore();
   const { user } = props.user.userProfile;
+  const { authData } = useAuth();
 
   return (
     <>
@@ -64,6 +67,7 @@ export default ProfileAction;
 const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["user"] }) => {
   const { modalOpen, setModalData } = useModalStore();
   const queryClient = useQueryClient();
+  const { authData } = useAuth();
 
   const {
     data: friendData,
@@ -216,6 +220,42 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
     return <div>Loading...</div>;
   }
 
+  if (!user?.active) {
+    return (
+      <>
+        <div className="flex items-center gap-2">
+          {authData?.role ? (
+            <Button
+              size="sm"
+              className="cursor-pointer inline-flex items-center justify-center text-sm text-white font-medium py-2 px-5 rounded-md bg-[#0096F6] hover:bg-[#1877F2]"
+              onClick={() => {
+                setModalData(user);
+                modalOpen(ConfirmBanAccountModalKey);
+              }}>
+              Unban
+            </Button>
+          ) : (
+            <Button
+              className="cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-2 px-5 rounded-md bg-gray-200/70 "
+              isDisabled
+              size="sm">
+              Banned
+            </Button>
+          )}
+          <div className="ml-2 cursor-pointer">
+            <TfiMoreAlt
+              size={20}
+              onClick={() => {
+                setModalData(user), modalOpen(ProfileMoreOptionsModalKey);
+              }}
+            />
+          </div>
+        </div>
+        <ProfileMoreOptions />
+      </>
+    );
+  }
+
   return (
     <>
       <div className="flex items-center gap-2">
@@ -225,13 +265,7 @@ const ProfileActionGuest = ({ user }: { user: UserProfileQuery["userProfile"]["u
             Message
           </Link>
         </div>
-        {/* <div>
-          <Button
-            size="sm"
-            className="cursor-pointer inline-flex items-center justify-center text-sm text-black font-medium py-1 px-3 rounded-md mr-2 bg-gray-200/70 hover:bg-gray-300">
-            <FiUserPlus size={18} />
-          </Button>
-        </div> */}
+
         <div className="ml-2 cursor-pointer">
           <TfiMoreAlt
             size={20}

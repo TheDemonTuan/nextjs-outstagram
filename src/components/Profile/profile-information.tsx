@@ -18,6 +18,15 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
 
   const isCurrentUser = authData?.id === user?.id;
 
+  const isViewerFriendOrOwner =
+    authData?.username === userProfile.userProfile.username ||
+    userProfile.userProfile.user?.friends?.some(
+      (friend) => friend?.to_user_info?.id === authData?.id || friend?.from_user_info?.id === authData?.id
+    );
+
+  const canViewPrivateProfile = userProfile.userProfile.user?.is_private === false || isViewerFriendOrOwner;
+  const accountNotBan = userProfile.userProfile.user?.active === true;
+
   const handleAvatarClick = () => {
     if (isCurrentUser) {
       modalOpen(OptionChangeAvatarModalKey);
@@ -60,7 +69,11 @@ const ProfileInformation = ({ userProfile }: { userProfile: UserProfileQuery }) 
             {authData && <ProfileAction isMe={authData.id === user?.id} user={userProfile} />}
           </div>
           <div className="mt-8 flex flex-row">
-            <ProfileInformationStat userData={userProfile} />
+            <ProfileInformationStat
+              userData={userProfile}
+              isBan={accountNotBan || false}
+              isPrivate={canViewPrivateProfile || false}
+            />
           </div>
           <div className="flex flex-col">
             <div className="pt-6">
@@ -86,17 +99,47 @@ const UserStat = ({ count, label }: { count: number; label: string }) => (
   </div>
 );
 
-const ProfileInformationStat = ({ userData }: { userData: UserProfileQuery }) => {
+const ProfileInformationStat = ({
+  userData,
+  isBan,
+  isPrivate,
+}: {
+  userData: UserProfileQuery;
+  isBan: boolean;
+  isPrivate: boolean;
+}) => {
   const { modalOpen } = useModalStore();
   const { user, posts } = userData.userProfile;
   return (
     <>
-      <UserStat count={posts?.length || 0} label="Posts" />
-      <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
-        <UserStat count={user?.friends?.length || 0} label="Friends" />
-      </div>
-      <UserStat count={0} label="Following" />
-      <Friends userData={userData} />
+      {!isBan ? (
+        <>
+          <UserStat count={posts?.length || 0} label="Posts" />
+          <div className="cursor-default">
+            <UserStat count={0} label="Friends" />
+          </div>
+          <UserStat count={0} label="Following" />
+          <Friends userData={userData} />
+        </>
+      ) : !isPrivate ? (
+        <>
+          <UserStat count={posts?.length || 0} label="Posts" />
+          <div className="cursor-default">
+            <UserStat count={user?.friends?.length || 0} label="Friends" />
+          </div>
+          <UserStat count={0} label="Following" />
+          <Friends userData={userData} />
+        </>
+      ) : (
+        <>
+          <UserStat count={posts?.length || 0} label="Posts" />
+          <div onClick={() => modalOpen(FriendsModalKey)} className="cursor-pointer">
+            <UserStat count={user?.friends?.length || 0} label="Friends" />
+          </div>
+          <UserStat count={0} label="Following" />
+          <Friends userData={userData} />
+        </>
+      )}
     </>
   );
 };

@@ -494,6 +494,8 @@ export const PostSuggestions = graphql(`
       deleted_at
       user{
         username
+        active
+        role
       }
       post_files {
         id

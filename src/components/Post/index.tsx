@@ -37,6 +37,7 @@ import PostPrivacyView from "../privacy-post-view";
 import TextareaAutosize from "react-textarea-autosize";
 import { EmojiStyle } from "emoji-picker-react";
 import ShareModal from "./share-modal";
+import { ImBlocked } from "react-icons/im";
 const PostMoreOptions = dynamic(() => import("./post-more-options"));
 
 const Picker = dynamic(
@@ -69,7 +70,16 @@ const Post = () => {
     hasPreviousPage,
   } = useInfiniteQuery({
     queryKey: [postKey, "home"],
-    queryFn: async ({ pageParam }) => graphQLClient.request(PostHomePageDocument, { page: pageParam }),
+    queryFn: async ({ pageParam }) => {
+      const result = await graphQLClient.request(PostHomePageDocument, { page: pageParam });
+      if (!authData?.role) {
+        result.postHomePage = result.postHomePage.filter((post) => post.active && post.user?.active);
+      } else {
+        result.postHomePage = result.postHomePage.filter((post) => post.user?.active);
+      }
+      return result;
+    },
+    // graphQLClient.request(PostHomePageDocument, { page: pageParam }),
     initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {
       if (lastPage.postHomePage.length === 0) {
@@ -203,13 +213,17 @@ const Post = () => {
                                       })}
                                     </Link>
                                     <span className="text-gray-500 ml-1"> • </span>
-
-                                    <PostPrivacyView privacy={post?.privacy || PostPrivacy.PUBLIC} size={12} />
+                                    {post.active ? (
+                                      <PostPrivacyView privacy={post?.privacy || PostPrivacy.PUBLIC} size={12} />
+                                    ) : (
+                                      <ImBlocked size={12} color="#65676B" className="ml-1" />
+                                    )}
                                   </div>
                                 </div>
                               </div>
                             </Tooltip>
                           </div>
+
                           <span
                             className="ml-auto w-8 h-8 rounded-full"
                             onClick={() => {

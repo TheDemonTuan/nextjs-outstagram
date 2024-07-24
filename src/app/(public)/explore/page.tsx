@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ExploresSkeleton } from "@/components/skeletons";
 import { Spinner } from "@nextui-org/react";
+import { ImBlocked } from "react-icons/im";
 
 const ExplorePage = () => {
   const { ref, inView } = useInView();
@@ -33,7 +34,16 @@ const ExplorePage = () => {
     hasPreviousPage,
   } = useInfiniteQuery({
     queryKey: [postKey, "explores-page"],
-    queryFn: async ({ pageParam }) => graphQLClient.request(PostExploresDocument, { page: pageParam }),
+    queryFn: async ({ pageParam }) => {
+      const result = await graphQLClient.request(PostExploresDocument, { page: pageParam });
+      if (!authData?.role) {
+        result.postExplores = result.postExplores.filter((post) => post.active && post.user?.active);
+      } else {
+        result.postExplores = result.postExplores.filter((post) => post.user?.active);
+      }
+      return result;
+    },
+    // graphQLClient.request(PostExploresDocument, { page: pageParam }),
     initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {
       if (lastPage.postExplores.length === 0) {
@@ -153,6 +163,13 @@ const ExplorePage = () => {
                       <ClipIcon className="w-8 h-8" />
                     </div>
                   )}
+
+                  {!post?.active && (
+                    <div className="absolute bottom-2 left-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                      <ImBlocked className="w-7 h-7" color="#FFFFFF" />
+                    </div>
+                  )}
+
                   <div className="space-x-5 absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center">
                     <div className="flex items-center font-bold space-x-2 mx-2">
                       <LikeHeartIcon className="text-white fill-white" />

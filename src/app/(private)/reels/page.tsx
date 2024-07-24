@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import { AudioMutedIcon, AudioPlayingIcon, MoreOptionReelsIcon, PlusReelsIcon, VerifiedIcon } from "@/icons";
 import { AiFillHeart } from "react-icons/ai";
-import { ImMusic } from "react-icons/im";
+import { ImBlocked, ImMusic } from "react-icons/im";
 import { LoadingDotsReels, ReelsSkeleton } from "@/components/skeletons";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PostPrivacy, PostType, postKey } from "@/api/post";
@@ -52,7 +52,16 @@ const ReelsPage = () => {
     hasPreviousPage,
   } = useInfiniteQuery({
     queryKey: [postKey, "reels"],
-    queryFn: async ({ pageParam }) => graphQLClient.request(PostReelDocument, { page: pageParam }),
+    queryFn: async ({ pageParam }) => {
+      const result = await graphQLClient.request(PostReelDocument, { page: pageParam });
+      if (!authData?.role) {
+        result.postReel = result.postReel.filter((reel) => reel.active && reel.user?.active);
+      } else {
+        result.postReel = result.postReel.filter((reel) => reel.user?.active);
+      }
+      return result;
+    },
+    //  graphQLClient.request(PostReelDocument, { page: pageParam }),
     initialPageParam: currentPage.current,
     getNextPageParam: (lastPage) => {
       if (lastPage.postReel.length === 0) {
@@ -189,19 +198,29 @@ const ReelsPage = () => {
                             hoveredVideo === reel.id ? "bottom-16" : "bottom-2"
                           }`}>
                           <div className="flex items-center -ml-1 ">
-                            <PostPrivacyView
-                              privacy={reel.privacy || PostPrivacy.PUBLIC}
-                              size={16}
-                              disabledTooltip={true}
-                              color="#FFFFFF"
-                            />
-                            <span className="pl-1 align-middle text-sm">
-                              {reel.privacy === PostPrivacy.PUBLIC
-                                ? "Public"
-                                : reel.privacy === PostPrivacy.FRIEND
-                                ? "Friend"
-                                : "Private"}
-                            </span>
+                            {reel.active ? (
+                              <>
+                                {" "}
+                                <PostPrivacyView
+                                  privacy={reel.privacy || PostPrivacy.PUBLIC}
+                                  size={16}
+                                  disabledTooltip={true}
+                                  color="#FFFFFF"
+                                />
+                                <span className="pl-1 align-middle text-sm">
+                                  {reel.privacy === PostPrivacy.PUBLIC
+                                    ? "Public"
+                                    : reel.privacy === PostPrivacy.FRIEND
+                                    ? "Friend"
+                                    : "Private"}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <ImBlocked size={16} color="#FFFFFF" className="ml-1" />
+                                <span className="pl-1 align-middle text-sm">Blocked</span>
+                              </>
+                            )}
                           </div>
 
                           <Link

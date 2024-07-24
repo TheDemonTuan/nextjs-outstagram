@@ -160,7 +160,11 @@ const ReelsView = ({ id }: { id: string }) => {
                 reelData.postByPostId.post_comments?.length > 0 &&
                 reelData.postByPostId.is_hide_comment === false ? (
                   <div className="mx-6 mt-5">
-                    <ViewComments comments={reelData.postByPostId.post_comments} />
+                    <ViewComments
+                      comments={reelData.postByPostId.post_comments}
+                      commentLikes={reelData.postByPostId.post_comment_likes}
+                      postID={reelData.postByPostId.id}
+                    />
                   </div>
                 ) : (
                   <div className="flex flex-col items-center gap-1.5 h-[250px] justify-center">

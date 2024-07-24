@@ -65,6 +65,7 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                                   posts={[]}
                                   friends={friendInfo?.friends as Friend[]}
                                   role={friendInfo?.role || false}
+                                  is_private={friendInfo?.is_private || false}
                                 />
                               )
                             }
@@ -93,6 +94,7 @@ const Friends = ({ userData }: { userData: UserProfileQuery }) => {
                                       posts={[]}
                                       friends={friendInfo?.friends as Friend[]}
                                       role={friendInfo?.role || false}
+                                      is_private={friendInfo?.is_private || false}
                                     />
                                   )
                                 }

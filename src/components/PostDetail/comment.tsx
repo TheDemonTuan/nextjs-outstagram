@@ -19,6 +19,7 @@ import { CommentLikeResponse, commentLike } from "@/api/comment_like";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { postKey } from "@/api/post";
+import { PostCommentLikesModalKey } from "../Post/post-comment-likes";
 
 const ViewComments = ({
   comments,
@@ -109,6 +110,10 @@ const ViewComments = ({
 
         const likeCount = getLikeCount(comment?.id);
 
+        const listCommentLikes = commentLikes?.filter(
+          (like) => like?.comment_id === comment.id && like.is_comment_liked
+        );
+
         return (
           <div key={comment?.id}>
             <div
@@ -164,7 +169,12 @@ const ViewComments = ({
                     </Link>
                     {authCanUse && (
                       <>
-                        <button className="text-xs font-semibold text-neutral-500">
+                        <button
+                          className="text-xs font-semibold text-neutral-500"
+                          onClick={() => {
+                            setModalData(listCommentLikes);
+                            modalOpen(PostCommentLikesModalKey);
+                          }}>
                           {likeCount > 0 ? (likeCount === 1 ? "1 like" : `${likeCount} likes`) : ""}
                         </button>
                         <button
@@ -313,6 +323,10 @@ const ReplyBox = memo(
           );
           const likeCount = getLikeCount(reply?.id || "");
 
+          const listCommentLikes = commentLikes?.filter(
+            (like) => like?.comment_id === reply?.id && like?.is_comment_liked
+          );
+
           return (
             <React.Fragment key={reply?.id}>
               <div
@@ -372,7 +386,12 @@ const ReplyBox = memo(
                       </span>
                       {authCanUse && (
                         <>
-                          <button className="text-xs font-semibold text-neutral-500">
+                          <button
+                            className="text-xs font-semibold text-neutral-500"
+                            onClick={() => {
+                              setModalData(listCommentLikes);
+                              modalOpen(PostCommentLikesModalKey);
+                            }}>
                             {likeCount > 0 ? (likeCount === 1 ? "1 like" : `${likeCount} likes`) : ""}
                           </button>
                           <button

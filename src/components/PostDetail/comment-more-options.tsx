@@ -4,13 +4,11 @@ import {
   postDeleteCommentOnPostByCommentId,
   postKey,
 } from "@/api/post";
-import { PostComment } from "@/gql/graphql";
-import { PostByPostID } from "@/graphql/post";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
 import { useModalStore } from "@/stores/modal-store";
-import { Modal, ModalBody, ModalContent } from "@nextui-org/react";
+import { Modal, ModalBody, ModalContent, Spinner } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { toast } from "sonner";
@@ -151,7 +149,12 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
 
             return (
               <>
-                <ModalBody className="mt-3 mb-3 cursor-pointer items-center p-0">
+                <ModalBody
+                  className={`mt-3 mb-3 cursor-pointer items-center p-0 ${
+                    postDeleteCommentOnPostByCommentIdIsPending || adminDeleteCommentOnPostByCommentIdIsPending
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }`}>
                   {listOptionItem.map((optionItem, index) => {
                     return (
                       <React.Fragment key={index}>
@@ -182,6 +185,12 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
                       </React.Fragment>
                     );
                   })}
+                  {postDeleteCommentOnPostByCommentIdIsPending ||
+                    (adminDeleteCommentOnPostByCommentIdIsPending && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+                        <Spinner size="md" />
+                      </div>
+                    ))}
                 </ModalBody>
               </>
             );

@@ -21,11 +21,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { FaHeart } from "react-icons/fa6";
 import { IoMdHeart } from "react-icons/io";
 
-export const LikesModalKey = "PostLikes";
+export const PostCommentLikesModalKey = "PostCommentLikes";
 
-const PostLikes = () => {
+const PostCommentLikes = () => {
   const { modalData, modalClose, modalKey } = useModalStore();
   const { authData } = useAuth();
+
+  console.log(modalData);
 
   const postLikes = modalData?.post?.post_likes?.filter((like: PostLike) => like?.is_liked);
   const isCurrentUserPost = modalData?.post?.user_id === authData?.id;
@@ -33,7 +35,7 @@ const PostLikes = () => {
   return (
     <Modal
       size="sm"
-      isOpen={modalKey === LikesModalKey}
+      isOpen={modalKey === PostCommentLikesModalKey}
       onOpenChange={modalClose}
       scrollBehavior="inside"
       className="h-[400px]">
@@ -44,27 +46,6 @@ const PostLikes = () => {
             <Divider />
 
             <ModalBody className="flex flex-col max-h-80 my-2">
-              {!isCurrentUserPost && modalData.post?.is_hide_like === true && (
-                <span className="text-gray-500 text-sm text-center my-1">
-                  {modalData?.post?.user?.username} can see the total number of people who liked this post.
-                </span>
-              )}
-              {isCurrentUserPost && modalData.post?.is_hide_like === true && (
-                <>
-                  <div className="flex flex-col justify-center items-center">
-                    <div className="flex items-center space-x-1.5">
-                      {" "}
-                      <IoMdHeart size={20} width={20} height={20} color="#000000" />
-                      <span className="font-semibold">{modalData?.post.post_likes.length}</span>
-                    </div>
-
-                    <span className="text-gray-500 text-sm text-center my-1">
-                      Only you can see the total number of likes on your posts.
-                    </span>
-                  </div>
-                </>
-              )}
-
               {postLikes?.map((like: PostLike) => {
                 const isCurrentUser = like?.user?.id === authData?.id;
                 const isFriend = like?.user?.friends
@@ -156,4 +137,4 @@ const PostLikes = () => {
   );
 };
 
-export default PostLikes;
+export default PostCommentLikes;

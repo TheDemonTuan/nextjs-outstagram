@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, DragPhotoVideoIcon, GalleryIcon, VideoAddIcon } from "@/icons";
 import { useModalStore } from "@/stores/modal-store";
 import { Button, Divider, Modal, ModalBody, ModalContent, ModalHeader, Tab, Tabs } from "@nextui-org/react";
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import AddPostModal, { AddPostModalKey } from "./create-post";
 import CarouselDetailPost from "./carousel-detail-post";
 import { PostType } from "@/api/post";

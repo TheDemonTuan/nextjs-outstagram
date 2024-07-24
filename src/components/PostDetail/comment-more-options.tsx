@@ -129,6 +129,7 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
   };
 
   const hasCommented = authData?.id === modalData?.user?.id;
+  const hasPost = authData?.id === userId;
 
   return (
     <>
@@ -140,13 +141,11 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
         <ModalContent>
           {() => {
             const listOptionItem =
-              (authData?.role === true && authData?.id !== userId && !hasCommented) ||
-              (authData?.id === userId && !hasCommented)
+              hasPost && !hasCommented
                 ? PostMeMoreOptions
-                : hasCommented
-                ? PostNotMeCommentedMoreOptions
-                : PostNotCommentMoreOptions;
-
+                : !authData?.role && !hasCommented && !hasPost
+                ? PostNotCommentMoreOptions
+                : PostNotMeCommentedMoreOptions;
             return (
               <>
                 <ModalBody

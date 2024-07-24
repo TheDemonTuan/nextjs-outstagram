@@ -49,7 +49,7 @@ const ProfileAction = (props: ProfileActionProps) => {
             </Button>
           </Link>
           <Link href="/archive">
-            <Button size="sm" className={btnClass}>
+            <Button size="sm" className={btnClass} isDisabled>
               <span>View archive</span>
             </Button>
           </Link>

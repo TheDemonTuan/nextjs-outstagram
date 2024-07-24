@@ -34,7 +34,6 @@ import { EmojiClickData, EmojiStyle } from "emoji-picker-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { SelectPhotoModalKey } from "./select-photo";
-import ConfirmDiscardPost, { ConfirmDiscardPostModalKey } from "./confirm-discard-post";
 
 export const AddPostModalKey = "AddPost";
 
@@ -317,7 +316,6 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
           )}
         </ModalContent>
       </Modal>
-      {/* <ConfirmDiscardPost onEventCloseModal={handleResetModalSelectPhoto} keyModal={AddPostModalKey} /> */}
     </>
   );
 };

@@ -5,6 +5,7 @@ import {
   postKey,
 } from "@/api/post";
 import { PostComment } from "@/gql/graphql";
+import { PostByPostID } from "@/graphql/post";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { cn } from "@/lib/utils";
@@ -70,15 +71,9 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
       mutationFn: (params) => postDeleteCommentOnPostByCommentId(params),
       onSuccess: () => {
         toast.success("Delete comment successfully!");
-        if (!!queryClient.getQueryData([postKey, { id: modalData?.post_id }])) {
-          queryClient.setQueryData([postKey, { id: modalData?.post_id }], (oldData: any) => {
-            if (!oldData) return oldData;
-            return {
-              ...oldData,
-              post_comments: oldData.post_comments.filter((comment: any) => comment.id !== modalData?.id),
-            };
-          });
-        }
+        queryClient.invalidateQueries({
+          queryKey: [postKey, { id: modalData?.post_id }],
+        });
         modalClose();
       },
       onError: (error) => {
@@ -91,15 +86,9 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
       mutationFn: (params) => adminDeleteCommentOnPostByCommentId(params),
       onSuccess: () => {
         toast.success("Delete comment successfully!");
-        if (!!queryClient.getQueryData([postKey, { id: modalData?.post_id }])) {
-          queryClient.setQueryData([postKey, { id: modalData?.post_id }], (oldData: any) => {
-            if (!oldData) return oldData;
-            return {
-              ...oldData,
-              post_comments: oldData.post_comments.filter((comment: PostComment) => comment.id !== modalData?.id),
-            };
-          });
-        }
+        queryClient.invalidateQueries({
+          queryKey: [postKey, { id: modalData?.post_id }],
+        });
 
         modalClose();
       },
@@ -116,14 +105,14 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
     if (postID && commentID) {
       if (authData?.id === userId) {
         postDeleteCommentOnPostByCommentIdMutate({
-          postID,
           commentID,
+          postID,
           userID,
         });
       } else {
         postDeleteCommentOnPostByCommentIdMutate({
-          postID,
           commentID,
+          postID,
         });
       }
     }
@@ -135,8 +124,8 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
     const userID = modalData?.user?.id;
 
     adminDeleteCommentOnPostByCommentIdMutate({
-      postID,
       commentID,
+      postID,
       userID,
     });
   };

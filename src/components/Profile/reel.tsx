@@ -5,13 +5,22 @@ import Link from "next/link";
 import React from "react";
 import SelectPhotoModal, { SelectPhotoModalKey } from "../Post/select-photo";
 import { useAuth } from "@/hooks/useAuth";
+import { ImBlocked } from "react-icons/im";
 
 const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
   const { modalOpen } = useModalStore();
   const { authData } = useAuth();
   const { reels } = userProfile.userProfile;
 
-  if (!reels || !reels.length) {
+  const filteredReels =
+    reels?.filter((reel) => {
+      if (!authData?.role) {
+        return reel?.active && reel.user?.active;
+      }
+      return reel?.user?.active;
+    }) || [];
+
+  if (!filteredReels || !filteredReels.length) {
     return (
       <>
         <div className="flex flex-col items-center justify-start my-5 space-y-3">
@@ -31,7 +40,7 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
 
   return (
     <div className="grid grid-cols-4 gap-1 mx-28 max-w-screen-xl">
-      {reels?.map((reel) => {
+      {filteredReels?.map((reel) => {
         const postFiles = reel?.post_files || [];
         const firstFile = postFiles[0];
 
@@ -50,6 +59,12 @@ const Reel = ({ userProfile }: { userProfile: UserProfileQuery }) => {
             <div className="absolute bottom-2 left-2 bg-transparent group-hover:opacity-0 bg-opacity-75 p-1 rounded-full">
               <PlayReelIcon />
             </div>
+
+            {!reel?.active && (
+              <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                <ImBlocked size={16} color="#FFFFFF" />
+              </div>
+            )}
 
             <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300 ease-in-out opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-6 rounded-md">
               <div className="flex items-center font-bold space-x-1 mx-2">

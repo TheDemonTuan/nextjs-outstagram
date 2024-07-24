@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirectHard } from "@/actions";
 import { PostType } from "@/api/post";
+import { ImBlocked } from "react-icons/im";
 
 const PostsGrid = ({ postSuggestions }: { postSuggestions: Post[] }) => {
   if (postSuggestions?.length === 0) {
@@ -53,6 +54,12 @@ const PostsGrid = ({ postSuggestions }: { postSuggestions: Post[] }) => {
             {postFiles?.length > 1 && (
               <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                 <MultiFileIcon />
+              </div>
+            )}
+
+            {!post.active && (
+              <div className="absolute bottom-2 left-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                <ImBlocked size={22} color="#FFFFFF" />
               </div>
             )}
 

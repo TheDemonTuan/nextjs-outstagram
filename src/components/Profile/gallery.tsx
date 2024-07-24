@@ -1,13 +1,24 @@
 import { UserProfileQuery } from "@/gql/graphql";
+import { useAuth } from "@/hooks/useAuth";
 import { ClipIcon, LikeHeartIcon, MessageCircleIcon, MultiFileIcon } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { ImBlocked } from "react-icons/im";
 
 const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
+  const { authData } = useAuth();
   const { posts } = userProfile.userProfile;
 
-  if (!posts || !posts.length) {
+  const filteredPosts =
+    posts?.filter((post) => {
+      if (!authData?.role) {
+        return post?.active && post.user?.active;
+      }
+      return post?.user?.active;
+    }) || [];
+
+  if (!filteredPosts || !filteredPosts.length) {
     return (
       <div className="flex flex-col items-center justify-center my-14">
         <Image width={64} height={64} src="/camera-b.png" alt="camera icon" className="object-cover" />
@@ -18,7 +29,7 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
 
   return (
     <div className="grid grid-cols-3 gap-1 mx-28">
-      {posts?.map((post) => {
+      {filteredPosts?.map((post) => {
         const postFiles = post?.post_files || [];
         const firstFile = postFiles[0];
 
@@ -38,6 +49,12 @@ const Gallery = ({ userProfile }: { userProfile: UserProfileQuery }) => {
               {postFiles?.length > 1 && (
                 <div className="absolute top-2 right-2 bg-transparent bg-opacity-75 p-1 rounded-full">
                   <MultiFileIcon />
+                </div>
+              )}
+
+              {!post?.active && (
+                <div className="absolute bottom-2 left-2 bg-transparent bg-opacity-75 p-1 rounded-full">
+                  <ImBlocked size={22} color="#FFFFFF" />
                 </div>
               )}
             </div>

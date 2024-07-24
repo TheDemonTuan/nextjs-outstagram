@@ -13,6 +13,7 @@ import HighlightHashtags from "../highlight-hashtags";
 import { useAuth } from "@/hooks/useAuth";
 import PostPrivacyView from "../privacy-post-view";
 import { PostType } from "@/api/post";
+import { ImBlocked } from "react-icons/im";
 
 const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
   const { authData, authCanUse } = useAuth();
@@ -94,7 +95,11 @@ const MiniPost = ({ post }: { post: PostByPostIdQuery["postByPostId"] }) => {
           )}
           <span className="text-xs text-gray-500">·</span>
 
-          <PostPrivacyView privacy={post?.privacy || PostType.DEFAULT} size={12} />
+          {post.active ? (
+            <PostPrivacyView privacy={post?.privacy || PostType.DEFAULT} size={12} />
+          ) : (
+            <ImBlocked size={12} color="#65676B" className="ml-1" />
+          )}
         </div>
       </div>
     </div>

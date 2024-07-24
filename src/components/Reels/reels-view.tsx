@@ -67,6 +67,16 @@ const ReelsView = ({ id }: { id: string }) => {
     notFound();
   }
 
+  if (!authData?.role) {
+    if (!reelData.postByPostId.active || !reelData.postByPostId.user?.active) {
+      notFound();
+    }
+  } else {
+    if (!reelData.postByPostId.user?.active) {
+      notFound();
+    }
+  }
+
   const loopThroughPostsUp = () => {
     console.log("loopThroughPostsUp");
   };
@@ -175,10 +185,18 @@ const ReelsView = ({ id }: { id: string }) => {
                 <div className="mb-5" />
               </div>
               {authCanUse ? (
-                reelData.postByPostId.is_hide_comment === false && (
+                reelData.postByPostId.active ? (
+                  reelData.postByPostId.is_hide_comment === false && (
+                    <div className="flex items-center bottom-0 justify-between bg-white lg:max-w-[550px] w-full py-5 px-8 border-t-1 sticky z-50">
+                      <div className="rounded-lg w-full lg:max-w-[500px] border-1 mt-auto">
+                        <CommentForm postId={reelData.postByPostId.id} />
+                      </div>
+                    </div>
+                  )
+                ) : (
                   <div className="flex items-center bottom-0 justify-between bg-white lg:max-w-[550px] w-full py-5 px-8 border-t-1 sticky z-50">
-                    <div className="rounded-lg w-full lg:max-w-[500px] border-1 mt-auto">
-                      <CommentForm postId={reelData.postByPostId.id} />
+                    <div className="w-full flex items-center justify-center text-sm font-semibold text-[#F02C56]">
+                      This reel is blocked and cannot be commented on.
                     </div>
                   </div>
                 )

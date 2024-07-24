@@ -72,6 +72,16 @@ const SinglePost = ({ id }: { id: string }) => {
     return notFound();
   }
 
+  if (!authData?.role) {
+    if (!postData.postByPostId.active || !postData.postByPostId.user?.active) {
+      notFound();
+    }
+  } else {
+    if (!postData.postByPostId.user?.active) {
+      notFound();
+    }
+  }
+
   return (
     <>
       <Card className="max-w-3xl lg:max-w-4xl hidden md:flex mx-auto mt-9 rounded-none shadow-none">
@@ -151,7 +161,18 @@ const SinglePost = ({ id }: { id: string }) => {
           </div>
 
           <div className="px-5 py-4 hidden md:block mt-auto border-b border-t p-2.5 space-y-3 sticky z-20">
-            {authCanUse ? (
+            {!postData.postByPostId.active ? (
+              <p className="flex items-center justify-center my-16 text-md font-medium text-red-600">
+                Post are being blocked
+              </p>
+            ) : !authCanUse ? (
+              <p className="flex items-center justify-center my-16 text-md font-medium text-gray-400">
+                <Link href="/login" className="text-[#0497F6] mr-1">
+                  Log in{" "}
+                </Link>{" "}
+                to like or comment on this post.
+              </p>
+            ) : (
               <>
                 <PostReact
                   postReact={postData.postByPostId as Post}
@@ -173,16 +194,11 @@ const SinglePost = ({ id }: { id: string }) => {
                   </time>
                 </div>
               </>
-            ) : (
-              <p className="flex items-center justify-center my-16 text-md font-medium text-gray-400">
-                <Link href="/login" className="text-[#0497F6] mr-1">
-                  Log in{" "}
-                </Link>{" "}
-                to like or comment on this post.
-              </p>
             )}
           </div>
-          {authCanUse && postData.postByPostId.is_hide_comment === false && <CommentForm postId={id} />}
+          {authCanUse && postData.postByPostId.is_hide_comment === false && postData.postByPostId.active && (
+            <CommentForm postId={postData.postByPostId.id} />
+          )}
         </div>
       </Card>
       {/* <div className="md:hidden"><Post post={post} /></div> */}

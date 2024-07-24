@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ImMusic } from "react-icons/im";
+import { ImBlocked, ImMusic } from "react-icons/im";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import HighlightHashtags from "../highlight-hashtags";
 import { Friend, Post, PostByPostIdQuery } from "@/gql/graphql";
@@ -104,8 +104,11 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked, isSaved }
                   })}
                 </span>
                 <span className="relative -top-[3px] text-sm pl-1 ">.</span>
-
-                <PostPrivacyView privacy={reelData.privacy || PostPrivacy.PUBLIC} size={15} />
+                {reelData.active ? (
+                  <PostPrivacyView privacy={reelData.privacy || PostPrivacy.PUBLIC} size={15} />
+                ) : (
+                  <ImBlocked size={14} color="#65676B" className="ml-1" />
+                )}
               </div>
             </div>
           </div>
@@ -149,10 +152,10 @@ export default function ReelsCommentsHeader({ reelHeaderData, isLiked, isSaved }
           disabled
         />
         <button
-          disabled={!authCanUse}
+          disabled={!authCanUse || !reelData.active}
           onClick={handleCopyLink}
           className={`absolute right-0 border font-bold text-base py-1.5 px-4 border-none  rounded-r-lg ${
-            !authCanUse ? "" : "hover:bg-white"
+            !authCanUse || !reelData.active ? "" : "hover:bg-white"
           }`}>
           Copy link
         </button>

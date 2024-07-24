@@ -196,8 +196,8 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
         } items-center`}>
         <div className={`${orientation === "horizontal" ? "pb-4 text-center flex items-center" : ""}`}>
           <button
-            disabled={!authCanUse}
-            className={`rounded-full ${!authCanUse ? "" : "cursor-pointer"} bg-gray-200 ${
+            disabled={!authCanUse || !reelReact.active}
+            className={`rounded-full ${!authCanUse || !reelReact.active ? "" : "cursor-pointer"} bg-gray-200 ${
               orientation === "horizontal" ? " p-2.5 " : "p-3 mb-1"
             }`}
             onClick={handleLikePost}>
@@ -209,9 +209,9 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
               />
             ) : (
               <LikeHeartIcon
-                className={`hover:stroke-gray115 ${!authCanUse ? "" : "cursor-pointer"} text-black ${
-                  orientation === "horizontal" ? "w-[22px] h-[22px]" : "w-6 h-6"
-                }`}
+                className={`hover:stroke-gray115 ${
+                  !authCanUse || !reelReact.active ? "" : "cursor-pointer"
+                } text-black ${orientation === "horizontal" ? "w-[22px] h-[22px]" : "w-6 h-6"}`}
               />
             )}
           </button>
@@ -237,8 +237,8 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
           (orientation === "horizontal" ? (
             <div className="pb-4 text-center flex items-center">
               <button
-                className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-                disabled={!authCanUse}>
+                className={`rounded-full bg-gray-200 p-2 ${!authCanUse || !reelReact.active ? "" : "cursor-pointer"}`}
+                disabled={!authCanUse || !reelReact.active}>
                 <MessageCircleIcon width={22} height={22} fill="#00000" />
               </button>
               <span className="text-sm pl-2 pr-4 text-gray-800 font-semibold">{reelReact.post_comments?.length}</span>
@@ -256,8 +256,8 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
           (orientation === "horizontal" ? (
             <div className="pb-4 text-center flex items-center">
               <button
-                className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-                disabled={!authCanUse}
+                className={`rounded-full bg-gray-200 p-2 ${!authCanUse || !reelReact.active ? "" : "cursor-pointer"}`}
+                disabled={!authCanUse || !reelReact.active}
                 onClick={handleSavePost}>
                 {isSaved ? (
                   <SavedBookMarkReelsCommentIcon width={22} height={2} fill="#00000" />
@@ -285,8 +285,8 @@ const ReelReact = memo(({ reelReact, isLiked, isSaved, postPage, orientation = "
         {orientation === "horizontal" ? (
           <div className="pb-4 text-center flex items-center">
             <button
-              className={`rounded-full bg-gray-200 p-2 ${!authCanUse ? "" : "cursor-pointer"}`}
-              disabled={!authCanUse}
+              className={`rounded-full bg-gray-200 p-2 ${!authCanUse || !reelReact.active ? "" : "cursor-pointer"}`}
+              disabled={!authCanUse || !reelReact.active}
               onClick={() => {
                 setModalData(reelReact);
                 modalOpen(ShareModalKey);

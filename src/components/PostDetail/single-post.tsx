@@ -140,7 +140,11 @@ const SinglePost = ({ id }: { id: string }) => {
               </div>
             ) : (
               <div className="flex flex-col">
-                <Comment comments={postData.postByPostId.post_comments} />
+                <Comment
+                  comments={postData.postByPostId.post_comments}
+                  commentLikes={postData.postByPostId.post_comment_likes}
+                  postID={postData.postByPostId.id}
+                />
               </div>
             )}
           </div>

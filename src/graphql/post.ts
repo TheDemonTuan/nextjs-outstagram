@@ -176,6 +176,26 @@ export const PostByPostID = graphql(`
         created_at
         updated_at
       }
+      post_comment_likes {
+          id
+          user_id
+          comment_id
+          is_comment_liked
+          PostComment {
+            id
+            post_id
+            user_id
+            parent_id
+            content
+            active
+            created_at
+            updated_at
+            deleted_at
+          }
+          created_at
+          updated_at
+          deleted_at
+      }
     }
   }
 `);
@@ -292,6 +312,15 @@ export const PostHomePage = graphql(`
         created_at
         updated_at
       }
+      post_comment_likes {
+          id
+          user_id
+          comment_id
+          is_comment_liked
+          created_at
+          updated_at
+          deleted_at
+      }
       
       created_at
     }
@@ -357,6 +386,16 @@ export const PostReel = graphql(`
             created_at
             updated_at
         }
+      post_comment_likes {
+          id
+          user_id
+          comment_id
+          is_comment_liked
+          created_at
+          updated_at
+          deleted_at
+      }
+
     }
   }
 `);

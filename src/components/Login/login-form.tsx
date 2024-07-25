@@ -11,8 +11,11 @@ import { LoginFormValidate, LoginFormValidateSchema } from "./login-form.validat
 import { Button, Input } from "@nextui-org/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { toast } from "sonner";
+import { useModalStore } from "@/stores/modal-store";
+import NotificationBanAccount, { NotificationBanAccountModalKey } from "../Profile/notification-ban-account";
 
 const LoginForm = () => {
+  const { modalOpen } = useModalStore();
   const queryClient = useQueryClient();
   const loginForm = useForm<LoginFormValidate>({
     resolver: zodResolver(LoginFormValidateSchema),
@@ -38,7 +41,11 @@ const LoginForm = () => {
       queryClient.setQueryData(["auth"], res);
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.message || "Login failed!");
+      if (error.response?.data.message === "Account is banned") {
+        modalOpen(NotificationBanAccountModalKey);
+      } else {
+        toast.error(error?.response?.data?.message || "Login failed!");
+      }
     },
   });
 
@@ -50,63 +57,67 @@ const LoginForm = () => {
   };
 
   return (
-    <Form {...loginForm}>
-      <form
-        method="post"
-        onSubmit={loginForm.handleSubmit(onSubmit)}
-        className="mb-4 space-y-4 bg-white p-8 border rounded">
-        <FormField
-          control={loginForm.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  isRequired
-                  isInvalid={!!loginForm.formState.errors.username}
-                  onClear={() => loginForm.resetField("username")}
-                  placeholder="Phone, username, or email"
-                  variant="bordered"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={loginForm.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  isRequired
-                  isInvalid={!!loginForm.formState.errors.password}
-                  endContent={
-                    <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-                      {isVisible ? (
-                        <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
-                      ) : (
-                        <FaEye className="text-2xl text-default-400 pointer-events-none" />
-                      )}
-                    </button>
-                  }
-                  type={isVisible ? "text" : "password"}
-                  variant="bordered"
-                  placeholder="Password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button color="primary" type="submit" className="w-full" variant="shadow" isLoading={loginIsPending}>
-          Login
-        </Button>
-      </form>
-    </Form>
+    <>
+      {" "}
+      <Form {...loginForm}>
+        <form
+          method="post"
+          onSubmit={loginForm.handleSubmit(onSubmit)}
+          className="mb-4 space-y-4 bg-white p-8 border rounded">
+          <FormField
+            control={loginForm.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    isRequired
+                    isInvalid={!!loginForm.formState.errors.username}
+                    onClear={() => loginForm.resetField("username")}
+                    placeholder="Phone, username, or email"
+                    variant="bordered"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={loginForm.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    isRequired
+                    isInvalid={!!loginForm.formState.errors.password}
+                    endContent={
+                      <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                        {isVisible ? (
+                          <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                        ) : (
+                          <FaEye className="text-2xl text-default-400 pointer-events-none" />
+                        )}
+                      </button>
+                    }
+                    type={isVisible ? "text" : "password"}
+                    variant="bordered"
+                    placeholder="Password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button color="primary" type="submit" className="w-full" variant="shadow" isLoading={loginIsPending}>
+            Login
+          </Button>
+        </form>
+      </Form>
+      <NotificationBanAccount />
+    </>
   );
 };
 

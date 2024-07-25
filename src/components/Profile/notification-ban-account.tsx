@@ -1,5 +1,6 @@
 import { useModalStore } from "@/stores/modal-store";
 import { Modal, ModalContent, ModalBody, ModalHeader, ModalFooter, Divider, Button } from "@nextui-org/react";
+import { format } from "date-fns";
 import React, { Fragment } from "react";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { IoLockClosedOutline, IoWarningOutline } from "react-icons/io5";
@@ -9,6 +10,10 @@ export const NotificationBanAccountModalKey = "NotificationBanAccount";
 
 const NotificationBanAccount = () => {
   const { modalData, modalClose, modalKey, modalOpen } = useModalStore();
+
+  const currentDate = new Date();
+  const formattedDate = format(currentDate, "MMMM d, yyyy");
+  const [month, day, year] = formattedDate.split(" ");
 
   return (
     <Modal
@@ -22,7 +27,7 @@ const NotificationBanAccount = () => {
           <>
             <ModalHeader className="flex flex-col text-center space-y-2">
               <p className="text-xl font-bold">
-                We assigned your <br /> account on October <br /> 31, 2024
+                We assigned your <br /> account on {month} <br /> {day} {year}
               </p>
               <p className="text-[#737373] text-xs">You have 30 days left to appeal this decision</p>
             </ModalHeader>

@@ -3,6 +3,7 @@
 import { authOAuthLogin, AuthOAuthLoginParams, AuthOAuthLoginResponse, OAuthProvider } from "@/api/auth";
 import { auth, facebookProvider, githubProvider, googleProvider } from "@/firebase";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
+import { useModalStore } from "@/stores/modal-store";
 import { useOAuthStore } from "@/stores/oauth-store";
 import { Button } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -11,9 +12,11 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useMemo, useState } from "react";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa6";
 import { toast } from "sonner";
+import NotificationBanAccount, { NotificationBanAccountModalKey } from "../Profile/notification-ban-account";
 
 const OAuth = () => {
   const queryClient = useQueryClient();
+  const { modalOpen } = useModalStore();
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const { email, provider, setData } = useOAuthStore();
@@ -31,6 +34,10 @@ const OAuth = () => {
     onError: (error) => {
       if (error?.response?.data?.message === "User not found") {
         router.replace(`/oauth`);
+        return;
+      }
+      if (error.response?.data.message === "Account is banned") {
+        modalOpen(NotificationBanAccountModalKey);
         return;
       }
       toast.error(error?.response?.data?.message || "Login with oauth failed !");
@@ -123,32 +130,35 @@ const OAuth = () => {
 
   const isLoading = useMemo(() => isPending || loginIsPending, [isPending, loginIsPending]);
   return (
-    <div className="mb-4 flex flex-col gap-2 items-center justify-center px-10">
-      <Button
-        className="w-full"
-        startContent={<FaFacebook className="mr-2 h-4 w-4" />}
-        variant="ghost"
-        onClick={handleLoginFacebook}
-        isLoading={isLoading}>
-        Log in with Facebook
-      </Button>
-      <Button
-        className="w-full"
-        startContent={<FaGithub className="mr-2 h-4 w-4" />}
-        variant="ghost"
-        onClick={handleLoginGithub}
-        isLoading={isLoading}>
-        Log in with Github
-      </Button>
-      <Button
-        className="w-full"
-        startContent={<FaGoogle className="mr-2 h-4 w-4" />}
-        variant="ghost"
-        onClick={handleLoginGoogle}
-        isLoading={isLoading}>
-        Log in with Google
-      </Button>
-    </div>
+    <>
+      <div className="mb-4 flex flex-col gap-2 items-center justify-center px-10">
+        <Button
+          className="w-full"
+          startContent={<FaFacebook className="mr-2 h-4 w-4" />}
+          variant="ghost"
+          onClick={handleLoginFacebook}
+          isLoading={isLoading}>
+          Log in with Facebook
+        </Button>
+        <Button
+          className="w-full"
+          startContent={<FaGithub className="mr-2 h-4 w-4" />}
+          variant="ghost"
+          onClick={handleLoginGithub}
+          isLoading={isLoading}>
+          Log in with Github
+        </Button>
+        <Button
+          className="w-full"
+          startContent={<FaGoogle className="mr-2 h-4 w-4" />}
+          variant="ghost"
+          onClick={handleLoginGoogle}
+          isLoading={isLoading}>
+          Log in with Google
+        </Button>
+      </div>
+      <NotificationBanAccount />
+    </>
   );
 };
 

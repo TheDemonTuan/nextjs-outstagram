@@ -18,16 +18,12 @@ import Link from "next/link";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import SummaryProfile from "../summary-profile";
 import { useAuth } from "@/hooks/useAuth";
-import { FaHeart } from "react-icons/fa6";
-import { IoMdHeart } from "react-icons/io";
 
 export const PostCommentLikesModalKey = "PostCommentLikes";
 
 const PostCommentLikes = () => {
   const { modalData, modalClose, modalKey } = useModalStore();
   const { authData } = useAuth();
-
-  //const commentLikes = modalData?.comment_likes?.filter((like: CommentLike) => like?.is_comment_liked);
 
   return (
     <Modal

@@ -1,4 +1,4 @@
-import { Friend, PostLike } from "@/gql/graphql";
+import { CommentLike, Friend, PostLike } from "@/gql/graphql";
 import { useModalStore } from "@/stores/modal-store";
 import {
   Button,
@@ -27,10 +27,7 @@ const PostCommentLikes = () => {
   const { modalData, modalClose, modalKey } = useModalStore();
   const { authData } = useAuth();
 
-  console.log(modalData);
-
-  const postLikes = modalData?.post?.post_likes?.filter((like: PostLike) => like?.is_liked);
-  const isCurrentUserPost = modalData?.post?.user_id === authData?.id;
+  //const commentLikes = modalData?.comment_likes?.filter((like: CommentLike) => like?.is_comment_liked);
 
   return (
     <Modal
@@ -46,7 +43,7 @@ const PostCommentLikes = () => {
             <Divider />
 
             <ModalBody className="flex flex-col max-h-80 my-2">
-              {postLikes?.map((like: PostLike) => {
+              {modalData?.map((like: PostLike) => {
                 const isCurrentUser = like?.user?.id === authData?.id;
                 const isFriend = like?.user?.friends
                   ?.filter((friend): friend is Friend => !!friend)

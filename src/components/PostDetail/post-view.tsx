@@ -135,11 +135,7 @@ function PostView({ id }: { id: string }) {
               <MiniPost post={postData.postByPostId} />
               {authCanUse && postData.postByPostId.is_hide_comment === false ? (
                 <div className="flex flex-col">
-                  <Comment
-                    comments={postData?.postByPostId.post_comments}
-                    commentLikes={postData?.postByPostId.post_comment_likes}
-                    postID={postData.postByPostId.id}
-                  />
+                  <Comment comments={postData?.postByPostId.post_comments} postID={postData.postByPostId.id} />
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-1.5 h-[400px] justify-center">

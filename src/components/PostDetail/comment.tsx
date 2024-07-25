@@ -1,3 +1,5 @@
+"use client";
+
 import React, { memo, useCallback, useMemo, useState } from "react";
 import { Divider, Spinner, Tooltip, useModal } from "@nextui-org/react";
 import Link from "next/link";
@@ -20,14 +22,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { postKey } from "@/api/post";
 import { PostCommentLikesModalKey } from "../Post/post-comment-likes";
+import { comment } from "postcss";
 
 const ViewComments = ({
   comments,
-  commentLikes,
   postID,
 }: {
   comments: PostByPostIdQuery["postByPostId"]["post_comments"];
-  commentLikes: PostByPostIdQuery["postByPostId"]["post_comment_likes"];
   postID: string;
 }) => {
   const { authData, authCanUse } = useAuth();
@@ -46,21 +47,26 @@ const ViewComments = ({
           ...authData,
         },
       };
-      if (!!queryClient.getQueryData([postKey, { id: postID }])) {
-        queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
-          const newLikes = oldData.postByPostId.post_comment_likes.filter(
-            (commentLike: any) =>
-              commentLike.user_id !== authData?.id && commentLike.comment_id === likeCommentData.data.comment_id
-          );
-          return {
-            ...oldData,
-            postByPostId: {
-              ...oldData.postByPostId,
-              post_comment_likes: [fakeData, ...newLikes],
-            },
-          };
+      queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
+        if (!oldData) return oldData;
+        const newComments = oldData.postByPostId.post_comments.map((comment: any) => {
+          if (comment.id === likeCommentData.data.comment_id) {
+            const updatedLikes = comment.comment_likes.filter((like: any) => like.user_id !== authData?.id);
+            return {
+              ...comment,
+              comment_likes: [fakeData, ...updatedLikes],
+            };
+          }
+          return comment;
         });
-      }
+        return {
+          ...oldData,
+          postByPostId: {
+            ...oldData.postByPostId,
+            post_comments: newComments,
+          },
+        };
+      });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Like comment failed!");
@@ -76,12 +82,8 @@ const ViewComments = ({
     [setContent, setParentID, setReplyUsername]
   );
 
-  const getLikeCount = useMemo(() => {
-    return (commentId: string) => {
-      const likes = commentLikes?.filter((like) => like?.comment_id === commentId && like.is_comment_liked);
-      return likes?.length || 0;
-    };
-  }, [commentLikes]);
+  console.log(comments);
+
   return (
     <div className="flex flex-col">
       {comments?.map((comment) => {
@@ -101,18 +103,14 @@ const ViewComments = ({
           return replyCount;
         };
 
-        const postCommentLikesFilter = commentLikes?.filter((commentLike) => commentLike?.is_comment_liked);
-        const isCommentLiked = postCommentLikesFilter?.some(
-          (commentLike) => commentLike?.user_id === authData?.id && commentLike?.comment_id === comment.id
-        );
+        const postCommentLikesFilter = comment.comment_likes?.filter((commentLike) => commentLike?.is_comment_liked);
+        const isCommentLiked = postCommentLikesFilter?.some((commentLike) => commentLike?.user_id === authData?.id);
 
         const totalReplies = countReplies(comments, comment?.id);
 
-        const likeCount = getLikeCount(comment?.id);
+        const likeCount = postCommentLikesFilter?.length || 0;
 
-        const listCommentLikes = commentLikes?.filter(
-          (like) => like?.comment_id === comment.id && like.is_comment_liked
-        );
+        console.log(comment);
 
         return (
           <div key={comment?.id}>
@@ -172,7 +170,7 @@ const ViewComments = ({
                         <button
                           className="text-xs font-semibold text-neutral-500"
                           onClick={() => {
-                            setModalData(listCommentLikes);
+                            setModalData(postCommentLikesFilter);
                             modalOpen(PostCommentLikesModalKey);
                           }}>
                           {likeCount > 0 ? (likeCount === 1 ? "1 like" : `${likeCount} likes`) : ""}
@@ -230,7 +228,6 @@ const ViewComments = ({
                       comments={comments}
                       parentID={comment.id}
                       postID={postID}
-                      commentLikes={commentLikes}
                       handleReplyComment={handleReplyComment}
                     />
                   )}
@@ -251,12 +248,10 @@ const ReplyBox = memo(
   ({
     comments,
     parentID,
-    commentLikes,
     postID,
     handleReplyComment,
   }: {
     comments: PostByPostIdQuery["postByPostId"]["post_comments"];
-    commentLikes: PostByPostIdQuery["postByPostId"]["post_comment_likes"];
     postID: string;
     parentID: string;
     handleReplyComment: (id: string, username: string) => void;
@@ -283,32 +278,31 @@ const ReplyBox = memo(
             ...authData,
           },
         };
-        if (!!queryClient.getQueryData([postKey, { id: postID }])) {
-          queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
-            const newLikes = oldData.postByPostId.post_comment_likes.filter(
-              (commentLike: any) =>
-                commentLike.user_id !== authData?.id && commentLike.comment_id === likeCommentData.data.comment_id
-            );
-            return {
-              ...oldData,
-              postByPostId: {
-                ...oldData.postByPostId,
-                post_comment_likes: [fakeData, ...newLikes],
-              },
-            };
+        queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
+          if (!oldData) return oldData;
+          const newComments = oldData.postByPostId.post_comments.map((comment: any) => {
+            if (comment.id === likeCommentData.data.comment_id) {
+              const updatedLikes = comment.comment_likes.filter((like: any) => like.user_id !== authData?.id);
+              return {
+                ...comment,
+                comment_likes: [fakeData, ...updatedLikes],
+              };
+            }
+            return comment;
           });
-        }
+          return {
+            ...oldData,
+            postByPostId: {
+              ...oldData.postByPostId,
+              post_comments: newComments,
+            },
+          };
+        });
       },
       onError: (error) => {
         toast.error(error?.response?.data?.message || "Like comment failed!");
       },
     });
-    const getLikeCount = useMemo(() => {
-      return (commentId: string) => {
-        const likes = commentLikes?.filter((like) => like?.comment_id === commentId && like.is_comment_liked);
-        return likes?.length || 0;
-      };
-    }, [commentLikes]);
 
     if (!replyComments?.length) {
       return null;
@@ -317,15 +311,11 @@ const ReplyBox = memo(
     return (
       <>
         {replyComments.map((reply) => {
-          const postCommentLikesFilter = commentLikes?.filter((commentLike) => commentLike?.is_comment_liked);
-          const isCommentLiked = postCommentLikesFilter?.some(
-            (commentLike) => commentLike?.user_id === authData?.id && commentLike?.comment_id === reply?.id
-          );
-          const likeCount = getLikeCount(reply?.id || "");
+          const postCommentLikesFilter = reply?.comment_likes?.filter((commentLike) => commentLike?.is_comment_liked);
+          const isCommentLiked = postCommentLikesFilter?.some((commentLike) => commentLike?.user_id === authData?.id);
+          const likeCount = postCommentLikesFilter?.length || 0;
 
-          const listCommentLikes = commentLikes?.filter(
-            (like) => like?.comment_id === reply?.id && like?.is_comment_liked
-          );
+          console.log(reply);
 
           return (
             <React.Fragment key={reply?.id}>
@@ -389,7 +379,7 @@ const ReplyBox = memo(
                           <button
                             className="text-xs font-semibold text-neutral-500"
                             onClick={() => {
-                              setModalData(listCommentLikes);
+                              setModalData(postCommentLikesFilter);
                               modalOpen(PostCommentLikesModalKey);
                             }}>
                             {likeCount > 0 ? (likeCount === 1 ? "1 like" : `${likeCount} likes`) : ""}
@@ -424,7 +414,6 @@ const ReplyBox = memo(
                 comments={comments}
                 parentID={reply?.id || ""}
                 postID={postID}
-                commentLikes={commentLikes}
                 handleReplyComment={handleReplyComment}
               />
             </React.Fragment>

@@ -86,7 +86,7 @@ const Suggestions = () => {
           </Button>
         </div>
       ) : (
-        userSuggestionData?.userSuggestion.map((user) => {
+        userSuggestionData?.userSuggestion.slice(0, 5).map((user) => {
           const isNewUser = user.created_at && getDifferenceInDays(new Date(user.created_at), new Date()) <= 7;
           return (
             <div key={user.username} className="flex items-center justify-between gap-3">

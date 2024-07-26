@@ -70,6 +70,10 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
       onResetModalSelectPhoto();
       setModalData([]);
       modalClose();
+      setCaption("");
+      setPrivacy("0");
+      setIsHiddenComment(false);
+      setIsHiddenLike(false);
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Add new post failed!");

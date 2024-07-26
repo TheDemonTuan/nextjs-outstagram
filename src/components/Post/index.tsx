@@ -288,7 +288,7 @@ const Post = () => {
                               </span>
                             </p>
 
-                            {(post.caption?.split("\n").length ?? 0) > 2 && (
+                            {(post.caption?.split("\n").length ?? 0) > 1 && (
                               <button
                                 onClick={toggleExpand}
                                 className="text-neutral-500 focus:outline-none inline-block">

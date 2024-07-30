@@ -148,7 +148,10 @@ const Suggestions = () => {
                   </div>
                 </div>
               </Tooltip>
-              <button className="text-blue-400 text-xs font-bold">Add friends</button>
+              {/* <button className="text-blue-400 text-xs font-bold">Add friends</button> */}
+              <Link href={`/${user.username}`} className="text-blue-400 text-xs font-bold">
+                Go to profile
+              </Link>
             </div>
           );
         })

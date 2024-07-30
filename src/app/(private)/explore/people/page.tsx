@@ -138,9 +138,14 @@ const PeoplePage = () => {
                       </h3>
                     </div>
                   </div>
-                  <button className="bg-[#0095F6] hover:bg-[#1877F2] rounded-md  px-4 py-1.5 text-sm font-medium text-white">
+                  {/* <button className="bg-[#0095F6] hover:bg-[#1877F2] rounded-md  px-4 py-1.5 text-sm font-medium text-white">
                     Add Friend
-                  </button>
+                  </button> */}
+                  <Link
+                    href={`/${user.username}`}
+                    className="bg-[#0095F6] hover:bg-[#1877F2] rounded-md  px-4 py-1.5 text-sm font-medium text-white">
+                    Go to profile
+                  </Link>
                 </div>
               );
             })

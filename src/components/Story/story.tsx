@@ -1,28 +1,29 @@
 import React from "react";
 import { Image } from "@nextui-org/react";
 import NextImage from "next/image";
+import Link from "next/link";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 
-interface StoryProps {
-  img: string;
-  username: string;
-}
-
-const Story: React.FC<StoryProps> = ({ img, username }) => {
+const Story = ({ img, username }: { img: string; username: string }) => {
   return (
-    <div className="space-y-1">
-      <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-gradient-to-r from-yellow-300 via-red-500 to-pink-500 p-[3px]">
-        <Image
-          as={NextImage}
-          className="object-cover"
-          width={256}
-          height={256}
-          radius="full"
-          src={img}
-          alt="User Avatar"
-        />
+    <Link href={`/${username}`}>
+      <div className="space-y-1">
+        <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-gradient-to-tr from-[#FFC500] via-[#FF105D] to-[#D300C5]">
+          <div className="flex flex-col justify-center items-center w-14 h-14 rounded-full bg-white p-1">
+            <Image
+              as={NextImage}
+              className="object-cover w-12 h-12"
+              width={256}
+              height={256}
+              radius="full"
+              src={getUserAvatarURL(img)}
+              alt="User Avatar"
+            />
+          </div>
+        </div>
+        <p className="text-xs text-center w-16 truncate">{username}</p>
       </div>
-      <p className="text-xs text-center w-16 truncate">{username}</p>
-    </div>
+    </Link>
   );
 };
 

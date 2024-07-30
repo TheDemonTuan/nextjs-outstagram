@@ -1,12 +1,16 @@
 import React, { useRef, useState } from "react";
-import stories from "./stories.json";
 import Story from "./story";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
+import { useAuth } from "@/hooks/useAuth";
+import { friendGetListMe, friendKey } from "@/api/friend";
+import { useQuery } from "@tanstack/react-query";
 
-const Stories: React.FC = () => {
+const Stories = () => {
   const storiesRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
+
+  const { authData } = useAuth();
 
   const onScroll = () => {
     if (storiesRef.current) {
@@ -16,15 +20,27 @@ const Stories: React.FC = () => {
     }
   };
 
+  const {
+    data: friendsData,
+    error: friendError,
+    isLoading: friendIsLoading,
+  } = useQuery({
+    queryKey: [friendKey, "home"],
+    queryFn: async () => await friendGetListMe(),
+  });
+
   return (
     <div className="relative w-max h-full">
       <div
         onScroll={onScroll}
         ref={storiesRef}
         className="flex items-center space-x-2 overflow-x-scroll max-w-xl bg-white border-gray-200 scroll-smooth scrollbar-hide">
-        {stories.map((story) => (
-          <Story key={story.id} img={story.avatar} username={`${story.first_name} ${story.last_name}`} />
-        ))}
+        {friendsData?.data &&
+          friendsData?.data.map((friend) => {
+            const friendInfo = authData?.id === friend?.FromUser?.id ? friend?.ToUser : friend?.FromUser;
+
+            return <Story key={friend.id} img={friendInfo.avatar} username={`${friendInfo.username}`} />;
+          })}
       </div>
       <div className="absolute top-0 p-7 pt-3 w-full h-full flex justify-between z-10 items-center">
         <button
@@ -45,11 +61,13 @@ const Stories: React.FC = () => {
               storiesRef.current.scrollLeft = storiesRef.current.scrollLeft + 300;
             }
           }}>
-          <FaCircleChevronRight
-            color="white"
-            size="20"
-            className={`cursor-pointer drop-shadow-lg filter ${showRight ? "visible" : "invisible"}`}
-          />
+          {friendsData?.data && friendsData?.data.length > 8 && (
+            <FaCircleChevronRight
+              color="white"
+              size="20"
+              className={`cursor-pointer drop-shadow-lg filter ${showRight ? "visible" : "invisible"}`}
+            />
+          )}
         </button>
       </div>
     </div>

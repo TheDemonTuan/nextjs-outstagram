@@ -11,6 +11,7 @@ import SummaryProfile from "./summary-profile";
 import UserProfileInfo from "./user-profile-info";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { friendGetListMe, friendKey } from "@/api/friend";
 
 const getDifferenceInDays = (date1: Date, date2: Date) => {
   const timeDifference = date2.getTime() - date1.getTime();
@@ -30,6 +31,15 @@ const Suggestions = () => {
     staleTime: 1000 * 60 * 5,
   });
 
+  const {
+    data: friendInfoData,
+    error: friendInfoError,
+    isLoading: friendInfoIsLoading,
+  } = useQuery({
+    queryKey: [friendKey, "suggestions"],
+    queryFn: async () => await friendGetListMe(),
+  });
+
   useEffect(() => {
     if (userSuggestionError) {
       toast.error("Failed to get user suggestions");
@@ -47,6 +57,10 @@ const Suggestions = () => {
       </>
     );
   }
+
+  const currentUserFriends = friendInfoData?.data?.map((friend) =>
+    friend.from_user_id === authData?.id ? friend.ToUser : friend.FromUser
+  );
 
   return (
     <div className="space-y-4">
@@ -88,6 +102,14 @@ const Suggestions = () => {
       ) : (
         userSuggestionData?.userSuggestion.slice(0, 5).map((user) => {
           const isNewUser = user.created_at && getDifferenceInDays(new Date(user.created_at), new Date()) <= 7;
+          const friendSuggestion = user.friends?.map((friend) =>
+            friend?.from_user_id === user.id ? friend.to_user_info : friend?.from_user_info
+          );
+
+          const commonFriend = friendSuggestion?.find((friend) =>
+            currentUserFriends?.some((currentFriend) => currentFriend.id === friend?.id)
+          );
+
           return (
             <div key={user.username} className="flex items-center justify-between gap-3">
               <Tooltip
@@ -111,7 +133,13 @@ const Suggestions = () => {
                   <div className="flex flex-row gap-3 items-center">
                     <UserProfileInfo
                       username={user.username || ""}
-                      full_name={isNewUser ? "New to Outstagram" : "Suggested for you"}
+                      full_name={
+                        commonFriend
+                          ? `Friend by ${commonFriend.username}`
+                          : isNewUser
+                          ? "New to Outstagram"
+                          : "Suggested for you"
+                      }
                       isShowFullName={true}
                       className="w-11 h-11"
                       avatar={user.avatar || ""}

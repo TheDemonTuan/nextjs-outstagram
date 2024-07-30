@@ -24,6 +24,9 @@ export interface FriendResponse {
 export const friendGetList = async () =>
     http.get<ApiSuccessResponse<FriendResponse[]>>("friends").then((res) => res.data);
 
+export const friendGetListMe = async () => 
+    http.get<ApiSuccessResponse<FriendResponse[]>>("friends/me").then((res) => res.data);
+
 export const friendSendRequest = async (toUserID: string) =>
     http
         .post<ApiSuccessResponse<FriendResponse>>(`friends/${toUserID}/request`)

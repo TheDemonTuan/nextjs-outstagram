@@ -39,6 +39,14 @@ export const UserSuggestion = graphql(`
         from_user_id
         to_user_id
         status
+        from_user_info {
+          id
+          username
+        }
+        to_user_info {
+          id
+          username
+        }
       }
       
     }

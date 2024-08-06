@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import SummaryProfile from "@/components/summary-profile";
 import { PeopleSuggestionsSkeleton } from "@/components/skeletons";
+import { friendGetListMe, friendKey } from "@/api/friend";
 
 const getDifferenceInDays = (date1: Date, date2: Date) => {
   const timeDifference = date2.getTime() - date1.getTime();
@@ -21,6 +22,7 @@ const getDifferenceInDays = (date1: Date, date2: Date) => {
 };
 
 const PeoplePage = () => {
+  const { authData } = useAuth();
   const {
     data: userSuggestionData,
     error: userSuggestionError,
@@ -29,6 +31,15 @@ const PeoplePage = () => {
     queryKey: [userKey, "suggestions"],
     queryFn: () => graphQLClient.request(UserSuggestionDocument, { count: 30 }),
     staleTime: 1000 * 60 * 5,
+  });
+
+  const {
+    data: friendInfoData,
+    error: friendInfoError,
+    isLoading: friendInfoIsLoading,
+  } = useQuery({
+    queryKey: [friendKey, "suggestions-people"],
+    queryFn: async () => await friendGetListMe(),
   });
 
   useEffect(() => {
@@ -44,6 +55,10 @@ const PeoplePage = () => {
       </>
     );
   }
+
+  const currentUserFriends = friendInfoData?.data?.map((friend) =>
+    friend.from_user_id === authData?.id ? friend.ToUser : friend.FromUser
+  );
 
   return (
     <>
@@ -78,6 +93,14 @@ const PeoplePage = () => {
           ) : (
             userSuggestionData?.userSuggestion?.map((user) => {
               const isNewUser = user.created_at && getDifferenceInDays(new Date(user.created_at), new Date()) <= 7;
+
+              const friendSuggestion = user.friends?.map((friend) =>
+                friend?.from_user_id === user.id ? friend.to_user_info : friend?.from_user_info
+              );
+
+              const commonFriend = friendSuggestion?.find((friend) =>
+                currentUserFriends?.some((currentFriend) => currentFriend.id === friend?.id)
+              );
               return (
                 <div key={user.id} className="flex items-center justify-between">
                   <div className="flex flex-row gap-3 items-center">
@@ -134,7 +157,11 @@ const PeoplePage = () => {
                       </div>
                       <h3 className="text-[14px] leading-[18px] text-[#737373]">{user.full_name}</h3>
                       <h3 className="text-[12px] leading-[16px] text-[#737373]">
-                        {isNewUser ? "New to Outstagram" : "Suggested for you"}
+                        {commonFriend
+                          ? `Friend by ${commonFriend.username}`
+                          : isNewUser
+                          ? "New to Outstagram"
+                          : "Suggested for you"}
                       </h3>
                     </div>
                   </div>

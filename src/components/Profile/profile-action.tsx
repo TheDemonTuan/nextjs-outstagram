@@ -48,11 +48,11 @@ const ProfileAction = (props: ProfileActionProps) => {
               <span>Edit profile</span>
             </Button>
           </Link>
-          <Link href="/archive">
-            <Button size="sm" className={btnClass} isDisabled>
-              <span>View archive</span>
-            </Button>
-          </Link>
+          <Button size="sm" className={btnClass}>
+            <Link href="/qr">
+              <span>Share profile</span>
+            </Link>
+          </Button>
           <SettingIcon className="cursor-pointer h-6 inline-block" onClick={() => modalOpen(ProfileSettingModalKey)} />
           <ProfileSettings />
         </div>

@@ -4,6 +4,9 @@ import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import { useAuth } from "@/hooks/useAuth";
 import { friendGetListMe, friendKey } from "@/api/friend";
 import { useQuery } from "@tanstack/react-query";
+import { Image } from "@nextui-org/react";
+import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { PiUsersThreeLight } from "react-icons/pi";
 
 const Stories = () => {
   const storiesRef = useRef<HTMLDivElement>(null);
@@ -35,6 +38,23 @@ const Stories = () => {
         onScroll={onScroll}
         ref={storiesRef}
         className="flex items-center space-x-2 overflow-x-scroll max-w-xl bg-white border-gray-200 scroll-smooth scrollbar-hide">
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white relative">
+            <Image
+              className="object-cover w-14 h-14"
+              width={256}
+              height={256}
+              radius="full"
+              src={getUserAvatarURL(authData?.avatar)}
+              alt="User Avatar"
+            />
+            <div className="bg-white border absolute w-8 h-5 rounded-xl z-10 bottom-0 shadow items-center justify-center flex">
+              <PiUsersThreeLight size={17} />
+            </div>
+          </div>
+          <p className="text-xs text-center w-16 truncate">Your Friends</p>
+        </div>
+
         {friendsData?.data &&
           friendsData?.data.map((friend) => {
             const friendInfo = authData?.id === friend?.FromUser?.id ? friend?.ToUser : friend?.FromUser;
@@ -42,33 +62,35 @@ const Stories = () => {
             return <Story key={friend.id} img={friendInfo.avatar} username={`${friendInfo.username}`} />;
           })}
       </div>
-      <div className="absolute top-0 p-7 pt-3 w-full h-full flex justify-between z-10 items-center">
-        <button
-          onClick={() => {
-            if (storiesRef.current) {
-              storiesRef.current.scrollLeft = storiesRef.current.scrollLeft - 300;
-            }
-          }}>
-          <FaCircleChevronLeft
-            color="white"
-            size="20"
-            className={`cursor-pointer drop-shadow-lg filter ${showLeft ? "visible" : "invisible"}`}
-          />
-        </button>
-        <button
-          onClick={() => {
-            if (storiesRef.current) {
-              storiesRef.current.scrollLeft = storiesRef.current.scrollLeft + 300;
-            }
-          }}>
-          {friendsData?.data && friendsData?.data.length > 8 && (
-            <FaCircleChevronRight
+      <div className="absolute -left-4 top-6 w-full z-10">
+        <div className="flex justify-between items-center">
+          <button
+            onClick={() => {
+              if (storiesRef.current) {
+                storiesRef.current.scrollLeft = storiesRef.current.scrollLeft - 300;
+              }
+            }}>
+            <FaCircleChevronLeft
               color="white"
               size="20"
-              className={`cursor-pointer drop-shadow-lg filter ${showRight ? "visible" : "invisible"}`}
+              className={`cursor-pointer drop-shadow-lg filter ${showLeft ? "visible" : "invisible"}`}
             />
-          )}
-        </button>
+          </button>
+          <button
+            onClick={() => {
+              if (storiesRef.current) {
+                storiesRef.current.scrollLeft = storiesRef.current.scrollLeft + 300;
+              }
+            }}>
+            {friendsData?.data && friendsData?.data.length > 7 && (
+              <FaCircleChevronRight
+                color="white"
+                size="20"
+                className={`cursor-pointer drop-shadow-lg filter ${showRight ? "visible" : "invisible"}`}
+              />
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

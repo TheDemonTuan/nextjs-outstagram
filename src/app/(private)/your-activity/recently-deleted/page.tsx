@@ -174,6 +174,15 @@ const PostsComponent = ({
   selectedItems: string[];
   onSelectionChange: (postId: string) => void;
 }) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center my-8 space-y-4">
+        <Image src="/02ffe4dfdf20.png" width={500} height={500} alt="" className="w-24 h-24" />
+        <span className="font-bold text-2xl">You haven&apos;t made any posts</span>
+        <span className="text-sm text-[#8e8e8e]">When you delete a post, it&apos;ll show up here.</span>
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-5 gap-1">
       {data.map((post) => {
@@ -218,6 +227,15 @@ const ReelsComponent = ({
   selectedItems: string[];
   onSelectionChange: (postId: string) => void;
 }) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center my-8 space-y-4">
+        <Image src="/02ffe4dfdf20.png" width={500} height={500} alt="" className="w-24 h-24" />
+        <span className="font-bold text-2xl">You haven&apos;t made any reels</span>
+        <span className="text-sm text-[#8e8e8e]">When you delete a reel, it&apos;ll show up here.</span>
+      </div>
+    );
+  }
   return (
     <div className="grid grid-cols-5 gap-1">
       {data.map((reel) => {

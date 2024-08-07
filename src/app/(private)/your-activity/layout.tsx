@@ -1,7 +1,5 @@
 import HeaderActivity from "@/components/YourActivity/header-activity";
-import { LoadingTopBar } from "@/components/skeletons";
 import { Card } from "@/components/ui/card";
-import { AccountHistoryIcon, InteractionsIcon, RecentlyDeletedIcon, UserIcon, VideoPhotoActivityIcon } from "@/icons";
 import React from "react";
 
 export default function YourActivityLayout({

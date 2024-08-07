@@ -26,12 +26,12 @@ const menuItems = [
       "They will be permanently deleted after the number of days shown. After that, you won't be able to restore them.",
     ],
   },
-  {
-    href: "/your-activity/account-history",
-    icon: <AccountHistoryIcon fill="#000000" stroke="#000000" />,
-    title: "Account History",
-    description: ["Review changes that you've", "made to your account since", "you created it."],
-  },
+  // {
+  //   href: "/your-activity/account-history",
+  //   icon: <AccountHistoryIcon fill="#000000" stroke="#000000" />,
+  //   title: "Account History",
+  //   description: ["Review changes that you've", "made to your account since", "you created it."],
+  // },
 ];
 
 const isActive = "font-bold";

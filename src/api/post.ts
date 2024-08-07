@@ -2,6 +2,7 @@ import http, { ApiSuccessResponse } from "@/lib/http";
 import { PostFileResponse } from "./post_file";
 import { PostLikeResponse } from "./post_like";
 import { PostComment } from "./post_comment";
+import { UserResponse } from "./user";
 
 export const postKey = "posts";
 
@@ -51,6 +52,17 @@ export const postGetByPostId = async (postID: string) =>
 
 export const getSaved = async () =>
   http.get<ApiSuccessResponse<PostResponse[]>>(`posts/me/saved`).then((res) => res.data);
+
+export const postGetLiked = async () =>
+  http.get<ApiSuccessResponse<PostResponse[]>>(`posts/me/liked`).then((res) => res.data);
+
+
+export interface PostWithUserResponse {
+  post: PostResponse;
+  user: UserResponse;
+}
+export const postGetCommented = async () =>
+  http.get<ApiSuccessResponse<PostWithUserResponse[]>>(`posts/me/commented`).then((res) => res.data);
 
 export const postGetDeleted = async () => 
   http.get<ApiSuccessResponse<PostResponse[]>>(`posts/me/deleted`).then((res) => res.data);

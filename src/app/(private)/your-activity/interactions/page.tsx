@@ -1,21 +1,36 @@
 "use client";
 import { redirectHard } from "@/actions";
-import { PostResponse, PostType, PostWithUserResponse, postGetCommented, postGetLiked, postKey } from "@/api/post";
+import {
+  DeleteCommentsParams,
+  PostResponse,
+  PostType,
+  PostWithUserResponse,
+  RestorePostsParams,
+  postGetCommented,
+  postGetLiked,
+  postKey,
+  postMeDeleteComments,
+} from "@/api/post";
+import { PostLikeResponse, postUnLikes } from "@/api/post_like";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { ClipIcon, ClipInteractionsIcon, CommentInteractionsIcon, MultiFileIcon, TymInteractionsIcon } from "@/icons";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { Checkbox, Spinner } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const InteractionsPage = () => {
   const [activeTab, setActiveTab] = useState("likes");
   const [selected, setSelected] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedCommentItems, setSelectedCommentItems] = useState<{ post_id: string; comment_id: string }[]>([]);
+  const queryClient = useQueryClient();
 
   const {
     data: postLikedData,
@@ -33,6 +48,46 @@ const InteractionsPage = () => {
   } = useQuery({
     queryKey: [postKey, "interactions-commented"],
     queryFn: async () => await postGetCommented(),
+  });
+
+  const { mutate: unlikePostsMutate, isPending: unlikePostsIsLoading } = useMutation<
+    ApiSuccessResponse<PostLikeResponse[]>,
+    ApiErrorResponse,
+    RestorePostsParams
+  >({
+    mutationFn: async (data) => await postUnLikes(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [postKey, "interactions-liked"],
+      });
+
+      toast.success("Unlike posts successfully!");
+      setSelectedItems([]);
+      setSelected(false);
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Unlike posts failed!");
+    },
+  });
+
+  const { mutate: deleteCommentsMutate, isPending: deleteCommentsIsLoading } = useMutation<
+    ApiSuccessResponse<string>,
+    ApiErrorResponse,
+    DeleteCommentsParams
+  >({
+    mutationFn: async (data) => await postMeDeleteComments(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [postKey, "interactions-commented"],
+      });
+
+      toast.success("Delete comments successfully!");
+      setSelectedItems([]);
+      setSelected(false);
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Delete comments failed!");
+    },
   });
 
   if (postLikedIsLoading || postCommentedIsLoading)
@@ -56,10 +111,26 @@ const InteractionsPage = () => {
     );
   };
 
+  const handleCommentSelectionChange = (post_id: string, comment_id: string) => {
+    setSelectedCommentItems((prevSelected) =>
+      prevSelected.some((item) => item.comment_id === comment_id)
+        ? prevSelected.filter((item) => item.comment_id !== comment_id)
+        : [...prevSelected, { post_id, comment_id }]
+    );
+  };
+
   const handleTabChange = (tabName: string) => {
     setActiveTab(tabName);
     setSelectedItems([]);
     setSelected(false);
+  };
+
+  const handleUnlike = () => {
+    unlikePostsMutate({ post_ids: selectedItems });
+  };
+
+  const handleCommentDelete = () => {
+    deleteCommentsMutate({ comment_ids: selectedCommentItems });
   };
 
   return (
@@ -77,51 +148,66 @@ const InteractionsPage = () => {
           </div>
         ))}
       </div>
+      {unlikePostsIsLoading || deleteCommentsIsLoading ? (
+        <div className="flex items-center justify-center h-[450px]">
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <>
+          {((activeTab === "likes" && postLikedData && postLikedData.data?.length > 0) ||
+            (activeTab === "comments" && postCommentedData && postCommentedData.data?.length > 0)) && (
+            <button
+              onClick={() => {
+                setSelectedItems([]);
+                setSelected(!selected);
+              }}
+              className="flex items-center justify-between mb-2 text-base mt-4"
+              disabled={unlikePostsIsLoading || deleteCommentsIsLoading}>
+              <div className={`text-[#737373] ${selected === false ? "text-transparent" : ""}`}>
+                {selectedItems.length} selected
+              </div>
+              <div className="flex items-center space-x-3">
+                {selected === true &&
+                  (activeTab === "likes" ? (
+                    <span className="font-bold text-[#ed4956]" onClick={handleUnlike}>
+                      Unlike
+                    </span>
+                  ) : (
+                    <span className="font-bold text-[#ed4956]" onClick={handleCommentDelete}>
+                      Delete
+                    </span>
+                  ))}
+                <div>
+                  {selected === true ? (
+                    <span className="text-[#737373]">Cancel</span>
+                  ) : (
+                    <span className="text-[#0095f6]">Select</span>
+                  )}
+                </div>
+              </div>
+            </button>
+          )}
 
-      {((activeTab === "likes" && postLikedData && postLikedData.data?.length > 0) ||
-        (activeTab === "comments" && postCommentedData && postCommentedData.data?.length > 0)) && (
-        <button
-          onClick={() => {
-            setSelectedItems([]);
-            setSelected(!selected);
-          }}
-          className="flex items-center justify-between mb-2 text-base mt-4">
-          <div className={`text-[#737373] ${selected === false ? "text-transparent" : ""}`}>
-            {selectedItems.length} selected
-          </div>
-          <div className="flex items-center space-x-3">
-            {selected === true && (
-              <span className="font-bold text-[#ed4956]">{activeTab === "likes" ? "Unlike" : "Delete"}</span>
+          <div className="mt-4 overflow-y-auto max-h-[442px]">
+            {activeTab === "likes" && postLikedData && (
+              <LikesComponent
+                data={postLikedData.data}
+                isSelected={selected}
+                selectedItems={selectedItems}
+                onSelectionChange={handleSelectionChange}
+              />
             )}
-            <div>
-              {selected === true ? (
-                <span className="text-[#737373]">Cancel</span>
-              ) : (
-                <span className="text-[#0095f6]">Select</span>
-              )}
-            </div>
+            {activeTab === "comments" && postCommentedData && (
+              <CommentsComponent
+                data={postCommentedData.data}
+                isSelected={selected}
+                selectedItems={selectedCommentItems}
+                onSelectionChange={handleCommentSelectionChange}
+              />
+            )}
           </div>
-        </button>
+        </>
       )}
-
-      <div className="mt-4 overflow-y-auto max-h-[442px]">
-        {activeTab === "likes" && postLikedData && (
-          <LikesComponent
-            data={postLikedData.data}
-            isSelected={selected}
-            selectedItems={selectedItems}
-            onSelectionChange={handleSelectionChange}
-          />
-        )}
-        {activeTab === "comments" && postCommentedData && (
-          <CommentsComponent
-            data={postCommentedData.data}
-            isSelected={selected}
-            selectedItems={selectedItems}
-            onSelectionChange={handleSelectionChange}
-          />
-        )}
-      </div>
     </div>
   );
 };
@@ -208,8 +294,8 @@ const CommentsComponent = ({
 }: {
   data: PostWithUserResponse[];
   isSelected: boolean;
-  selectedItems: string[];
-  onSelectionChange: (postId: string) => void;
+  selectedItems: { post_id: string; comment_id: string }[];
+  onSelectionChange: (post_id: string, comment_id: string) => void;
 }) => {
   const { authData } = useAuth();
   if (!data || data.length === 0) {
@@ -226,9 +312,8 @@ const CommentsComponent = ({
       {data.map((post) => {
         const postFiles = post?.post.post_files || [];
         const firstFile = postFiles[0];
-        const isSelectedItem = selectedItems.includes(post.post.id);
         return (
-          <div key={post.post.id} className="flex flex-col my-3 mx-9">
+          <div key={post.post.id} className="flex flex-col my-3 mx-5">
             <div className="flex items-center justify-between">
               <div className="flex space-x-2">
                 <Link href={`/${post.user.username}`}>
@@ -251,46 +336,56 @@ const CommentsComponent = ({
                 </div>
               </div>
               {post.post.type === PostType.DEFAULT ? (
-                <Image alt="" width={500} height={500} src={firstFile.url} className="w-12 h-12 object-cover" />
+                <Link href={`/p/${post.post.id}`}>
+                  <Image alt="" width={500} height={500} src={firstFile.url} className="w-12 h-12 object-cover" />
+                </Link>
               ) : (
-                <video src={firstFile.url} controls={false} className="w-12 h-12 object-cover" />
+                <Link href={`/r/${post.post.id}`}>
+                  <video src={firstFile.url} controls={false} className="w-12 h-12 object-cover" />
+                </Link>
               )}
             </div>
-            {post.post.post_comments.map((comment) => (
-              <div key={comment.id} className="flex items-center justify-between my-3 ml-[73px]">
-                <div className="flex space-x-2">
-                  <Link href={`/${authData?.username}`}>
-                    <Avatar className="w-11 h-11">
-                      <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar)} />
-                      <AvatarFallback>
-                        <Spinner size="sm" />
-                      </AvatarFallback>
-                    </Avatar>
-                  </Link>
-                  <div className="flex flex-col">
-                    <span className="text-sm line-clamp-[1]">
-                      <span className="font-bold">{authData?.username}</span> {comment.content}
-                    </span>
-                    <span className="text-xs text-[#737373]">
-                      {formatDistanceToNow(comment.created_at || "", {
-                        addSuffix: true,
-                      })}
-                    </span>
+            {post.post.post_comments.map((comment) => {
+              const isSelectedItem = selectedItems.some(
+                (item) => item.post_id === comment.post_id && item.comment_id === comment.id
+              );
+
+              //const isSelectedItem = selectedItems.includes(comment.id);
+              return (
+                <div key={comment.id} className="flex items-center justify-between my-3 ml-10">
+                  <div className="flex space-x-2">
+                    <Link href={`/${authData?.username}`}>
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage className="object-cover" src={getUserAvatarURL(authData?.avatar)} />
+                        <AvatarFallback>
+                          <Spinner size="sm" />
+                        </AvatarFallback>
+                      </Avatar>
+                    </Link>
+                    <div className="flex flex-col">
+                      <span className="text-sm line-clamp-[1]">
+                        <span className="font-bold">{authData?.username}</span> {comment.content}
+                      </span>
+                      <span className="text-xs text-[#737373]">
+                        {formatDistanceToNow(comment.created_at || "", {
+                          addSuffix: true,
+                        })}
+                      </span>
+                    </div>
                   </div>
+                  {isSelected === true && (
+                    <div className=" bottom-1 right-0 bg-transparent group-hover:opacity-0 bg-opacity-75 p-1 rounded-full text-red-500 text-xs">
+                      <Checkbox
+                        isSelected={isSelectedItem}
+                        radius="full"
+                        size="md"
+                        onClick={() => onSelectionChange(comment.post_id, comment.id)}
+                      />
+                    </div>
+                  )}
                 </div>
-                {isSelected === true && (
-                  <div className=" bottom-1 right-0 bg-transparent group-hover:opacity-0 bg-opacity-75 p-1 rounded-full text-red-500 text-xs">
-                    <Checkbox
-                      isSelected={isSelectedItem}
-                      radius="full"
-                      size="md"
-                      color="danger"
-                      onClick={() => onSelectionChange(post.post.id)}
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         );
       })}

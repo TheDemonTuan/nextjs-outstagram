@@ -143,7 +143,7 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
             const listOptionItem =
               hasPost && !hasCommented
                 ? PostMeMoreOptions
-                : !authData?.role && !hasCommented && !hasPost
+                : (!authData?.role || authData?.role) && !hasCommented && !hasPost
                 ? PostNotCommentMoreOptions
                 : PostNotMeCommentedMoreOptions;
             return (

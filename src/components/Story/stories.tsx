@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Image } from "@nextui-org/react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { PiUsersThreeLight } from "react-icons/pi";
+import { StoriesSkeleton } from "../skeletons";
 
 const Stories = () => {
   const storiesRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,10 @@ const Stories = () => {
     queryKey: [friendKey, "home"],
     queryFn: async () => await friendGetListMe(),
   });
+
+  if (friendIsLoading) {
+    return <StoriesSkeleton />;
+  }
 
   return (
     <div className="relative w-max h-full">

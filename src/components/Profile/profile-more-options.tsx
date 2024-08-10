@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import AboutThisAccount, { AboutThisAccountModalKey } from "../about-this-account";
 import ShareModal, { ShareModalKey } from "../Post/share-modal";
 import ConfirmBanAccount, { ConfirmBanAccountModalKey } from "./confirm-ban-account";
+import ReportModal, { ReportModalKey } from "../Report/report-modal";
+import { ReportType } from "@/api/report";
 
 export const ProfileMoreOptionsModalKey = "ProfileMoreOptions";
 
@@ -18,6 +20,7 @@ const UserNotMeMoreOptions = [
   {
     title: "Report",
     className: "text-red-500 font-semibold",
+    action: true,
   },
   {
     title: "Share to ...",
@@ -50,6 +53,7 @@ const ProfileMoreOptions = () => {
     {
       title: "Report",
       className: "text-red-500 font-semibold",
+      action: true,
     },
     {
       title: "Share to ...",
@@ -99,6 +103,10 @@ const ProfileMoreOptions = () => {
                                   setModalData(modalData);
                                   modalOpen(ShareModalKey);
                                   break;
+                                case "Report":
+                                  setModalData(modalData);
+                                  modalOpen(ReportModalKey);
+                                  break;
                                 case "Cancel":
                                   modalClose();
                                   break;
@@ -122,6 +130,7 @@ const ProfileMoreOptions = () => {
       <AboutThisAccount isProfile={true} />
       <ShareModal isProfile={true} />
       <ConfirmBanAccount />
+      <ReportModal type={ReportType.User} />
     </>
   );
 };

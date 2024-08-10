@@ -12,6 +12,9 @@ import { Modal, ModalBody, ModalContent, Spinner } from "@nextui-org/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { toast } from "sonner";
+import { NotificationReportModalKey } from "../Report/notification-report-modal";
+import { ReportType } from "@/api/report";
+import ReportModal, { ReportModalKey } from "../Report/report-modal";
 
 export const CommentMoreOptionsModalKey = "CommentMoreOptions";
 
@@ -60,7 +63,7 @@ const PostNotMeCommentedMoreOptions = [
 ];
 
 const CommentMoreOptions = ({ userId }: { userId: string }) => {
-  const { modalData, modalClose, modalKey } = useModalStore();
+  const { modalData, modalClose, modalKey, modalOpen } = useModalStore();
   const { authData } = useAuth();
   const queryClient = useQueryClient();
 
@@ -164,6 +167,7 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
                             if (optionItem?.action) {
                               switch (optionItem.title) {
                                 case "Report":
+                                  modalOpen(ReportModalKey);
                                   break;
                                 case "Delete":
                                   authData?.role === true && authData?.id !== userId && !hasCommented
@@ -196,6 +200,8 @@ const CommentMoreOptions = ({ userId }: { userId: string }) => {
           }}
         </ModalContent>
       </Modal>
+
+      <ReportModal type={ReportType.Comment} />
     </>
   );
 };

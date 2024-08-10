@@ -13,12 +13,16 @@ import { PostEditHiddenComment, PostEditHiddenCountLike, PostType, postKey } fro
 import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ConfirmBlockPost, { ConfirmBlockPostModalKey } from "./confirm-block-post";
+import ReportModal, { ReportModalKey } from "../Report/report-modal";
+import { ReportType } from "@/api/report";
+import NotificationReportModal, { NotificationReportModalKey } from "../Report/notification-report-modal";
 export const PostMoreOptionsModalKey = "PostMoreOptions";
 
 const UserMoreOptions = [
   {
     title: "Report",
     className: "text-red-500 font-semibold",
+    action: true,
   },
   // {
   //   title: "Unfollow",
@@ -93,6 +97,7 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
     {
       title: "Report",
       className: "text-red-500 font-semibold",
+      action: true,
     },
     // {
     //   title: "Unfollow",
@@ -362,6 +367,10 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
                                   setModalData(modalData);
                                   modalOpen(ConfirmBlockPostModalKey);
                                   break;
+                                case "Report":
+                                  setModalData(modalData);
+                                  modalOpen(ReportModalKey);
+                                  break;
                                 case "Cancel":
                                   modalClose();
                                   break;
@@ -387,6 +396,11 @@ const PostMoreOptions = ({ isGoToPost = false, isPostDetail }: { isGoToPost?: bo
       <AboutThisAccount />
       <ShareModal />
       <ConfirmBlockPost />
+      {modalData.type === PostType.DEFAULT ? (
+        <ReportModal type={ReportType.Post} />
+      ) : (
+        <ReportModal type={ReportType.Reel} />
+      )}
     </>
   );
 };

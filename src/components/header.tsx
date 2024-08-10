@@ -297,11 +297,14 @@ const Header = () => {
                     {" "}
                     <span className="mx-1">Switch appearance</span>
                   </DropdownItem> */}
-                  <DropdownItem
-                    className="py-4 pl-4 hover:bg-[#F2F2F2]"
-                    startContent={<ReportAProblemIcon className="w-5 h-5 pl-2" />}>
-                    <span className="mx-1">Report a problem</span>
-                  </DropdownItem>
+                  {authData?.role === true && (
+                    <DropdownItem
+                      className="py-4 pl-4 hover:bg-[#F2F2F2]"
+                      href="/report/interactions"
+                      startContent={<ReportAProblemIcon className="w-5 h-5 pl-2" />}>
+                      <span className="mx-1">Report a problem</span>
+                    </DropdownItem>
+                  )}
                 </DropdownSection>
                 <DropdownItem className="py-4 hover:bg-[#F2F2F2]" onClick={() => modalOpen(LogoutModalKey)}>
                   <span className="px-2">Log out</span>

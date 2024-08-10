@@ -4,7 +4,6 @@ import { PostLikeResponse } from "./post_like";
 import { PostComment } from "./post_comment";
 import { UserResponse } from "./user";
 import { AxiosRequestConfig } from "axios";
-import { UUID } from "crypto";
 
 export const postKey = "posts";
 

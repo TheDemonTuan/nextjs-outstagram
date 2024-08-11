@@ -1,15 +1,16 @@
-import LoginForm from "@/components/Login/login-form";
 import OAuth from "@/components/OAuth";
+import RegisterForm from "@/components/Register/register-form";
+import ResetForm from "@/components/Reset/reset-form";
 import { InstagramIcon } from "@/icons";
 import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Login - Outstagram",
+  title: "Reset - Outstagram",
 };
 
-const LoginPage = () => {
+const RegisterPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-xs">
@@ -17,7 +18,7 @@ const LoginPage = () => {
           <InstagramIcon />
           <h1 className="text-3xl font-bold">Outstagram</h1>
         </div>
-        <LoginForm />
+        <ResetForm />
         <div className="mb-4 flex items-center justify-between">
           <div
             className="flex-grow-0 h-px bg-gray-300"
@@ -33,21 +34,21 @@ const LoginPage = () => {
             }}
           />
         </div>
-        <OAuth />
+        {/* <OAuth /> */}
         <div className="text-center">
-          <Link className="text-sm" href="/accounts/password/reset">
-            Forgot password?
+          <Link className="text-sm" href="/register">
+            Create new account
           </Link>
         </div>
       </div>
       <div className="mt-8">
-        <span className="text-sm text-gray-500">Don&apos;t have an account?</span>
-        <Link className="text-sm font-semibold" href="/register">
-          Register
+        <span className="text-sm text-gray-500">Have an account?</span>
+        <Link className="text-sm font-semibold" href="/login">
+          Login
         </Link>
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

@@ -13,12 +13,15 @@ import { AuthVerifyResponse, authKey } from "@/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { userEditPassword } from "@/api/user";
+import { logoutToken } from "@/actions";
+import { useRouter } from "next/navigation";
 
 const ChangePasswordForm = () => {
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isReTypeNewPasswordVisible, setIsReTypeNewPasswordVisible] = useState(false);
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const editForm = useForm<ChangePasswordFormValidate>({
     resolver: zodResolver(ChangePasswordFormValidateSchema),
@@ -56,6 +59,17 @@ const ChangePasswordForm = () => {
       current_password: data.current_password,
       new_password: data.new_password,
     });
+  };
+
+  const handleSignOut = async () => {
+    toast.promise(logoutToken(), {
+      loading: "Logging out... 🚪",
+      success: "Logged out successfully! 👋",
+      error: "Failed to log out! 😵",
+    });
+    queryClient.clear();
+
+    router.push("/accounts/password/reset");
   };
 
   return (
@@ -174,7 +188,7 @@ const ChangePasswordForm = () => {
           />
 
           <div className="flex justify-between">
-            <Link href="">
+            <Link href="/accounts/password/reset" onClick={handleSignOut}>
               <div className="font-medium text-primary-500 hover:underline">Forgot your password?</div>
             </Link>
 

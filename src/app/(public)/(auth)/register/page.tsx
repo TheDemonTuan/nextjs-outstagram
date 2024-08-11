@@ -35,7 +35,7 @@ const RegisterPage = () => {
         </div>
         <OAuth />
         <div className="text-center">
-          <Link className="text-sm" href="#">
+          <Link className="text-sm" href="/accounts/password/reset/">
             Forgot password?
           </Link>
         </div>

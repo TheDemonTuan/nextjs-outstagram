@@ -1,17 +1,20 @@
 "use client";
 import { redirectHard } from "@/actions";
-import { PostResponse, PostType, postGetAllFromMe, postKey } from "@/api/post";
+import { PostResponse, PostType, RestorePostsParams, postGetAllFromMe, postKey, postMeDeleteList } from "@/api/post";
 import { MultiFileIcon, PlayReelIcon, PostsPhotosAndVideosIcon, ReelsPhotosAndVideosIcon } from "@/icons";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/lib/http";
 import { Checkbox, Spinner } from "@nextui-org/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const PhotoAndVideoPage = () => {
   const [selected, setSelected] = useState(false);
   const [activeTab, setActiveTab] = useState("posts");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const queryClient = useQueryClient();
   const {
     data: contentData,
     error: contentError,
@@ -19,6 +22,26 @@ const PhotoAndVideoPage = () => {
   } = useQuery({
     queryKey: [postKey, "photos-videos"],
     queryFn: async () => await postGetAllFromMe(),
+  });
+
+  const { mutate: deletePostsMutate, isPending: deletePostsIsLoading } = useMutation<
+    ApiSuccessResponse<string>,
+    ApiErrorResponse,
+    RestorePostsParams
+  >({
+    mutationFn: async (data) => await postMeDeleteList(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [postKey, "photos-videos"],
+      });
+
+      toast.success("Delete posts successfully!");
+      setSelectedItems([]);
+      setSelected(false);
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Delete posts failed!");
+    },
   });
 
   const posts = contentData?.data.filter((item) => item.type === PostType.DEFAULT);
@@ -50,6 +73,10 @@ const PhotoAndVideoPage = () => {
     setSelectedItems([]);
     setSelected(false);
   };
+
+  const handleDelete = () => {
+    deletePostsMutate({ post_ids: selectedItems });
+  };
   return (
     <div className="flex flex-col mx-6">
       <div className="w-full flex items-center justify-evenly text-sm border-b mt-1">
@@ -66,48 +93,61 @@ const PhotoAndVideoPage = () => {
         ))}
       </div>
 
-      {((activeTab === "posts" && posts && posts?.length > 0) ||
-        (activeTab === "reels" && reels && reels?.length > 0)) && (
-        <button
-          onClick={() => {
-            setSelectedItems([]);
-            setSelected(!selected);
-          }}
-          className="flex items-center justify-between mb-2 mt-4 text-base">
-          <div className={`text-[#737373] ${selected === false ? "text-transparent" : ""}`}>
-            {selectedItems.length} selected
-          </div>
-          <div className="flex items-center space-x-3">
-            {selected === true && <span className="font-bold text-[#ed4956]">Delete</span>}
-            <div>
-              {selected === true ? (
-                <span className="text-[#737373]"> Cancel</span>
-              ) : (
-                <span className="text-[#0095f6]">Select</span>
-              )}
-            </div>
-          </div>
-        </button>
-      )}
+      {deletePostsIsLoading ? (
+        <div className="flex items-center justify-center h-[450px]">
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <>
+          {((activeTab === "posts" && posts && posts?.length > 0) ||
+            (activeTab === "reels" && reels && reels?.length > 0)) && (
+            <button
+              onClick={() => {
+                setSelectedItems([]);
+                setSelected(!selected);
+              }}
+              className="flex items-center justify-between mb-2 mt-4 text-base"
+              disabled={deletePostsIsLoading}>
+              <div className={`text-[#737373] ${selected === false ? "text-transparent" : ""}`}>
+                {selectedItems.length} selected
+              </div>
+              <div className="flex items-center space-x-3">
+                {selected === true && (
+                  <span className="font-bold text-[#ed4956]" onClick={handleDelete}>
+                    Delete
+                  </span>
+                )}
+                <div>
+                  {selected === true ? (
+                    <span className="text-[#737373]"> Cancel</span>
+                  ) : (
+                    <span className="text-[#0095f6]">Select</span>
+                  )}
+                </div>
+              </div>
+            </button>
+          )}
 
-      <div className="overflow-y-auto max-h-[442px] scrollbar-hide">
-        {activeTab === "posts" && posts && (
-          <PostsComponent
-            data={posts}
-            isSelected={selected}
-            selectedItems={selectedItems}
-            onSelectionChange={handleSelectionChange}
-          />
-        )}
-        {activeTab === "reels" && reels && (
-          <ReelsComponent
-            data={reels}
-            isSelected={selected}
-            selectedItems={selectedItems}
-            onSelectionChange={handleSelectionChange}
-          />
-        )}
-      </div>
+          <div className="overflow-y-auto max-h-[442px] scrollbar-hide">
+            {activeTab === "posts" && posts && (
+              <PostsComponent
+                data={posts}
+                isSelected={selected}
+                selectedItems={selectedItems}
+                onSelectionChange={handleSelectionChange}
+              />
+            )}
+            {activeTab === "reels" && reels && (
+              <ReelsComponent
+                data={reels}
+                isSelected={selected}
+                selectedItems={selectedItems}
+                onSelectionChange={handleSelectionChange}
+              />
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

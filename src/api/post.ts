@@ -3,6 +3,7 @@ import { PostFileResponse } from "./post_file";
 import { PostLikeResponse } from "./post_like";
 import { PostComment } from "./post_comment";
 import { UserResponse } from "./user";
+import { AxiosRequestConfig } from "axios";
 
 export const postKey = "posts";
 
@@ -119,3 +120,24 @@ export interface RestorePostsParams {
 
 export const postMeRestore = async (params: RestorePostsParams) => 
   http.patch<ApiSuccessResponse<PostResponse[]>>(`posts/me/restore`, params).then((res) => res.data);
+
+export const postMeDeleteList = async (params: RestorePostsParams) => {
+  const config: AxiosRequestConfig  = {
+    data: params,
+  };
+
+  return http.delete<ApiSuccessResponse<string>>(`posts/me`, config).then((res) => res.data);
+};
+
+export interface DeleteCommentsParams {
+  comment_ids: { post_id: string; comment_id: string }[];
+ 
+}
+
+export const postMeDeleteComments = async (params: DeleteCommentsParams) => {
+  const config: AxiosRequestConfig  = {
+    data: params,
+  };
+
+  return http.delete<ApiSuccessResponse<string>>(`posts/me/comments`, config).then((res) => res.data);
+};

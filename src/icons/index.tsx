@@ -1867,3 +1867,19 @@ export const PrivateAccountIcon = (props: SVGProps<SVGAElement>) => {
     </svg>
   );
 };
+
+export const ReportTickIcon = (props: SVGProps<SVGAElement>) => {
+  return (
+    <svg
+      aria-label="tick"
+      className="x1lliihq x1n2onr6 x127hrn9"
+      fill="#58C322"
+      height="48"
+      role="img"
+      viewBox="0 0 24 24"
+      width="48">
+      <title>tick</title>
+      <path d="M12.001.504a11.5 11.5 0 1 0 11.5 11.5 11.513 11.513 0 0 0-11.5-11.5Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5ZM16.293 8.3l-5.792 5.788-2.794-2.796a1 1 0 1 0-1.414 1.414l3.5 3.503a1 1 0 0 0 1.414.001l6.5-6.495A1 1 0 0 0 16.293 8.3Z"></path>
+    </svg>
+  );
+};

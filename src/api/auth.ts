@@ -103,3 +103,40 @@ export const authOAuthRegister = async (params: AuthOAuthRegisterParams) =>
 
     return res.data;
   });
+
+
+export interface AuthOTPSendEmailParams {
+    user_email: string;
+    full_name: string;
+    username: string;
+    password: string;
+    birthday: Date;
+}
+export const authOTPSendEmail = async (params: AuthOTPSendEmailParams) => 
+    http.post<ApiSuccessResponse<string>>("auth/otp/send", params).then((res) => res.data);
+
+export interface AuthOTPVerifyEmailParams {
+  user_email: string;
+  otp_code: string;
+}
+
+export const authOTPVerifyEmail = async (params: AuthOTPVerifyEmailParams) =>
+  http.patch<ApiSuccessResponse<string>>("auth/otp/verify", params).then((res) => res.data);
+
+export interface AuthOTPSendEmailResetPasswordParams {
+  user_email: string;
+}
+
+export const authOTPSendEmailResetPassword = async (params: AuthOTPSendEmailResetPasswordParams) => 
+  http.put<ApiSuccessResponse<string>>("auth/reset/otp/send", params).then((res) => res.data);
+
+
+export interface AuthResetPasswordParams {
+  email: string;
+  new_password: string;
+}
+export const authResetPassword = async (params: AuthResetPasswordParams) => 
+  http.patch<ApiSuccessResponse<string>>("auth/reset/password", params).then((res) => res.data);
+
+
+

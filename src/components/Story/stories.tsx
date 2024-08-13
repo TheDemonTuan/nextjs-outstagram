@@ -7,6 +7,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Image } from "@nextui-org/react";
 import { getUserAvatarURL } from "@/lib/get-user-avatar-url";
 import { PiUsersThreeLight } from "react-icons/pi";
+import { StoriesSkeleton } from "../skeletons";
+
+const STORY_ITEM_WIDTH = 80;
+const MIN_STORIES = 8;
 
 const Stories = () => {
   const storiesRef = useRef<HTMLDivElement>(null);
@@ -32,12 +36,20 @@ const Stories = () => {
     queryFn: async () => await friendGetListMe(),
   });
 
+  const totalItems = friendsData?.data ? friendsData.data.length + 1 : 1;
+  const containerWidth = Math.max(totalItems, MIN_STORIES) * STORY_ITEM_WIDTH;
+
+  if (friendIsLoading) {
+    return <StoriesSkeleton />;
+  }
+
   return (
     <div className="relative w-max h-full">
       <div
         onScroll={onScroll}
         ref={storiesRef}
-        className="flex items-center space-x-2 overflow-x-scroll max-w-xl bg-white border-gray-200 scroll-smooth scrollbar-hide">
+        className="flex items-center space-x-2 overflow-x-scroll max-w-xl bg-white border-gray-200 scroll-smooth scrollbar-hide"
+        style={{ minWidth: containerWidth }}>
         <div className="space-y-1">
           <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white relative">
             <Image

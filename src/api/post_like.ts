@@ -1,4 +1,5 @@
 import http, { ApiSuccessResponse } from "@/lib/http";
+import { RestorePostsParams } from "./post";
 
 export interface PostLikeResponse {
   id: string;
@@ -12,3 +13,6 @@ export interface PostLikeResponse {
 
 export const postLike = async (postId: string) =>
   http.post<ApiSuccessResponse<PostLikeResponse>>(`posts/me/like/${postId}`).then((res) => res.data);
+
+export const postUnLikes = async (params: RestorePostsParams) =>
+  http.post<ApiSuccessResponse<PostLikeResponse[]>>(`posts/me/unlikes`, params).then((res) => res.data);

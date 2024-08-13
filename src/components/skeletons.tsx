@@ -563,3 +563,57 @@ export function FrameInboxSkeleton() {
     </div>
   );
 }
+
+export function StoriesSkeleton() {
+  return (
+    <div className="relative w-max h-full">
+      <div className="flex items-center space-x-2 overflow-x-scroll max-w-xl bg-white border-gray-200 scroll-smooth scrollbar-hide">
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14 " />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+        <div className="space-y-1">
+          <div className="flex flex-col justify-center items-center w-16 h-16 rounded-full bg-white">
+            <Skeleton className="rounded-full w-14 h-14" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

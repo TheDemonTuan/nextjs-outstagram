@@ -22,7 +22,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { postKey } from "@/api/post";
 import { PostCommentLikesModalKey } from "../Post/post-comment-likes";
-import { comment } from "postcss";
 
 const ViewComments = ({
   comments,
@@ -41,31 +40,35 @@ const ViewComments = ({
   const { mutate: commentLikeMutate } = useMutation<ApiSuccessResponse<CommentLikeResponse>, ApiErrorResponse, string>({
     mutationFn: async (params) => await commentLike(params),
     onSuccess: (likeCommentData) => {
-      const fakeData = {
-        ...likeCommentData.data,
-        user: {
-          ...authData,
-        },
-      };
-      queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
-        if (!oldData) return oldData;
-        const newComments = oldData.postByPostId.post_comments.map((comment: any) => {
-          if (comment.id === likeCommentData.data.comment_id) {
-            const updatedLikes = comment.comment_likes.filter((like: any) => like.user_id !== authData?.id);
-            return {
-              ...comment,
-              comment_likes: [fakeData, ...updatedLikes],
-            };
-          }
-          return comment;
-        });
-        return {
-          ...oldData,
-          postByPostId: {
-            ...oldData.postByPostId,
-            post_comments: newComments,
-          },
-        };
+      // const fakeData = {
+      //   ...likeCommentData.data,
+      //   user: {
+      //     ...authData,
+      //   },
+      // };
+      // queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
+      //   if (!oldData) return oldData;
+      //   const newComments = oldData.postByPostId.post_comments.map((comment: any) => {
+      //     if (comment.id === likeCommentData.data.comment_id) {
+      //       const updatedLikes = comment.comment_likes.filter((like: any) => like.user_id !== authData?.id);
+      //       return {
+      //         ...comment,
+      //         comment_likes: [fakeData, ...updatedLikes],
+      //       };
+      //     }
+      //     return comment;
+      //   });
+      //   return {
+      //     ...oldData,
+      //     postByPostId: {
+      //       ...oldData.postByPostId,
+      //       post_comments: newComments,
+      //     },
+      //   };
+      // });
+
+      queryClient.invalidateQueries({
+        queryKey: [postKey, { id: postID }],
       });
     },
     onError: (error) => {
@@ -109,8 +112,6 @@ const ViewComments = ({
         const totalReplies = countReplies(comments, comment?.id);
 
         const likeCount = postCommentLikesFilter?.length || 0;
-
-        console.log(comment);
 
         return (
           <div key={comment?.id}>
@@ -272,31 +273,35 @@ const ReplyBox = memo(
     >({
       mutationFn: async (params) => await commentLike(params),
       onSuccess: (likeCommentData) => {
-        const fakeData = {
-          ...likeCommentData.data,
-          user: {
-            ...authData,
-          },
-        };
-        queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
-          if (!oldData) return oldData;
-          const newComments = oldData.postByPostId.post_comments.map((comment: any) => {
-            if (comment.id === likeCommentData.data.comment_id) {
-              const updatedLikes = comment.comment_likes.filter((like: any) => like.user_id !== authData?.id);
-              return {
-                ...comment,
-                comment_likes: [fakeData, ...updatedLikes],
-              };
-            }
-            return comment;
-          });
-          return {
-            ...oldData,
-            postByPostId: {
-              ...oldData.postByPostId,
-              post_comments: newComments,
-            },
-          };
+        // const fakeData = {
+        //   ...likeCommentData.data,
+        //   user: {
+        //     ...authData,
+        //   },
+        // };
+        // queryClient.setQueryData([postKey, { id: postID }], (oldData: any) => {
+        //   if (!oldData) return oldData;
+        //   const newComments = oldData.postByPostId.post_comments.map((comment: any) => {
+        //     if (comment.id === likeCommentData.data.comment_id) {
+        //       const updatedLikes = comment.comment_likes.filter((like: any) => like.user_id !== authData?.id);
+        //       return {
+        //         ...comment,
+        //         comment_likes: [fakeData, ...updatedLikes],
+        //       };
+        //     }
+        //     return comment;
+        //   });
+        //   return {
+        //     ...oldData,
+        //     postByPostId: {
+        //       ...oldData.postByPostId,
+        //       post_comments: newComments,
+        //     },
+        //   };
+        // });
+
+        queryClient.invalidateQueries({
+          queryKey: [postKey, { id: postID }],
         });
       },
       onError: (error) => {
@@ -314,8 +319,6 @@ const ReplyBox = memo(
           const postCommentLikesFilter = reply?.comment_likes?.filter((commentLike) => commentLike?.is_comment_liked);
           const isCommentLiked = postCommentLikesFilter?.some((commentLike) => commentLike?.user_id === authData?.id);
           const likeCount = postCommentLikesFilter?.length || 0;
-
-          console.log(reply);
 
           return (
             <React.Fragment key={reply?.id}>

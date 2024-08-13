@@ -61,6 +61,7 @@ http.interceptors.response.use(
           return Promise.resolve(http.request(error.config));
         }
 
+        refreshTokenRetryCount = 0;
         return Promise.reject(error);
       } catch (err) {
         await logoutToken();

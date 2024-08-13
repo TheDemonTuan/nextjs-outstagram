@@ -1,4 +1,4 @@
-import { getToken, refreshToken, setToken } from "@/actions";
+import { getToken, logoutToken, refreshToken, setToken } from "@/actions";
 import { GraphQLClient, RequestMiddleware } from "graphql-request";
 
 const endpoint = `${process.env.NEXT_PUBLIC_API_HOST}/graphql`;
@@ -20,6 +20,7 @@ const customFetch = async (url: URL | RequestInfo, options?: RequestInit) => {
   const attemptFetch: any = async () => {
     if (apiRetryCount >= MAX_API_RETRIES) {
       // Đã vượt quá giới hạn số lần gọi lại, xử lý tương ứng
+      await logoutToken();
       throw new Error("Reached max API retries");
     }
 

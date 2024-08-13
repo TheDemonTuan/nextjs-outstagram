@@ -69,6 +69,7 @@ const CommentForm = ({ postId }: { postId: string }) => {
             username: replyUsername,
           },
         },
+        comments_likes: [],
       };
     },
     [authData?.avatar, authData?.username, parentID, replyUsername]

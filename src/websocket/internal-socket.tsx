@@ -42,6 +42,8 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
         case "inbox-action":
           switch (data.action) {
             case "delete":
+              if (!queryClient.getQueryData([inboxKey, { username: data.fromUserName }])) return;
+
               queryClient.setQueryData(
                 [inboxKey, { username: data.fromUserName }],
                 (oldData: InboxGetByUsernameQuery) => {
@@ -70,6 +72,39 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
 
               break;
             case "send":
+              toast.custom((t) => (
+                <div
+                  className={`${
+                    t.visible ? "animate-enter" : "animate-leave"
+                  } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+                  <div className="flex-1 w-0 p-4">
+                    <div className="flex items-start">
+                      <Link href={`/${data.username}`} className="flex-shrink-0 pt-0.5">
+                        <Avatar className="w-11 h-11">
+                          <AvatarImage className="object-cover" src={getUserAvatarURL(data.avatar)} />
+                          <AvatarFallback>
+                            <Spinner size="sm" />
+                          </AvatarFallback>
+                        </Avatar>
+                      </Link>
+                      <div className="ml-3 flex-1">
+                        <p className="text-sm font-medium text-gray-900">{data.username}</p>
+                        <p className="mt-1 text-sm text-gray-500">{data.message}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex border-l border-gray-200">
+                    <Link
+                      href={`/direct/inbox/${data.username}`}
+                      onClick={() => toast.dismiss(t.id)}
+                      className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                      View
+                    </Link>
+                  </div>
+                </div>
+              ));
+              if (!queryClient.getQueryData([inboxKey, { username: data.fromUserName }])) return;
+
               const fakeData = {
                 id: data.messageID,
                 from_user_id: data.fromUserID,
@@ -119,9 +154,6 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
                   inboxGetAllBubble: [...cloneData],
                 };
               });
-              break;
-            default:
-              break;
           }
           break;
         case "friend-action":
@@ -148,7 +180,7 @@ export const useInternalSocket = (toastRef: MutableRefObject<any>) => {
               </div>
               <div className="flex border-l border-gray-200">
                 <Link
-                  href={`/direct/inbox/${data.fromUserID}`}
+                  href={`/${data.username}`}
                   onClick={() => toast.dismiss(t.id)}
                   className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                   View

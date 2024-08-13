@@ -7,6 +7,9 @@ const getAccessToken = () => Promise.resolve(getToken(process.env.NEXT_PUBLIC_AC
 
 export const graphqlAbortController = new AbortController()
 
+let apiRetryCount = 0; // Khởi tạo biến đếm
+const MAX_API_RETRIES = 3; // Giới hạn số lần gọi lại
+
 const customFetch = async (url: URL | RequestInfo, options?: RequestInit) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 30000);
@@ -14,7 +17,12 @@ const customFetch = async (url: URL | RequestInfo, options?: RequestInit) => {
   options = options || {};
   options.signal = controller.signal;
 
-  const attemptFetch = async () => {
+  const attemptFetch: any = async () => {
+    if (apiRetryCount >= MAX_API_RETRIES) {
+      // Đã vượt quá giới hạn số lần gọi lại, xử lý tương ứng
+      throw new Error("Reached max API retries");
+    }
+
     try {
       const response = await fetch(url, options);
       clearTimeout(timeoutId);
@@ -32,14 +40,13 @@ const customFetch = async (url: URL | RequestInfo, options?: RequestInit) => {
           "Content-Type": "application/json",
         };
 
+        apiRetryCount++; // Tăng biến đếm
         return attemptFetch();
       }
+      apiRetryCount = 0; // Đặt lại biến đếm sau khi gọi API thành công
       return response;
     } catch (error: any) {
-      if (error.name === 'AbortError') {
-        throw new Error('Request timeout');
-      }
-      throw error;
+      throw error; // Xử lý lỗi tại đây
     }
   };
 

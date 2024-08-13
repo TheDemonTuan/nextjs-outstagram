@@ -32,14 +32,24 @@ http.interceptors.request.use(
   }
 );
 
+let refreshTokenRetryCount = 0;
+const MAX_REFRESH_TOKEN_RETRIES = 3;
+
 http.interceptors.response.use(
   async (response) => {
     return response;
   },
   async (error: ApiErrorResponse) => {
     if (error.response?.status === 401) {
+      if (refreshTokenRetryCount >= MAX_REFRESH_TOKEN_RETRIES) {
+        // Đã vượt quá giới hạn số lần gọi lại, xử lý tương ứng
+        await logoutToken();
+        return Promise.reject(new Error("Reached max refresh token retries"));
+      }
+
       try {
         const accessToken = await refreshToken();
+        refreshTokenRetryCount++; // Tăng biến đếm
 
         if (!accessToken) {
           throw new Error("No access token found");

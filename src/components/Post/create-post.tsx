@@ -64,9 +64,19 @@ const AddPostModal = ({ onResetModalSelectPhoto }: { onResetModalSelectPhoto: ()
     mutationFn: async (params) => await postCreate(params),
     onSuccess: () => {
       toast.success("Add new post successfully!");
-      queryClient.invalidateQueries({
-        queryKey: [postKey, "home"],
-      });
+
+      if (isImage === PostType.DEFAULT) {
+        queryClient.invalidateQueries({
+          queryKey: [postKey, "home"],
+        });
+      }
+
+      if (isImage === PostType.REEL) {
+        queryClient.invalidateQueries({
+          queryKey: [postKey, "reels"],
+        });
+      }
+
       onResetModalSelectPhoto();
       setModalData([]);
       modalClose();

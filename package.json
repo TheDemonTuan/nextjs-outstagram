@@ -13,7 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@million/lint": "^1.0.0-rc.82-beta.38",
-    "@nextui-org/react": "2.4.2",
+    "@nextui-org/react": "2.4.8",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
